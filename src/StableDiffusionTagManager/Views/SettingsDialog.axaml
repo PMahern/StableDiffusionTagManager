@@ -1,0 +1,40 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Height="100"
+        Width="300"
+        xmlns:controls="using:StableDiffusionTagManager.Controls"
+        x:Class="StableDiffusionTagManager.Views.SettingsDialog"
+        CanResize="False"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="4"
+        ExtendClientAreaToDecorationsHint="True"
+        WindowStartupLocation="CenterOwner"
+        Title="Application Settings"
+        Icon="/Assets/logo.ico">
+  <Window.Styles>
+    <Style Selector="TextBox">
+      <Setter Property="Width" Value="200"></Setter>
+    </Style>
+  </Window.Styles>
+  <controls:HeaderControl Title="Application Settings" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="5" CloseCommand="{Binding HeaderCloseCommand}">
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+      <Label>Web UI URL</Label>
+      <TextBox Grid.Column="1" Text="{Binding WebUIAddress}" />
+      <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
+        <Button Grid.Row="1" Command="{Binding SaveCommand}">Save</Button>
+        <Button Grid.Row="1" Grid.Column="1" Command="{Binding CancelCommand}">Cancel</Button>
+      </StackPanel>
+    </Grid>
+  </controls:HeaderControl>
+</Window>

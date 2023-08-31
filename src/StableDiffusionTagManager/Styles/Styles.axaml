@@ -1,0 +1,289 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:StableDiffusionTagManager.Controls"
+        xmlns:materialicons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+  <Design.PreviewWith>
+    <Window Width="500" Height="500">
+      <DockPanel>
+        <Menu DockPanel.Dock="Top">
+          <MenuItem  Header="_File">
+            <MenuItem Header="_Load Folder..." Command="{Binding LoadFolderCommand}"/>
+            <MenuItem Header="Exit"/>
+          </MenuItem>
+        </Menu>
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="1"/>
+            <RowDefinition Height="100"/>
+          </Grid.RowDefinitions>
+          <StackPanel Orientation="Vertical">
+            <Border>
+              <Button>Test button</Button>
+            </Border>
+            <WrapPanel Orientation="Horizontal">
+              <Border Classes="tag">
+                <StackPanel Orientation="Horizontal">
+                  <Label>Test Tag</Label>
+                  <Button>x</Button>
+                </StackPanel>
+              </Border>
+              <Border Classes="tag">
+                <StackPanel Orientation="Horizontal">
+                  <Label>Test Tag</Label>
+                  <Button>x</Button>
+                </StackPanel>
+              </Border>
+            </WrapPanel>
+          </StackPanel>
+          <GridSplitter Grid.Row="1" Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+        </Grid>
+      </DockPanel>
+    </Window>
+  </Design.PreviewWith>
+  <StyleInclude Source="/Styles/DefaultTheme.axaml"/>
+  <!--<Style Selector="Window">
+    <Setter Property="Background" Value="{DynamicResource MainBackgroundColor}"/>
+  </Style>
+  <Style Selector="Menu">
+    <Setter Property="Background" Value="{DynamicResource SecondaryBackgroundColor}"/>
+  </Style>
+  <Style Selector="MenuItem">
+    <Setter Property="Background" Value="{DynamicResource SecondaryBackgroundColor}"/>
+  </Style>
+  <Style Selector="ListBox">
+    <Setter Property="Background" Value="{DynamicResource ControlInteractiveContentBackgroundColor}"/>
+  </Style>
+  <Style Selector="ToggleButton">
+    <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveColor}"/>
+  </Style>
+  <Style Selector="ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveHoverColor}"/>
+  </Style>
+  <Style Selector="ToggleButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource PrimaryInteractivePressedColor}"/>
+  </Style>
+  <Style Selector="Button">
+    <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveColor}"/>
+  </Style>
+  <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveHoverColor}"/>
+  </Style>
+  <Style Selector="Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource PrimaryInteractivePressedColor}"/>
+  </Style>
+  <Style Selector="GridSplitter">
+    <Setter Property="Background" Value="{DynamicResource BorderColor}"/>
+  </Style>
+  <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveHoverColor}" />
+  </Style>
+  <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveColor}" />
+  </Style>-->
+  <Style Selector="MenuItem:pointerover /template/ Border#PART_LayoutRoot">
+    <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveHoverColor}"/>
+  </Style>
+  <Style Selector="StackPanel.toolbar">
+    <Setter Property="Background" Value="{DynamicResource SecondaryBackgroundColor}" />
+    <Setter Property="Height" Value="40" />
+  </Style>
+  <Style Selector="StackPanel.toolbar > Button">
+    <Setter Property="Height" Value="30" />
+    <Setter Property="Width" Value="30" />
+    <Setter Property="Margin" Value="5, 0, 5, 0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="StackPanel.toolbar materialicons|MaterialIcon">
+    <Setter Property="Height" Value="20" />
+    <Setter Property="Width" Value="20" />
+  </Style>
+  <Style Selector="StackPanel.toolbar > ToggleButton">
+    <Setter Property="Height" Value="30" />
+    <Setter Property="Width" Value="30" />
+    <Setter Property="Margin" Value="5, 0, 5, 0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="StackPanel.toolbar > ToggleButton:focus">
+    <Setter Property="Background" Value="{StaticResource SystemAccentColorLight1}"/>
+  </Style>
+  <Style Selector="StackPanel.toolbar > ComboBox">
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="Height" Value="30"/>
+    <Setter Property="FontSize" Value="10" />
+    <Setter Property="Padding" Value="5"/>
+    <Setter Property="Margin" Value="5, 0, 5, 0" />
+  </Style>
+  <Style Selector="StackPanel.toolbar ComboBox /template/ ComboBoxItem#PART_ContentPresenter">
+    <Setter Property="Padding" Value="0"/>
+  </Style>
+  <Style Selector="StackPanel.toolbar NumericUpDown">
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="Height" Value="30"/>
+    <Setter Property="Width" Value="75"/>
+    <Setter Property="Margin" Value="5, 0, 5, 0" />
+  </Style>
+  <Style Selector="Border.tag">
+    <Setter Property="CornerRadius" Value="5"/>
+    <Setter Property="Background" Value="{DynamicResource SystemBaseMediumColor}"/>
+    <Setter Property="Margin" Value="2"/>
+  </Style>
+  <Style Selector="Border.tag:pointerover">
+    <Setter Property="Background" Value="{DynamicResource SystemBaseMediumColor}"/>
+  </Style>
+  <Style Selector="Border.tag Label">
+    <Setter Property="VerticalAlignment" Value="Center"/>
+  </Style>
+  <Style Selector="Border.tag Button">
+    <Setter Property="CornerRadius" Value="5"/>
+    <Setter Property="Background" Value="Transparent"/>
+  </Style>
+  <Style Selector="Border.tag PathIcon">
+    <Setter Property="Margin" Value="4" />
+    <Setter Property="Height" Value="16"/>
+    <Setter Property="Width" Value="16"/>
+    <Setter Property="Cursor" Value="DragMove"/>
+  </Style>
+  <Style Selector="NumericUpDown /template/ ButtonSpinner">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DataValidationErrors>
+          <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  MinHeight="{TemplateBinding MinHeight}">
+            <DockPanel>
+              <UniformGrid Rows="2" Name="PART_SpinnerPanel"
+                          DockPanel.Dock="Right"
+                          IsVisible="{TemplateBinding ShowButtonSpinner}"
+                          Width="24">
+                <RepeatButton Name="PART_IncreaseButton"
+                              Classes="ButtonSpinnerRepeatButton"
+                              VerticalContentAlignment="Center"
+                              HorizontalContentAlignment="Left"
+                              Foreground="{TemplateBinding Foreground}"
+                              BorderBrush="{TemplateBinding BorderBrush}"
+                              Background="{TemplateBinding Background}"
+                              FontSize="{TemplateBinding FontSize}"
+                              Width="24">
+                  <Path Fill="{TemplateBinding Foreground}"
+                        Width="8"
+                        Height="6"
+                        Stretch="Fill"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Data="{StaticResource ButtonSpinnerIncreaseButtonIcon}" />
+                </RepeatButton>
+
+                <RepeatButton Name="PART_DecreaseButton"
+                              Classes="ButtonSpinnerRepeatButton"
+                              Foreground="{TemplateBinding Foreground}"
+                              BorderBrush="{TemplateBinding BorderBrush}"
+                              Background="{TemplateBinding Background}"
+                              VerticalContentAlignment="Center"
+                              HorizontalContentAlignment="Left"
+                              FontSize="{TemplateBinding FontSize}"
+                              Width="24">
+                  <Path Fill="{TemplateBinding Foreground}"
+                        Width="8"
+                        Height="6"
+                        Stretch="Fill"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Data="{StaticResource ButtonSpinnerDecreaseButtonIcon}" />
+                </RepeatButton>
+              </UniformGrid>
+
+              <ContentPresenter Name="PART_ContentPresenter"
+                                Grid.Column="1"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Content="{TemplateBinding Content}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Padding="{TemplateBinding Padding}" />
+            </DockPanel>
+          </Border>
+        </DataValidationErrors>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="CheckBox">
+    <Setter Property="Padding" Value="8,0,0,0" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+    <Setter Property="MinHeight" Value="20" />
+    <!--<Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}" />
+    <Setter Property="FocusVisualMargin" Value="-7,-3,-7,-3" />-->
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid x:Name="RootGrid" ColumnDefinitions="20,*">
+          <Border x:Name="PART_Border"
+                  Grid.ColumnSpan="2"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{TemplateBinding CornerRadius}" />
+
+          <Grid VerticalAlignment="Top">
+            <Border x:Name="NormalRectangle"
+                BorderThickness="{DynamicResource CheckBoxBorderThemeThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                UseLayoutRounding="False"
+                Height="20"
+                Width="20" />
+
+            <Viewbox UseLayoutRounding="False">
+              <Panel>
+                <Panel Height="16" Width="16" />
+                <Path x:Name="CheckGlyph" Stretch="Uniform" VerticalAlignment="Center" />
+              </Panel>
+            </Viewbox>
+          </Grid>
+          <ContentPresenter x:Name="ContentPresenter"
+                         ContentTemplate="{TemplateBinding ContentTemplate}"
+                         Content="{TemplateBinding Content}"
+                         Margin="{TemplateBinding Padding}"
+                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                         Grid.Column="1" />
+          <!-- TODO: TextWrapping="Wrap" on contentpresenter -->
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="controls|HeaderControl">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate>
+          <Border BorderBrush="{StaticResource SystemAltMediumLowColor}" BorderThickness="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White">
+            <Grid RowDefinitions="Auto,*" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+              <Grid Background="{StaticResource SystemAltMediumLowColor}">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    Name="TitleLabel"
+                    Margin="10,0,0,0"
+                    Content="{Binding Title}"
+                    Foreground="White" />
+                <Button Name="CloseButton" Grid.Column="1" BorderBrush="White" Height="16" Width="16" VerticalAlignment="Center" Padding="0" Foreground="White">
+                  <PathIcon Data="{StaticResource dismiss_regular}"  HorizontalAlignment="Center" VerticalAlignment="Center"  Foreground="White" Width="8" Height="8"/>
+                </Button>
+              </Grid>
+              <ContentPresenter Name="Presenter" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                Content="{TemplateBinding Content}"/>
+            </Grid>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</Styles>
+

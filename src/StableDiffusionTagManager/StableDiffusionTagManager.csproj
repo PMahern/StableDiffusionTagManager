@@ -1,0 +1,75 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Include="Styles\**" />
+    <AvaloniaResource Remove="Assets\tags.csv" />
+    <AvaloniaXaml Remove="Styles\DefaultTheme.axaml" />
+    <AvaloniaXaml Remove="Styles\Icons.axaml" />
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TrimmerRootDescriptor Include="Roots.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.18" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+    <PackageReference Include="Deadpikle.AvaloniaProgressRing" Version="0.9.8" />
+    <PackageReference Include="Material.Icons.Avalonia" Version="1.1.10" />
+    <PackageReference Include="MessageBox.Avalonia" Version="2.1.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.0" />
+    <PackageReference Include="ThemeEditor.Controls.ColorPicker" Version="0.10.17" />
+    <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ImageUtil\ImageUtil.csproj" />
+    <ProjectReference Include="..\SdWebUiApi\SdWebUiApi.csproj" />
+    <ProjectReference Include="..\TagUtil\TagUtil.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Update="Styles\DefaultTheme.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Styles\Icons.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\ImageTouchupDialog.axaml.cs">
+      <DependentUpon>ImageTouchupDialog.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ProjectSettingsDialog.axaml.cs">
+      <DependentUpon>ProjectSettingsDialog.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\tags.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="xcopy /e /i /y /s $(ProjectDir)..\..\submodules\kumiko $(ProjectDir)$(OutDir)Assets\kumiko" />
+  </Target>
+
+  <Target Name="AddPayloadsFolder" AfterTargets="Publish">
+    <Exec Command="xcopy /e /i /y /s $(ProjectDir)..\..\submodules\kumiko $(PublishDir)Assets\kumiko" />
+  </Target>
+</Project>

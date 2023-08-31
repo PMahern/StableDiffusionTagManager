@@ -1,0 +1,3 @@
+[submodule "submodules/kumiko"]
+	path = submodules/kumiko
+	url = https://github.com/njean42/kumiko.git

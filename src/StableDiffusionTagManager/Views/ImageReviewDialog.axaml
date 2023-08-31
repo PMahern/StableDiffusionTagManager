@@ -1,0 +1,70 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:aib="using:UVtools.AvaloniaControls"
+        xmlns:conv="using:StableDiffusionTagManager.Converters"
+        xmlns:views="using:StableDiffusionTagManager.Views"
+        mc:Ignorable="d"
+        d:DesignWidth="800" d:DesignHeight="450"
+        Width="1200"
+        Height="800"
+        x:Class="StableDiffusionTagManager.Views.ImageReviewDialog"
+        Icon="/Assets/logo.ico"
+        Title="{Binding Title}">
+  <Grid RowDefinitions="*,Auto">
+    <Grid.Resources>
+      <conv:ReviewModeToBoolConverter x:Key="reviewModeToBoolConverter"/>
+    </Grid.Resources>
+    <Grid ColumnDefinitions="1*,2,1*">
+      <aib:AdvancedImageBox Image="{Binding SelectedImage.Image}"/>
+      <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
+      <ListBox Name="ImageList"
+               Grid.Column="2"
+               VirtualizationMode="Simple"
+               Items="{Binding Images}"
+               SelectedItem="{Binding SelectedImage}"
+               HorizontalAlignment="Stretch"
+               ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <ListBox.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel Orientation="Horizontal"
+                       Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=Bounds.Width}"/>
+          </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <Grid>
+              <Image Source="{Binding Image}" Height="200"/>
+              <Grid Background="White"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"
+                      Margin="5"
+                     MinHeight="0"
+                     MinWidth="0"
+                     IsVisible="{Binding ElementName=ImageList, 
+                                            Path=DataContext.ReviewMode, 
+                                            RelativeSource={RelativeSource AncestorType=ListBox},
+                                            Converter={StaticResource ResourceKey=reviewModeToBoolConverter}, 
+                                            ConverterParameter={x:Static views:ImageReviewDialogMode.MultiSelect}}">
+                <CheckBox IsChecked="{Binding IsSelected}"
+                          Margin="0"
+                          Padding="0"
+                        ></CheckBox>
+              </Grid>
+            </Grid>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </Grid>
+    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+      <Button Command="{Binding ChooseImageCommand}" IsVisible="{Binding ReviewMode, 
+                                            Converter={StaticResource ResourceKey=reviewModeToBoolConverter}, 
+                                            ConverterParameter={x:Static views:ImageReviewDialogMode.SingleSelect}}">Choose Image</Button>
+      <Button Command="{Binding ChooseImageCommand}" IsVisible="{Binding ReviewMode, 
+                                            Converter={StaticResource ResourceKey=reviewModeToBoolConverter}, 
+                                            ConverterParameter={x:Static views:ImageReviewDialogMode.MultiSelect}}">Choose Images</Button>
+      <Button Command="{Binding CancelCommand}">Cancel</Button>
+    </StackPanel>
+  </Grid>
+</Window>

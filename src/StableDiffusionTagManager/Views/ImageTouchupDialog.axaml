@@ -1,0 +1,92 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="using:StableDiffusionTagManager.Controls"
+        xmlns:progRing="clr-namespace:AvaloniaProgressRing;assembly=AvaloniaProgressRing"
+        xmlns:conv="using:StableDiffusionTagManager.Converters"
+        mc:Ignorable="d"
+        Width="1600"
+        Height="900"
+        x:Class="StableDiffusionTagManager.Views.ImageTouchupDialog"
+        Icon="/Assets/logo.ico"
+        Title="Touchup Image">
+  <Grid>
+    <Grid RowDefinitions="*,Auto">
+      <Grid ColumnDefinitions="*,*">
+        <controls:ImageBoxWithControls Name="ImageBox"
+                                       Image="{Binding Image}"
+                                       ShowExtractComicPanelsButton="False"
+                                       ShowEditImageButton="False"
+                                       ShowInterrogateButton="False"/>
+        <DockPanel Grid.Column="1">
+          <StackPanel  Orientation="Vertical" DockPanel.Dock="Top">
+            <controls:HeaderControl Title="Prompt" >
+              <TextBox Height="150" Text="{Binding Prompt, Mode=TwoWay}" TextWrapping="Wrap" />
+            </controls:HeaderControl>
+            <controls:HeaderControl Title="Negative Prompt" >
+              <TextBox Height="150" Text="{Binding NegativePrompt, Mode=TwoWay}" TextWrapping="Wrap"/>
+            </controls:HeaderControl>
+            <controls:HeaderControl Title="Sampler Options" >
+              <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*, Auto, *, Auto">
+                <Label>Sampler</Label>
+                <DropDown Grid.Column="1" SelectedItem="{Binding SelectedSampler}" Items="{Binding Samplers}" Width="200"/>
+
+                <Label Grid.Column="2">Sampling Steps</Label>
+                <NumericUpDown Grid.Column="3" Value="{Binding SamplingSteps}"  Increment="1" Minimum="1" Maximum="100"/>
+
+
+                <Label Grid.Row="1">Denoise Strength</Label>
+                <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding DenoiseStrength}" Increment=".1" Maximum="1" Minimum="0" />
+              </Grid>
+            </controls:HeaderControl>
+            <controls:HeaderControl Title="Mask Options">
+              <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*, Auto, *, Auto">
+                <Grid.Resources>
+                  <conv:MaskedContentToStringConverter x:Key="maskedContentToStringConverter"/>
+                </Grid.Resources>
+                <Label>Mask Blur</Label>
+                <NumericUpDown Grid.Column="1" Value="{Binding MaskBlur}"  Increment="1" Minimum="0" Maximum="10"/>
+
+                <Label Grid.Column="2">Inpaint Only Masked</Label>
+                <CheckBox Grid.Column="3" IsChecked="{Binding InpaintOnlyMasked}"/>
+
+                <Label Grid.Row="1">Inpaint Only Masked Padding</Label>
+                <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding OnlyMaskedPadding}"  Increment="1" Minimum="0" Maximum="1000"/>
+
+                <Label Grid.Row="1" Grid.Column="2">Masked Content</Label>
+                <DropDown Grid.Row="1" Grid.Column="3" SelectedItem="{Binding SelectedMaskedContent}" Items="{Binding MaskedContents}" Width="200">
+                  <DropDown.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding Converter={StaticResource ResourceKey=maskedContentToStringConverter}}"/>
+                    </DataTemplate>
+                  </DropDown.ItemTemplate>
+                </DropDown>
+              </Grid>
+            </controls:HeaderControl>
+            <controls:HeaderControl Title="Other Options">
+              <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*, Auto, *, Auto">
+                <Label>Batch Size</Label>
+                <NumericUpDown Grid.Column="1" Value="{Binding BatchSize}"  Increment="1" Minimum="1" Maximum="100"/>
+              </Grid>
+            </controls:HeaderControl>
+            <Button Command="{Binding GenerateImages}">Generate</Button>
+          </StackPanel>
+        </DockPanel>
+      </Grid>
+      <StackPanel HorizontalAlignment="Center" Grid.Row="1" DockPanel.Dock="Bottom" Orientation="Horizontal">
+        <Button Command="{Binding SaveChangesCommand}">Save Changes</Button>
+        <Button Command="{Binding CancelCommand}">Cancel</Button>
+      </StackPanel>
+    </Grid>
+    <Border IsVisible="{Binding IsLoading}" Background="#40000000" >
+      <progRing:ProgressRing Width="80"
+                         Height="80"
+                         IsActive="{Binding IsLoading}"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Foreground="Green"
+                         Margin="10,20,0,0"/>
+    </Border>
+  </Grid>
+</Window>

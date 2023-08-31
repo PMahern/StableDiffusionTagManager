@@ -1,0 +1,110 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             Name="ThisControl"
+             xmlns:aib="using:UVtools.AvaloniaControls"
+             xmlns:conv="using:StableDiffusionTagManager.Converters"
+             xmlns:controls="using:StableDiffusionTagManager.Controls"
+             xmlns:cp="clr-namespace:ThemeEditor.Controls.ColorPicker;assembly=ThemeEditor.Controls.ColorPicker"
+             xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StableDiffusionTagManager.Controls.ImageBoxWithControls">
+  <UserControl.Resources>
+    <conv:ImageViewerModeToBoolConverter x:Key="modeConverter"/>
+    <conv:ColorBrushConverter x:Key="colorConverter"/>
+  </UserControl.Resources>
+  <Grid DataContext="{Binding ElementName=ThisControl}">
+    <DockPanel>
+      <Grid Classes="toolbar" DockPanel.Dock="Top">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Classes="toolbar" Grid.Column="0">
+          <ToggleButton Command="{Binding SetSelectModeCommand}" IsChecked="{Binding CurrentMode, Converter={StaticResource ResourceKey=modeConverter}, ConverterParameter={x:Static controls:ImageViewerMode.Selection}, Mode=OneWay}" ToolTip.Tip="Selection Mode">
+            <mi:MaterialIcon Kind="Select" Width="20" Height="20"/>
+          </ToggleButton>
+          <ToggleButton Command="{Binding SetPaintModeCommand}" IsChecked="{Binding CurrentMode, Converter={StaticResource ResourceKey=modeConverter}, ConverterParameter={x:Static controls:ImageViewerMode.Paint}, Mode=OneWay}" ToolTip.Tip="Paint Mode">
+            <mi:MaterialIcon Kind="Brush" Width="20" Height="20"/>
+          </ToggleButton>
+          <ToggleButton Command="{Binding SetMaskModeCommand}" IsVisible="{Binding ShowMaskModeButton}" IsChecked="{Binding CurrentMode, Converter={StaticResource ResourceKey=modeConverter}, ConverterParameter={x:Static controls:ImageViewerMode.Mask}, Mode=OneWay}" ToolTip.Tip="Mask Mode">
+            <mi:MaterialIcon Kind="DominoMask"/>
+          </ToggleButton>
+          <Button Command="{Binding ExtractComicPanelsCommand}" IsVisible="{Binding ShowExtractComicPanelsButton}" ToolTip.Tip="Extract Comic Panels">
+            <mi:MaterialIcon Kind="PhotoLibrary"/>
+          </Button>
+          <Button Command="{Binding EditImageCommand}" IsVisible="{Binding ShowEditImageButton}" ToolTip.Tip="Touch Up Image">
+            <PathIcon Data="{StaticResource image_edit_regular}" />
+          </Button>
+          <ToggleButton Command="{Binding InterrogateCommand}" IsVisible="{Binding ShowInterrogateButtonProperty}" ToolTip.Tip="Interrogate SD Webui For Tags">
+            <mi:MaterialIcon Kind="Eye"/>
+          </ToggleButton>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  Classes="toolbar" Grid.Column="2" IsVisible="{Binding CurrentMode, Converter={StaticResource ResourceKey=modeConverter}, ConverterParameter={x:Static controls:ImageViewerMode.Selection}, Mode=OneWay}">
+          <Button Command="{Binding CropSelectionCommand}" ToolTip.Tip="Crop Selection">
+            <PathIcon Data="{StaticResource crop_regular}" />
+          </Button>
+          <Label>x</Label>
+          <NumericUpDown Value="{Binding SelectionX, Mode=TwoWay}"/>
+          <Label>y</Label>
+          <NumericUpDown Value="{Binding SelectionY, Mode=TwoWay}"/>
+          <Label>w</Label>
+          <NumericUpDown Value="{Binding SelectionWidth, Mode=TwoWay}"/>
+          <Label>h</Label>
+          <NumericUpDown Value="{Binding SelectionHeight, Mode=TwoWay}"/>
+          <ToggleButton IsChecked="{Binding IsAspectRatioLocked}">
+            <PathIcon Data="{StaticResource lock_regular}" />
+          </ToggleButton>
+        </StackPanel>
+        <StackPanel  IsVisible="{Binding CurrentMode, Converter={StaticResource ResourceKey=modeConverter}, ConverterParameter={x:Static controls:ImageViewerMode.Paint}, Mode=OneWay}" Orientation="Horizontal" Classes="toolbar" Grid.Column="2">
+          <ComboBox Items="{Binding BrushSizes}" SelectedItem="{Binding SelectedBrushSize}" ToolTip.Tip="Brush Size">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <ComboBoxItem Content="{Binding}" Padding="0"/>
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+          <Button Command="{Binding ChooseColorCommand}" Background="{Binding PaintBrushColor, Converter={StaticResource ResourceKey=colorConverter}}" ToolTip.Tip="Brush Color"/>
+          <Button Command="{Binding UndoLastPaintCommand}" ToolTip.Tip="Undo Paint Layer">
+            <PathIcon Data="{StaticResource arrow_undo_regular}" />
+          </Button>
+        </StackPanel>
+        <StackPanel  IsVisible="{Binding CurrentMode, Converter={StaticResource ResourceKey=modeConverter}, ConverterParameter={x:Static controls:ImageViewerMode.Mask}, Mode=OneWay}" Orientation="Horizontal" Classes="toolbar" Grid.Column="2">
+          <ComboBox Items="{Binding BrushSizes}" SelectedItem="{Binding SelectedMaskSize}"  ToolTip.Tip="Mask Brush Size">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <ComboBoxItem Content="{Binding}" Padding="0"/>
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+          <Button Command="{Binding UndoLastMaskCommand}" ToolTip.Tip="Undo Last Mask Layer">
+            <PathIcon Data="{StaticResource arrow_undo_regular}" />
+          </Button>
+        </StackPanel>
+      </Grid>
+      <aib:AdvancedImageBox Name="ImageBox"
+                                    Image="{Binding Image}"
+                                    SelectionMode="{Binding ImageBoxSelectionMode}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    PanWithMouseButtons="RightButton"
+                                    SelectWithMouseButtons="{Binding SelectWithMouseButtons}"
+                                    PaintWithMouseButtons="{Binding PaintWithMouseButtons}"
+                                    MaskWithMouseButtons="{Binding MaskWithMouseButtons}"
+                                    PaintBrushSize="{Binding SelectedBrushSize}"
+                                    MaskBrushSize="{Binding SelectedMaskSize}"
+                                    PaintBrushColor="{Binding PaintBrushColor}"
+                                    SelectionRegion="{Binding SelectionRegion, Mode=TwoWay}"
+                                    IsAspectRatioLocked="{Binding IsAspectRatioLocked, Mode=TwoWay}"/>
+    </DockPanel>
+    <Border IsVisible="{Binding IsChoosingColor}" Background="#40000000">
+      <controls:HeaderControl Title="Select Color" CloseCommand="{Binding CloseColorSelectorCommand}" Height="450" Width="400">
+        <Border Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+          <cp:ColorPicker IsVisible="{Binding IsChoosingColor}" Color="{Binding PaintBrushColor, Mode=TwoWay}" />
+        </Border>
+      </controls:HeaderControl>
+    </Border>
+  </Grid>
+</UserControl>

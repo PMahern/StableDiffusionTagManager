@@ -1,0 +1,63 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        x:Class="StableDiffusionTagManager.Views.ProjectSettingsDialog"
+        Height="270"
+        Width="400"
+        xmlns:controls="using:StableDiffusionTagManager.Controls"
+        xmlns:conv="using:StableDiffusionTagManager.Converters"
+        xmlns:api="using:SdWebUpApi"
+        CanResize="False"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="4"
+        ExtendClientAreaToDecorationsHint="True"
+        WindowStartupLocation="CenterOwner"
+        Title="Project Settings"
+        Icon="/Assets/logo.ico"
+        Name="ThisControl">
+  <Window.Styles>
+    <Style Selector="RadioButton">
+      <Setter Property="Margin" Value="5,0,0,0"></Setter>
+    </Style>
+  </Window.Styles>
+  <Window.Resources>
+    <conv:InterrogateMethodToBooleanConverter x:Key="interrogateConverter"/>
+  </Window.Resources>
+  <controls:HeaderControl DataContext="{Binding ElementName=ThisControl}" Title="Project Settings" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="5" CloseCommand="{Binding CancelCommand}">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+      <Label >Default Prompt Prefix</Label>
+      <TextBox Width="200" Grid.Column="1" Text="{Binding DefaultPromptPrefix}" />
+
+      <Label Grid.Row="1">Default Negative Prompt</Label>
+      <TextBox Width="200" Grid.Row="1" Grid.Column="1" Text="{Binding DefaultNegativePrompt}" />
+
+      <Label Grid.Row="2">Activation Keyword</Label>
+      <TextBox Width="200" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Text="{Binding ActivationKeyword}" />
+
+      <Label Grid.Row="3">Default Denoise Strength</Label>
+      <NumericUpDown HorizontalAlignment="Right" Grid.Row="3" Grid.Column="1" Value="{Binding DefaultDenoiseStrength}" Width="30" Minimum="0" Maximum="1" Increment="0.1"/>
+
+      <Grid Grid.Row="4" Grid.ColumnSpan="2" ColumnDefinitions="*,Auto,*,Auto">
+        <Label>Image Width</Label>
+        <NumericUpDown Grid.Column="1" Value="{Binding TargetImageWidth}" Width ="60" Minimum="0"/>
+        <Label Grid.Column="2">Image Height</Label>
+        <NumericUpDown Grid.Column="3" Value="{Binding TargetImageHeight}" Width="60" Minimum="0"/>
+      </Grid>
+
+      <Grid Grid.Row="5" Grid.ColumnSpan="2" ColumnDefinitions="*,Auto">
+        <Label>Interrogate Method</Label>
+        <StackPanel Grid.Column="1" Orientation="Horizontal">
+          <RadioButton IsChecked="{Binding InterrogateMethod, Converter={StaticResource ResourceKey=interrogateConverter}, ConverterParameter={x:Static api:InterrogateMethod.Clip}, Mode=TwoWay}">CLIP</RadioButton>
+          <RadioButton IsChecked="{Binding InterrogateMethod, Converter={StaticResource ResourceKey=interrogateConverter}, ConverterParameter={x:Static api:InterrogateMethod.DeepDanBooru}, Mode=TwoWay}">DeepDanBooru</RadioButton>
+        </StackPanel>
+      </Grid>
+
+      <StackPanel Grid.Row="6" Grid.Column="1" HorizontalAlignment="Center" Orientation="Horizontal">
+        <Button Command="{Binding SaveCommand}">Save</Button>
+        <Button Command="{Binding CancelCommand}">Cancel</Button>
+      </StackPanel>
+    </Grid>
+  </controls:HeaderControl>
+</Window>
