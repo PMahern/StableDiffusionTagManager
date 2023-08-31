@@ -27,7 +27,7 @@ After loading your image set you'll be presented with the following layout.
 
 ![image](https://github.com/PMahern/StableDiffusionTagManager/assets/18010074/609b450d-d4c2-43f5-8ec0-867a9ce73410)
 
-Across the top are the images in the set and on the right are the tags for the currently selected image. On the right is an image viewer with the currently selected image and some simple controls for manipulating the image and on the right are the tags for the current image.
+Across the top are the images in the set and on the right are the tags for the currently selected image. On the left is an image viewer with the currently selected image and some simple controls for manipulating the image.
 
 ## The Image Viewer 
 
