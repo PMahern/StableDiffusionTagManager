@@ -31,7 +31,7 @@ Across the top are the images in the set and on the right are the tags for the c
 
 ## The Image Viewer 
 
-The image viewer itself has some tools for simple editing of the image. There's a selection mode for selecting a region in the photo to crop it into a new photo, a painting mode for simple drawing (mostly to paint over out things you don't want in the image set), a button to extract comic panels from the image, a button to launch a "touch up" utility for using stable diffusion to inpaint on the image, and an interrogate button for generating tags for the current image using AUTOMATIC1111's built in interrogate tool.
+The image viewer itself has some tools for simple editing of the image. There's a selection mode for selecting a region in the photo to crop it into a new photo, a painting mode for simple drawing (mostly to paint over things you don't want in the image set), a button to extract comic panels from the image, a button to launch a "touch up" utility for using stable diffusion to inpaint on the image, and an interrogate button for generating tags for the current image using AUTOMATIC1111's built in interrogate tool.
 
 ### Image "Touch up"
 
