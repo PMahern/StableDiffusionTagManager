@@ -45,16 +45,21 @@ Probably not the best example, but the intent is that you can fix up images befo
 
 ## Tagging
 
+Upon startup, the application will look for a tags.csv in the folder where the exe lies. It expects a csv with two columns, the first being a tag name and the second being a number. It will order the tags in descending order and use these 
+as autocomplete suggestions anywhere you might type a tag. One such example file can be found [here](https://github.com/stmobo/Machine-Learning/blob/master/danbooru-chars.csv).
+
 It's usually best to try and use the interrogate function to generate an initial set of tags. It hallucinates a lot of tags but you can quickly trim the excess ones and it often times may spot things you didn't think to add. After getting an initial set of tags there are several hotkeys to help with the extremely tedious process of tagging.
 
 - Shift + enter will add a tag in front of the currently focused tag (or at the front of all the tags if none is selected).
-- Ctrl + enter will add a tag to the beginning
+- Ctrl + enter will add a tag to the beginning of the current tag set
 - Alt + enter will add a tag to the end of the current tag set
 - Shift + left or right arrow will move focus between the current images tags
 - Ctrl + left or right will move the currently focused tag left or right
 - Alt + left or right will move between images in the set
 - Ctrl + delete will delete the currently focused tag
-- Alt + delete will delete the currently selected image
+- Alt + delete will delete the currently selected image (with a warning)
+
+
 
 ### Thanks
 
