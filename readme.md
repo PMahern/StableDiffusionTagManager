@@ -53,7 +53,7 @@ It's usually best to try and use the interrogate function to generate an initial
 - Shift + enter will add a tag in front of the currently focused tag (or at the front of all the tags if none is selected).
 - Ctrl + enter will add a tag to the beginning of the current tag set
 - Alt + enter will add a tag to the end of the current tag set
-- Shift + left or right arrow will move focus between the current images tags
+- Shift + left or right arrow will move focus between the current image's tags
 - Ctrl + left or right will move the currently focused tag left or right
 - Alt + left or right will move between images in the set
 - Ctrl + delete will delete the currently focused tag
