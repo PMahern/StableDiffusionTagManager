@@ -38,7 +38,7 @@ namespace StableDiffusionTagManager.Controls
         public Func<Bitmap, Task>? InterrogateClicked;
         public Func<Bitmap, Task>? EditImageClicked;
         public Func<List<Bitmap?>, Task>? ComicPanelsExtracted;
-        
+
 
         private (int x, int y) _lockedSize;
         private bool isAspectRatioLocked = false;
@@ -405,8 +405,8 @@ namespace StableDiffusionTagManager.Controls
                             {
                                 var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
                                         .GetMessageBoxStandardWindow(
-                                            "Panel Extraction Failed", 
-                                            $"Failed to execute kumiko panel extraction. Exception message was : {e.Message}", 
+                                            "Panel Extraction Failed",
+                                            $"Failed to execute kumiko panel extraction. Exception message was : {e.Message}",
                                             MessageBox.Avalonia.Enums.ButtonEnum.Ok);
 
                                 await messageBoxStandardWindow.ShowDialog(window);
@@ -420,8 +420,12 @@ namespace StableDiffusionTagManager.Controls
         #endregion
         public void CropImageRegionAndCreateNewImage(Rect region, PixelSize? targetSize = null)
         {
-            var finalSize = targetSize ?? new PixelSize(Convert.ToInt32(region.Width), Convert.ToInt32(region.Height));
-            var newImage = ImageBox.CreateNewImageWithLayersFromRegion(region);
+            var finalSize = new PixelSize(Convert.ToInt32(region.Width), Convert.ToInt32(region.Height));
+            if (targetSize != null && targetSize.Value.Height > 0 && targetSize.Value.Width > 0)
+            {
+                finalSize = targetSize.Value;
+            }
+            var newImage = ImageBox.CreateNewImageWithLayersFromRegion(region, finalSize);
             if (newImage != null)
             {
                 ImageCropped?.Invoke(this, newImage);
@@ -465,7 +469,11 @@ namespace StableDiffusionTagManager.Controls
             {
                 if (this.EditImageClicked != null)
                 {
-                    await this.EditImageClicked.Invoke(ImageBox.CreateNewImageWithLayersFromRegion(null));
+                    var image = ImageBox.CreateNewImageWithLayersFromRegion();
+                    if (image != null)
+                    {
+                        await this.EditImageClicked.Invoke(image);
+                    }
                 }
 
             }
@@ -480,9 +488,9 @@ namespace StableDiffusionTagManager.Controls
         [RelayCommand]
         public void Save()
         {
-            if(ImageBox.IsPainted)
+            if (ImageBox.IsPainted)
             {
-                var bitmap = ImageBox.CreateNewImageWithLayersFromRegion(null, null);
+                var bitmap = ImageBox.CreateNewImageWithLayersFromRegion();
                 if (bitmap != null)
                 {
                     SaveClicked?.Invoke(bitmap);

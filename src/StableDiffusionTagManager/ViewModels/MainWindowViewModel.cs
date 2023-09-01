@@ -239,6 +239,8 @@ namespace StableDiffusionTagManager.ViewModels
                     if (projFolder)
                     {
                         openProject = new Project(projFile);
+                        openProject.ProjectUpdated += UpdateProjectSettings;
+                        UpdateProjectSettings();
                     }
 
                     FolderTagSets = new FolderTagSets(pickResult);

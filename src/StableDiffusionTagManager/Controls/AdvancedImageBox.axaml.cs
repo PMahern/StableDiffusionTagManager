@@ -561,11 +561,14 @@ namespace UVtools.AvaloniaControls
                 control.IsPainted = false;
                 if (value != null && !control.paintLayers.ContainsKey(value))
                 {
-                    control.paintLayers[value] = new List<RenderTargetBitmap>();
-                    
-                } else
-                {
-                    control.IsPainted = control.paintLayers[value].Any();
+                    if (!control.paintLayers.ContainsKey(value))
+                    {
+                        control.paintLayers[value] = new List<RenderTargetBitmap>();
+                    }
+                    else
+                    {
+                        control.IsPainted = control.paintLayers[value].Any();
+                    }
                 }
 
                 if (value != null && !control.maskLayers.ContainsKey(value))
@@ -734,7 +737,8 @@ namespace UVtools.AvaloniaControls
                 }
                 IsPainted = set.Any();
                 TriggerRender();
-            } else
+            }
+            else
             {
                 IsPainted = false;
             }
@@ -1357,7 +1361,7 @@ namespace UVtools.AvaloniaControls
         private bool isPainted = false;
         public bool IsPainted
         {
-            get => isPainted; 
+            get => isPainted;
             set
             {
                 SetAndRaise(IsPaintedProperty, ref isPainted, value);
@@ -3068,7 +3072,7 @@ namespace UVtools.AvaloniaControls
             return CreateNewImageWithLayersFromRegion(SelectionRegion, targetSize);
         }
 
-        public Bitmap? CreateNewImageWithLayersFromRegion(Rect? region, PixelSize? targetSize = null)
+        public Bitmap? CreateNewImageWithLayersFromRegion(Rect? region = null, PixelSize? targetSize = null)
         {
             if (Image != null)
             {
