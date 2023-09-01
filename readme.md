@@ -21,7 +21,11 @@ The project is currently developed in Visual Studio 2022. Building it is pretty 
 
 Users can load a folder of images with corresponding tag files, when a folder is opened for the first time they will be prompted to create a project. Projects are not a requirement but allow some settings that are global to the image set.
 
+## Projects
+
 ![image](https://github.com/PMahern/StableDiffusionTagManager/assets/18010074/0707f413-71bd-4f42-a9bd-bb62b71480a9)
+
+Projects allow you to specify settings to help expedite certain tasks. The default prompt prefix will add the entered text as a prefix to the tags currently defined on an image when opening the image touch up window. The default negative prompt and denoise stregth will be automatically entered into their respective fields on the touch up screen. The image size setting specifies a size that all cropped images will be resized to, with the intent that eventually all images in the set will be resized to the same size since models tend to train better if the images are all the same size and match the size the original base model was trained on (such as 512x512 pixels for stable diffusion 1.5). If no image size is specified or 0 is entered into either dimension then images will be cropped to their original dimensions.
 
 After loading your image set you'll be presented with the following layout.
 
@@ -31,7 +35,7 @@ Across the top are the images in the set and on the right are the tags for the c
 
 ## The Image Viewer 
 
-The image viewer itself has some tools for simple editing of the image. There's a selection mode for selecting a region in the photo to crop it into a new photo, a painting mode for simple drawing (mostly to paint over things you don't want in the image set), a button to extract comic panels from the image, a button to launch a "touch up" utility for using stable diffusion to inpaint on the image, and an interrogate button for generating tags for the current image using AUTOMATIC1111's built in interrogate tool.
+The image viewer itself has some tools for simple editing of the image. There's a selection mode for selecting a region in the photo to crop it into a new photo, a painting mode for simple drawing (mostly to paint over things you don't want in the image set), a button to extract comic panels from the image, a button to launch a "touch up" utility for using stable diffusion to inpaint on the image, and an interrogate button for generating tags for the current image using AUTOMATIC1111's built in interrogate tool. In select mode there is a lock button in the top right which will lock the selection region to it's current aspect ratio. This allows you to for instance lock the aspect ratio to 1:1 and drag a selection area that will always be a square, and with the image size set to 512x512 in the project settings the cropped image will be resized to 512x512 without stretching the image in either dimension.
 
 ### Image "Touch up"
 
