@@ -1575,21 +1575,21 @@ namespace UVtools.AvaloniaControls
                 }
             }
 
-            var image = Image;
-            if (image is null) return;
+            var toDraw = Image;
+            if (toDraw is null) return;
             var imageViewPort = GetImageViewPort();
 
             //var targetImage = bitmapMips.ContainsKey(image) ? bitmapMips[image].First() : image;
-            IEnumerable<Bitmap> paintLayers = this.paintLayers[image];
+            IEnumerable<Bitmap> paintLayers = this.paintLayers[toDraw];
             if (mipScaleFactor > 1)
             {
-                var mipSet = mips[(image, mipScaleFactor)];
-                image = mipSet.image;
+                var mipSet = mips[(toDraw, mipScaleFactor)];
+                toDraw = mipSet.image;
                 paintLayers = mipSet.paintLayers;
             }
 
             // Draw image
-            context.DrawImage(image,
+            context.DrawImage(toDraw,
                 GetSourceImageRegion(mipScaleFactor),
                 imageViewPort
             );
@@ -1607,11 +1607,10 @@ namespace UVtools.AvaloniaControls
 
             if (maskLayers != null && (MaskWithMouseButtons != MouseButtons.None))
             {
-                IEnumerable<Bitmap> maskLayers = this.maskLayers[image];
+                IEnumerable<Bitmap> maskLayers = this.maskLayers[Image];
                 if (mipScaleFactor > 1)
                 {
-                    var mipSet = mips[(image, mipScaleFactor)];
-                    image = mipSet.image;
+                    var mipSet = mips[(Image, mipScaleFactor)];
                     maskLayers = mipSet.maskLayers;
                 }
 
@@ -1634,7 +1633,7 @@ namespace UVtools.AvaloniaControls
             {
                 var destSize = TrackerImageAutoZoom
                     ? new Size(_trackerImage!.Size.Width * zoomFactor, _trackerImage.Size.Height * zoomFactor)
-                    : image.Size;
+                    : toDraw.Size;
 
                 var destPos = new Point(
                     _pointerPosition.X - destSize.Width / 2,

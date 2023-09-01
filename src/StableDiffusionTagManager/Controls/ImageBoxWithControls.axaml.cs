@@ -377,7 +377,7 @@ namespace StableDiffusionTagManager.Controls
 
                 var appDir = App.GetAppDirectory();
 
-                KumikoWrapper kwrapper = new KumikoWrapper(Path.Combine(new string[] { appDir, "Assets", "kumiko" }));
+                KumikoWrapper kwrapper = new KumikoWrapper(App.Settings.PythonPath, Path.Combine(new string[] { appDir, "Assets", "kumiko" }));
                 if (Image != null)
                 {
                     try

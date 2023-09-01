@@ -28,10 +28,13 @@ namespace ImageUtil
 
     public class KumikoWrapper
     {
+        private readonly string pythonpath;
         private readonly string kumikopath;
 
-        public KumikoWrapper(string kumikopath)
+
+        public KumikoWrapper(string pythonpath, string kumikopath)
         {
+            this.pythonpath = pythonpath;
             this.kumikopath = kumikopath;
         }
 
@@ -44,7 +47,7 @@ namespace ImageUtil
             using (Process p = new Process())
             {
                 p.StartInfo.WorkingDirectory = kumikopath;
-                p.StartInfo.FileName = "python";
+                p.StartInfo.FileName = pythonpath;
                 p.StartInfo.Arguments = $"kumiko -i {imagepath} -o \"{outputfile}\"";
                 p.StartInfo.UseShellExecute = true;
 

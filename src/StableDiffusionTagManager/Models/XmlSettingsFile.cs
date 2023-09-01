@@ -38,12 +38,12 @@ namespace StableDiffusionTagManager.Models
         protected abstract void AddSettings(XDocument doc);
         protected abstract void LoadSettings(XDocument doc);
 
-        protected string? LoadSetting(XDocument doc, string name)
+        protected string? LoadSetting(XDocument doc, string name, string? def = null)
         {
-            return doc.Root?.Attribute(name)?.Value;
+            return doc.Root?.Attribute(name)?.Value ?? def;
         }
 
-        protected Nullable<TargetType> LoadSetting<TargetType>(XDocument doc, string name)
+        protected Nullable<TargetType> LoadSetting<TargetType>(XDocument doc, string name, TargetType def = default(TargetType))
             where TargetType : struct
         {
             var value = doc.Root?.Attribute(name)?.Value;
