@@ -10,8 +10,7 @@
         x:Class="StableDiffusionTagManager.Views.MainWindow"
         Icon="/Assets/logo.ico"
         Title="Stable Diffusion Tag Manager"
-        x:Name="mainWindow"
-        >
+        x:Name="mainWindow">
   <Window.Styles>
 
   </Window.Styles>
@@ -73,6 +72,7 @@
             <controls:ImageBoxWithControls Name="ImageBox"
                                   Image="{Binding SelectedImage.ImageSource}"
                                   TargetImageSize="{Binding TargetImageSize}"
+                                  ShowSaveButton="True"
                                   ShowMaskModeButton="False"/>
           </DockPanel>
         </Border>

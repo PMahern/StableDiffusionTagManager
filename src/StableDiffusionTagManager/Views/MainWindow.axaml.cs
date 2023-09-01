@@ -1,11 +1,13 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using StableDiffusionTagManager.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,6 +31,10 @@ namespace StableDiffusionTagManager.Views
             DataContextChanged += DataContextChangedHandler;
         }
 
+        public void asdf(object? sender, CancelEventArgs args)
+        {
+
+        }
         private void DataContextChangedHandler(object? sender, EventArgs e)
         {
             var viewModel = this.DataContext as MainWindowViewModel;
@@ -55,6 +61,7 @@ namespace StableDiffusionTagManager.Views
 
                 viewModel.ShowDialogHandler = new MessageBoxDialogHandler(this);
                 viewModel.ExitCallback = () => Close();
+                ImageBox.SaveClicked = async (image) => await viewModel.SaveCurrentImage(image);
                 ImageBox.ComicPanelsExtracted = async (images) => await viewModel.ReviewComicPanels(images);
                 ImageBox.ImageCropped += (source, image) => viewModel.AddNewImage(image);
                 ImageBox.InterrogateClicked = async (image) => await viewModel.Interrogate(image);
@@ -225,7 +232,12 @@ namespace StableDiffusionTagManager.Views
                 viewModel?.MoveTagRight(focusedTag);
             }
         }
-
+        
+        public async Task ImageBox_SavedClicked(object? sender, Bitmap image)
+        {
+            var viewModel = this.DataContext as MainWindowViewModel;
+            await viewModel?.SaveCurrentImage(image);
+        }
 
 
         public void FocusNextTag()

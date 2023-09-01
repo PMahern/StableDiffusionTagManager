@@ -33,19 +33,7 @@ namespace StableDiffusionTagManager.ViewModels
         public ImageWithTagsViewModel(Bitmap image, string newFileName)
         {
             imageSource = image;
-            if (image.PixelSize.Width > THUMBNAIL_SIZE || image.PixelSize.Height > THUMBNAIL_SIZE)
-            {
-                var aspectRatio = (float)image.PixelSize.Width / (float)image.PixelSize.Height;
-                var pixelSize = aspectRatio > 1.0 ? new PixelSize(THUMBNAIL_SIZE, (int)((float)THUMBNAIL_SIZE / aspectRatio)) : new PixelSize((int)((float)THUMBNAIL_SIZE * aspectRatio), THUMBNAIL_SIZE);
-                var renderBitmap = new RenderTargetBitmap(pixelSize);
-                using var dc = renderBitmap.CreateDrawingContext(null);
-                using var drawingContext = new DrawingContext(dc, false);
-                drawingContext.DrawImage(image, new Rect(0, 0, image.PixelSize.Width, image.PixelSize.Height), new Rect(0, 0, pixelSize.Width, pixelSize.Height));
-                thumbnail = renderBitmap;
-            }
-            else
-                thumbnail = image;
-
+            GenerateThumbnail();
 
             filename = filename = Path.GetFileName(newFileName);
             tags = new ObservableCollection<TagViewModel>();
@@ -101,6 +89,22 @@ namespace StableDiffusionTagManager.ViewModels
         public string GetTagsFileName()
         {
             return $"{System.IO.Path.GetFileNameWithoutExtension(Filename)}.txt";
+        }
+
+        public void GenerateThumbnail()
+        {
+            if (imageSource.PixelSize.Width > THUMBNAIL_SIZE || imageSource.PixelSize.Height > THUMBNAIL_SIZE)
+            {
+                var aspectRatio = (float)imageSource.PixelSize.Width / (float)imageSource.PixelSize.Height;
+                var pixelSize = aspectRatio > 1.0 ? new PixelSize(THUMBNAIL_SIZE, (int)((float)THUMBNAIL_SIZE / aspectRatio)) : new PixelSize((int)((float)THUMBNAIL_SIZE * aspectRatio), THUMBNAIL_SIZE);
+                var renderBitmap = new RenderTargetBitmap(pixelSize);
+                using var dc = renderBitmap.CreateDrawingContext(null);
+                using var drawingContext = new DrawingContext(dc, false);
+                drawingContext.DrawImage(imageSource, new Rect(0, 0, imageSource.PixelSize.Width, imageSource.PixelSize.Height), new Rect(0, 0, pixelSize.Width, pixelSize.Height));
+                thumbnail = renderBitmap;
+            }
+            else
+                thumbnail = imageSource;
         }
     }
 }

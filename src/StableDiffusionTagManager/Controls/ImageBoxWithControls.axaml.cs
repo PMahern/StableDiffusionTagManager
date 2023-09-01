@@ -34,9 +34,11 @@ namespace StableDiffusionTagManager.Controls
         }
 
         public event EventHandler<Bitmap>? ImageCropped;
+        public Func<Bitmap, Task> SaveClicked;
         public Func<Bitmap, Task>? InterrogateClicked;
         public Func<Bitmap, Task>? EditImageClicked;
         public Func<List<Bitmap?>, Task>? ComicPanelsExtracted;
+        
 
         private (int x, int y) _lockedSize;
         private bool isAspectRatioLocked = false;
@@ -62,6 +64,15 @@ namespace StableDiffusionTagManager.Controls
         {
             get => GetValue(ShowEditImageButtonProperty);
             set => SetValue(ShowEditImageButtonProperty, value);
+        }
+
+        public static readonly StyledProperty<bool> ShowSaveButtonProperty =
+            AvaloniaProperty.Register<ImageBoxWithControls, bool>(nameof(ShowSaveButton), false);
+
+        public bool ShowSaveButton
+        {
+            get => GetValue(ShowSaveButtonProperty);
+            set => SetValue(ShowSaveButtonProperty, value);
         }
 
         public static readonly StyledProperty<bool> ShowMaskModeButtonProperty =
@@ -464,6 +475,19 @@ namespace StableDiffusionTagManager.Controls
         public void CloseColorSelector()
         {
             IsChoosingColor = false;
+        }
+
+        [RelayCommand]
+        public void Save()
+        {
+            if(ImageBox.IsPainted)
+            {
+                var bitmap = ImageBox.CreateNewImageWithLayersFromRegion(null, null);
+                if (bitmap != null)
+                {
+                    SaveClicked?.Invoke(bitmap);
+                }
+            }
         }
 
         #region Bindable Base

@@ -17,6 +17,7 @@ using Avalonia.Controls;
 using SdWebUpApi.Api;
 using Newtonsoft.Json.Linq;
 using StableDiffusionTagManager.Extensions;
+using StableDiffusionTagManager.Controls;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -658,6 +659,18 @@ namespace StableDiffusionTagManager.ViewModels
                     AddNewImage(image);
                 }
             }
+        }
+
+        public Task SaveCurrentImage(Bitmap image)
+        {
+            if(openFolder != null && SelectedImage != null)
+            {
+                image.Save(Path.Combine(openFolder, SelectedImage.Filename));
+                SelectedImage.ImageSource = image;
+                SelectedImage.GenerateThumbnail();   
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

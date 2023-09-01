@@ -558,10 +558,14 @@ namespace UVtools.AvaloniaControls
                 var value = control.GetValue(ImageProperty);
                 control.mipScaleFactor = 0;
                 control.SelectNone();
-
+                control.IsPainted = false;
                 if (value != null && !control.paintLayers.ContainsKey(value))
                 {
                     control.paintLayers[value] = new List<RenderTargetBitmap>();
+                    
+                } else
+                {
+                    control.IsPainted = control.paintLayers[value].Any();
                 }
 
                 if (value != null && !control.maskLayers.ContainsKey(value))
@@ -572,32 +576,10 @@ namespace UVtools.AvaloniaControls
                 control.ZoomToFit();
                 control.UpdateViewPort();
                 control.TriggerRender();
-
-
-                //if (value != null && (value.PixelSize.Width * value.PixelSize.Height) > 4000000 && !control.bitmapMips.ContainsKey(value))
-                //{
-                //    control.bitmapMips[value] = new List<Bitmap>();
-                //    var newWidth = value.PixelSize.Width / 2;
-                //    var newHeight = value.PixelSize.Height / 2;
-                //    do
-                //    {
-                //        var bitmapMip = new RenderTargetBitmap(new PixelSize(newWidth, newHeight));
-                //        using (var bitmapRenderContext = bitmapMip.CreateDrawingContext(null))
-                //        {
-                //            var dc = new DrawingContext(bitmapRenderContext);
-                //            dc.DrawImage(value, new Rect(0, 0, newWidth, newHeight));
-                //        }
-                //        control.bitmapMips[value].Add(bitmapMip);
-                //        newWidth = newWidth / 2;
-                //        newHeight = newHeight / 2;
-                //    } while (newWidth * newHeight > 4000000);
-                //}
-                //control.Mip.Source = value != null && control.bitmapMips.ContainsKey(value) ? control.bitmapMips[value].First() : null;
                 control.RaisePropertyChanged(nameof(IsImageLoaded));
             }
         }
 
-        //private Dictionary<(Bitmap, int), List<Bitmap>> layerMips = new Dictionary<(Bitmap, int), List<Bitmap>>();
         private Dictionary<(Bitmap, int), (Bitmap image, List<RenderTargetBitmap> paintLayers, List<RenderTargetBitmap> maskLayers)> mips = new();
         private int mipScaleFactor = 0;
 
@@ -621,10 +603,6 @@ namespace UVtools.AvaloniaControls
                 mipScaleFactor = 0;
                 return;
             }
-            //if (Image != null && !bitmapMips.ContainsKey(Image))
-            //{
-            //    bitmapMips[Image] = new List<Bitmap>();
-            //}
 
             var zoomFactor = ZoomFactor;
             var curHeight = Image.PixelSize.Height;
@@ -634,8 +612,7 @@ namespace UVtools.AvaloniaControls
             var minHeight = Image.PixelSize.Height * zoomFactor;
             var minWidth = Image.PixelSize.Width * zoomFactor;
             var newmipScaleFactor = 1;
-            //var viewPortWidth = ViewPortSize.Width;
-            //var viewPortHeight = ViewPortSize.Height;
+
             while (nextHeight > minHeight && nextWidth > minWidth)
             {
                 newmipScaleFactor *= 2;
@@ -666,7 +643,7 @@ namespace UVtools.AvaloniaControls
                         layerMips.Add(CreateBitmapMip(layer, curWidth, curHeight));
                     }
 
-                    mips[key] = (image: imagemip, paintLayers: layerMips, maskLayers: maskLayerMips); ;
+                    mips[key] = (image: imagemip, paintLayers: layerMips, maskLayers: maskLayerMips);
                 }
                 else
                 {
@@ -755,7 +732,11 @@ namespace UVtools.AvaloniaControls
                         }
                     }
                 }
+                IsPainted = set.Any();
                 TriggerRender();
+            } else
+            {
+                IsPainted = false;
             }
         }
 
@@ -1370,6 +1351,19 @@ namespace UVtools.AvaloniaControls
         /// <value>The height of the scaled image.</value>
         public double ScaledImageHeight => Image?.Size.Height * ZoomFactor ?? 0;
 
+        public static readonly DirectProperty<AdvancedImageBox, bool> IsPaintedProperty =
+            AvaloniaProperty.RegisterDirect<AdvancedImageBox, bool>(nameof(IsPainted), aib => aib.IsPainted);
+
+        private bool isPainted = false;
+        public bool IsPainted
+        {
+            get => isPainted; 
+            set
+            {
+                SetAndRaise(IsPaintedProperty, ref isPainted, value);
+            }
+        }
+
         private Dictionary<Bitmap, List<RenderTargetBitmap>> paintLayers = new Dictionary<Bitmap, List<RenderTargetBitmap>>();
         private Dictionary<Bitmap, List<RenderTargetBitmap>> maskLayers = new Dictionary<Bitmap, List<RenderTargetBitmap>>();
 
@@ -1818,6 +1812,7 @@ namespace UVtools.AvaloniaControls
             {
                 IsPainting = true;
                 paintLayers[Image].Add(new RenderTargetBitmap(Image.PixelSize));
+                IsPainted = true;
             }
             else if (
                     pointer.Properties.IsLeftButtonPressed && (MaskWithMouseButtons & MouseButtons.LeftButton) != 0 ||

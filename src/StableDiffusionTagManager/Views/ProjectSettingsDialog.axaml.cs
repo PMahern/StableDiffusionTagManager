@@ -6,8 +6,6 @@ using StableDiffusionTagManager.Models;
 
 namespace StableDiffusionTagManager.Views
 {
-    
-
     public partial class ProjectSettingsDialog : Window
     {
         public ProjectSettingsDialog()
@@ -36,7 +34,7 @@ namespace StableDiffusionTagManager.Views
             }
 
         }
-
+        #region Properties
         public static readonly StyledProperty<string?> DefaultPromptPrefixProperty =
             AvaloniaProperty.Register<ProjectSettingsDialog, string?>(nameof(DefaultPromptPrefix));
 
@@ -120,7 +118,9 @@ namespace StableDiffusionTagManager.Views
             get => GetValue(InterrogateMethodProperty);
             set => SetValue(InterrogateMethodProperty, value);
         }
+        #endregion
 
+        #region Commands
         [RelayCommand]
         public void Save()
         {
@@ -151,5 +151,6 @@ namespace StableDiffusionTagManager.Views
         {
             Close();
         }
+        #endregion
     }
 }
