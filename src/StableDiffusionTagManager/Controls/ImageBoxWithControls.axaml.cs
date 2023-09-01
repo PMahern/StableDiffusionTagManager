@@ -381,7 +381,7 @@ namespace StableDiffusionTagManager.Controls
         public async Task ExtractComicPanels()
         {
             var window = this.VisualRoot as Window;
-            string tmpImage = System.IO.Path.GetTempFileName().Replace(".tmp", ".jpg");
+            string tmpImage = Path.Combine(App.GetTempFileDirectory(), $"{Guid.NewGuid()}.png");
             if (Image != null)
             {
                 Image.Save(tmpImage);
@@ -393,7 +393,7 @@ namespace StableDiffusionTagManager.Controls
                 {
                     try
                     {
-                        var results = await kwrapper.GetImagePanels(tmpImage);
+                        var results = await kwrapper.GetImagePanels(tmpImage, App.GetTempFileDirectory());
 
                         var comicPanels = results.Select(r => ImageBox.CreateNewImageWithLayersFromRegion(new Rect(r.TopLeftX, r.TopLeftY, r.Width, r.Height))).ToList();
                         ComicPanelsExtracted?.Invoke(comicPanels);

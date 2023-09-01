@@ -8,6 +8,7 @@ using StableDiffusionTagManager.Models;
 using StableDiffusionTagManager.ViewModels;
 using StableDiffusionTagManager.Views;
 using System;
+using System.IO;
 
 namespace StableDiffusionTagManager
 {
@@ -22,6 +23,16 @@ namespace StableDiffusionTagManager
         public static string GetAppDirectory()
         {
             return AppDomain.CurrentDomain.BaseDirectory;
+        }
+
+        public static string GetTempFileDirectory()
+        {
+            var path = Path.Combine(GetAppDirectory(), "tmp");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            return path;
         }
 
         public override void OnFrameworkInitializationCompleted()

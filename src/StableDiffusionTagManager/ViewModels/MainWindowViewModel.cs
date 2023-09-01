@@ -17,8 +17,6 @@ using Avalonia.Controls;
 using SdWebUpApi.Api;
 using Newtonsoft.Json.Linq;
 using StableDiffusionTagManager.Extensions;
-using StableDiffusionTagManager.Controls;
-using AvaloniaEdit.Utils;
 
 namespace StableDiffusionTagManager.ViewModels
 {

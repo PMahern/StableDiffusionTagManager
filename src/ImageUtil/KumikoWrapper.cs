@@ -38,9 +38,9 @@ namespace ImageUtil
             this.kumikopath = kumikopath;
         }
 
-        public async Task<IEnumerable<PanelInfo>> GetImagePanels(string imagepath)
+        public async Task<IEnumerable<PanelInfo>> GetImagePanels(string imagepath, string tempfilepath)
         {
-            string outputfile = System.IO.Path.GetTempFileName().Replace(".tmp", ".json");
+            string outputfile = Path.Combine(tempfilepath, $"{Guid.NewGuid().ToString()}.json");
 
             var sb = new StringBuilder();
 
