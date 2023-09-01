@@ -304,6 +304,7 @@ namespace StableDiffusionTagManager.Views
         public void SaveChanges()
         {
             this.Success = true;
+            this.Image = ImageBox.ImageBox.CreateNewImageWithLayersFromRegion();
             Close();
         }
     }

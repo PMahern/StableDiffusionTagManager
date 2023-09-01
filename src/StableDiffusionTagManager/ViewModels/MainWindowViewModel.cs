@@ -640,7 +640,7 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 newFilename = $"{withoutExtension}__{(++i).ToString("00")}";
             }
-            newFilename = $"{openFolder}/{newFilename}.jpg";
+            newFilename = Path.Combine(openFolder, "{newFilename}.png");
             image.Save(newFilename);
             ImagesWithTags.Insert(index + 1, new ImageWithTagsViewModel(image, newFilename));
         }
@@ -667,6 +667,11 @@ namespace StableDiffusionTagManager.ViewModels
         {
             if(openFolder != null && SelectedImage != null)
             {
+                if(Path.GetExtension(SelectedImage.Filename) != ".png")
+                {
+                    image.Save(Path.Combine(openFolder, SelectedImage.Filename));
+                    SelectedImage.Filename = $"{Path.GetFileNameWithoutExtension(SelectedImage.Filename)}.png";
+                }
                 image.Save(Path.Combine(openFolder, SelectedImage.Filename));
                 SelectedImage.ImageSource = image;
                 SelectedImage.GenerateThumbnail();   
