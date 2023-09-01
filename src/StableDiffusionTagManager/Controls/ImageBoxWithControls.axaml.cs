@@ -297,7 +297,7 @@ namespace StableDiffusionTagManager.Controls
             }
         }
 
-        ObservableCollection<int> brushSizes = new ObservableCollection<int>(Enumerable.Range(1, 25).ToList());
+        ObservableCollection<int> brushSizes = new ObservableCollection<int>(Enumerable.Range(1, 100).ToList());
         public ObservableCollection<int> BrushSizes => brushSizes;
 
         private int brushSize = 5;
