@@ -8,6 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using TagUtil;
@@ -17,35 +18,49 @@ namespace StableDiffusionTagManager.ViewModels
     public partial class ImageWithTagsViewModel : ObservableObject
     {
         const int THUMBNAIL_SIZE = 200;
+        private readonly Func<Bitmap, bool> imageDirtyCallback;
+        private bool tagsDirty = false;
 
-        public ImageWithTagsViewModel(string imageFile, TagSet tagSet)
+        public ImageWithTagsViewModel(string imageFile, TagSet tagSet, Func<Bitmap, bool> imageDirtyCallback)
         {
             using var stream = File.OpenRead(imageFile);
+            this.imageDirtyCallback = imageDirtyCallback;
             thumbnail = Bitmap.DecodeToHeight(stream, THUMBNAIL_SIZE);
             imageSource = new Bitmap(imageFile);
 
             filename = Path.GetFileName(imageFile);
-            tags = new ObservableCollection<TagViewModel>(tagSet.Tags.Select(t => new TagViewModel(t) { TagChanged = (oldtag, newtag) => TagChanged?.Invoke(oldtag, newtag) })); ;
+
+            tags = new ObservableCollection<TagViewModel>(tagSet.Tags.Select(t => new TagViewModel(t) { TagChanged = (oldtag, newtag) => TagChanged?.Invoke(oldtag, newtag) }));
+            tags.CollectionChanged += SetTagsDirty;
             IsFromCrop = false;
+            
+        }
+
+        public ImageWithTagsViewModel(Bitmap image, string newFileName, Func<Bitmap, bool> imageDirtyCallback, IEnumerable<string>? tags = null)
+        {
+            imageSource = image;
+            thumbnail = GenerateThumbnail();
+            this.imageDirtyCallback = imageDirtyCallback;
+
+            filename = filename = Path.GetFileName(newFileName);
+            if (tags != null)
+            {
+                this.tags = new ObservableCollection<TagViewModel>(tags.Select(t => new TagViewModel(t)));
+            }
+            else
+            {
+                this.tags = new ObservableCollection<TagViewModel>();
+            }
+            this.tags.CollectionChanged += SetTagsDirty;
+        }
+
+        private void SetTagsDirty(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            tagsDirty = true;
         }
 
         public Action<string, string>? TagChanged;
         public Action<string>? TagRemoved;
-
-        public ImageWithTagsViewModel(Bitmap image, string newFileName, IEnumerable<string>? tags = null)
-        {
-            imageSource = image;
-            GenerateThumbnail();
-
-            filename = filename = Path.GetFileName(newFileName);
-            if(tags != null)
-            {
-                this.tags = new ObservableCollection<TagViewModel>(tags.Select(t =>new TagViewModel(t)));
-            } else
-            {
-                this.tags = new ObservableCollection<TagViewModel>();
-            }
-        }
 
         public bool IsFromCrop { get; }
 
@@ -63,7 +78,11 @@ namespace StableDiffusionTagManager.ViewModels
         public ObservableCollection<TagViewModel> Tags
         {
             get { return tags; }
-            set { tags = value; OnPropertyChanged(); }
+            set {
+                tags.CollectionChanged -= SetTagsDirty;
+                tags = value;
+                tags.CollectionChanged += SetTagsDirty;
+                OnPropertyChanged(); }
         }
 
         //Tag handling
@@ -99,7 +118,7 @@ namespace StableDiffusionTagManager.ViewModels
             return $"{System.IO.Path.GetFileNameWithoutExtension(Filename)}.txt";
         }
 
-        public void GenerateThumbnail()
+        public Bitmap GenerateThumbnail()
         {
             if (imageSource.PixelSize.Width > THUMBNAIL_SIZE || imageSource.PixelSize.Height > THUMBNAIL_SIZE)
             {
@@ -109,10 +128,30 @@ namespace StableDiffusionTagManager.ViewModels
                 using var dc = renderBitmap.CreateDrawingContext(null);
                 using var drawingContext = new DrawingContext(dc, false);
                 drawingContext.DrawImage(imageSource, new Rect(0, 0, imageSource.PixelSize.Width, imageSource.PixelSize.Height), new Rect(0, 0, pixelSize.Width, pixelSize.Height));
-                thumbnail = renderBitmap;
+                return renderBitmap;
             }
             else
-                thumbnail = imageSource;
+                return imageSource;
+        }
+
+        public void UpdateThumbnail()
+        {
+            Thumbnail = GenerateThumbnail();
+        }
+
+        public bool IsImageDirty()
+        {
+            return imageDirtyCallback(ImageSource);
+        }
+
+        public void ClearTagsDirty()
+        {
+            tagsDirty = false;
+        }
+
+        public bool AreTagsDirty()
+        {
+            return tagsDirty;   
         }
     }
 }

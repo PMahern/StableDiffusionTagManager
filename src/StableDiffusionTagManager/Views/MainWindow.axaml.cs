@@ -29,12 +29,19 @@ namespace StableDiffusionTagManager.Views
 
             AddHandler(KeyDownEvent, KeyDownHandler, handledEventsToo: true);
             DataContextChanged += DataContextChangedHandler;
+            Closing += ClosingHandler;
         }
 
-        public void asdf(object? sender, CancelEventArgs args)
+        private void ClosingHandler(object? sender, CancelEventArgs e)
         {
-
+            var viewModel = this.DataContext as MainWindowViewModel;
+            if(viewModel != null)
+            {
+                e.Cancel = true;
+                Dispatcher.UIThread.Post(() => viewModel.Exit());
+            }
         }
+
         private void DataContextChangedHandler(object? sender, EventArgs e)
         {
             var viewModel = this.DataContext as MainWindowViewModel;
@@ -60,13 +67,20 @@ namespace StableDiffusionTagManager.Views
                     };
 
                 viewModel.ShowDialogHandler = new MessageBoxDialogHandler(this);
-                viewModel.ExitCallback = () => Close();
+                viewModel.ExitCallback = () =>
+                {
+                    //Remove the handler to prevent an infinite loop, if the vm says to close we KNOW we're closing.
+                    Closing -= ClosingHandler;
+                    Close();
+                };
+                viewModel.ImageDirtyCallback = (image) => ImageBox.ImageBox.ImageHasPaint(image);
                 ImageBox.SaveClicked = async (image) => await viewModel.SaveCurrentImage(image);
                 ImageBox.ComicPanelsExtracted = async (images) => await viewModel.ReviewComicPanels(images);
                 ImageBox.ImageCropped += (source, image) => viewModel.ImageCropped(image);
                 ImageBox.InterrogateClicked = async (image) => await viewModel.Interrogate(image);
                 ImageBox.ExpandClicked = async (image) => await viewModel.ExpandImage(image);
                 ImageBox.EditImageClicked = async (image) => await viewModel.RunImgToImg(image);
+                
             };
         }
 

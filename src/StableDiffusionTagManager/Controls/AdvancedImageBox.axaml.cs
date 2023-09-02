@@ -790,6 +790,11 @@ namespace UVtools.AvaloniaControls
             }
         }
 
+        public bool ImageHasPaint(Bitmap image)
+        {
+            return paintLayers.ContainsKey(image) && paintLayers[image].Any();
+        }
+
         public bool IsImageLoaded => Image is not null;
 
         public static readonly DirectProperty<AdvancedImageBox, Bitmap?> TrackerImageProperty =
