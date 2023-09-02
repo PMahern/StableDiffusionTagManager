@@ -38,6 +38,9 @@
           <Button Command="{Binding EditImageCommand}" IsVisible="{Binding ShowEditImageButton}" ToolTip.Tip="Touch Up Image">
             <PathIcon Data="{StaticResource image_edit_regular}" />
           </Button>
+          <ToggleButton Command="{Binding ExpandCommand}" IsVisible="{Binding ShowExpandButton}" ToolTip.Tip="Expand the Image">
+            <mi:MaterialIcon Kind="Fullscreen"/>
+          </ToggleButton>
           <ToggleButton Command="{Binding InterrogateCommand}" IsVisible="{Binding ShowInterrogateButton}" ToolTip.Tip="Interrogate SD Webui For Tags">
             <mi:MaterialIcon Kind="Eye"/>
           </ToggleButton>
@@ -70,6 +73,9 @@
             </ComboBox.ItemTemplate>
           </ComboBox>
           <Button Command="{Binding ChooseColorCommand}" Background="{Binding PaintBrushColor, Converter={StaticResource ResourceKey=colorConverter}}" ToolTip.Tip="Brush Color"/>
+          <Button Command="{Binding ToggleEyeDropperCommand}" ToolTip.Tip="Get Color from Pixel">
+            <mi:MaterialIcon Kind="Eyedropper"/>
+          </Button>
           <Button Command="{Binding UndoLastPaintCommand}" ToolTip.Tip="Undo Paint Layer">
             <PathIcon Data="{StaticResource arrow_undo_regular}" />
           </Button>
@@ -96,9 +102,10 @@
                                     SelectWithMouseButtons="{Binding SelectWithMouseButtons}"
                                     PaintWithMouseButtons="{Binding PaintWithMouseButtons}"
                                     MaskWithMouseButtons="{Binding MaskWithMouseButtons}"
+                                    EyeDropWithMouseButtons="{Binding EyeDropWithMouseButtons}"
                                     PaintBrushSize="{Binding SelectedBrushSize}"
                                     MaskBrushSize="{Binding SelectedMaskSize}"
-                                    PaintBrushColor="{Binding PaintBrushColor}"
+                                    PaintBrushColor="{Binding PaintBrushColor, Mode=TwoWay}"
                                     SelectionRegion="{Binding SelectionRegion, Mode=TwoWay}"
                                     IsAspectRatioLocked="{Binding IsAspectRatioLocked, Mode=TwoWay}"/>
     </DockPanel>

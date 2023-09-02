@@ -5,6 +5,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SixLabors.ImageSharp;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -30,13 +32,19 @@ namespace StableDiffusionTagManager.ViewModels
         public Action<string, string>? TagChanged;
         public Action<string>? TagRemoved;
 
-        public ImageWithTagsViewModel(Bitmap image, string newFileName)
+        public ImageWithTagsViewModel(Bitmap image, string newFileName, IEnumerable<string>? tags = null)
         {
             imageSource = image;
             GenerateThumbnail();
 
             filename = filename = Path.GetFileName(newFileName);
-            tags = new ObservableCollection<TagViewModel>();
+            if(tags != null)
+            {
+                this.tags = new ObservableCollection<TagViewModel>(tags.Select(t =>new TagViewModel(t)));
+            } else
+            {
+                this.tags = new ObservableCollection<TagViewModel>();
+            }
         }
 
         public bool IsFromCrop { get; }

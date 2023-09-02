@@ -219,7 +219,7 @@ namespace StableDiffusionTagManager.Views
             {
                 var api = new DefaultApi(App.Settings.WebUiAddress);
 
-                var flattened = ImageBox.ImageBox.CreateNewImageWithLayersFromRegion(null, null);
+                var flattened = ImageBox.ImageBox.CreateNewImageWithLayersFromRegion();
                 if (flattened != null)
                 {
                     this.IsLoading = true;
@@ -304,6 +304,7 @@ namespace StableDiffusionTagManager.Views
         public void SaveChanges()
         {
             this.Success = true;
+            this.Image = ImageBox.ImageBox.CreateNewImageWithLayersFromRegion();
             Close();
         }
     }

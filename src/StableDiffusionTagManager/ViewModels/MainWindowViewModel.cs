@@ -17,11 +17,11 @@ using Avalonia.Controls;
 using SdWebUpApi.Api;
 using Newtonsoft.Json.Linq;
 using StableDiffusionTagManager.Extensions;
-using StableDiffusionTagManager.Controls;
+using Avalonia.Media;
 
 namespace StableDiffusionTagManager.ViewModels
 {
-    public class BooruTagModel
+    public class TagModel
     {
         public string Tag { get; set; } = "";
         public int Count { get; set; } = 0;
@@ -31,7 +31,7 @@ namespace StableDiffusionTagManager.ViewModels
     {
         private static readonly string TagsPath = "tags.csv";
 
-        private List<BooruTagModel> _booruTags = new List<BooruTagModel>();
+        private List<TagModel> _booruTags = new List<TagModel>();
 
         public MainWindowViewModel()
         {
@@ -41,7 +41,7 @@ namespace StableDiffusionTagManager.ViewModels
                                     .Select(line =>
                                     {
                                         var pair = line.Split(',');
-                                        return new BooruTagModel
+                                        return new TagModel
                                         {
                                             Tag = pair[0],
                                             Count = int.Parse(pair[1])
@@ -74,20 +74,21 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 if (selectedImage != value)
                 {
-                    if(tagCache != null && selectedImage != null)
+                    if (tagCache != null && selectedImage != null)
                     {
                         var newTags = selectedImage.Tags.Select(t => t.Tag);
 
                         var removedTags = tagCache.Except(newTags);
                         var addedTags = newTags.Except(tagCache);
 
-                        foreach(var removedTag in removedTags)
+                        foreach (var removedTag in removedTags)
                         {
                             var tag = TagCounts.First(t => t.Tag == removedTag);
-                            if(tag.Count == 1)
+                            if (tag.Count == 1)
                             {
                                 TagCounts.Remove(tag);
-                            } else
+                            }
+                            else
                             {
                                 tag.Count--;
                             }
@@ -96,10 +97,11 @@ namespace StableDiffusionTagManager.ViewModels
                         foreach (var addedTag in addedTags)
                         {
                             var tag = TagCounts.FirstOrDefault(t => t.Tag == addedTag);
-                            if(tag == null)
+                            if (tag == null)
                             {
-                                TagCounts.Add(new TagWithCountViewModel(this) {  Tag = addedTag, Count = 1 });
-                            } else
+                                TagCounts.Add(new TagWithCountViewModel(this) { Tag = addedTag, Count = 1 });
+                            }
+                            else
                             {
                                 tag.Count++;
                             }
@@ -239,6 +241,8 @@ namespace StableDiffusionTagManager.ViewModels
                     if (projFolder)
                     {
                         openProject = new Project(projFile);
+                        openProject.ProjectUpdated += UpdateProjectSettings;
+                        UpdateProjectSettings();
                     }
 
                     FolderTagSets = new FolderTagSets(pickResult);
@@ -274,7 +278,7 @@ namespace StableDiffusionTagManager.ViewModels
                     set.WriteFile();
                 }
             }
-        }     
+        }
 
         //Tag Drag handling
         public void BeginTagDrag(TagViewModel tagViewModel)
@@ -469,7 +473,7 @@ namespace StableDiffusionTagManager.ViewModels
         }
 
         private Dictionary<string, int> TagCountDictionary = new Dictionary<string, int>();
-        
+
 
         public void UpdateTagCounts()
         {
@@ -561,7 +565,7 @@ namespace StableDiffusionTagManager.ViewModels
             dialog.OpenProject = this.openProject;
             await ShowDialog(dialog);
 
-            if(dialog.Success)
+            if (dialog.Success)
             {
                 SelectedImage.ImageSource = dialog.Image;
                 SelectedImage.ImageSource.Save(Path.Combine(this.openFolder, SelectedImage.Filename));
@@ -599,11 +603,11 @@ namespace StableDiffusionTagManager.ViewModels
         {
             var api = new DefaultApi(App.Settings.WebUiAddress);
 
-            if(SelectedImage != null)
+            if (SelectedImage != null)
             {
                 var model = "deepdanbooru";
 
-                if(openProject != null && openProject.InterrogateMethod == SdWebUpApi.InterrogateMethod.Clip)
+                if (openProject != null && openProject.InterrogateMethod == SdWebUpApi.InterrogateMethod.Clip)
                 {
                     model = "clip";
                 }
@@ -619,16 +623,20 @@ namespace StableDiffusionTagManager.ViewModels
 
                 var jtokResult = result as JToken;
                 var convertedresult = jtokResult?.ToObject<InterrogateResult>();
-                if(convertedresult != null)
+                if (convertedresult != null)
                 {
-                    SelectedImage.Tags = new ObservableCollection<TagViewModel>(
-                        convertedresult.caption.Split(", ")
-                        .Select(t => new TagViewModel(t)));
+                    var tags = convertedresult.caption.Split(", ");
+                    foreach (var tag in tags)
+                    {
+                        if(!SelectedImage.Tags.Any(t => t.Tag == tag)) {
+                            SelectedImage.Tags.Add(new TagViewModel(tag));
+                        }
+                    }
                 }
             }
         }
 
-        public void AddNewImage(Bitmap image)
+        public void AddNewImage(Bitmap image, IEnumerable<string>? tags = null)
         {
             var index = ImagesWithTags.IndexOf(SelectedImage);
             var withoutExtension = System.IO.Path.GetFileNameWithoutExtension(SelectedImage.Filename);
@@ -638,9 +646,14 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 newFilename = $"{withoutExtension}__{(++i).ToString("00")}";
             }
-            newFilename = $"{openFolder}/{newFilename}.jpg";
+            newFilename = Path.Combine(openFolder, $"{newFilename}.png");
             image.Save(newFilename);
-            ImagesWithTags.Insert(index + 1, new ImageWithTagsViewModel(image, newFilename));
+            ImagesWithTags.Insert(index + 1, new ImageWithTagsViewModel(image, newFilename, tags));
+        }
+
+        public void ImageCropped(Bitmap image)
+        {
+            AddNewImage(image, SelectedImage.Tags.Select(t => t.Tag));
         }
 
         public async Task ReviewComicPanels(List<Bitmap> panels)
@@ -652,9 +665,9 @@ namespace StableDiffusionTagManager.ViewModels
 
             await ShowDialog(dialog);
 
-            if(dialog.Success)
+            if (dialog.Success)
             {
-                foreach(var image in dialog.SelectedImages)
+                foreach (var image in dialog.SelectedImages)
                 {
                     AddNewImage(image);
                 }
@@ -663,14 +676,40 @@ namespace StableDiffusionTagManager.ViewModels
 
         public Task SaveCurrentImage(Bitmap image)
         {
-            if(openFolder != null && SelectedImage != null)
+            if (openFolder != null && SelectedImage != null)
             {
+                if (Path.GetExtension(SelectedImage.Filename) != ".png")
+                {
+                    image.Save(Path.Combine(openFolder, SelectedImage.Filename));
+                    SelectedImage.Filename = $"{Path.GetFileNameWithoutExtension(SelectedImage.Filename)}.png";
+                }
                 image.Save(Path.Combine(openFolder, SelectedImage.Filename));
                 SelectedImage.ImageSource = image;
-                SelectedImage.GenerateThumbnail();   
+                SelectedImage.GenerateThumbnail();
             }
 
             return Task.CompletedTask;
+        }
+
+        public async Task ExpandImage(Bitmap image)
+        {
+            var dialog = new ExpandImageDialog();
+            await ShowDialog(dialog);
+            if (dialog.Success)
+            {
+                var finalSize = new PixelSize(image.PixelSize.Width + dialog.ExpandLeft + dialog.ExpandRight, image.PixelSize.Height + dialog.ExpandUp + dialog.ExpandDown);
+                var imageRegion = new Rect(dialog.ExpandLeft, dialog.ExpandUp, image.PixelSize.Width, image.PixelSize.Height);
+                var newImage = new RenderTargetBitmap(finalSize);
+                using (var drawingContext = newImage.CreateDrawingContext(null))
+                {
+                    drawingContext.Clear(new Color(255, 255, 255, 255));
+                    var dc = new DrawingContext(drawingContext);
+                    
+                    dc.DrawImage(image, new Rect(0, 0, image.PixelSize.Width, image.PixelSize.Height), imageRegion, Avalonia.Visuals.Media.Imaging.BitmapInterpolationMode.HighQuality);
+                }
+
+                AddNewImage(newImage, SelectedImage.Tags.Select(t => t.Tag));
+            }
         }
     }
 }

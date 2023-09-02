@@ -38,7 +38,8 @@ namespace StableDiffusionTagManager.Controls
         public Func<Bitmap, Task>? InterrogateClicked;
         public Func<Bitmap, Task>? EditImageClicked;
         public Func<List<Bitmap?>, Task>? ComicPanelsExtracted;
-        
+        public Func<Bitmap, Task>? ExpandClicked;
+
 
         private (int x, int y) _lockedSize;
         private bool isAspectRatioLocked = false;
@@ -286,6 +287,17 @@ namespace StableDiffusionTagManager.Controls
             }
         }
 
+        private MouseButtons eyeDropWithMouseButtons;
+
+        public MouseButtons EyeDropWithMouseButtons
+        {
+            get => eyeDropWithMouseButtons;
+            set
+            {
+                RaiseAndSetIfChanged(ref eyeDropWithMouseButtons, value);
+            }
+        }
+
         private bool isChoosingColor = false;
 
         public bool IsChoosingColor
@@ -297,7 +309,7 @@ namespace StableDiffusionTagManager.Controls
             }
         }
 
-        ObservableCollection<int> brushSizes = new ObservableCollection<int>(Enumerable.Range(1, 25).ToList());
+        ObservableCollection<int> brushSizes = new ObservableCollection<int>(Enumerable.Range(1, 100).ToList());
         public ObservableCollection<int> BrushSizes => brushSizes;
 
         private int brushSize = 5;
@@ -363,6 +375,13 @@ namespace StableDiffusionTagManager.Controls
         }
 
         [RelayCommand]
+        public void ToggleEyeDropper()
+        {
+            EyeDropWithMouseButtons = MouseButtons.LeftButton;
+            PaintWithMouseButtons = MouseButtons.None;
+        }
+
+        [RelayCommand]
         public void ChooseColor()
         {
             IsChoosingColor = true;
@@ -381,7 +400,7 @@ namespace StableDiffusionTagManager.Controls
         public async Task ExtractComicPanels()
         {
             var window = this.VisualRoot as Window;
-            string tmpImage = System.IO.Path.GetTempFileName().Replace(".tmp", ".jpg");
+            string tmpImage = Path.Combine(App.GetTempFileDirectory(), $"{Guid.NewGuid()}.png");
             if (Image != null)
             {
                 Image.Save(tmpImage);
@@ -393,7 +412,7 @@ namespace StableDiffusionTagManager.Controls
                 {
                     try
                     {
-                        var results = await kwrapper.GetImagePanels(tmpImage);
+                        var results = await kwrapper.GetImagePanels(tmpImage, App.GetTempFileDirectory());
 
                         var comicPanels = results.Select(r => ImageBox.CreateNewImageWithLayersFromRegion(new Rect(r.TopLeftX, r.TopLeftY, r.Width, r.Height))).ToList();
                         ComicPanelsExtracted?.Invoke(comicPanels);
@@ -405,8 +424,8 @@ namespace StableDiffusionTagManager.Controls
                             {
                                 var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
                                         .GetMessageBoxStandardWindow(
-                                            "Panel Extraction Failed", 
-                                            $"Failed to execute kumiko panel extraction. Exception message was : {e.Message}", 
+                                            "Panel Extraction Failed",
+                                            $"Failed to execute kumiko panel extraction. Exception message was : {e.Message}",
                                             MessageBox.Avalonia.Enums.ButtonEnum.Ok);
 
                                 await messageBoxStandardWindow.ShowDialog(window);
@@ -420,8 +439,12 @@ namespace StableDiffusionTagManager.Controls
         #endregion
         public void CropImageRegionAndCreateNewImage(Rect region, PixelSize? targetSize = null)
         {
-            var finalSize = targetSize ?? new PixelSize(Convert.ToInt32(region.Width), Convert.ToInt32(region.Height));
-            var newImage = ImageBox.CreateNewImageWithLayersFromRegion(region);
+            var finalSize = new PixelSize(Convert.ToInt32(region.Width), Convert.ToInt32(region.Height));
+            if (targetSize != null && targetSize.Value.Height > 0 && targetSize.Value.Width > 0)
+            {
+                finalSize = targetSize.Value;
+            }
+            var newImage = ImageBox.CreateNewImageWithLayersFromRegion(region, finalSize);
             if (newImage != null)
             {
                 ImageCropped?.Invoke(this, newImage);
@@ -465,7 +488,11 @@ namespace StableDiffusionTagManager.Controls
             {
                 if (this.EditImageClicked != null)
                 {
-                    await this.EditImageClicked.Invoke(ImageBox.CreateNewImageWithLayersFromRegion(null));
+                    var image = ImageBox.CreateNewImageWithLayersFromRegion();
+                    if (image != null)
+                    {
+                        await this.EditImageClicked.Invoke(image);
+                    }
                 }
 
             }
@@ -480,13 +507,30 @@ namespace StableDiffusionTagManager.Controls
         [RelayCommand]
         public void Save()
         {
-            if(ImageBox.IsPainted)
+            if (ImageBox.IsPainted)
             {
-                var bitmap = ImageBox.CreateNewImageWithLayersFromRegion(null, null);
+                var bitmap = ImageBox.CreateNewImageWithLayersFromRegion();
                 if (bitmap != null)
                 {
                     SaveClicked?.Invoke(bitmap);
                 }
+            }
+        }
+
+        [RelayCommand]
+        public void Expand()
+        {
+            if (ImageBox.IsPainted)
+            {
+                var bitmap = ImageBox.CreateNewImageWithLayersFromRegion();
+                if (bitmap != null)
+                {
+                    ExpandClicked?.Invoke(bitmap);
+                } 
+            }
+            else if(Image != null)
+            {
+                ExpandClicked?.Invoke(Image);
             }
         }
 

@@ -63,8 +63,9 @@ namespace StableDiffusionTagManager.Views
                 viewModel.ExitCallback = () => Close();
                 ImageBox.SaveClicked = async (image) => await viewModel.SaveCurrentImage(image);
                 ImageBox.ComicPanelsExtracted = async (images) => await viewModel.ReviewComicPanels(images);
-                ImageBox.ImageCropped += (source, image) => viewModel.AddNewImage(image);
+                ImageBox.ImageCropped += (source, image) => viewModel.ImageCropped(image);
                 ImageBox.InterrogateClicked = async (image) => await viewModel.Interrogate(image);
+                ImageBox.ExpandClicked = async (image) => await viewModel.ExpandImage(image);
                 ImageBox.EditImageClicked = async (image) => await viewModel.RunImgToImg(image);
             };
         }

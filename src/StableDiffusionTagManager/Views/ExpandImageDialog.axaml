@@ -1,0 +1,46 @@
+<Window xmlns="https://github.com/avaloniaui"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      x:Class="StableDiffusionTagManager.Views.ExpandImageDialog"
+      Height="180"
+      Width="400"
+      xmlns:controls="using:StableDiffusionTagManager.Controls"
+      xmlns:conv="using:StableDiffusionTagManager.Converters"
+      xmlns:api="using:SdWebUpApi"
+      CanResize="False"
+      ExtendClientAreaChromeHints="NoChrome"
+      ExtendClientAreaTitleBarHeightHint="4"
+      ExtendClientAreaToDecorationsHint="True"
+      WindowStartupLocation="CenterOwner"
+      Title="Expand Image"
+      Icon="/Assets/logo.ico"
+      Name="ThisControl">
+  <Window.Styles>
+    <Style Selector="RadioButton">
+      <Setter Property="Margin" Value="5,0,0,0"></Setter>
+    </Style>
+  </Window.Styles>
+  <Window.Resources>
+    <conv:InterrogateMethodToBooleanConverter x:Key="interrogateConverter"/>
+  </Window.Resources>
+  <controls:HeaderControl DataContext="{Binding ElementName=ThisControl}" Title="Project Settings" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="5" CloseCommand="{Binding CancelCommand}">
+    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto,*,Auto">
+        <Label>Expand Left</Label>
+        <NumericUpDown Grid.Column="1" Value="{Binding ExpandLeft}" Width ="60" Minimum="0"/>
+        <Label Grid.Column="2">Expand Right</Label>
+        <NumericUpDown Grid.Column="3" Value="{Binding ExpandRight}" Width="60" Minimum="0"/>
+
+        <Label Grid.Row="1">Expand Up</Label>
+        <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding ExpandUp}" Width ="60" Minimum="0"/>
+        <Label Grid.Row="1" Grid.Column="2">Expand Down</Label>
+        <NumericUpDown Grid.Row="1" Grid.Column="3" Value="{Binding ExpandDown}" Width="60" Minimum="0"/>
+      
+      <StackPanel Grid.Row="3" Grid.ColumnSpan="4" HorizontalAlignment="Center" Orientation="Horizontal">
+        <Button Command="{Binding SaveCommand}">Save</Button>
+        <Button Command="{Binding CancelCommand}">Cancel</Button>
+      </StackPanel>
+    </Grid>
+  </controls:HeaderControl>
+</Window>
