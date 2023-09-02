@@ -21,8 +21,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using static UVtools.AvaloniaControls.AdvancedImageBox;
 using Bitmap = Avalonia.Media.Imaging.Bitmap;
 using Color = Avalonia.Media.Color;
@@ -30,6 +32,7 @@ using Image = Avalonia.Controls.Image;
 using Pen = Avalonia.Media.Pen;
 using Point = Avalonia.Point;
 using Size = Avalonia.Size;
+using StableDiffusionTagManager.Extensions;
 
 namespace UVtools.AvaloniaControls
 {
@@ -1069,6 +1072,18 @@ namespace UVtools.AvaloniaControls
             set => SetValue(PaintWithMouseButtonsProperty, value);
         }
 
+        public static readonly StyledProperty<MouseButtons> EyeDropWithMouseButtonsProperty =
+            AvaloniaProperty.Register<AdvancedImageBox, MouseButtons>(nameof(EyeDropWithMouseButtons), MouseButtons.None, notifying: TriggerRenderOnMouseButtonChange);
+
+        /// <summary>
+        /// Gets or sets the mouse buttons to EyeDrop on the image
+        /// </summary>
+        public MouseButtons EyeDropWithMouseButtons
+        {
+            get => GetValue(EyeDropWithMouseButtonsProperty);
+            set => SetValue(EyeDropWithMouseButtonsProperty, value);
+        }
+
         public static readonly StyledProperty<MouseButtons> MaskWithMouseButtonsProperty =
             AvaloniaProperty.Register<AdvancedImageBox, MouseButtons>(nameof(MaskWithMouseButtons), MouseButtons.None, notifying: TriggerRenderOnMouseButtonChange);
 
@@ -1370,7 +1385,7 @@ namespace UVtools.AvaloniaControls
 
         private Dictionary<Bitmap, List<RenderTargetBitmap>> paintLayers = new Dictionary<Bitmap, List<RenderTargetBitmap>>();
         private Dictionary<Bitmap, List<RenderTargetBitmap>> maskLayers = new Dictionary<Bitmap, List<RenderTargetBitmap>>();
-
+        private object framebuffer;
         public static readonly StyledProperty<ISolidColorBrush> PixelGridColorProperty =
             AvaloniaProperty.Register<AdvancedImageBox, ISolidColorBrush>(nameof(PixelGridColor), Avalonia.Media.Brushes.DimGray);
 
@@ -1492,7 +1507,7 @@ namespace UVtools.AvaloniaControls
         #endregion
 
         public bool IsSelectionMode => (SelectWithMouseButtons & MouseButtons.LeftButton) != 0;
-        public bool IsPaintMode => (PaintWithMouseButtons & MouseButtons.LeftButton) != 0;
+        public bool IsPaintMode => (PaintWithMouseButtons & MouseButtons.LeftButton) != 0 || (EyeDropWithMouseButtons & MouseButtons.LeftButton) != 0;
 
         public bool IsMaskMode => (MaskWithMouseButtons & MouseButtons.LeftButton) != 0;
 
@@ -1826,6 +1841,26 @@ namespace UVtools.AvaloniaControls
             {
                 IsMasking = true;
                 maskLayers[Image].Add(new RenderTargetBitmap(Image.PixelSize));
+            }
+            else if (
+                    pointer.Properties.IsLeftButtonPressed && (EyeDropWithMouseButtons & MouseButtons.LeftButton) != 0 ||
+                    pointer.Properties.IsMiddleButtonPressed && (EyeDropWithMouseButtons & MouseButtons.MiddleButton) != 0 ||
+                    pointer.Properties.IsRightButtonPressed && (EyeDropWithMouseButtons & MouseButtons.RightButton) != 0
+               )
+            {
+                //This is some hacky garbage, create a writable bitmap (which we can read pixel data from ) image, ciopy the entire image into it, then read the 1 pixel
+                var convertedPosition = PointToImage(pointer.Position);
+                if (convertedPosition.X > 0 && convertedPosition.Y > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        Image.Save(memoryStream);
+                        memoryStream.Position = 0;
+                        using var writable = WriteableBitmap.Decode(memoryStream);
+                        using var buffer = writable.Lock();
+                        PaintBrushColor = buffer.GetPixelColor((int)convertedPosition.X, (int)convertedPosition.Y);
+                    }
+                }
             }
             else if ((pointer.Properties.IsLeftButtonPressed && (PanWithMouseButtons & MouseButtons.LeftButton) != 0
                  || pointer.Properties.IsMiddleButtonPressed && (PanWithMouseButtons & MouseButtons.MiddleButton) != 0

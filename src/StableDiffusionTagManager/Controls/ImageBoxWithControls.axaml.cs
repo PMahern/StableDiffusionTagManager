@@ -286,6 +286,17 @@ namespace StableDiffusionTagManager.Controls
             }
         }
 
+        private MouseButtons eyeDropWithMouseButtons;
+
+        public MouseButtons EyeDropWithMouseButtons
+        {
+            get => eyeDropWithMouseButtons;
+            set
+            {
+                RaiseAndSetIfChanged(ref eyeDropWithMouseButtons, value);
+            }
+        }
+
         private bool isChoosingColor = false;
 
         public bool IsChoosingColor
@@ -360,6 +371,13 @@ namespace StableDiffusionTagManager.Controls
             SelectWithMouseButtons = MouseButtons.None;
             PaintWithMouseButtons = MouseButtons.None;
             CurrentMode = ImageViewerMode.Mask;
+        }
+
+        [RelayCommand]
+        public void ToggleEyeDropper()
+        {
+            EyeDropWithMouseButtons = MouseButtons.LeftButton;
+            PaintWithMouseButtons = MouseButtons.None;
         }
 
         [RelayCommand]
