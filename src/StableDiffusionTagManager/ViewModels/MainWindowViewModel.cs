@@ -17,10 +17,11 @@ using Avalonia.Controls;
 using SdWebUpApi.Api;
 using Newtonsoft.Json.Linq;
 using StableDiffusionTagManager.Extensions;
+using Avalonia.Media;
 
 namespace StableDiffusionTagManager.ViewModels
 {
-    public class BooruTagModel
+    public class TagModel
     {
         public string Tag { get; set; } = "";
         public int Count { get; set; } = 0;
@@ -30,7 +31,7 @@ namespace StableDiffusionTagManager.ViewModels
     {
         private static readonly string TagsPath = "tags.csv";
 
-        private List<BooruTagModel> _booruTags = new List<BooruTagModel>();
+        private List<TagModel> _booruTags = new List<TagModel>();
 
         public MainWindowViewModel()
         {
@@ -40,7 +41,7 @@ namespace StableDiffusionTagManager.ViewModels
                                     .Select(line =>
                                     {
                                         var pair = line.Split(',');
-                                        return new BooruTagModel
+                                        return new TagModel
                                         {
                                             Tag = pair[0],
                                             Count = int.Parse(pair[1])
@@ -688,6 +689,27 @@ namespace StableDiffusionTagManager.ViewModels
             }
 
             return Task.CompletedTask;
+        }
+
+        public async Task ExpandImage(Bitmap image)
+        {
+            var dialog = new ExpandImageDialog();
+            await ShowDialog(dialog);
+            if (dialog.Success)
+            {
+                var finalSize = new PixelSize(image.PixelSize.Width + dialog.ExpandLeft + dialog.ExpandRight, image.PixelSize.Height + dialog.ExpandUp + dialog.ExpandDown);
+                var imageRegion = new Rect(dialog.ExpandLeft, dialog.ExpandUp, image.PixelSize.Width, image.PixelSize.Height);
+                var newImage = new RenderTargetBitmap(finalSize);
+                using (var drawingContext = newImage.CreateDrawingContext(null))
+                {
+                    drawingContext.Clear(new Color(255, 255, 255, 255));
+                    var dc = new DrawingContext(drawingContext);
+                    
+                    dc.DrawImage(image, new Rect(0, 0, image.PixelSize.Width, image.PixelSize.Height), imageRegion, Avalonia.Visuals.Media.Imaging.BitmapInterpolationMode.HighQuality);
+                }
+
+                AddNewImage(newImage, SelectedImage.Tags.Select(t => t.Tag));
+            }
         }
     }
 }

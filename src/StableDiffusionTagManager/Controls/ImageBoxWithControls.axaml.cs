@@ -38,6 +38,7 @@ namespace StableDiffusionTagManager.Controls
         public Func<Bitmap, Task>? InterrogateClicked;
         public Func<Bitmap, Task>? EditImageClicked;
         public Func<List<Bitmap?>, Task>? ComicPanelsExtracted;
+        public Func<Bitmap, Task>? ExpandClicked;
 
 
         private (int x, int y) _lockedSize;
@@ -513,6 +514,23 @@ namespace StableDiffusionTagManager.Controls
                 {
                     SaveClicked?.Invoke(bitmap);
                 }
+            }
+        }
+
+        [RelayCommand]
+        public void Expand()
+        {
+            if (ImageBox.IsPainted)
+            {
+                var bitmap = ImageBox.CreateNewImageWithLayersFromRegion();
+                if (bitmap != null)
+                {
+                    ExpandClicked?.Invoke(bitmap);
+                } 
+            }
+            else if(Image != null)
+            {
+                ExpandClicked?.Invoke(Image);
             }
         }
 

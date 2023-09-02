@@ -62,7 +62,7 @@
       <GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" ResizeBehavior="PreviousAndNext"/>
       <Grid Grid.Row="2">
         <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="1*" MinWidth="200"/>
+          <ColumnDefinition Width="1*" MinWidth="400"/>
           <ColumnDefinition Width="2"/>
           <ColumnDefinition Width="2*" MinWidth="100"/>
         </Grid.ColumnDefinitions>
