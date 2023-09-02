@@ -494,6 +494,8 @@ namespace StableDiffusionTagManager.ViewModels
                             Tag = pair.Key,
                             Count = pair.Count()
                         }).OrderBy(tc => tc.Tag));
+
+                tagCache = selectedImage?.Tags.Select(t => t.Tag).ToList();
             }
         }
 

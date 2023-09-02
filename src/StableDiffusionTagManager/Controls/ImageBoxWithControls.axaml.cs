@@ -342,7 +342,9 @@ namespace StableDiffusionTagManager.Controls
             get => paintBrushColor;
             set
             {
-                if (RaiseAndSetIfChanged(ref paintBrushColor, value)) ;
+                RaiseAndSetIfChanged(ref paintBrushColor, value);
+                EyeDropWithMouseButtons = MouseButtons.None;
+                PaintWithMouseButtons = MouseButtons.LeftButton;
             }
         }
 
