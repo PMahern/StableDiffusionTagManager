@@ -6,6 +6,7 @@
         xmlns:aib="using:UVtools.AvaloniaControls"
         xmlns:controls="using:StableDiffusionTagManager.Controls"
         xmlns:cp="clr-namespace:ThemeEditor.Controls.ColorPicker;assembly=ThemeEditor.Controls.ColorPicker"
+        xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="StableDiffusionTagManager.Views.MainWindow"
         Icon="/Assets/logo.ico"
@@ -85,37 +86,46 @@
               <RowDefinition Height="2*" MinHeight="100"/>
             </Grid.RowDefinitions>
             <controls:HeaderControl Grid.Row="0" Title="Image Tags" MaxHeight="{Binding Path=Parent.ActualHeight, RelativeSource={RelativeSource Self}}" Padding="0">
-              <ScrollViewer VerticalScrollBarVisibility="Visible"
+              <Grid RowDefinitions="Auto,*">
+                <StackPanel Orientation="Horizontal" Classes="toolbar" Grid.Column="0">
+                  <Button Command="{Binding ClearTagsCommand}" ToolTip.Tip="Delete All Tags">
+                    <mi:MaterialIcon Kind="DeleteSweep"/>
+                  </Button>
+                  </StackPanel>
+                <ScrollViewer Grid.Row="1" 
+                              VerticalScrollBarVisibility="Visible"
                               HorizontalScrollBarVisibility="Disabled"
                               HorizontalAlignment="Stretch"
                               VerticalAlignment="Stretch">
-                <ItemsControl Name="TagsList" Items="{Binding SelectedImage.Tags}">
-                  <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                      <WrapPanel Orientation="Horizontal" Margin="5"/>
-                    </ItemsPanelTemplate>
-                  </ItemsControl.ItemsPanel>
-                  <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                      <StackPanel Orientation="Horizontal">
-                        <Border Classes="tag" DragDrop.AllowDrop="True">
-                          <StackPanel Orientation="Horizontal" PointerPressed="TagDragStart" >
-                            <PathIcon Data="{StaticResource drag_regular}"/>
-                            <AutoCompleteBox Text="{Binding Tag, Mode=TwoWay}" IsTextCompletionEnabled="True" AsyncPopulator="SearchTags" AttachedToVisualTree="AutoCompleteAttached">
-                              <AutoCompleteBox.ItemTemplate>
-                                <DataTemplate>
-                                  <TextBlock Text="{Binding}" />
-                                </DataTemplate>
-                              </AutoCompleteBox.ItemTemplate>
-                            </AutoCompleteBox>
-                            <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.SelectedImage.RemoveTagCommand}" CommandParameter="{Binding}">x</Button>
-                          </StackPanel>
-                        </Border>
-                      </StackPanel>
-                    </DataTemplate>
-                  </ItemsControl.ItemTemplate>
-                </ItemsControl>
-              </ScrollViewer>
+                  <ItemsControl Name="TagsList" Items="{Binding SelectedImage.Tags}">
+                    <ItemsControl.ItemsPanel>
+                      <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" Margin="5"/>
+                      </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                          <Border Classes="tag" DragDrop.AllowDrop="True">
+                            <StackPanel Orientation="Horizontal" PointerPressed="TagDragStart" >
+                              <PathIcon Data="{StaticResource drag_regular}"/>
+                              <AutoCompleteBox Text="{Binding Tag, Mode=TwoWay}" IsTextCompletionEnabled="True" AsyncPopulator="SearchTags" AttachedToVisualTree="AutoCompleteAttached">
+                                <AutoCompleteBox.ItemTemplate>
+                                  <DataTemplate>
+                                    <TextBlock Text="{Binding}" />
+                                  </DataTemplate>
+                                </AutoCompleteBox.ItemTemplate>
+                              </AutoCompleteBox>
+                              <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.SelectedImage.RemoveTagCommand}" CommandParameter="{Binding}">x</Button>
+                            </StackPanel>
+                          </Border>
+                        </StackPanel>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </ScrollViewer>
+              </Grid>
+              
             </controls:HeaderControl>
             <GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" ResizeBehavior="PreviousAndNext"/>
             <Grid Grid.Row="2">
