@@ -23,7 +23,6 @@ namespace StableDiffusionTagManager.ViewModels
         private bool tagsDirty = false;
         private readonly int firstNumberedChunk = -1;
         private readonly int secondNumberedChunk = -1;
-        private bool isNumbered = false;
 
         private ImageWithTagsViewModel(string imageFile, Func<Bitmap, bool> imageDirtyCallback)
         {

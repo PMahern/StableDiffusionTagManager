@@ -53,7 +53,7 @@ namespace StableDiffusionTagManager.ViewModels
                                     }).ToList();
             }
 
-            if(Directory.Exists(TagPrioritySets))
+            if (Directory.Exists(TagPrioritySets))
             {
                 var txts = Directory.EnumerateFiles(TagPrioritySets, "*.txt").ToList();
                 tagPrioritySets = txts.Select(filename => new TagPrioritySet(filename)).ToList();
@@ -590,17 +590,20 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public async Task RunImgToImg(Bitmap image)
         {
-            var dialog = new ImageTouchupDialog();
-
-            dialog.Tags = SelectedImage.Tags.Select(t => t.Tag).ToList();
-            dialog.Image = image;
-            dialog.OpenProject = this.openProject;
-            await ShowDialog(dialog);
-
-            if (dialog.Success)
+            if (SelectedImage != null)
             {
-                SelectedImage.ImageSource = dialog.Image;
-                SelectedImage.ImageSource.Save(Path.Combine(this.openFolder, SelectedImage.Filename));
+                var dialog = new ImageTouchupDialog();
+
+                dialog.Tags = SelectedImage.Tags.Select(t => t.Tag).ToList();
+                dialog.Image = image;
+                dialog.OpenProject = this.openProject;
+                await ShowDialog(dialog);
+
+                if (dialog.Success)
+                {
+                    SelectedImage.ImageSource = dialog.Image;
+                    SelectedImage.ImageSource.Save(Path.Combine(this.openFolder, SelectedImage.Filename));
+                }
             }
         }
 
@@ -733,13 +736,13 @@ namespace StableDiffusionTagManager.ViewModels
         {
             var index = ImagesWithTags.IndexOf(SelectedImage);
             var withoutExtension = System.IO.Path.GetFileNameWithoutExtension(SelectedImage.Filename);
-            if(SelectedImage.FirstNumberedChunk != -1)
+            if (SelectedImage.FirstNumberedChunk != -1)
             {
                 withoutExtension = SelectedImage.FirstNumberedChunk.ToString("00000");
             }
 
             int i = 0;
-            if(SelectedImage.SecondNumberedChunk != -1)
+            if (SelectedImage.SecondNumberedChunk != -1)
             {
                 i = SelectedImage.SecondNumberedChunk;
             }
@@ -833,7 +836,7 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public void ApplyTagPrioritySet()
         {
-            if(tagPrioritySets != null && tagPrioritySets.Any() && SelectedImage != null)
+            if (tagPrioritySets != null && tagPrioritySets.Any() && SelectedImage != null)
             {
                 SelectedImage.ApplyTagOrdering(t => tagPrioritySets.First().GetTagPriority(t));
             }
