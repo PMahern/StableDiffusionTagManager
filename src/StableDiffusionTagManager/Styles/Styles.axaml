@@ -268,7 +268,7 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate>
-          <Border BorderBrush="{StaticResource SystemAltMediumLowColor}" BorderThickness="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White">
+          <Border BorderBrush="{StaticResource SystemAltMediumLowColor}" BorderThickness="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#2c2f33">
             <Grid RowDefinitions="Auto,*" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
               <Grid Background="{StaticResource SystemAltMediumLowColor}">
                 <Grid.ColumnDefinitions>
