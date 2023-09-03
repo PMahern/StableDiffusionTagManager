@@ -317,7 +317,7 @@ namespace StableDiffusionTagManager.ViewModels
             var index = SelectedImage?.Tags.IndexOf(tag) ?? -1;
             if (index != -1)
             {
-                SelectedImage?.Tags.Insert(index, newTag);
+                SelectedImage?.InsertTag(index, newTag);
             }
             FocusTagCallback?.Invoke(newTag);
         }
@@ -326,7 +326,7 @@ namespace StableDiffusionTagManager.ViewModels
         public void AddTagToFront()
         {
             var newTag = new TagViewModel("");
-            SelectedImage?.Tags.Insert(0, newTag);
+            SelectedImage?.InsertTag(0, newTag);
             FocusTagCallback?.Invoke(newTag);
         }
 
@@ -334,14 +334,14 @@ namespace StableDiffusionTagManager.ViewModels
         public void AddTagToEnd()
         {
             var newTag = new TagViewModel("");
-            SelectedImage?.Tags.Add(newTag);
+            SelectedImage?.AddTag(newTag);
             FocusTagCallback?.Invoke(newTag);
         }
 
         public void AddTagToEnd(string tag)
         {
             var newTag = new TagViewModel(tag);
-            SelectedImage?.Tags.Add(newTag);
+            SelectedImage?.AddTag(newTag);
         }
 
         public void AddMissingTagsToEnd(List<string> Tags)
@@ -352,7 +352,7 @@ namespace StableDiffusionTagManager.ViewModels
                 {
                     if (!SelectedImage.Tags.Any(t => t.Tag == tag))
                     {
-                        SelectedImage.Tags.Add(new TagViewModel(tag));
+                        SelectedImage.AddTag(new TagViewModel(tag));
                     }
                 }
             }
@@ -373,7 +373,7 @@ namespace StableDiffusionTagManager.ViewModels
                     {
                         if (!image.Tags.Any(t => t.Tag == tagResult))
                         {
-                            image.Tags.Add(new TagViewModel(tagResult));
+                            image.AddTag(new TagViewModel(tagResult));
                         }
                     }
                 }
@@ -393,7 +393,7 @@ namespace StableDiffusionTagManager.ViewModels
                     {
                         if (!image.Tags.Any(t => t.Tag == tagResult))
                         {
-                            image.Tags.Insert(0, new TagViewModel(tagResult));
+                            image.InsertTag(0, new TagViewModel(tagResult));
                         }
                     }
                 }
@@ -416,7 +416,7 @@ namespace StableDiffusionTagManager.ViewModels
                         var toRemove = image.Tags.Where(t => t.Tag == tagResult).ToList();
                         foreach (var tagToRemove in toRemove)
                         {
-                            image.Tags.Remove(tagToRemove);
+                            image.RemoveTag(tagToRemove);
                         }
                     }
                 }
@@ -506,8 +506,8 @@ namespace StableDiffusionTagManager.ViewModels
                 var index = SelectedImage.Tags.IndexOf(tag);
                 if (index > 0)
                 {
-                    SelectedImage.Tags.RemoveAt(index);
-                    SelectedImage.Tags.Insert(index - 1, tag);
+                    SelectedImage.RemoveTagAt(index);
+                    SelectedImage.InsertTag(index - 1, tag);
                     FocusTagCallback?.Invoke(tag);
                 }
             }
@@ -521,8 +521,8 @@ namespace StableDiffusionTagManager.ViewModels
                 var index = SelectedImage.Tags.IndexOf(tag);
                 if (index < SelectedImage.Tags.Count() - 1)
                 {
-                    SelectedImage.Tags.RemoveAt(index);
-                    SelectedImage.Tags.Insert(index + 1, tag);
+                    SelectedImage.RemoveTagAt(index);
+                    SelectedImage.InsertTag(index + 1, tag);
                     FocusTagCallback?.Invoke(tag);
                 }
             }
@@ -612,6 +612,23 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
+        [RelayCommand]
+        public async void ClearTags()
+        {
+            if (SelectedImage.Tags.Any())
+            {
+                var dialog = MessageBox.Avalonia.MessageBoxManager
+                                    .GetMessageBoxStandardWindow("Delete all tags", "This will delete all tags for the current image, are you sure?", MessageBox.Avalonia.Enums.ButtonEnum.YesNo, Icon.Warning);
+
+                var result = await ShowDialog(dialog);
+
+                if(result == ButtonResult.Yes)
+                {
+                    SelectedImage.ClearTags();
+                }
+            }
+        }
+
         public async Task<bool> CheckCanExit()
         {
             if (ImagesWithTags != null)
@@ -671,7 +688,7 @@ namespace StableDiffusionTagManager.ViewModels
                     foreach (var tag in tags)
                     {
                         if(!SelectedImage.Tags.Any(t => t.Tag == tag)) {
-                            SelectedImage.Tags.Add(new TagViewModel(tag));
+                            SelectedImage.AddTag(new TagViewModel(tag));
                         }
                     }
                 }

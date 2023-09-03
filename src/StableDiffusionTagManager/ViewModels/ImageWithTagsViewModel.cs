@@ -30,10 +30,13 @@ namespace StableDiffusionTagManager.ViewModels
 
             filename = Path.GetFileName(imageFile);
 
-            tags = new ObservableCollection<TagViewModel>(tagSet.Tags.Select(t => new TagViewModel(t) { TagChanged = (oldtag, newtag) => TagChanged?.Invoke(oldtag, newtag) }));
+            tags = new ObservableCollection<TagViewModel>(tagSet.Tags.Select(t => new TagViewModel(t)
+            {
+                TagChanged = TagChangedHandler
+            }));
             tags.CollectionChanged += SetTagsDirty;
             IsFromCrop = false;
-            
+
         }
 
         public ImageWithTagsViewModel(Bitmap image, string newFileName, Func<Bitmap, bool> imageDirtyCallback, IEnumerable<string>? tags = null)
@@ -45,7 +48,10 @@ namespace StableDiffusionTagManager.ViewModels
             filename = filename = Path.GetFileName(newFileName);
             if (tags != null)
             {
-                this.tags = new ObservableCollection<TagViewModel>(tags.Select(t => new TagViewModel(t)));
+                this.tags = new ObservableCollection<TagViewModel>(tags.Select(t => new TagViewModel(t)
+                {
+                    TagChanged = TagChangedHandler
+                }));
             }
             else
             {
@@ -75,14 +81,9 @@ namespace StableDiffusionTagManager.ViewModels
 
         private ObservableCollection<TagViewModel> tags;
 
-        public ObservableCollection<TagViewModel> Tags
+        public ReadOnlyObservableCollection<TagViewModel> Tags
         {
-            get { return tags; }
-            set {
-                tags.CollectionChanged -= SetTagsDirty;
-                tags = value;
-                tags.CollectionChanged += SetTagsDirty;
-                OnPropertyChanged(); }
+            get { return new ReadOnlyObservableCollection<TagViewModel>(tags); }
         }
 
         //Tag handling
@@ -151,7 +152,41 @@ namespace StableDiffusionTagManager.ViewModels
 
         public bool AreTagsDirty()
         {
-            return tagsDirty;   
+            return tagsDirty;
+        }
+
+        internal void ClearTags()
+        {
+            foreach (var tag in tags)
+            {
+                tag.TagChanged -= TagChangedHandler;
+            }
+
+            tags.Clear();
+        }
+
+        private void TagChangedHandler(string arg1, string arg2)
+        {
+            tagsDirty = true;
+        }
+
+        internal void InsertTag(int index, TagViewModel newTag)
+        {
+            newTag.TagChanged += TagChangedHandler;
+            tags.Insert(index, newTag);
+        }
+
+        internal void AddTag(TagViewModel newTag)
+        {
+            newTag.TagChanged += TagChangedHandler;
+            tags.Add(newTag);
+        }
+
+        internal void RemoveTagAt(int index)
+        {
+            var tag = tags[index];
+            tag.TagChanged -= TagChangedHandler;
+            tags.RemoveAt(index);
         }
     }
 }
