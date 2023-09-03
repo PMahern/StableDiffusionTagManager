@@ -38,15 +38,15 @@
           <Button Command="{Binding EditImageCommand}" IsVisible="{Binding ShowEditImageButton}" ToolTip.Tip="Touch Up Image">
             <PathIcon Data="{StaticResource image_edit_regular}" />
           </Button>
-          <ToggleButton Command="{Binding ExpandCommand}" IsVisible="{Binding ShowExpandButton}" ToolTip.Tip="Expand the Image">
+          <Button Command="{Binding ExpandCommand}" IsVisible="{Binding ShowExpandButton}" ToolTip.Tip="Expand the Image">
             <mi:MaterialIcon Kind="Fullscreen"/>
-          </ToggleButton>
-          <ToggleButton Command="{Binding InterrogateCommand}" IsVisible="{Binding ShowInterrogateButton}" ToolTip.Tip="Interrogate SD Webui For Tags">
+          </Button>
+          <Button Command="{Binding InterrogateCommand}" IsVisible="{Binding ShowInterrogateButton}" ToolTip.Tip="Interrogate SD Webui For Tags">
             <mi:MaterialIcon Kind="Eye"/>
-          </ToggleButton>
-          <ToggleButton Command="{Binding SaveCommand}" IsVisible="{Binding ShowSaveButton}" IsEnabled="{Binding IsPainted, ElementName=ImageBox}" ToolTip.Tip="Save Changes">
+          </Button>
+          <Button Command="{Binding SaveCommand}" IsVisible="{Binding ShowSaveButton}" IsEnabled="{Binding IsPainted, ElementName=ImageBox}" ToolTip.Tip="Save Changes">
             <mi:MaterialIcon Kind="FloppyDisc"/>
-          </ToggleButton>
+          </Button>
         </StackPanel>
         <StackPanel Orientation="Horizontal"  Classes="toolbar" Grid.Column="2" IsVisible="{Binding CurrentMode, Converter={StaticResource ResourceKey=modeConverter}, ConverterParameter={x:Static controls:ImageViewerMode.Selection}, Mode=OneWay}">
           <Button Command="{Binding CropSelectionCommand}" ToolTip.Tip="Crop Selection">
