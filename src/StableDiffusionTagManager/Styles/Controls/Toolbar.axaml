@@ -1,0 +1,58 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialicons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+    <Design.PreviewWith>
+        <Border Padding="20">
+          <StackPanel Orientation="Horizontal" Classes="toolbar">
+            <Button>
+              <materialicons:MaterialIcon Kind="Add"/>
+            </Button>
+            <Button>
+              <materialicons:MaterialIcon Kind="Delete"/>
+            </Button>
+            <Button>
+              <materialicons:MaterialIcon Kind="About"/>
+            </Button>
+          </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+  <Style Selector="StackPanel.toolbar">
+    <Setter Property="Background" Value="{DynamicResource SecondaryBackgroundColor}" />
+    <Setter Property="Height" Value="40" />
+  </Style>
+  <Style Selector="StackPanel.toolbar > Button">
+    <Setter Property="Height" Value="30" />
+    <Setter Property="Width" Value="30" />
+    <Setter Property="Margin" Value="5, 0, 5, 0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="StackPanel.toolbar materialicons|MaterialIcon">
+    <Setter Property="Height" Value="20" />
+    <Setter Property="Width" Value="20" />
+  </Style>
+  <Style Selector="StackPanel.toolbar > ToggleButton">
+    <Setter Property="Height" Value="30" />
+    <Setter Property="Width" Value="30" />
+    <Setter Property="Margin" Value="5, 0, 5, 0" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="StackPanel.toolbar > ToggleButton:focus">
+    <Setter Property="Background" Value="{StaticResource SystemAccentColorLight1}"/>
+  </Style>
+  <Style Selector="StackPanel.toolbar > ComboBox">
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="Height" Value="30"/>
+    <Setter Property="FontSize" Value="10" />
+    <Setter Property="Padding" Value="5"/>
+    <Setter Property="Margin" Value="5, 0, 5, 0" />
+  </Style>
+  <Style Selector="StackPanel.toolbar ComboBox /template/ ComboBoxItem#PART_ContentPresenter">
+    <Setter Property="Padding" Value="0"/>
+  </Style>
+  <Style Selector="StackPanel.toolbar NumericUpDown">
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="Height" Value="30"/>
+    <Setter Property="Width" Value="75"/>
+    <Setter Property="Margin" Value="5, 0, 5, 0" />
+  </Style>
+</Styles>

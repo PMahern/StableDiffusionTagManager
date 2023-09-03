@@ -33,14 +33,15 @@ namespace StableDiffusionTagManager.ViewModels
         private static readonly string ProjectFolder = ".sdtmproj";
         private static readonly string ProjecFilename = "_project.xml";
         private static readonly string ArchiveFolder = "archive";
+        private static readonly string TagPrioritySets = "TagPrioritySets";
 
         private List<TagModel> _tagDictionary = new List<TagModel>();
 
         public MainWindowViewModel()
         {
-            if (System.IO.File.Exists(TagsPath))
+            if (File.Exists(TagsPath))
             {
-                _tagDictionary = System.IO.File.ReadAllLines(TagsPath)
+                _tagDictionary = File.ReadAllLines(TagsPath)
                                     .Select(line =>
                                     {
                                         var pair = line.Split(',');
@@ -50,6 +51,12 @@ namespace StableDiffusionTagManager.ViewModels
                                             Count = int.Parse(pair[1])
                                         };
                                     }).ToList();
+            }
+
+            if(Directory.Exists(TagPrioritySets))
+            {
+                var txts = Directory.EnumerateFiles(TagPrioritySets, "*.txt").ToList();
+                tagPrioritySets = txts.Select(filename => new TagPrioritySet(filename)).ToList();
             }
         }
 
@@ -818,5 +825,19 @@ namespace StableDiffusionTagManager.ViewModels
         {
             return ImageDirtyCallback?.Invoke(image) ?? false;
         }
+
+
+        #region Tag Priority Sets
+        private List<TagPrioritySet>? tagPrioritySets;
+
+        [RelayCommand]
+        public void ApplyTagPrioritySet()
+        {
+            if(tagPrioritySets != null && tagPrioritySets.Any() && SelectedImage != null)
+            {
+                SelectedImage.ApplyTagOrdering(t => tagPrioritySets.First().GetTagPriority(t));
+            }
+        }
+        #endregion
     }
 }

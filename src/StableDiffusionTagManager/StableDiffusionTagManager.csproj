@@ -12,6 +12,11 @@
     <AvaloniaResource Include="Assets\**" />
     <AvaloniaResource Include="Styles\**" />
     <AvaloniaResource Remove="Assets\tags.csv" />
+    <AvaloniaResource Remove="Styles\Controls\Checkbox.axaml" />
+    <AvaloniaResource Remove="Styles\Controls\HeaderControl.axaml" />
+    <AvaloniaResource Remove="Styles\Controls\NumericUpDown.axaml" />
+    <AvaloniaResource Remove="Styles\Controls\Tag.axaml" />
+    <AvaloniaResource Remove="Styles\Controls\Toolbar.axaml" />
     <AvaloniaXaml Remove="Styles\DefaultTheme.axaml" />
     <AvaloniaXaml Remove="Styles\Icons.axaml" />
     <None Remove=".gitignore" />
@@ -42,6 +47,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaXaml Update="Styles\Controls\HeaderControl.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+    <AvaloniaXaml Update="Styles\Controls\Checkbox.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+    <AvaloniaXaml Update="Styles\Controls\NumericUpDown.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+    <AvaloniaXaml Update="Styles\Controls\Tag.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+    <AvaloniaXaml Update="Styles\Controls\Toolbar.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
     <AvaloniaResource Update="Styles\DefaultTheme.axaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>

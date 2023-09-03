@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SixLabors.ImageSharp;
@@ -201,6 +202,13 @@ namespace StableDiffusionTagManager.ViewModels
             var tag = tags[index];
             tag.TagChanged -= TagChangedHandler;
             tags.RemoveAt(index);
+        }
+
+        internal void ApplyTagOrdering<TKey>(Func<string, TKey> orderBy)
+        {
+            var newOrder = this.tags.OrderBy(t => orderBy(t.Tag)).ToList();
+            this.tags.Clear();
+            this.tags.AddRange(newOrder);
         }
     }
 }

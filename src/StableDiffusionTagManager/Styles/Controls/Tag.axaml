@@ -1,0 +1,42 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20">
+          <WrapPanel Orientation="Horizontal">
+            <Border Classes="tag">
+              <StackPanel Orientation="Horizontal">
+                <Label>Test Tag</Label>
+                <Button>x</Button>
+              </StackPanel>
+            </Border>
+            <Border Classes="tag">
+              <StackPanel Orientation="Horizontal">
+                <Label>Test Tag</Label>
+                <Button>x</Button>
+              </StackPanel>
+            </Border>
+          </WrapPanel>
+        </Border>
+    </Design.PreviewWith>
+  <Style Selector="Border.tag">
+    <Setter Property="CornerRadius" Value="5"/>
+    <Setter Property="Background" Value="{DynamicResource SystemBaseMediumColor}"/>
+    <Setter Property="Margin" Value="2"/>
+  </Style>
+  <Style Selector="Border.tag:pointerover">
+    <Setter Property="Background" Value="{DynamicResource SystemBaseMediumColor}"/>
+  </Style>
+  <Style Selector="Border.tag Label">
+    <Setter Property="VerticalAlignment" Value="Center"/>
+  </Style>
+  <Style Selector="Border.tag Button">
+    <Setter Property="CornerRadius" Value="5"/>
+    <Setter Property="Background" Value="Transparent"/>
+  </Style>
+  <Style Selector="Border.tag PathIcon">
+    <Setter Property="Margin" Value="4" />
+    <Setter Property="Height" Value="16"/>
+    <Setter Property="Width" Value="16"/>
+    <Setter Property="Cursor" Value="DragMove"/>
+  </Style>
+</Styles>
