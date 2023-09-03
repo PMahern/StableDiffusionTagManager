@@ -30,6 +30,9 @@ namespace StableDiffusionTagManager.ViewModels
     public partial class MainWindowViewModel : ViewModelBase
     {
         private static readonly string TagsPath = "tags.csv";
+        private static readonly string ProjectFolder = ".sdtmproj";
+        private static readonly string ProjecFilename = "_project.xml";
+        private static readonly string ArchiveFolder = "archive";
 
         private List<TagModel> _tagDictionary = new List<TagModel>();
 
@@ -167,7 +170,7 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public async Task LoadFolder()
         {
-            if(!await CheckCanExit())
+            if (!await CheckCanExit())
             {
                 return;
             }
@@ -178,9 +181,9 @@ namespace StableDiffusionTagManager.ViewModels
 
                 if (pickResult != null)
                 {
-                    var projectPath = Path.Combine(pickResult, ".sdtmproj");
+                    var projectPath = Path.Combine(pickResult, ProjectFolder);
                     var projFolder = Directory.Exists(projectPath);
-                    var projFile = Path.Combine(projectPath, "_project.xml");
+                    var projFile = Path.Combine(projectPath, ProjecFilename);
                     if (!projFolder)
                     {
                         var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
@@ -253,7 +256,9 @@ namespace StableDiffusionTagManager.ViewModels
 
                     FolderTagSets = new FolderTagSets(pickResult);
 
-                    ImagesWithTags = new(FolderTagSets.TagsSets.Select(tagSet => new ImageWithTagsViewModel(tagSet.ImageFile, tagSet.TagSet, ImageDirtyHandler)));
+                    ImagesWithTags = new(FolderTagSets.TagsSets.Select(tagSet => new ImageWithTagsViewModel(tagSet.ImageFile, tagSet.TagSet, ImageDirtyHandler))
+                                    .OrderBy(iwt => iwt.FirstNumberedChunk)
+                                    .ThenBy(iwt => iwt.SecondNumberedChunk));
 
                     if (openProject != null)
                     {
@@ -534,7 +539,7 @@ namespace StableDiffusionTagManager.ViewModels
             if (SelectedImage != null && ImagesWithTags != null)
             {
                 var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                            .GetMessageBoxStandardWindow("Delete Image?", "Really delete Selected Image? This operation is permanent!", MessageBox.Avalonia.Enums.ButtonEnum.YesNo, Icon.Warning);
+                            .GetMessageBoxStandardWindow("Archive Image?", "Really archive selected image? It will be moved to a subdirectory named archive.", MessageBox.Avalonia.Enums.ButtonEnum.YesNo, Icon.Warning);
 
                 var result = await ShowDialog(messageBoxStandardWindow);
 
@@ -559,8 +564,18 @@ namespace StableDiffusionTagManager.ViewModels
                         SelectedImage = null;
                     }
 
-                    File.Delete(Path.Combine(openFolder, imageToDelete.Filename));
-                    File.Delete(Path.Combine(openFolder, imageToDelete.GetTagsFileName()));
+                    var destDirectory = Path.Combine(openFolder, ArchiveFolder);
+                    if (!Directory.Exists(destDirectory))
+                    {
+                        Directory.CreateDirectory(destDirectory);
+                    }
+
+                    File.Move(Path.Combine(openFolder, imageToDelete.Filename), Path.Combine(destDirectory, imageToDelete.Filename));
+                    var tagFile = Path.Combine(openFolder, imageToDelete.GetTagsFileName());
+                    if (File.Exists(tagFile))
+                    {
+                        File.Move(tagFile, Path.Combine(destDirectory, imageToDelete.GetTagsFileName()));
+                    }
                 }
             }
         }
@@ -606,7 +621,7 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public async void Exit()
         {
-            if(await CheckCanExit())
+            if (await CheckCanExit())
             {
                 ExitCallback?.Invoke();
             }
@@ -622,7 +637,7 @@ namespace StableDiffusionTagManager.ViewModels
 
                 var result = await ShowDialog(dialog);
 
-                if(result == ButtonResult.Yes)
+                if (result == ButtonResult.Yes)
                 {
                     SelectedImage.ClearTags();
                 }
@@ -699,7 +714,7 @@ namespace StableDiffusionTagManager.ViewModels
                 catch (Exception ex)
                 {
                     var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                            .GetMessageBoxStandardWindow("Interrogate Failed", 
+                            .GetMessageBoxStandardWindow("Interrogate Failed",
                                                          $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}", ButtonEnum.Ok, Icon.Warning);
 
                     await ShowDialog(messageBoxStandardWindow);
@@ -711,7 +726,17 @@ namespace StableDiffusionTagManager.ViewModels
         {
             var index = ImagesWithTags.IndexOf(SelectedImage);
             var withoutExtension = System.IO.Path.GetFileNameWithoutExtension(SelectedImage.Filename);
+            if(SelectedImage.FirstNumberedChunk != -1)
+            {
+                withoutExtension = SelectedImage.FirstNumberedChunk.ToString("00000");
+            }
+
             int i = 0;
+            if(SelectedImage.SecondNumberedChunk != -1)
+            {
+                i = SelectedImage.SecondNumberedChunk;
+            }
+
             var newFilename = $"{withoutExtension}__{i.ToString("00")}";
             while (ImagesWithTags.Any(i => newFilename == System.IO.Path.GetFileNameWithoutExtension(i.Filename)))
             {
@@ -720,7 +745,7 @@ namespace StableDiffusionTagManager.ViewModels
             newFilename = Path.Combine(openFolder, $"{newFilename}.png");
             image.Save(newFilename);
             var newImageViewModel = new ImageWithTagsViewModel(image, newFilename, ImageDirtyHandler, tags);
-            if(tags != null)
+            if (tags != null)
             {
                 var set = new TagSet(Path.Combine(openFolder, newImageViewModel.GetTagsFileName()), tags);
                 set.WriteFile();
@@ -781,7 +806,7 @@ namespace StableDiffusionTagManager.ViewModels
                 {
                     drawingContext.Clear(new Color(255, 255, 255, 255));
                     var dc = new DrawingContext(drawingContext);
-                    
+
                     dc.DrawImage(image, new Rect(0, 0, image.PixelSize.Width, image.PixelSize.Height), imageRegion, Avalonia.Visuals.Media.Imaging.BitmapInterpolationMode.HighQuality);
                 }
 

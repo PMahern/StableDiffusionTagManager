@@ -20,32 +20,44 @@ namespace StableDiffusionTagManager.ViewModels
         const int THUMBNAIL_SIZE = 200;
         private readonly Func<Bitmap, bool> imageDirtyCallback;
         private bool tagsDirty = false;
+        private readonly int firstNumberedChunk = -1;
+        private readonly int secondNumberedChunk = -1;
+        private bool isNumbered = false;
 
-        public ImageWithTagsViewModel(string imageFile, TagSet tagSet, Func<Bitmap, bool> imageDirtyCallback)
+        private ImageWithTagsViewModel(string imageFile, Func<Bitmap, bool> imageDirtyCallback)
+        {
+            this.imageDirtyCallback = imageDirtyCallback;
+            filename = Path.GetFileName(imageFile);
+            var withoutExtension = Path.GetFileNameWithoutExtension(filename);
+            var chunks = withoutExtension.Split("__");
+            if (chunks.Count() > 0)
+            {
+                int.TryParse(chunks[0], out firstNumberedChunk);
+            }
+
+            if (chunks.Count() > 1)
+            {
+                int.TryParse(chunks[0], out secondNumberedChunk);
+            }
+        }
+
+        public ImageWithTagsViewModel(string imageFile, TagSet tagSet, Func<Bitmap, bool> imageDirtyCallback) : this(imageFile, imageDirtyCallback)
         {
             using var stream = File.OpenRead(imageFile);
-            this.imageDirtyCallback = imageDirtyCallback;
             thumbnail = Bitmap.DecodeToHeight(stream, THUMBNAIL_SIZE);
             imageSource = new Bitmap(imageFile);
-
-            filename = Path.GetFileName(imageFile);
-
             tags = new ObservableCollection<TagViewModel>(tagSet.Tags.Select(t => new TagViewModel(t)
             {
                 TagChanged = TagChangedHandler
             }));
             tags.CollectionChanged += SetTagsDirty;
-            IsFromCrop = false;
-
         }
 
-        public ImageWithTagsViewModel(Bitmap image, string newFileName, Func<Bitmap, bool> imageDirtyCallback, IEnumerable<string>? tags = null)
+        public ImageWithTagsViewModel(Bitmap image, string newFileName, Func<Bitmap, bool> imageDirtyCallback, IEnumerable<string>? tags = null) : this(newFileName, imageDirtyCallback)
         {
             imageSource = image;
             thumbnail = GenerateThumbnail();
-            this.imageDirtyCallback = imageDirtyCallback;
 
-            filename = filename = Path.GetFileName(newFileName);
             if (tags != null)
             {
                 this.tags = new ObservableCollection<TagViewModel>(tags.Select(t => new TagViewModel(t)
@@ -68,8 +80,6 @@ namespace StableDiffusionTagManager.ViewModels
         public Action<string, string>? TagChanged;
         public Action<string>? TagRemoved;
 
-        public bool IsFromCrop { get; }
-
         private Bitmap imageSource;
         public Bitmap ImageSource { get => imageSource; set { imageSource = value; OnPropertyChanged(); } }
 
@@ -85,6 +95,10 @@ namespace StableDiffusionTagManager.ViewModels
         {
             get { return new ReadOnlyObservableCollection<TagViewModel>(tags); }
         }
+
+        public int SecondNumberedChunk => secondNumberedChunk;
+
+        public int FirstNumberedChunk => firstNumberedChunk;
 
         //Tag handling
         private TagViewModel? _tagBeingDragged = null;
