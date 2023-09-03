@@ -69,7 +69,7 @@
         </Grid.ColumnDefinitions>
         <Border Classes="gridcontent" Grid.Column="0">
           <DockPanel>
-            <Label DockPanel.Dock="Bottom" HorizontalAlignment="Center" Content="{Binding SelectedImage.Filename}" Background="White"></Label>
+            <Label DockPanel.Dock="Bottom" HorizontalAlignment="Center" Content="{Binding SelectedImage.Filename}"></Label>
             <controls:ImageBoxWithControls Name="ImageBox"
                                   Image="{Binding SelectedImage.ImageSource}"
                                   TargetImageSize="{Binding TargetImageSize}"

@@ -36,7 +36,7 @@
           <DataTemplate>
             <Grid>
               <Image Source="{Binding Image}" Height="200"/>
-              <Grid Background="White"
+              <Grid
                      HorizontalAlignment="Left"
                      VerticalAlignment="Top"
                       Margin="5"
