@@ -38,6 +38,14 @@
           </StackPanel>
           <GridSplitter Grid.Row="1" Height="1" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
         </Grid>
+        <controls:HeaderControl Grid.Row="0" Title="Image Tags" MaxHeight="{Binding Path=Parent.ActualHeight, RelativeSource={RelativeSource Self}}" Padding="0">
+          <ScrollViewer VerticalScrollBarVisibility="Visible"
+                          HorizontalScrollBarVisibility="Disabled"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch">
+
+          </ScrollViewer>
+        </controls:HeaderControl>
       </DockPanel>
     </Window>
   </Design.PreviewWith>
