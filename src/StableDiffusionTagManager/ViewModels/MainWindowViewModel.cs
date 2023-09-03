@@ -674,23 +674,35 @@ namespace StableDiffusionTagManager.ViewModels
                 SelectedImage.ImageSource.Save(uploadStream);
                 var imagebase64 = Convert.ToBase64String(uploadStream.ToArray());
 
-                var result = await api.InterrogateapiSdapiV1InterrogatePostAsync(new SdWebUpApi.Model.InterrogateRequest
+                try
                 {
-                    Image = imagebase64,
-                    Model = model
-                });
-
-                var jtokResult = result as JToken;
-                var convertedresult = jtokResult?.ToObject<InterrogateResult>();
-                if (convertedresult != null)
-                {
-                    var tags = convertedresult.caption.Split(", ");
-                    foreach (var tag in tags)
+                    var result = await api.InterrogateapiSdapiV1InterrogatePostAsync(new SdWebUpApi.Model.InterrogateRequest
                     {
-                        if(!SelectedImage.Tags.Any(t => t.Tag == tag)) {
-                            SelectedImage.AddTag(new TagViewModel(tag));
+                        Image = imagebase64,
+                        Model = model
+                    });
+
+                    var jtokResult = result as JToken;
+                    var convertedresult = jtokResult?.ToObject<InterrogateResult>();
+                    if (convertedresult != null)
+                    {
+                        var tags = convertedresult.caption.Split(", ");
+                        foreach (var tag in tags)
+                        {
+                            if (!SelectedImage.Tags.Any(t => t.Tag == tag))
+                            {
+                                SelectedImage.AddTag(new TagViewModel(tag));
+                            }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
+                            .GetMessageBoxStandardWindow("Interrogate Failed", 
+                                                         $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}", ButtonEnum.Ok, Icon.Warning);
+
+                    await ShowDialog(messageBoxStandardWindow);
                 }
             }
         }

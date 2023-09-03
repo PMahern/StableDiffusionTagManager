@@ -427,7 +427,7 @@ namespace StableDiffusionTagManager.Controls
                                 var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
                                         .GetMessageBoxStandardWindow(
                                             "Panel Extraction Failed",
-                                            $"Failed to execute kumiko panel extraction. Exception message was : {e.Message}",
+                                            $"{e.Message}",
                                             MessageBox.Avalonia.Enums.ButtonEnum.Ok);
 
                                 await messageBoxStandardWindow.ShowDialog(window);

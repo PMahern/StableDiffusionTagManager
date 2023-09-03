@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using SdWebUpApi;
 using SdWebUpApi.Api;
@@ -14,7 +15,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using static UVtools.AvaloniaControls.AdvancedImageBox;
+using MessageBox.Avalonia.Enums;
 
 namespace StableDiffusionTagManager.Views
 {
@@ -36,16 +37,31 @@ namespace StableDiffusionTagManager.Views
             Prompt = (OpenProject?.DefaultPromptPrefix ?? "") + (validtags.Any() ? validtags.Aggregate((l, r) => $"{l}, {r}") : "");
             NegativePrompt = OpenProject?.DefaultNegativePrompt ?? "";
             DenoiseStrength = OpenProject?.DefaultDenoiseStrength ?? 0.25M;
-
-            var api = new DefaultApi(App.Settings.WebUiAddress);
-
-            var samplers = api.GetSamplersSdapiV1SamplersGet();
-
-            this.Samplers = samplers.Select(s => s.Name).ToObservableCollection();
-
-            this.SelectedSampler = this.Samplers.First();
+            Dispatcher.UIThread.Post(() => UpdateSamplers());
         }
 
+        public async void UpdateSamplers()
+        {
+            try
+            {
+                var api = new DefaultApi(App.Settings.WebUiAddress);
+
+                var samplers = api.GetSamplersSdapiV1SamplersGet();
+
+                this.Samplers = samplers.Select(s => s.Name).ToObservableCollection();
+
+                this.SelectedSampler = this.Samplers.First();
+            }
+            catch (Exception ex)
+            {
+                var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
+                            .GetMessageBoxStandardWindow("Failed to get samplers",
+                                                         $"Querying stable diffusion webui for the list of available samplers failed. This likely indicates the server can't be reached. Error message:\n\r {ex.Message}",
+                                                         ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+
+                await messageBoxStandardWindow.ShowDialog(this);
+            }
+        }
         public bool Success { get; set; }
 
         public static readonly StyledProperty<Bitmap?> ImagePropery =
@@ -217,79 +233,92 @@ namespace StableDiffusionTagManager.Views
         {
             if (App.Settings.WebUiAddress != null)
             {
-                var api = new DefaultApi(App.Settings.WebUiAddress);
-
-                var flattened = ImageBox.ImageBox.CreateNewImageWithLayersFromRegion();
-                if (flattened != null)
+                try
                 {
-                    this.IsLoading = true;
-                    using var uploadStream = new MemoryStream();
-                    flattened.Save(uploadStream);
-                    var imagebase64 = Convert.ToBase64String(uploadStream.ToArray());
+                    var api = new DefaultApi(App.Settings.WebUiAddress);
 
-                    Bitmap? maskImage = null;
-                    var invertmask = false;
-                    if (ImageBox.CurrentMode == Controls.ImageViewerMode.Mask)
+                    var flattened = ImageBox.ImageBox.CreateNewImageWithLayersFromRegion();
+                    if (flattened != null)
                     {
-                        maskImage = ImageBox.ImageBox.CreateNewImageFromMask();
-                        invertmask = true;
-                    }
-                    else
-                    {
-                        var renderTarget = new RenderTargetBitmap(Image.PixelSize);
-                        var selectionRegion = ImageBox.SelectionRegion;
-                        var whiteBrush = new SolidColorBrush(new Color(255, 255, 255, 255));
-                        using (var dc = renderTarget.CreateDrawingContext(null))
+                        this.IsLoading = true;
+                        using var uploadStream = new MemoryStream();
+                        flattened.Save(uploadStream);
+                        var imagebase64 = Convert.ToBase64String(uploadStream.ToArray());
+
+                        Bitmap? maskImage = null;
+                        var invertmask = false;
+                        if (ImageBox.CurrentMode == Controls.ImageViewerMode.Mask)
                         {
-                            dc.Clear(new Color(255, 0, 0, 0));
-                            dc.DrawRectangle(whiteBrush, null, new RoundedRect(selectionRegion, 0));
+                            maskImage = ImageBox.ImageBox.CreateNewImageFromMask();
+                            invertmask = true;
+                        }
+                        else
+                        {
+                            var renderTarget = new RenderTargetBitmap(Image.PixelSize);
+                            var selectionRegion = ImageBox.SelectionRegion;
+                            var whiteBrush = new SolidColorBrush(new Color(255, 255, 255, 255));
+                            using (var dc = renderTarget.CreateDrawingContext(null))
+                            {
+                                dc.Clear(new Color(255, 0, 0, 0));
+                                dc.DrawRectangle(whiteBrush, null, new RoundedRect(selectionRegion, 0));
+                            }
+
+                            maskImage = renderTarget;
                         }
 
-                        maskImage = renderTarget;
-                    }
-
-                    using var maskStream = new MemoryStream();
-                    maskImage.Save(maskStream);
-                    var maskbase64 = Convert.ToBase64String(maskStream.ToArray());
-                    maskImage.Dispose();
+                        using var maskStream = new MemoryStream();
+                        maskImage.Save(maskStream);
+                        var maskbase64 = Convert.ToBase64String(maskStream.ToArray());
+                        maskImage.Dispose();
 
 
-                    var r = await api.Img2imgapiSdapiV1Img2imgPostAsync(new SdWebUpApi.Model.StableDiffusionProcessingImg2Img
-                    {
-                        Prompt = Prompt,
-                        NegativePrompt = NegativePrompt,
-                        InitImages = new List<object> { imagebase64 },
-                        InpaintFullRes = InpaintOnlyMasked,
-                        Mask = maskbase64,
-                        InpaintFullResPadding = OnlyMaskedPadding,
-                        DenoisingStrength = DenoiseStrength,
-                        InpaintingFill = (int)SelectedMaskedContent,
-                        BatchSize = BatchSize,
-                        InpaintingMaskInvert = invertmask ? 1 : 0,
-                        SamplerName = SelectedSampler ?? "Euler a",
-                        Steps = SamplingSteps,
-                        MaskBlur = MaskBlur
-                    });
-
-                    var bitmaps = r.Images.Select(imageData =>
-                    {
-                        using (var mstream = new MemoryStream(Convert.FromBase64String(imageData)))
+                        var r = await api.Img2imgapiSdapiV1Img2imgPostAsync(new SdWebUpApi.Model.StableDiffusionProcessingImg2Img
                         {
-                            return new ImageReviewViewModel(new Bitmap(mstream));
-                        }
-                    }).ToObservableCollection();
+                            Prompt = Prompt,
+                            NegativePrompt = NegativePrompt,
+                            InitImages = new List<object> { imagebase64 },
+                            InpaintFullRes = InpaintOnlyMasked,
+                            Mask = maskbase64,
+                            InpaintFullResPadding = OnlyMaskedPadding,
+                            DenoisingStrength = DenoiseStrength,
+                            InpaintingFill = (int)SelectedMaskedContent,
+                            BatchSize = BatchSize,
+                            InpaintingMaskInvert = invertmask ? 1 : 0,
+                            SamplerName = SelectedSampler ?? "Euler a",
+                            Steps = SamplingSteps,
+                            MaskBlur = MaskBlur
+                        });
 
+                        var bitmaps = r.Images.Select(imageData =>
+                        {
+                            using (var mstream = new MemoryStream(Convert.FromBase64String(imageData)))
+                            {
+                                return new ImageReviewViewModel(new Bitmap(mstream));
+                            }
+                        }).ToObservableCollection();
+
+                        this.IsLoading = false;
+                        var viewer = new ImageReviewDialog();
+                        viewer.Title = "Select New Image";
+                        viewer.Images = bitmaps;
+                        await viewer.ShowDialog(this);
+
+                        if (viewer.Success)
+                        {
+                            ImageBox.ImageBox.ClearMipsAndLayers(Image);
+                            this.Image = viewer.SelectedImage.Image;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
+                                .GetMessageBoxStandardWindow("Failed to generate images",
+                                                             $"Image generation failed. This likely indicates the server can't be reached or the input parameters are invalid. Error message:\n\r {ex.Message}",
+                                                             ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+
+                    await messageBoxStandardWindow.ShowDialog(this);
                     this.IsLoading = false;
-                    var viewer = new ImageReviewDialog();
-                    viewer.Title = "Select New Image";
-                    viewer.Images = bitmaps;
-                    await viewer.ShowDialog(this);
-
-                    if (viewer.Success)
-                    {
-                        ImageBox.ImageBox.ClearMipsAndLayers(Image);
-                        this.Image = viewer.SelectedImage.Image;
-                    }
                 }
             }
         }

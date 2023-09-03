@@ -70,23 +70,29 @@ namespace ImageUtil
 
                 var output = sb.ToString();
 
-                using (StreamReader r = new StreamReader(outputfile))
+                try
                 {
-                    string json = r.ReadToEnd();
-                    List<KumikoPanelInfo>? panels = JsonConvert.DeserializeObject<List<KumikoPanelInfo>>(json);
-
-                    if (panels != null)
+                    using (StreamReader r = new StreamReader(outputfile))
                     {
-                        return panels.First().panels.Select(paneldims => new PanelInfo
-                        {
-                            TopLeftX = paneldims[0],
-                            TopLeftY = paneldims[1],
-                            Width = paneldims[2],
-                            Height = paneldims[3]
-                        });
-                    }
+                        string json = r.ReadToEnd();
+                        List<KumikoPanelInfo>? panels = JsonConvert.DeserializeObject<List<KumikoPanelInfo>>(json);
 
-                    throw new Exception("Panel Extraction Failed.");
+                        if (panels != null)
+                        {
+                            return panels.First().panels.Select(paneldims => new PanelInfo
+                            {
+                                TopLeftX = paneldims[0],
+                                TopLeftY = paneldims[1],
+                                Width = paneldims[2],
+                                Height = paneldims[3]
+                            });
+                        }
+
+                        throw new Exception($"Panel Extraction Failed. No panels were found in the output file.\n\r Console output from kumiko execution was: {output}");
+                    }
+                } catch (Exception ex)
+                {
+                    throw new Exception($"Error occured reading kumiko output file.\n\r Console output from kumiko execution was:\n\r {output}");
                 }
             }
         }
