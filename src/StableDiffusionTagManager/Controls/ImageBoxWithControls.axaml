@@ -111,7 +111,7 @@
     </DockPanel>
     <Border IsVisible="{Binding IsChoosingColor}" Background="#40000000">
       <controls:HeaderControl Title="Select Color" CloseCommand="{Binding CloseColorSelectorCommand}" Height="450" Width="400">
-        <Border Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
           <cp:ColorPicker IsVisible="{Binding IsChoosingColor}" Color="{Binding PaintBrushColor, Mode=TwoWay}" />
         </Border>
       </controls:HeaderControl>
