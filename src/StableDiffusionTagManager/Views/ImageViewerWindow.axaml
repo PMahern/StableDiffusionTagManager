@@ -13,6 +13,5 @@
   <aib:AdvancedImageBox 
     Name="ImageBox"
     Image="{Binding Image}">
-
   </aib:AdvancedImageBox>
 </Window>

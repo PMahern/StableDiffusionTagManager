@@ -13,6 +13,7 @@
     <AvaloniaResource Include="Styles\**" />
     <AvaloniaResource Remove="Assets\tags.csv" />
     <AvaloniaResource Remove="Styles\Controls\Checkbox.axaml" />
+    <AvaloniaResource Remove="Styles\Controls\Dialog.axaml" />
     <AvaloniaResource Remove="Styles\Controls\HeaderControl.axaml" />
     <AvaloniaResource Remove="Styles\Controls\NumericUpDown.axaml" />
     <AvaloniaResource Remove="Styles\Controls\Tag.axaml" />
@@ -60,6 +61,9 @@
       <SubType>Designer</SubType>
     </AvaloniaXaml>
     <AvaloniaXaml Update="Styles\Controls\Toolbar.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+    <AvaloniaXaml Update="Styles\Controls\Dialog.axaml">
       <SubType>Designer</SubType>
     </AvaloniaXaml>
     <AvaloniaResource Update="Styles\DefaultTheme.axaml">

@@ -74,7 +74,7 @@
           </StackPanel>
         </DockPanel>
       </Grid>
-      <StackPanel HorizontalAlignment="Center" Grid.Row="1" DockPanel.Dock="Bottom" Orientation="Horizontal">
+      <StackPanel Classes="footer" Grid.Row="1">
         <Button Command="{Binding SaveChangesCommand}">Save Changes</Button>
         <Button Command="{Binding CancelCommand}">Cancel</Button>
       </StackPanel>

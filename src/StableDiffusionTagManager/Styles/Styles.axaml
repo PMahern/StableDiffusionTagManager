@@ -32,45 +32,7 @@
   <StyleInclude Source="/Styles/Controls/NumericUpDown.axaml"/>
   <StyleInclude Source="/Styles/Controls/Checkbox.axaml"/>
   <StyleInclude Source="/Styles/Controls/Toolbar.axaml"/>
-  <!--<Style Selector="Window">
-    <Setter Property="Background" Value="{DynamicResource MainBackgroundColor}"/>
-  </Style>
-  <Style Selector="Menu">
-    <Setter Property="Background" Value="{DynamicResource SecondaryBackgroundColor}"/>
-  </Style>
-  <Style Selector="MenuItem">
-    <Setter Property="Background" Value="{DynamicResource SecondaryBackgroundColor}"/>
-  </Style>
-  <Style Selector="ListBox">
-    <Setter Property="Background" Value="{DynamicResource ControlInteractiveContentBackgroundColor}"/>
-  </Style>
-  <Style Selector="ToggleButton">
-    <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveColor}"/>
-  </Style>
-  <Style Selector="ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveHoverColor}"/>
-  </Style>
-  <Style Selector="ToggleButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{DynamicResource PrimaryInteractivePressedColor}"/>
-  </Style>
-  <Style Selector="Button">
-    <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveColor}"/>
-  </Style>
-  <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveHoverColor}"/>
-  </Style>
-  <Style Selector="Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{DynamicResource PrimaryInteractivePressedColor}"/>
-  </Style>
-  <Style Selector="GridSplitter">
-    <Setter Property="Background" Value="{DynamicResource BorderColor}"/>
-  </Style>
-  <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveHoverColor}" />
-  </Style>
-  <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveColor}" />
-  </Style>-->
+  <StyleInclude Source="/Styles/Controls/Dialog.axaml"/>
   <Style Selector="MenuItem:pointerover /template/ Border#PART_LayoutRoot">
     <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveHoverColor}"/>
   </Style>  

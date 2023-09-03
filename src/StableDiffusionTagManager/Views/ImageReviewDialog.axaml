@@ -57,7 +57,7 @@
         </ListBox.ItemTemplate>
       </ListBox>
     </Grid>
-    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+    <StackPanel Grid.Row="1" Classes="footer">
       <Button Command="{Binding ChooseImageCommand}" IsVisible="{Binding ReviewMode, 
                                             Converter={StaticResource ResourceKey=reviewModeToBoolConverter}, 
                                             ConverterParameter={x:Static views:ImageReviewDialogMode.SingleSelect}}">Choose Image</Button>

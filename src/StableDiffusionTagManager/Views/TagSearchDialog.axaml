@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         x:Class="StableDiffusionTagManager.Views.TagSearchDialog"
         Width="200"
-        Height="100"
+        Height="130"
         CanResize="False"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="4"
@@ -28,7 +28,7 @@
             </DataTemplate>
           </AutoCompleteBox.ItemTemplate>
         </AutoCompleteBox>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2">
+        <StackPanel Classes="footer" Grid.Row="2">
           <Button Click="Ok_Clicked">Ok</Button>
           <Button Click="Cancel_Clicked">Cancel</Button>
         </StackPanel>

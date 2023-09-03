@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         x:Class="StableDiffusionTagManager.Views.ProjectSettingsDialog"
-        Height="270"
+        Height="290"
         Width="400"
         xmlns:controls="using:StableDiffusionTagManager.Controls"
         xmlns:conv="using:StableDiffusionTagManager.Converters"
@@ -54,7 +54,7 @@
         </StackPanel>
       </Grid>
 
-      <StackPanel Grid.Row="6" Grid.Column="1" HorizontalAlignment="Center" Orientation="Horizontal">
+      <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Classes="footer">
         <Button Command="{Binding SaveCommand}">Save</Button>
         <Button Command="{Binding CancelCommand}">Cancel</Button>
       </StackPanel>

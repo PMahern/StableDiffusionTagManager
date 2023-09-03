@@ -1,0 +1,23 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Design.PreviewWith>
+    <Window Width="500" Height="500">
+      <Grid RowDefinitions="*,Auto">
+        <Label Grid.Row="0">Some other content</Label>
+        <StackPanel Grid.Row="1" Classes="footer">
+          <Button>Save</Button>
+          <Button>Cancel</Button>
+        </StackPanel>
+      </Grid>
+    </Window>
+  </Design.PreviewWith>
+
+  <Style Selector="StackPanel.footer">
+    <Setter Property="Orientation" Value="Horizontal" />
+    <Setter Property="HorizontalAlignment" Value="Right" />
+    <Setter Property="Margin" Value="0,20,20,20" />
+  </Style>
+  <Style Selector="StackPanel.footer > Button">
+    <Setter Property="Margin" Value="10, 0, 0, 0"></Setter>
+  </Style>
+</Styles>

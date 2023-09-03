@@ -37,7 +37,7 @@
         <Label Grid.Row="1" Grid.Column="2">Expand Down</Label>
         <NumericUpDown Grid.Row="1" Grid.Column="3" Value="{Binding ExpandDown}" Width="60" Minimum="0"/>
       
-      <StackPanel Grid.Row="3" Grid.ColumnSpan="4" HorizontalAlignment="Center" Orientation="Horizontal">
+      <StackPanel Grid.Row="3" Grid.ColumnSpan="4" Classes="footer">
         <Button Command="{Binding SaveCommand}">Save</Button>
         <Button Command="{Binding CancelCommand}">Cancel</Button>
       </StackPanel>

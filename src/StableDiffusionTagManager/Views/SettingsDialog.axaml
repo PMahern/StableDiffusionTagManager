@@ -3,7 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Height="130"
+        Height="160"
         Width="300"
         xmlns:controls="using:StableDiffusionTagManager.Controls"
         x:Class="StableDiffusionTagManager.Views.SettingsDialog"
@@ -25,7 +25,7 @@
       <TextBox Grid.Column="1" Text="{Binding WebUIAddress}" />
       <Label Grid.Row="1">Python Path</Label>
       <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding PythonPath}" />
-      <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
+      <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Classes="footer">
         <Button Command="{Binding SaveCommand}">Save</Button>
         <Button Command="{Binding CancelCommand}">Cancel</Button>
       </StackPanel>
