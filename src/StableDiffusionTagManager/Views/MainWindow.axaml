@@ -11,6 +11,7 @@
         x:Class="StableDiffusionTagManager.Views.MainWindow"
         Icon="/Assets/logo.ico"
         Title="Stable Diffusion Tag Manager"
+        WindowState="Maximized"
         x:Name="mainWindow">
   <Window.Styles>
 
@@ -91,7 +92,10 @@
                   <Button Command="{Binding ClearTagsCommand}" ToolTip.Tip="Delete All Tags">
                     <mi:MaterialIcon Kind="DeleteSweep"/>
                   </Button>
-                  </StackPanel>
+                  <Button Command="{Binding ApplyTagPrioritySetCommand}" ToolTip.Tip="Apply Tag Priority">
+                    <mi:MaterialIcon Kind="OrderAlphabeticalAscending"/>
+                  </Button>
+                </StackPanel>
                 <ScrollViewer Grid.Row="1" 
                               VerticalScrollBarVisibility="Visible"
                               HorizontalScrollBarVisibility="Disabled"
