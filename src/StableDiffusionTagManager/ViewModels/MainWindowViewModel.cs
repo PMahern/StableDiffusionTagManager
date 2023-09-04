@@ -135,6 +135,7 @@ namespace StableDiffusionTagManager.ViewModels
 
         public bool IsProject { get => openProject != null; }
 
+        #region Callbacks and Events
         public MessageBoxDialogHandler? ShowDialogHandler { get; set; }
 
         public Func<Task<string?>>? ShowFolderDialogCallback { get; set; }
@@ -146,6 +147,7 @@ namespace StableDiffusionTagManager.ViewModels
         public Action? ExitCallback { get; set; }
 
         public Func<Bitmap, bool>? ImageDirtyCallback { get; set; }
+        #endregion
 
         private Task<TResult> ShowDialog<TResult>(IMsBoxWindow<TResult> mbox) where TResult : struct
         {
@@ -492,6 +494,41 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
+        #region Progress indicator
+        private bool showProgressIndicator = false;
+        public bool ShowProgressIndicator
+        {
+            get => showProgressIndicator;
+            private set
+            {
+                showProgressIndicator = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int progressIndicatorMax = 0;
+        public int ProgressIndicatorMax
+        {
+            get => progressIndicatorMax;
+            private set
+            {
+                progressIndicatorMax = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int progressIndicatorProgress = 0;
+        public int ProgressIndicatorProgress
+        {
+            get => progressIndicatorProgress;
+            private set
+            {
+                progressIndicatorProgress = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
         private Dictionary<string, int> TagCountDictionary = new Dictionary<string, int>();
 
 
@@ -581,7 +618,7 @@ namespace StableDiffusionTagManager.ViewModels
                     var destFile = Path.Combine(destDirectory, imageToDelete.Filename);
                     var destFileWithoutExtension = Path.Combine(destDirectory, Path.GetFileNameWithoutExtension(imageToDelete.Filename));
                     var i = 0;
-                    while(File.Exists(destFile))
+                    while (File.Exists(destFile))
                     {
                         destFileWithoutExtension = Path.Combine(destDirectory, $"{Path.GetFileNameWithoutExtension(imageToDelete.Filename)}_{i.ToString("00")}");
                         destFile = $"{destFileWithoutExtension}{Path.GetExtension(imageToDelete.Filename)}";
@@ -692,55 +729,96 @@ namespace StableDiffusionTagManager.ViewModels
             return true;
         }
 
-        public async Task Interrogate(Bitmap image)
+        #region Image Interrogation
+        public async Task InterrogateAndApplyToSelectedImage(Bitmap bitmap)
         {
-            var api = new DefaultApi(App.Settings.WebUiAddress);
+            //Cache the selected image in case it's changed during async operation
+            var selectedImage = SelectedImage;
+            var tags = await Interrogate(bitmap);
 
-            if (SelectedImage != null)
+            if (tags != null)
             {
-                var model = "deepdanbooru";
-
-                if (openProject != null && openProject.InterrogateMethod == SdWebUpApi.InterrogateMethod.Clip)
+                foreach (var tag in tags)
                 {
-                    model = "clip";
-                }
-                using var uploadStream = new MemoryStream();
-                SelectedImage.ImageSource.Save(uploadStream);
-                var imagebase64 = Convert.ToBase64String(uploadStream.ToArray());
-
-                try
-                {
-                    var result = await api.InterrogateapiSdapiV1InterrogatePostAsync(new SdWebUpApi.Model.InterrogateRequest
-                    {
-                        Image = imagebase64,
-                        Model = model
-                    });
-
-                    var jtokResult = result as JToken;
-                    var convertedresult = jtokResult?.ToObject<InterrogateResult>();
-                    if (convertedresult != null)
-                    {
-                        var tags = convertedresult.caption.Split(", ");
-                        foreach (var tag in tags)
-                        {
-                            if (!SelectedImage.Tags.Any(t => t.Tag == tag))
-                            {
-                                SelectedImage.AddTag(new TagViewModel(tag));
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                            .GetMessageBoxStandardWindow("Interrogate Failed",
-                                                         $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}", ButtonEnum.Ok, Icon.Warning);
-
-                    await ShowDialog(messageBoxStandardWindow);
+                    selectedImage.AddTagIfNotExists(tag);
                 }
             }
         }
+        public async Task<IEnumerable<TagViewModel>?> Interrogate(Bitmap image)
+        {
+            var api = new DefaultApi(App.Settings.WebUiAddress);
 
+            var model = "deepdanbooru";
+
+            if (openProject != null && openProject.InterrogateMethod == SdWebUpApi.InterrogateMethod.Clip)
+            {
+                model = "clip";
+            }
+            using var uploadStream = new MemoryStream();
+            image.Save(uploadStream);
+            var imagebase64 = Convert.ToBase64String(uploadStream.ToArray());
+
+            try
+            {
+                var result = await api.InterrogateapiSdapiV1InterrogatePostAsync(new SdWebUpApi.Model.InterrogateRequest
+                {
+                    Image = imagebase64,
+                    Model = model
+                });
+
+                var jtokResult = result as JToken;
+                var convertedresult = jtokResult?.ToObject<InterrogateResult>();
+                if (convertedresult != null)
+                {
+                    return convertedresult.caption.Split(", ")
+                                                  .Select(t => new TagViewModel(t));
+                }
+            }
+            catch (Exception ex)
+            {
+                var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
+                        .GetMessageBoxStandardWindow("Interrogate Failed",
+                                                     $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}", ButtonEnum.Ok, Icon.Warning);
+
+                await ShowDialog(messageBoxStandardWindow);
+            }
+
+            return null;
+        }
+
+        [RelayCommand]
+        public async Task InterrogateAllImages()
+        {
+            if (ImagesWithTags != null && ImagesWithTags.Count > 0)
+            {
+                ShowProgressIndicator = true;
+                ProgressIndicatorMax = ImagesWithTags.Count();
+                ProgressIndicatorProgress = 0;
+
+                foreach (var image in ImagesWithTags)
+                {
+                    var tags = await Interrogate(image.ImageSource);
+
+                    if (tags != null)
+                    {
+                        foreach (var tag in tags)
+                        {
+                            image.AddTagIfNotExists(tag);
+                        }
+                    }
+                    else
+                    {
+                        //The interrogate failed, likely connection issue, cancel out
+                        break;
+                    }
+                    ++ProgressIndicatorProgress;
+                }
+
+                ShowProgressIndicator = false;
+            }
+        }
+
+        #endregion
         public void AddNewImage(Bitmap image, IEnumerable<string>? tags = null)
         {
             var index = ImagesWithTags.IndexOf(SelectedImage);

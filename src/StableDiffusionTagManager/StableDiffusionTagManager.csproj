@@ -16,6 +16,7 @@
     <AvaloniaResource Remove="Styles\Controls\Dialog.axaml" />
     <AvaloniaResource Remove="Styles\Controls\HeaderControl.axaml" />
     <AvaloniaResource Remove="Styles\Controls\NumericUpDown.axaml" />
+    <AvaloniaResource Remove="Styles\Controls\Overlay.axaml" />
     <AvaloniaResource Remove="Styles\Controls\Tag.axaml" />
     <AvaloniaResource Remove="Styles\Controls\Toolbar.axaml" />
     <AvaloniaXaml Remove="Styles\DefaultTheme.axaml" />
@@ -64,6 +65,9 @@
       <SubType>Designer</SubType>
     </AvaloniaXaml>
     <AvaloniaXaml Update="Styles\Controls\Dialog.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+    <AvaloniaXaml Update="Styles\Controls\Overlay.axaml">
       <SubType>Designer</SubType>
     </AvaloniaXaml>
     <AvaloniaResource Update="Styles\DefaultTheme.axaml">

@@ -4,6 +4,7 @@ using Avalonia.Media.Imaging;
 using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HarfBuzzSharp;
 using SixLabors.ImageSharp;
 using System;
 using System.Collections;
@@ -23,6 +24,7 @@ namespace StableDiffusionTagManager.ViewModels
         private bool tagsDirty = false;
         private readonly int firstNumberedChunk = -1;
         private readonly int secondNumberedChunk = -1;
+        private bool isNumbered = false;
 
         private ImageWithTagsViewModel(string imageFile, Func<Bitmap, bool> imageDirtyCallback)
         {
@@ -201,6 +203,14 @@ namespace StableDiffusionTagManager.ViewModels
             var tag = tags[index];
             tag.TagChanged -= TagChangedHandler;
             tags.RemoveAt(index);
+        }
+
+        internal void AddTagIfNotExists(TagViewModel tagViewModel)
+        {
+            if (!Tags.Any(t => t.Tag == tagViewModel.Tag))
+            {
+                AddTag(tagViewModel);
+            }
         }
 
         internal void ApplyTagOrdering<TKey>(Func<string, TKey> orderBy)
