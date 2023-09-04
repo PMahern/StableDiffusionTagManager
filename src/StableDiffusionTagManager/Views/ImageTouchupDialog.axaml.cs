@@ -37,29 +37,35 @@ namespace StableDiffusionTagManager.Views
             Prompt = (OpenProject?.DefaultPromptPrefix ?? "") + (validtags.Any() ? validtags.Aggregate((l, r) => $"{l}, {r}") : "");
             NegativePrompt = OpenProject?.DefaultNegativePrompt ?? "";
             DenoiseStrength = OpenProject?.DefaultDenoiseStrength ?? 0.25M;
-            Dispatcher.UIThread.Post(() => UpdateSamplers());
+            UpdateSamplers();
         }
 
-        public async void UpdateSamplers()
+        public async Task UpdateSamplers()
         {
             try
             {
                 var api = new DefaultApi(App.Settings.WebUiAddress);
 
-                var samplers = api.GetSamplersSdapiV1SamplersGet();
+                var samplers = await api.GetSamplersSdapiV1SamplersGetAsync();
 
-                this.Samplers = samplers.Select(s => s.Name).ToObservableCollection();
+                Dispatcher.UIThread.Post(() =>
+                {
+                    this.Samplers = samplers.Select(s => s.Name).ToObservableCollection();
 
-                this.SelectedSampler = this.Samplers.First();
+                    this.SelectedSampler = this.Samplers.First();
+                });
             }
             catch (Exception ex)
             {
-                var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                            .GetMessageBoxStandardWindow("Failed to get samplers",
-                                                         $"Querying stable diffusion webui for the list of available samplers failed. This likely indicates the server can't be reached. Error message:\n\r {ex.Message}",
-                                                         ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                Dispatcher.UIThread.Post(async () =>
+                {
+                    var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
+                                .GetMessageBoxStandardWindow("Failed to get samplers",
+                                                             $"Querying stable diffusion webui for the list of available samplers failed. This likely indicates the server can't be reached. Error message:\n\r {ex.Message}",
+                                                             ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
 
-                await messageBoxStandardWindow.ShowDialog(this);
+                    await messageBoxStandardWindow.ShowDialog(this);
+                });
             }
         }
         public bool Success { get; set; }
