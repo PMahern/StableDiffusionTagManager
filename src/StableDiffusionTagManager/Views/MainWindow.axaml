@@ -40,7 +40,11 @@
         <MenuItem Header="_Remove Tag from All Images" Command="{Binding RemoveTagFromAllImages}"/>
       </MenuItem>
       <MenuItem  Header="_Images">
-        <MenuItem Header="_Delete Selected Image" Command="{Binding DeleteSelectedImageCommand}"/>
+        <MenuItem Header="_Archive Selected Image" Command="{Binding DeleteSelectedImageCommand}"/>
+      </MenuItem>
+      <MenuItem Header="_Automation">
+        <MenuItem Header="Tag _Collections..." />
+        <MenuItem Header="Tag _Priority Setss..." Command="{Binding EditTagPrioritySets}"/>
       </MenuItem>
     </Menu>
     <Grid>

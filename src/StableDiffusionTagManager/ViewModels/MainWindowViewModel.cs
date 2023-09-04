@@ -541,7 +541,7 @@ namespace StableDiffusionTagManager.ViewModels
         }
 
         [RelayCommand]
-        public async Task DeleteSelectedImage()
+        public async Task ArchiveSelectedImage()
         {
             if (SelectedImage != null && ImagesWithTags != null)
             {
@@ -577,11 +577,20 @@ namespace StableDiffusionTagManager.ViewModels
                         Directory.CreateDirectory(destDirectory);
                     }
 
-                    File.Move(Path.Combine(openFolder, imageToDelete.Filename), Path.Combine(destDirectory, imageToDelete.Filename));
+
+                    var destFile = Path.Combine(destDirectory, imageToDelete.Filename);
+                    var destFileWithoutExtension = Path.Combine(destDirectory, Path.GetFileNameWithoutExtension(imageToDelete.Filename));
+                    var i = 0;
+                    while(File.Exists(destFile))
+                    {
+                        destFileWithoutExtension = Path.Combine(destDirectory, $"{Path.GetFileNameWithoutExtension(imageToDelete.Filename)}_{i.ToString("00")}");
+                        destFile = $"{destFileWithoutExtension}{Path.GetExtension(imageToDelete.Filename)}";
+                    }
+                    File.Move(Path.Combine(openFolder, imageToDelete.Filename), destFile);
                     var tagFile = Path.Combine(openFolder, imageToDelete.GetTagsFileName());
                     if (File.Exists(tagFile))
                     {
-                        File.Move(tagFile, Path.Combine(destDirectory, imageToDelete.GetTagsFileName()));
+                        File.Move(tagFile, Path.Combine(destDirectory, $"{destFileWithoutExtension}.txt"));
                     }
                 }
             }
@@ -840,6 +849,14 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 SelectedImage.ApplyTagOrdering(t => tagPrioritySets.First().GetTagPriority(t));
             }
+        }
+
+        [RelayCommand]
+        public async Task EditTagPrioritySets()
+        {
+            var dialog = new TagPriortySetManagerDialog();
+
+            await ShowDialog(dialog);
         }
         #endregion
     }

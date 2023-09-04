@@ -394,6 +394,15 @@ namespace StableDiffusionTagManager.Controls
         {
             if (!SelectionRegion.IsEmpty && Image != null)
             {
+                CropImageRegionAndCreateNewImage(SelectionRegion);
+            }
+        }
+
+        [RelayCommand]
+        public void CropSelectionToTargetImageSize()
+        {
+            if (!SelectionRegion.IsEmpty && Image != null)
+            {
                 CropImageRegionAndCreateNewImage(SelectionRegion, TargetImageSize);
             }
         }

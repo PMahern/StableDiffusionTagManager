@@ -2,15 +2,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Width="500"
+        Height="500"
         x:Class="StableDiffusionTagManager.Views.TagPriortySetManagerDialog"
         xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-        Title="TagPriortySetManagerDialog">
+        Title="TagPriortySetManagerDialog"
+        Name="ThisControl">
 
-  <Grid RowDefinitions="Auto,*,5,Auto" Margin="5">
+  <Grid RowDefinitions="Auto,*,5,Auto" Margin="5" DataContext="{Binding ElementName=ThisControl}">
     <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
       <Border>
-        <DropDown HorizontalAlignment="Stretch" Items="{Binding TagPrioritySets}"></DropDown>
+        <DropDown HorizontalAlignment="Stretch" Items="{Binding TagPrioritySets}" SelectedItem="{Binding SelectedPrioritySet}"></DropDown>
       </Border>
       <Border  Grid.Column="1">
         <Button Margin="5,0,0,0">
@@ -19,13 +21,16 @@
       </Border>
     </Grid>
     <Grid Grid.Row="1" Margin="0,5,0,0" ColumnDefinitions="*,5,*">
-      <ListBox ScrollViewer.VerticalScrollBarVisibility="Auto">
+      <ListBox ScrollViewer.VerticalScrollBarVisibility="Auto" Items="{Binding SelectedPrioritySet, Path=Tags}" SelectedItem="{Binding SelectedTagSetReference}">
 
       </ListBox>
       <ListBox Grid.Column="2" ScrollViewer.VerticalScrollBarVisibility="Auto">
 
       </ListBox>
     </Grid>
-      <StackPanel Classes="dialog-footer" Orientation="Horizontal" Grid.Row="3"><Button>Save</Button><Button>Cancel</Button></StackPanel>
+    <StackPanel Classes="footer" Orientation="Horizontal" Grid.Row="3">
+      <Button>Save</Button>
+      <Button>Cancel</Button>
+    </StackPanel>
   </Grid>
 </Window>

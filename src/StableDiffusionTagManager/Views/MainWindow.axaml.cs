@@ -126,7 +126,7 @@ namespace StableDiffusionTagManager.Views
 
                 if ((e.KeyModifiers & KeyModifiers.Alt) > 0 && e.Key == Key.Delete)
                 {
-                    await viewModel.DeleteSelectedImage();
+                    await viewModel.ArchiveSelectedImage();
                 }
 
                 if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.Delete)

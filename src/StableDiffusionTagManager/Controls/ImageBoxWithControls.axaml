@@ -49,6 +49,9 @@
           </Button>
         </StackPanel>
         <StackPanel Orientation="Horizontal"  Classes="toolbar" Grid.Column="2" IsVisible="{Binding CurrentMode, Converter={StaticResource ResourceKey=modeConverter}, ConverterParameter={x:Static controls:ImageViewerMode.Selection}, Mode=OneWay}">
+          <Button Command="{Binding CropSelectionToTargetImageSize}" ToolTip.Tip="Crop Selection To Target Size">
+            <mi:MaterialIcon Kind="CropSquare" />
+          </Button>
           <Button Command="{Binding CropSelectionCommand}" ToolTip.Tip="Crop Selection">
             <PathIcon Data="{StaticResource crop_regular}" />
           </Button>
