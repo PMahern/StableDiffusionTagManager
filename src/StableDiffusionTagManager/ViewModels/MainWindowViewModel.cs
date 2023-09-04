@@ -135,6 +135,7 @@ namespace StableDiffusionTagManager.ViewModels
 
         public bool IsProject { get => openProject != null; }
 
+        #region Callbacks and Events
         public MessageBoxDialogHandler? ShowDialogHandler { get; set; }
 
         public Func<Task<string?>>? ShowFolderDialogCallback { get; set; }
@@ -146,6 +147,7 @@ namespace StableDiffusionTagManager.ViewModels
         public Action? ExitCallback { get; set; }
 
         public Func<Bitmap, bool>? ImageDirtyCallback { get; set; }
+        #endregion
 
         private Task<TResult> ShowDialog<TResult>(IMsBoxWindow<TResult> mbox) where TResult : struct
         {
@@ -194,14 +196,20 @@ namespace StableDiffusionTagManager.ViewModels
                     if (!projFolder)
                     {
                         var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                            .GetMessageBoxStandardWindow("Create Project?", "It appears you haven't created a project for this folder. Creating a project will back up all the current existing images and tag sets into a folder named .sdtmproj so you can restore them and will also let you set some properties on the project. Would you like to create a project now?", MessageBox.Avalonia.Enums.ButtonEnum.YesNo, Icon.Question);
+                            .GetMessageBoxStandardWindow("Create Project?", 
+                                                         "It appears you haven't created a project for this folder. Creating a project will back up all the current existing images and tag sets into a folder named .sdtmproj so you can restore them and will also let you set some properties on the project. Would you like to create a project now?", 
+                                                         ButtonEnum.YesNo, 
+                                                         Icon.Question);
                         if ((await ShowDialog(messageBoxStandardWindow)) == ButtonResult.Yes)
                         {
 
                             projFolder = true;
 
                             messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                                .GetMessageBoxStandardWindow("Rename Images?", "You can optionally rename all the images to have an increasing index instead of the current existing pattern.  Would you like to do this now?", MessageBox.Avalonia.Enums.ButtonEnum.YesNo, Icon.Question);
+                                .GetMessageBoxStandardWindow("Rename Images?", 
+                                                             "You can optionally rename all the images to have an increasing index instead of the current existing pattern.  Would you like to do this now?", 
+                                                             ButtonEnum.YesNo, 
+                                                             Icon.Question);
 
                             var renameImages = (await ShowDialog(messageBoxStandardWindow) == ButtonResult.Yes);
 
@@ -219,7 +227,7 @@ namespace StableDiffusionTagManager.ViewModels
                             {
                                 foreach (var file in all)
                                 {
-                                    File.Move(file, Path.Combine(projectPath, System.IO.Path.GetFileName(file)));
+                                    File.Move(file, Path.Combine(projectPath, Path.GetFileName(file)));
                                 }
 
                                 var movedjpegs = Directory.EnumerateFiles(projectPath, "*.jpg").ToList();
@@ -492,6 +500,41 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
+        #region Progress indicator
+        private bool showProgressIndicator = false;
+        public bool ShowProgressIndicator
+        {
+            get => showProgressIndicator;
+            private set
+            {
+                showProgressIndicator = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int progressIndicatorMax = 0;
+        public int ProgressIndicatorMax
+        {
+            get => progressIndicatorMax;
+            private set
+            {
+                progressIndicatorMax = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int progressIndicatorProgress = 0;
+        public int ProgressIndicatorProgress
+        {
+            get => progressIndicatorProgress;
+            private set
+            {
+                progressIndicatorProgress = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
         private Dictionary<string, int> TagCountDictionary = new Dictionary<string, int>();
 
 
@@ -546,7 +589,10 @@ namespace StableDiffusionTagManager.ViewModels
             if (SelectedImage != null && ImagesWithTags != null)
             {
                 var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                            .GetMessageBoxStandardWindow("Archive Image?", "Really archive selected image? It will be moved to a subdirectory named archive.", MessageBox.Avalonia.Enums.ButtonEnum.YesNo, Icon.Warning);
+                            .GetMessageBoxStandardWindow("Archive Image?", 
+                                                         "Really archive selected image? It will be moved to a subdirectory named archive.",
+                                                         ButtonEnum.YesNo, 
+                                                         Icon.Warning);
 
                 var result = await ShowDialog(messageBoxStandardWindow);
 
@@ -581,7 +627,7 @@ namespace StableDiffusionTagManager.ViewModels
                     var destFile = Path.Combine(destDirectory, imageToDelete.Filename);
                     var destFileWithoutExtension = Path.Combine(destDirectory, Path.GetFileNameWithoutExtension(imageToDelete.Filename));
                     var i = 0;
-                    while(File.Exists(destFile))
+                    while (File.Exists(destFile))
                     {
                         destFileWithoutExtension = Path.Combine(destDirectory, $"{Path.GetFileNameWithoutExtension(imageToDelete.Filename)}_{i.ToString("00")}");
                         destFile = $"{destFileWithoutExtension}{Path.GetExtension(imageToDelete.Filename)}";
@@ -652,7 +698,10 @@ namespace StableDiffusionTagManager.ViewModels
             if (SelectedImage.Tags.Any())
             {
                 var dialog = MessageBox.Avalonia.MessageBoxManager
-                                    .GetMessageBoxStandardWindow("Delete all tags", "This will delete all tags for the current image, are you sure?", MessageBox.Avalonia.Enums.ButtonEnum.YesNo, Icon.Warning);
+                                    .GetMessageBoxStandardWindow("Delete all tags", 
+                                                                 "This will delete all tags for the current image, are you sure?", 
+                                                                 ButtonEnum.YesNo, 
+                                                                 Icon.Warning);
 
                 var result = await ShowDialog(dialog);
 
@@ -674,7 +723,10 @@ namespace StableDiffusionTagManager.ViewModels
                 if (dirtyImages.Any() || dirtyTags.Any())
                 {
                     var dialog = MessageBox.Avalonia.MessageBoxManager
-                                    .GetMessageBoxStandardWindow("Unsaved Changes", "You have unsaved changes, do you wish to save them now?", MessageBox.Avalonia.Enums.ButtonEnum.YesNoCancel, Icon.Warning);
+                                    .GetMessageBoxStandardWindow("Unsaved Changes", 
+                                                                 "You have unsaved changes, do you wish to save them now?", 
+                                                                 ButtonEnum.YesNoCancel, 
+                                                                 Icon.Warning);
 
                     var result = (await ShowDialog(dialog));
                     if (result == ButtonResult.Yes)
@@ -692,61 +744,102 @@ namespace StableDiffusionTagManager.ViewModels
             return true;
         }
 
-        public async Task Interrogate(Bitmap image)
+        #region Image Interrogation
+        public async Task InterrogateAndApplyToSelectedImage(Bitmap bitmap)
         {
-            var api = new DefaultApi(App.Settings.WebUiAddress);
+            //Cache the selected image in case it's changed during async operation
+            var selectedImage = SelectedImage;
+            var tags = await Interrogate(bitmap);
 
-            if (SelectedImage != null)
+            if (tags != null)
             {
-                var model = "deepdanbooru";
-
-                if (openProject != null && openProject.InterrogateMethod == SdWebUpApi.InterrogateMethod.Clip)
+                foreach (var tag in tags)
                 {
-                    model = "clip";
-                }
-                using var uploadStream = new MemoryStream();
-                SelectedImage.ImageSource.Save(uploadStream);
-                var imagebase64 = Convert.ToBase64String(uploadStream.ToArray());
-
-                try
-                {
-                    var result = await api.InterrogateapiSdapiV1InterrogatePostAsync(new SdWebUpApi.Model.InterrogateRequest
-                    {
-                        Image = imagebase64,
-                        Model = model
-                    });
-
-                    var jtokResult = result as JToken;
-                    var convertedresult = jtokResult?.ToObject<InterrogateResult>();
-                    if (convertedresult != null)
-                    {
-                        var tags = convertedresult.caption.Split(", ");
-                        foreach (var tag in tags)
-                        {
-                            if (!SelectedImage.Tags.Any(t => t.Tag == tag))
-                            {
-                                SelectedImage.AddTag(new TagViewModel(tag));
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                            .GetMessageBoxStandardWindow("Interrogate Failed",
-                                                         $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}", 
-                                                         ButtonEnum.Ok, 
-                                                         Icon.Warning);
-
-                    await ShowDialog(messageBoxStandardWindow);
+                    selectedImage.AddTagIfNotExists(tag);
                 }
             }
         }
+        public async Task<IEnumerable<TagViewModel>?> Interrogate(Bitmap image)
+        {
+            var api = new DefaultApi(App.Settings.WebUiAddress);
 
+            var model = "deepdanbooru";
+
+            if (openProject != null && openProject.InterrogateMethod == SdWebUpApi.InterrogateMethod.Clip)
+            {
+                model = "clip";
+            }
+            using var uploadStream = new MemoryStream();
+            image.Save(uploadStream);
+            var imagebase64 = Convert.ToBase64String(uploadStream.ToArray());
+
+            try
+            {
+                var result = await api.InterrogateapiSdapiV1InterrogatePostAsync(new SdWebUpApi.Model.InterrogateRequest
+                {
+                    Image = imagebase64,
+                    Model = model
+                });
+
+                var jtokResult = result as JToken;
+                var convertedresult = jtokResult?.ToObject<InterrogateResult>();
+                if (convertedresult != null)
+                {
+                    return convertedresult.caption.Split(", ")
+                                                  .Select(t => new TagViewModel(t));
+                }
+            }
+            catch (Exception ex)
+            {
+                var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
+                        .GetMessageBoxStandardWindow("Interrogate Failed",
+                                                     $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}", 
+                                                     ButtonEnum.Ok, 
+                                                     Icon.Warning);
+
+                await ShowDialog(messageBoxStandardWindow);
+            }
+
+            return null;
+        }
+
+        [RelayCommand]
+        public async Task InterrogateAllImages()
+        {
+            if (ImagesWithTags != null && ImagesWithTags.Count > 0)
+            {
+                ShowProgressIndicator = true;
+                ProgressIndicatorMax = ImagesWithTags.Count();
+                ProgressIndicatorProgress = 0;
+
+                foreach (var image in ImagesWithTags)
+                {
+                    var tags = await Interrogate(image.ImageSource);
+
+                    if (tags != null)
+                    {
+                        foreach (var tag in tags)
+                        {
+                            image.AddTagIfNotExists(tag);
+                        }
+                    }
+                    else
+                    {
+                        //The interrogate failed, likely connection issue, cancel out
+                        break;
+                    }
+                    ++ProgressIndicatorProgress;
+                }
+
+                ShowProgressIndicator = false;
+            }
+        }
+
+        #endregion
         public void AddNewImage(Bitmap image, IEnumerable<string>? tags = null)
         {
             var index = ImagesWithTags.IndexOf(SelectedImage);
-            var withoutExtension = System.IO.Path.GetFileNameWithoutExtension(SelectedImage.Filename);
+            var withoutExtension = Path.GetFileNameWithoutExtension(SelectedImage.Filename);
             if (SelectedImage.FirstNumberedChunk != -1)
             {
                 withoutExtension = SelectedImage.FirstNumberedChunk.ToString("00000");
@@ -758,8 +851,8 @@ namespace StableDiffusionTagManager.ViewModels
                 i = SelectedImage.SecondNumberedChunk;
             }
 
-            var newFilename = $"{withoutExtension}__{i.ToString("00")}";
-            while (ImagesWithTags.Any(i => newFilename == System.IO.Path.GetFileNameWithoutExtension(i.Filename)))
+            var newFilename = $"{withoutExtension}__{i:00}";
+            while (ImagesWithTags.Any(i => newFilename == Path.GetFileNameWithoutExtension(i.Filename)))
             {
                 newFilename = $"{withoutExtension}__{++i:00}";
             }

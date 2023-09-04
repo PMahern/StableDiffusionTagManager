@@ -21,177 +21,183 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <vm:MainWindowViewModel/>
   </Design.DataContext>
-  <DockPanel>
-    <Menu DockPanel.Dock="Top">
-      <MenuItem  Header="_File">
-        <MenuItem  Header="_Application Settings..." Command="{Binding ApplicationSettingsCommand}" />
-        <MenuItem Header="_Load Folder..." Command="{Binding LoadFolderCommand}"/>
-        <MenuItem Header="_Save" Command="{Binding SaveChangesCommand}"/>
-        <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
-      </MenuItem>
-      <MenuItem  Header="_Project" IsVisible="{Binding IsProject}">
-        <MenuItem Header="_Settings" Command="{Binding ProjectSettingsCommand}" />
-      </MenuItem>
-      <MenuItem  Header="_Tags">
-        <MenuItem Header="Add Tag To _Start" Command="{Binding AddTagToFront}"/>
-        <MenuItem Header="Add Tag to _End" Command="{Binding AddTagToEnd}"/>
-        <MenuItem Header="Add Tag to _All Images " Command="{Binding AddTagToStartOfAllImages}"/>
-        <MenuItem Header="Add Tag to End of All _Images " Command="{Binding AddTagToEndOfAllImages}"/>
-        <MenuItem Header="_Remove Tag from All Images" Command="{Binding RemoveTagFromAllImages}"/>
-      </MenuItem>
-      <MenuItem  Header="_Images">
-        <MenuItem Header="_Archive Selected Image" Command="{Binding DeleteSelectedImageCommand}"/>
-      </MenuItem>
-      <MenuItem Header="_Automation">
-        <MenuItem Header="Tag _Collections..." />
-        <MenuItem Header="Tag _Priority Setss..." Command="{Binding EditTagPrioritySets}"/>
-      </MenuItem>
-    </Menu>
-    <Grid>
-      <Grid.RowDefinitions>
-        <RowDefinition Height="100" MinHeight="100"></RowDefinition>
-        <RowDefinition Height="2"></RowDefinition>
-        <RowDefinition Height="*"></RowDefinition>
-      </Grid.RowDefinitions>
-      <ListBox Name="ImageList" VirtualizationMode="Simple" Items="{Binding ImagesWithTags}" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SelectedImage}">
-        <ListBox.ItemsPanel>
-          <ItemsPanelTemplate>
-            <StackPanel Orientation="Horizontal" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=Bounds.Height}" />
-          </ItemsPanelTemplate>
-        </ListBox.ItemsPanel>
-        <ListBox.ItemTemplate>
-          <DataTemplate>
-            <Image Source="{Binding Thumbnail}" VerticalAlignment="Stretch"/>
-          </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
-      <GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" ResizeBehavior="PreviousAndNext"/>
-      <Grid Grid.Row="2">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="1*" MinWidth="400"/>
-          <ColumnDefinition Width="2"/>
-          <ColumnDefinition Width="2*" MinWidth="100"/>
-        </Grid.ColumnDefinitions>
-        <Border Classes="gridcontent" Grid.Column="0">
-          <DockPanel>
-            <Label DockPanel.Dock="Bottom" HorizontalAlignment="Center" Content="{Binding SelectedImage.Filename}"></Label>
-            <controls:ImageBoxWithControls Name="ImageBox"
-                                  Image="{Binding SelectedImage.ImageSource}"
-                                  TargetImageSize="{Binding TargetImageSize}"
-                                  ShowSaveButton="True"
-                                  ShowMaskModeButton="False"/>
-          </DockPanel>
-        </Border>
-        <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
-        <Border Grid.Column="2">
-          <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="1*" MinHeight="100"/>
-              <RowDefinition Height="2"/>
-              <RowDefinition Height="2*" MinHeight="100"/>
-            </Grid.RowDefinitions>
-            <controls:HeaderControl Grid.Row="0" Title="Image Tags" MaxHeight="{Binding Path=Parent.ActualHeight, RelativeSource={RelativeSource Self}}" Padding="0">
-              <Grid RowDefinitions="Auto,*">
-                <StackPanel Orientation="Horizontal" Classes="toolbar" Grid.Column="0">
-                  <Button Command="{Binding ClearTagsCommand}" ToolTip.Tip="Delete All Tags">
-                    <mi:MaterialIcon Kind="DeleteSweep"/>
-                  </Button>
-                  <Button Command="{Binding ApplyTagPrioritySetCommand}" ToolTip.Tip="Apply Tag Priority">
-                    <mi:MaterialIcon Kind="OrderAlphabeticalAscending"/>
-                  </Button>
-                </StackPanel>
-                <ScrollViewer Grid.Row="1" 
-                              VerticalScrollBarVisibility="Visible"
-                              HorizontalScrollBarVisibility="Disabled"
-                              HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch">
-                  <ItemsControl Name="TagsList" Items="{Binding SelectedImage.Tags}">
-                    <ItemsControl.ItemsPanel>
-                      <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" Margin="5"/>
-                      </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                      <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                          <Border Classes="tag" DragDrop.AllowDrop="True">
-                            <StackPanel Orientation="Horizontal" PointerPressed="TagDragStart" >
-                              <PathIcon Data="{StaticResource drag_regular}"/>
-                              <AutoCompleteBox Text="{Binding Tag, Mode=TwoWay}" IsTextCompletionEnabled="True" AsyncPopulator="SearchTags" AttachedToVisualTree="AutoCompleteAttached">
-                                <AutoCompleteBox.ItemTemplate>
-                                  <DataTemplate>
-                                    <TextBlock Text="{Binding}" />
-                                  </DataTemplate>
-                                </AutoCompleteBox.ItemTemplate>
-                              </AutoCompleteBox>
-                              <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.SelectedImage.RemoveTagCommand}" CommandParameter="{Binding}">x</Button>
-                            </StackPanel>
+  <Grid>
+    <DockPanel>
+      <Menu DockPanel.Dock="Top">
+        <MenuItem  Header="_File">
+          <MenuItem  Header="_Application Settings..." Command="{Binding ApplicationSettingsCommand}" />
+          <MenuItem Header="_Load Folder..." Command="{Binding LoadFolderCommand}"/>
+          <MenuItem Header="_Save" Command="{Binding SaveChangesCommand}"/>
+          <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
+        </MenuItem>
+        <MenuItem  Header="_Project" IsVisible="{Binding IsProject}">
+          <MenuItem Header="_Settings" Command="{Binding ProjectSettingsCommand}" />
+        </MenuItem>
+        <MenuItem  Header="_Tags">
+          <MenuItem Header="Add Tag To _Start" Command="{Binding AddTagToFront}"/>
+          <MenuItem Header="Add Tag to _End" Command="{Binding AddTagToEnd}"/>
+          <MenuItem Header="Add Tag to _All Images " Command="{Binding AddTagToStartOfAllImages}"/>
+          <MenuItem Header="Add Tag to End of All _Images " Command="{Binding AddTagToEndOfAllImages}"/>
+          <MenuItem Header="_Remove Tag from All Images" Command="{Binding RemoveTagFromAllImages}"/>
+        </MenuItem>
+        <MenuItem  Header="_Images">
+          <MenuItem Header="_Archive Selected Image" Command="{Binding DeleteSelectedImageCommand}"/>
+        </MenuItem>
+        <MenuItem Header="_Automation">
+          <MenuItem Header="Tag _Collections..." />
+          <MenuItem Header="Tag _Priority Sets..." Command="{Binding EditTagPrioritySetsCommand}"/>
+          <MenuItem Header="_Interrogate All Images" Command="{Binding InterrogateAllImagesCommand}"/>
+        </MenuItem>
+      </Menu>
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="100" MinHeight="100"></RowDefinition>
+          <RowDefinition Height="2"></RowDefinition>
+          <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ListBox Name="ImageList" VirtualizationMode="Simple" Items="{Binding ImagesWithTags}" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SelectedImage}">
+          <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel Orientation="Horizontal" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=Bounds.Height}" />
+            </ItemsPanelTemplate>
+          </ListBox.ItemsPanel>
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Image Source="{Binding Thumbnail}" VerticalAlignment="Stretch"/>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" ResizeBehavior="PreviousAndNext"/>
+        <Grid Grid.Row="2">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" MinWidth="400"/>
+            <ColumnDefinition Width="2"/>
+            <ColumnDefinition Width="2*" MinWidth="100"/>
+          </Grid.ColumnDefinitions>
+          <Border Classes="gridcontent" Grid.Column="0">
+            <DockPanel>
+              <Label DockPanel.Dock="Bottom" HorizontalAlignment="Center" Content="{Binding SelectedImage.Filename}"></Label>
+              <controls:ImageBoxWithControls Name="ImageBox"
+                                    Image="{Binding SelectedImage.ImageSource}"
+                                    TargetImageSize="{Binding TargetImageSize}"
+                                    ShowSaveButton="True"
+                                    ShowMaskModeButton="False"/>
+            </DockPanel>
+          </Border>
+          <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
+          <Border Grid.Column="2">
+            <Grid>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="1*" MinHeight="100"/>
+                <RowDefinition Height="2"/>
+                <RowDefinition Height="2*" MinHeight="100"/>
+              </Grid.RowDefinitions>
+              <controls:HeaderControl Grid.Row="0" Title="Image Tags" MaxHeight="{Binding Path=Parent.ActualHeight, RelativeSource={RelativeSource Self}}" Padding="0">
+                <Grid RowDefinitions="Auto,*">
+                  <StackPanel Orientation="Horizontal" Classes="toolbar" Grid.Column="0">
+                    <Button Command="{Binding ClearTagsCommand}" ToolTip.Tip="Delete All Tags">
+                      <mi:MaterialIcon Kind="DeleteSweep"/>
+                    </Button>
+                    <Button Command="{Binding ApplyTagPrioritySetCommand}" ToolTip.Tip="Apply Tag Priority">
+                      <mi:MaterialIcon Kind="OrderAlphabeticalAscending"/>
+                    </Button>
+                  </StackPanel>
+                  <ScrollViewer Grid.Row="1"
+                                VerticalScrollBarVisibility="Visible"
+                                HorizontalScrollBarVisibility="Disabled"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch">
+                    <ItemsControl Name="TagsList" Items="{Binding SelectedImage.Tags}">
+                      <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                          <WrapPanel Orientation="Horizontal" Margin="5"/>
+                        </ItemsPanelTemplate>
+                      </ItemsControl.ItemsPanel>
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                          <StackPanel Orientation="Horizontal">
+                            <Border Classes="tag" DragDrop.AllowDrop="True">
+                              <StackPanel Orientation="Horizontal" PointerPressed="TagDragStart" >
+                                <PathIcon Data="{StaticResource drag_regular}"/>
+                                <AutoCompleteBox Text="{Binding Tag, Mode=TwoWay}" IsTextCompletionEnabled="True" AsyncPopulator="SearchTags" AttachedToVisualTree="AutoCompleteAttached">
+                                  <AutoCompleteBox.ItemTemplate>
+                                    <DataTemplate>
+                                      <TextBlock Text="{Binding}" />
+                                    </DataTemplate>
+                                  </AutoCompleteBox.ItemTemplate>
+                                </AutoCompleteBox>
+                                <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.SelectedImage.RemoveTagCommand}" CommandParameter="{Binding}">x</Button>
+                              </StackPanel>
+                            </Border>
+                          </StackPanel>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </ScrollViewer>
+                </Grid>
+
+              </controls:HeaderControl>
+              <GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" ResizeBehavior="PreviousAndNext"/>
+              <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="1*" MinWidth="100"/>
+                  <ColumnDefinition Width="2"/>
+                  <ColumnDefinition Width="3*" MinWidth="100"/>
+                </Grid.ColumnDefinitions>
+                <controls:HeaderControl Grid.Column="0" Title="Tag Collections" Padding="0">
+                  <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                HorizontalScrollBarVisibility="Disabled"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch">
+                    <ItemsControl Grid.Column="0"  Items="{Binding TagCollections}">
+                      <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                          <WrapPanel Orientation="Horizontal" Margin="5"/>
+                        </ItemsPanelTemplate>
+                      </ItemsControl.ItemsPanel>
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                          <Button Content="{Binding Name}" Command="{Binding AddTags}"></Button>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </ScrollViewer>
+                </controls:HeaderControl>
+                <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
+                <controls:HeaderControl Grid.Column="2" Title="Tags Currently in the Project" Padding="0">
+                  <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                HorizontalScrollBarVisibility="Disabled"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch">
+                    <ItemsControl Items="{Binding TagCounts}">
+                      <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                          <WrapPanel Orientation="Horizontal" Margin="5"/>
+                        </ItemsPanelTemplate>
+                      </ItemsControl.ItemsPanel>
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                          <Border>
+                            <Button Command="{Binding AddTag}">
+                              <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Tag}"/>
+                                <TextBlock Margin="5,0,0,0" Text="{Binding Count}"/>
+                              </StackPanel>
+                            </Button>
                           </Border>
-                        </StackPanel>
-                      </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                  </ItemsControl>
-                </ScrollViewer>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </ScrollViewer>
+                </controls:HeaderControl>
               </Grid>
-              
-            </controls:HeaderControl>
-            <GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" ResizeBehavior="PreviousAndNext"/>
-            <Grid Grid.Row="2">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*" MinWidth="100"/>
-                <ColumnDefinition Width="2"/>
-                <ColumnDefinition Width="3*" MinWidth="100"/>
-              </Grid.ColumnDefinitions>
-              <controls:HeaderControl Grid.Column="0" Title="Tag Collections" Padding="0">
-                <ScrollViewer VerticalScrollBarVisibility="Visible"
-                              HorizontalScrollBarVisibility="Disabled"
-                              HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch">
-                  <ItemsControl Grid.Column="0"  Items="{Binding TagCollections}">
-                    <ItemsControl.ItemsPanel>
-                      <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" Margin="5"/>
-                      </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                      <DataTemplate>
-                        <Button Content="{Binding Name}" Command="{Binding AddTags}"></Button>
-                      </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                  </ItemsControl>
-                </ScrollViewer>
-              </controls:HeaderControl>
-              <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
-              <controls:HeaderControl Grid.Column="2" Title="Tags Currently in the Project" Padding="0">
-                <ScrollViewer VerticalScrollBarVisibility="Visible" 
-                              HorizontalScrollBarVisibility="Disabled" 
-                              HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch">
-                  <ItemsControl Items="{Binding TagCounts}">
-                    <ItemsControl.ItemsPanel>
-                      <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" Margin="5"/>
-                      </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                      <DataTemplate>
-                        <Border>
-                          <Button Command="{Binding AddTag}">
-                            <StackPanel Orientation="Horizontal">
-                              <TextBlock Text="{Binding Tag}"/>
-                              <TextBlock Margin="5,0,0,0" Text="{Binding Count}"/>
-                            </StackPanel>
-                          </Button>
-                        </Border>
-                      </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                  </ItemsControl>
-                </ScrollViewer>
-              </controls:HeaderControl>
             </Grid>
-          </Grid>
-        </Border>
+          </Border>
+        </Grid>
       </Grid>
-    </Grid>
-  </DockPanel>
+    </DockPanel>
+    <Border IsVisible="{Binding ShowProgressIndicator}" Classes="progressoverlay">
+      <ProgressBar  Minimum="0" Maximum="{Binding ProgressIndicatorMax}" Value="{Binding ProgressIndicatorProgress}" />
+    </Border>
+  </Grid>
 </Window>

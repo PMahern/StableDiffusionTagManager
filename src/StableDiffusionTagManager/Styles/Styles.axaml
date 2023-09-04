@@ -33,6 +33,7 @@
   <StyleInclude Source="/Styles/Controls/Checkbox.axaml"/>
   <StyleInclude Source="/Styles/Controls/Toolbar.axaml"/>
   <StyleInclude Source="/Styles/Controls/Dialog.axaml"/>
+  <StyleInclude Source="/Styles/Controls/Overlay.axaml"/>
   <Style Selector="MenuItem:pointerover /template/ Border#PART_LayoutRoot">
     <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveHoverColor}"/>
   </Style>  
