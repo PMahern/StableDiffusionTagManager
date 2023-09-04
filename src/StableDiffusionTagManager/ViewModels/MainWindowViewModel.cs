@@ -195,7 +195,7 @@ namespace StableDiffusionTagManager.ViewModels
                     {
                         var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
                             .GetMessageBoxStandardWindow("Create Project?", "It appears you haven't created a project for this folder. Creating a project will back up all the current existing images and tag sets into a folder named .sdtmproj so you can restore them and will also let you set some properties on the project. Would you like to create a project now?", MessageBox.Avalonia.Enums.ButtonEnum.YesNo, Icon.Question);
-                        if ((await ShowDialog(messageBoxStandardWindow)) == MessageBox.Avalonia.Enums.ButtonResult.Yes)
+                        if ((await ShowDialog(messageBoxStandardWindow)) == ButtonResult.Yes)
                         {
 
                             projFolder = true;
@@ -203,7 +203,7 @@ namespace StableDiffusionTagManager.ViewModels
                             messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
                                 .GetMessageBoxStandardWindow("Rename Images?", "You can optionally rename all the images to have an increasing index instead of the current existing pattern.  Would you like to do this now?", MessageBox.Avalonia.Enums.ButtonEnum.YesNo, Icon.Question);
 
-                            var renameImages = (await ShowDialog(messageBoxStandardWindow) == MessageBox.Avalonia.Enums.ButtonResult.Yes);
+                            var renameImages = (await ShowDialog(messageBoxStandardWindow) == ButtonResult.Yes);
 
                             var jpegs = Directory.EnumerateFiles(pickResult, "*.jpg").ToList();
                             var pngs = Directory.EnumerateFiles(pickResult, "*.png").ToList();
@@ -231,14 +231,14 @@ namespace StableDiffusionTagManager.ViewModels
                                 foreach (var image in imagesToCopy)
                                 {
                                     var filename = i.ToString("00000");
-                                    var newFileName = Path.Combine(pickResult, $"{filename}{System.IO.Path.GetExtension(image)}");
+                                    var newFileName = Path.Combine(pickResult, $"{filename}{Path.GetExtension(image)}");
                                     File.Copy(image, newFileName);
-                                    var matchingTagFile = movedtxts.FirstOrDefault(f => System.IO.Path.GetFileNameWithoutExtension(f) == System.IO.Path.GetFileNameWithoutExtension(image));
+                                    var matchingTagFile = movedtxts.FirstOrDefault(f => Path.GetFileNameWithoutExtension(f) == Path.GetFileNameWithoutExtension(image));
                                     if (matchingTagFile != null)
                                     {
                                         File.Copy(matchingTagFile, Path.Combine(pickResult, $"{filename}.txt"));
                                     }
-                                    project.AddBackedUpFileMap(System.IO.Path.GetFileName(image), System.IO.Path.GetFileName(newFileName));
+                                    project.AddBackedUpFileMap(Path.GetFileName(image), Path.GetFileName(newFileName));
 
                                     ++i;
                                 }
@@ -248,7 +248,7 @@ namespace StableDiffusionTagManager.ViewModels
                             {
                                 foreach (var file in all)
                                 {
-                                    File.Copy(file, Path.Combine(projectPath, System.IO.Path.GetFileName(file)));
+                                    File.Copy(file, Path.Combine(projectPath, Path.GetFileName(file)));
                                 }
                             }
                         }
@@ -734,7 +734,9 @@ namespace StableDiffusionTagManager.ViewModels
                 {
                     var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
                             .GetMessageBoxStandardWindow("Interrogate Failed",
-                                                         $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}", ButtonEnum.Ok, Icon.Warning);
+                                                         $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}", 
+                                                         ButtonEnum.Ok, 
+                                                         Icon.Warning);
 
                     await ShowDialog(messageBoxStandardWindow);
                 }
@@ -759,7 +761,7 @@ namespace StableDiffusionTagManager.ViewModels
             var newFilename = $"{withoutExtension}__{i.ToString("00")}";
             while (ImagesWithTags.Any(i => newFilename == System.IO.Path.GetFileNameWithoutExtension(i.Filename)))
             {
-                newFilename = $"{withoutExtension}__{(++i).ToString("00")}";
+                newFilename = $"{withoutExtension}__{++i:00}";
             }
             newFilename = Path.Combine(openFolder, $"{newFilename}.png");
             image.Save(newFilename);
