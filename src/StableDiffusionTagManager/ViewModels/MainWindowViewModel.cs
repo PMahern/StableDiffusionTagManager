@@ -953,7 +953,7 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public async Task EditTagPrioritySets()
         {
-            var dialog = new TagPriortySetManagerDialog();
+            var dialog = new TagPrioritySetManagerDialog();
 
             await ShowDialog(dialog);
         }

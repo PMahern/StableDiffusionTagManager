@@ -4,15 +4,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         Width="500"
         Height="500"
-        x:Class="StableDiffusionTagManager.Views.TagPriortySetManagerDialog"
+        x:Class="StableDiffusionTagManager.Views.TagPrioritySetManagerDialog"
         xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-        Title="TagPriortySetManagerDialog"
+        Title="Managed Tag Priority Sets"
         Name="ThisControl">
-
   <Grid RowDefinitions="Auto,*,5,Auto" Margin="5" DataContext="{Binding ElementName=ThisControl}">
     <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
       <Border>
-        <DropDown HorizontalAlignment="Stretch" Items="{Binding TagPrioritySets}" SelectedItem="{Binding SelectedPrioritySet}"></DropDown>
+        <DropDown HorizontalAlignment="Stretch" Items="{Binding TagPrioritySets}" SelectedItem="{Binding SelectedPrioritySet}">
+          <DropDown.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Name}"></TextBlock>
+            </DataTemplate>
+          </DropDown.ItemTemplate>
+        </DropDown>
       </Border>
       <Border  Grid.Column="1">
         <Button Margin="5,0,0,0">
@@ -21,8 +26,12 @@
       </Border>
     </Grid>
     <Grid Grid.Row="1" Margin="0,5,0,0" ColumnDefinitions="*,5,*">
-      <ListBox ScrollViewer.VerticalScrollBarVisibility="Auto" Items="{Binding SelectedPrioritySet, Path=Tags}" SelectedItem="{Binding SelectedTagSetReference}">
-
+      <ListBox ScrollViewer.VerticalScrollBarVisibility="Auto" Items="{Binding SelectedPrioritySet.Entries}" SelectedItem="{Binding SelectedTagSetReference}">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <TextBox Text="{Binding Name}" />
+          </DataTemplate>
+        </ListBox.ItemTemplate>
       </ListBox>
       <ListBox Grid.Column="2" ScrollViewer.VerticalScrollBarVisibility="Auto">
 
