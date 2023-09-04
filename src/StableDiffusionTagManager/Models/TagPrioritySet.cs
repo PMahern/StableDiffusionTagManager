@@ -15,13 +15,14 @@ namespace StableDiffusionTagManager.Models
         {
             var lines = File.ReadLines(filename);
             var i = 0;
+            var subsetFoldername = Path.GetFileNameWithoutExtension(filename);
             foreach (var line in lines)
             {
                 if (line.StartsWith("###"))
                 {
                     //Load other file and process it
                     var directory = Path.GetDirectoryName(filename);
-                    var subsetname = Path.Combine(new string[] { directory, "subsets", line.Substring(3).Trim() });
+                    var subsetname = Path.Combine(new string[] { directory, subsetFoldername, line.Substring(3).Trim() });
                     var innerFileLines = File.ReadLines(subsetname);
                     foreach (var subline in innerFileLines)
                     {
