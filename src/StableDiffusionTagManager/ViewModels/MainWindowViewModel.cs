@@ -910,6 +910,10 @@ namespace StableDiffusionTagManager.ViewModels
         public async Task ExpandImage(Bitmap image)
         {
             var dialog = new ExpandImageDialog();
+            if(openProject != null && openProject.TargetImageSize.HasValue && openProject.TargetImageSize.Value.Width > 0 && openProject.TargetImageSize.Value.Height > 0)
+            {
+                dialog.ComputeExpansionNeededForTargetAspectRatio(image.PixelSize.Width, image.PixelSize.Height, openProject.TargetImageSize.Value.Width, openProject.TargetImageSize.Value.Height);
+            }
             await ShowDialog(dialog);
             if (dialog.Success)
             {

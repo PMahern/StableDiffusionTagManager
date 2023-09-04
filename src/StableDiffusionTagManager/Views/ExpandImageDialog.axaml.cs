@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
+using JetBrains.Annotations;
 
 namespace StableDiffusionTagManager.Views
 {
@@ -75,5 +76,23 @@ namespace StableDiffusionTagManager.Views
             set => SetValue(ExpandDownProperty, value);
         }
         #endregion
+
+        public void ComputeExpansionNeededForTargetAspectRatio(int currentWidth, int currentHeight, int targetWidth, int targetHeight)
+        {
+            var currentAspect = (double)currentWidth / (double)currentHeight;
+            var targetAspect = (double)targetWidth / (double)targetHeight;
+            if (targetAspect > currentAspect)
+            {
+                var computeWidth = (double)currentWidth * (targetAspect / currentAspect);
+                ExpandLeft = (int)((computeWidth - currentWidth) / 2.0);
+                ExpandRight = (int)((computeWidth - currentWidth) / 2.0);
+            } else
+            {
+                var computeHeight = (double)currentHeight * (currentAspect / targetAspect);
+                ExpandUp = (int)((computeHeight - currentHeight) / 2.0);
+                ExpandDown = (int)((computeHeight - currentHeight) / 2.0);
+            }
+            
+        }
     }
 }
