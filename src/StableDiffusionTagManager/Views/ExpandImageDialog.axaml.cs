@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
-using JetBrains.Annotations;
 
 namespace StableDiffusionTagManager.Views
 {

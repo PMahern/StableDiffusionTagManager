@@ -7,16 +7,13 @@ namespace StableDiffusionTagManager.Extensions
     {
         public static int GetBytesPerPixel(this PixelFormat pixelFormat)
         {
-            switch (pixelFormat)
+            if(pixelFormat == PixelFormat.Rgb565)
             {
-                case PixelFormat.Rgb565:
-                    return 2;
-                case PixelFormat.Rgba8888:
-                case PixelFormat.Bgra8888:
-                    return 4;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(pixelFormat), pixelFormat, null);
+                return 2;
             }
+
+            //PixelFormat.Rgba8888 and PixelFormat.Bgra8888
+            return 4;
         }
     }
 }

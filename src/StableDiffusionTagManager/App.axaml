@@ -8,12 +8,12 @@
     </Application.DataTemplates>
 
     <Application.Styles>
-        <FluentTheme Mode="Light"/>
+        <FluentTheme />
         <StyleInclude Source="/Styles/DefaultTheme.axaml" />
         <StyleInclude Source="/Styles/Styles.axaml" />
       <StyleInclude Source="/Styles/Icons.axaml" />
       <StyleInclude Source="avares://ThemeEditor.Controls.ColorPicker/ColorPicker.axaml" />
       <StyleInclude Source="avares://AvaloniaProgressRing/Styles/ProgressRing.xaml"/>
-      <StyleInclude Source="avares://Material.Icons.Avalonia/App.xaml" />
+      <materialIcons:MaterialIconStyles />
     </Application.Styles>
 </Application>

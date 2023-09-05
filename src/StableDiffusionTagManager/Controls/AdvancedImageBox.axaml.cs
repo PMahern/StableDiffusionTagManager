@@ -15,7 +15,6 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using SkiaSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,8 +23,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using static UVtools.AvaloniaControls.AdvancedImageBox;
 using Bitmap = Avalonia.Media.Imaging.Bitmap;
 using Color = Avalonia.Media.Color;
 using Image = Avalonia.Controls.Image;
@@ -33,6 +30,7 @@ using Pen = Avalonia.Media.Pen;
 using Point = Avalonia.Point;
 using Size = Avalonia.Size;
 using StableDiffusionTagManager.Extensions;
+using System.Diagnostics;
 
 namespace UVtools.AvaloniaControls
 {
@@ -49,6 +47,7 @@ namespace UVtools.AvaloniaControls
             add => _propertyChanged += value;
             remove => _propertyChanged -= value;
         }
+
         protected bool RaiseAndSetIfChanged<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return false;
@@ -57,8 +56,34 @@ namespace UVtools.AvaloniaControls
             return true;
         }
 
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
+            base.OnPropertyChanged(change);
+
+            if (change.Property == ImageProperty)
+            {
+                ImageChanged(change.NewValue as Bitmap);
+            }
+
+            if (change.Property == IsAspectRatioLockedProperty)
+            {
+                OnAspectRatioLocked();
+            }
+
+            if (change.Property == PanWithMouseButtonsProperty ||
+               change.Property == PanWithArrowsProperty ||
+               change.Property == SelectWithMouseButtonsProperty ||
+               change.Property == PaintWithMouseButtonsProperty ||
+               change.Property == EyeDropWithMouseButtonsProperty ||
+               change.Property == MaskWithMouseButtonsProperty)
+            {
+                TriggerRender();
+            }
+
+            if (change.Property == SelectionRegionProperty)
+            {
+                SelectionRegionChanged();
+            }
         }
 
         /// <summary>
@@ -72,7 +97,6 @@ namespace UVtools.AvaloniaControls
         protected void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
         {
             var e = new PropertyChangedEventArgs(propertyName);
-            OnPropertyChanged(e);
             _propertyChanged?.Invoke(this, e);
         }
         #endregion
@@ -554,36 +578,33 @@ namespace UVtools.AvaloniaControls
             set => SetValue(GridColorAlternateProperty, value);
         }
 
-        private static void ImageChanged(AdvancedImageBox control, bool before)
+        private void ImageChanged(Bitmap? value)
         {
-            if (!before)
+
+            mipScaleFactor = 0;
+            SelectNone();
+            IsPainted = false;
+            if (value != null && !paintLayers.ContainsKey(value))
             {
-                var value = control.GetValue(ImageProperty);
-                control.mipScaleFactor = 0;
-                control.SelectNone();
-                control.IsPainted = false;
-                if (value != null && !control.paintLayers.ContainsKey(value))
+                if (!paintLayers.ContainsKey(value))
                 {
-                    if (!control.paintLayers.ContainsKey(value))
-                    {
-                        control.paintLayers[value] = new List<RenderTargetBitmap>();
-                    }
-                    else
-                    {
-                        control.IsPainted = control.paintLayers[value].Any();
-                    }
+                    paintLayers[value] = new List<RenderTargetBitmap>();
                 }
-
-                if (value != null && !control.maskLayers.ContainsKey(value))
+                else
                 {
-                    control.maskLayers[value] = new List<RenderTargetBitmap>();
+                    IsPainted = paintLayers[value].Any();
                 }
-
-                control.ZoomToFit();
-                control.UpdateViewPort();
-                control.TriggerRender();
-                control.RaisePropertyChanged(nameof(IsImageLoaded));
             }
+
+            if (value != null && !maskLayers.ContainsKey(value))
+            {
+                maskLayers[value] = new List<RenderTargetBitmap>();
+            }
+
+            ZoomToFit();
+            UpdateViewPort();
+            TriggerRender();
+            RaisePropertyChanged(nameof(IsImageLoaded));
         }
 
         private Dictionary<(Bitmap, int), (Bitmap image, List<RenderTargetBitmap> paintLayers, List<RenderTargetBitmap> maskLayers)> mips = new();
@@ -592,10 +613,9 @@ namespace UVtools.AvaloniaControls
         private RenderTargetBitmap CreateBitmapMip(Bitmap source, int width, int height)
         {
             var renderImage = new RenderTargetBitmap(new PixelSize(width, height));
-            using (var bitmapRenderContext = renderImage.CreateDrawingContext(null))
+            using (var bitmapRenderContext = renderImage.CreateDrawingContext())
             {
-                var dc = new DrawingContext(bitmapRenderContext);
-                dc.DrawImage(source, new Rect(0, 0, source.PixelSize.Width, source.PixelSize.Height), new Rect(0, 0, width, height), Avalonia.Visuals.Media.Imaging.BitmapInterpolationMode.HighQuality);
+                bitmapRenderContext.DrawImage(source, new Rect(0, 0, source.PixelSize.Width, source.PixelSize.Height), new Rect(0, 0, width, height));
             }
             return renderImage;
         }
@@ -770,7 +790,7 @@ namespace UVtools.AvaloniaControls
         }
 
         public static readonly StyledProperty<Bitmap?> ImageProperty =
-            AvaloniaProperty.Register<AdvancedImageBox, Bitmap?>(nameof(Image), notifying: (obj, before) => ImageChanged((AdvancedImageBox)obj, before));
+            AvaloniaProperty.Register<AdvancedImageBox, Bitmap?>(nameof(Image));
 
         /// <summary>
         /// Gets or sets the image to be displayed
@@ -965,19 +985,16 @@ namespace UVtools.AvaloniaControls
             protected set => SetAndRaise(IsPaintingProperty, ref _isMasking, value);
         }
 
-        private static void OnAspectRatioLocked(AdvancedImageBox imageBox, bool before)
+        private void OnAspectRatioLocked()
         {
-            if (!before)
+            if (IsAspectRatioLocked && SelectionRegion.Width > 0 && SelectionRegion.Height > 0)
             {
-                if (imageBox.IsAspectRatioLocked && !imageBox.SelectionRegion.IsEmpty)
-                {
-                    imageBox._lockedAspectRatio = imageBox.SelectionRegion.Width / imageBox.SelectionRegion.Height;
-                }
+                _lockedAspectRatio = SelectionRegion.Width / SelectionRegion.Height;
             }
         }
 
         public static readonly StyledProperty<bool> IsAspectRatioLockedProperty =
-            AvaloniaProperty.Register<AdvancedImageBox, bool>(nameof(IsAspectRatioLocked), false, notifying: (control, before) => OnAspectRatioLocked((AdvancedImageBox)control, before));
+            AvaloniaProperty.Register<AdvancedImageBox, bool>(nameof(IsAspectRatioLocked), false);
 
         private double _lockedAspectRatio;
 
@@ -1017,19 +1034,8 @@ namespace UVtools.AvaloniaControls
             set => SetValue(AutoPanProperty, value);
         }
 
-        public static void TriggerRenderOnMouseButtonChange(IAvaloniaObject obj, bool before)
-        {
-            if (!before)
-            {
-                var control = obj as AdvancedImageBox;
-                if (control != null)
-                {
-                    control.TriggerRender();
-                }
-            }
-        }
         public static readonly StyledProperty<MouseButtons> PanWithMouseButtonsProperty =
-            AvaloniaProperty.Register<AdvancedImageBox, MouseButtons>(nameof(PanWithMouseButtons), MouseButtons.LeftButton | MouseButtons.MiddleButton | MouseButtons.RightButton, notifying: TriggerRenderOnMouseButtonChange);
+            AvaloniaProperty.Register<AdvancedImageBox, MouseButtons>(nameof(PanWithMouseButtons), MouseButtons.LeftButton | MouseButtons.MiddleButton | MouseButtons.RightButton);
 
         /// <summary>
         /// Gets or sets the mouse buttons to pan the image
@@ -1041,7 +1047,7 @@ namespace UVtools.AvaloniaControls
         }
 
         public static readonly StyledProperty<bool> PanWithArrowsProperty =
-            AvaloniaProperty.Register<AdvancedImageBox, bool>(nameof(PanWithArrows), true, notifying: TriggerRenderOnMouseButtonChange);
+            AvaloniaProperty.Register<AdvancedImageBox, bool>(nameof(PanWithArrows), true);
 
         /// <summary>
         /// Gets or sets if the control can pan with the keyboard arrows
@@ -1053,7 +1059,7 @@ namespace UVtools.AvaloniaControls
         }
 
         public static readonly StyledProperty<MouseButtons> SelectWithMouseButtonsProperty =
-            AvaloniaProperty.Register<AdvancedImageBox, MouseButtons>(nameof(SelectWithMouseButtons), MouseButtons.LeftButton | MouseButtons.RightButton, notifying: TriggerRenderOnMouseButtonChange);
+            AvaloniaProperty.Register<AdvancedImageBox, MouseButtons>(nameof(SelectWithMouseButtons), MouseButtons.LeftButton | MouseButtons.RightButton);
 
 
         /// <summary>
@@ -1066,7 +1072,7 @@ namespace UVtools.AvaloniaControls
         }
 
         public static readonly StyledProperty<MouseButtons> PaintWithMouseButtonsProperty =
-            AvaloniaProperty.Register<AdvancedImageBox, MouseButtons>(nameof(PaintWithMouseButtons), MouseButtons.MiddleButton, notifying: TriggerRenderOnMouseButtonChange);
+            AvaloniaProperty.Register<AdvancedImageBox, MouseButtons>(nameof(PaintWithMouseButtons), MouseButtons.MiddleButton);
 
         /// <summary>
         /// Gets or sets the mouse buttons to paint on the image
@@ -1078,7 +1084,7 @@ namespace UVtools.AvaloniaControls
         }
 
         public static readonly StyledProperty<MouseButtons> EyeDropWithMouseButtonsProperty =
-            AvaloniaProperty.Register<AdvancedImageBox, MouseButtons>(nameof(EyeDropWithMouseButtons), MouseButtons.None, notifying: TriggerRenderOnMouseButtonChange);
+            AvaloniaProperty.Register<AdvancedImageBox, MouseButtons>(nameof(EyeDropWithMouseButtons), MouseButtons.None);
 
         /// <summary>
         /// Gets or sets the mouse buttons to EyeDrop on the image
@@ -1090,7 +1096,7 @@ namespace UVtools.AvaloniaControls
         }
 
         public static readonly StyledProperty<MouseButtons> MaskWithMouseButtonsProperty =
-            AvaloniaProperty.Register<AdvancedImageBox, MouseButtons>(nameof(MaskWithMouseButtons), MouseButtons.None, notifying: TriggerRenderOnMouseButtonChange);
+            AvaloniaProperty.Register<AdvancedImageBox, MouseButtons>(nameof(MaskWithMouseButtons), MouseButtons.None);
 
         /// <summary>
         /// Gets or sets the mouse buttons to paint on the image
@@ -1436,19 +1442,16 @@ namespace UVtools.AvaloniaControls
             set => SetValue(SelectionColorProperty, value);
         }
 
-        private static void SelectionRegionChanged(AdvancedImageBox control, bool before)
+        private void SelectionRegionChanged()
         {
-            if (!before)
-            {
-                control.TriggerRender();
-                control.RaisePropertyChanged(nameof(HaveSelection));
-                control.RaisePropertyChanged(nameof(SelectionRegionNet));
-                control.RaisePropertyChanged(nameof(SelectionPixelSize));
-            }
+            TriggerRender();
+            RaisePropertyChanged(nameof(HaveSelection));
+            RaisePropertyChanged(nameof(SelectionRegionNet));
+            RaisePropertyChanged(nameof(SelectionPixelSize));
         }
 
         public static readonly StyledProperty<Rect> SelectionRegionProperty =
-            AvaloniaProperty.Register<AdvancedImageBox, Rect>(nameof(SelectionRegion), Rect.Empty, notifying: (control, before) => SelectionRegionChanged((AdvancedImageBox)control, before));
+            AvaloniaProperty.Register<AdvancedImageBox, Rect>(nameof(SelectionRegion), new Rect());
 
 
         public Rect SelectionRegion
@@ -1479,7 +1482,7 @@ namespace UVtools.AvaloniaControls
             }
         }
 
-        public bool HaveSelection => !SelectionRegion.IsEmpty;
+        public bool HaveSelection => SelectionRegion.Width > 0 && SelectionRegion.Height > 0;
         #endregion
 
         #region Constructor
@@ -1500,7 +1503,7 @@ namespace UVtools.AvaloniaControls
             HorizontalScrollBar.Scroll += ScrollBarOnScroll;
             VerticalScrollBar.Scroll += ScrollBarOnScroll;
             ViewPort.PointerPressed += ViewPortOnPointerPressed;
-            ViewPort.PointerLeave += ViewPortOnPointerLeave;
+            ViewPort.PointerExited += ViewPortOnPointerLeave;
             ViewPort.PointerMoved += ViewPortOnPointerMoved;
             ViewPort.PointerWheelChanged += ViewPortOnPointerWheelChanged;
         }
@@ -1683,7 +1686,7 @@ namespace UVtools.AvaloniaControls
                 context.DrawRectangle(pen, imageViewPort);
             }
 
-            if (!SelectionRegion.IsEmpty)
+            if (SelectionRegion.Width > 0 && SelectionRegion.Height > 0)
             {
                 var rect = GetOffsetRectangle(SelectionRegion);
                 var selectionColor = SelectionColor;
@@ -1835,7 +1838,9 @@ namespace UVtools.AvaloniaControls
                )
             {
                 IsPainting = true;
-                paintLayers[Image].Add(new RenderTargetBitmap(Image.PixelSize));
+                var newImage = new RenderTargetBitmap(Image.PixelSize);
+                paintLayers[Image].Add(newImage);
+
                 IsPainted = true;
             }
             else if (
@@ -1883,6 +1888,8 @@ namespace UVtools.AvaloniaControls
             _startMousePosition = location;
         }
 
+
+
         protected override void OnPointerReleased(PointerReleasedEventArgs e)
         {
             base.OnPointerReleased(e);
@@ -1920,7 +1927,7 @@ namespace UVtools.AvaloniaControls
             if (_isPainting)
             {
                 var newestLayer = paintLayers[Image].Last();
-                using (var bitmapRenderContext = newestLayer.CreateDrawingContext(null))
+                using (var bitmapRenderContext = newestLayer.GetDrawingContextWithoutClear())
                 {
                     var brushSize = PaintBrushSize - 1;
                     var pos = PointToImage(pointer.Position);
@@ -1932,7 +1939,6 @@ namespace UVtools.AvaloniaControls
                         d = 0.5;
                     }
                     bitmapRenderContext.DrawEllipse(brush, pen, new Rect(pos.X - brushSize, pos.Y - brushSize, d, d));
-
                     var intermediatePoints = e.GetIntermediatePoints(this);
                     foreach (var point in intermediatePoints)
                     {
@@ -1953,7 +1959,7 @@ namespace UVtools.AvaloniaControls
                         else
                             layerMip = layerMips.Last();
 
-                        using (var mipRenderContext = layerMip.CreateDrawingContext(null))
+                        using (var mipRenderContext = layerMip.GetDrawingContextWithoutClear())
                         {
                             mipRenderContext.DrawEllipse(brush, pen, new Rect(pos.X / mipScaleFactor - brushSize / mipScaleFactor, pos.Y / mipScaleFactor - brushSize / mipScaleFactor, d / mipScaleFactor, d / mipScaleFactor));
                             foreach (var point in intermediatePoints)
@@ -1969,7 +1975,7 @@ namespace UVtools.AvaloniaControls
             if (_isMasking)
             {
                 var newestLayer = maskLayers[Image].Last();
-                using (var bitmapRenderContext = newestLayer.CreateDrawingContext(null))
+                using (var bitmapRenderContext = newestLayer.GetDrawingContextWithoutClear())
                 {
                     var brushSize = MaskBrushSize - 1;
                     var pos = PointToImage(pointer.Position);
@@ -2002,7 +2008,7 @@ namespace UVtools.AvaloniaControls
                         else
                             layerMip = layerMips.Last();
 
-                        using (var mipRenderContext = layerMip.CreateDrawingContext(null))
+                        using (var mipRenderContext = layerMip.GetDrawingContextWithoutClear())
                         {
                             mipRenderContext.DrawEllipse(brush, pen, new Rect(pos.X / mipScaleFactor - brushSize / mipScaleFactor, pos.Y / mipScaleFactor - brushSize / mipScaleFactor, d / mipScaleFactor, d / mipScaleFactor));
                             foreach (var point in intermediatePoints)
@@ -2695,7 +2701,7 @@ namespace UVtools.AvaloniaControls
         public Rect FitRectangle(Rect rectangle)
         {
             var image = Image;
-            if (image is null) return Rect.Empty;
+            if (image is null) return new Rect(0, 0, 0, 0);
             var x = rectangle.X;
             var y = rectangle.Y;
             var w = rectangle.Width;
@@ -2984,7 +2990,7 @@ namespace UVtools.AvaloniaControls
         /// </summary>
         public void SelectNone()
         {
-            SelectionRegion = Rect.Empty;
+            SelectionRegion = new Rect(0, 0, 0, 0);
         }
 
         #endregion
@@ -2997,7 +3003,7 @@ namespace UVtools.AvaloniaControls
         public Rect GetSourceImageRegion(double mipScaleFactor = 1.0)
         {
             var image = Image;
-            if (image is null) return Rect.Empty;
+            if (image is null) return new Rect();
 
             switch (SizeMode)
             {
@@ -3024,7 +3030,7 @@ namespace UVtools.AvaloniaControls
         public Rect GetImageViewPort()
         {
             var viewPortSize = ViewPortSize;
-            if (!IsImageLoaded || viewPortSize is { Width: 0, Height: 0 }) return Rect.Empty;
+            if (!IsImageLoaded || viewPortSize is { Width: 0, Height: 0 }) return new Rect(0, 0, 0, 0);
 
             double xOffset = 0;
             double yOffset = 0;
@@ -3120,15 +3126,14 @@ namespace UVtools.AvaloniaControls
                 var finalSize = targetSize ?? new PixelSize(Convert.ToInt32(finalRegion.Width), Convert.ToInt32(finalRegion.Height));
                 var newImage = new RenderTargetBitmap(finalSize);
                 var layers = GetImageLayers(Image);
-                using (var drawingContext = newImage.CreateDrawingContext(null))
+                using (var drawingContext = newImage.CreateDrawingContext())
                 {
-                    var dc = new DrawingContext(drawingContext);
-                    dc.DrawImage(Image, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height), Avalonia.Visuals.Media.Imaging.BitmapInterpolationMode.HighQuality);
+                    drawingContext.DrawImage(Image, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height));
                     if (layers != null)
                     {
                         foreach (var paintLayer in layers)
                         {
-                            dc.DrawImage(paintLayer, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height), Avalonia.Visuals.Media.Imaging.BitmapInterpolationMode.HighQuality);
+                            drawingContext.DrawImage(paintLayer, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height));
                         }
                     }
                 }
@@ -3147,16 +3152,16 @@ namespace UVtools.AvaloniaControls
                 var finalSize = new PixelSize(Convert.ToInt32(finalRegion.Width), Convert.ToInt32(finalRegion.Height));
                 var newImage = new RenderTargetBitmap(finalSize);
                 var layers = GetImageMaskLayers(Image);
-                using (var drawingContext = newImage.CreateDrawingContext(null))
-                {
-                    drawingContext.Clear(new Color(255, 255, 255, 255));
-                    var dc = new DrawingContext(drawingContext);
 
+                var imageRect = new Rect(0, 0, finalSize.Width, finalSize.Height);
+                using (var drawingContext = newImage.CreateDrawingContext())
+                {
+                    drawingContext.FillRectangle(new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)), imageRect, 0);
                     if (layers != null)
                     {
                         foreach (var maskLayer in layers)
                         {
-                            dc.DrawImage(maskLayer, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height), Avalonia.Visuals.Media.Imaging.BitmapInterpolationMode.HighQuality);
+                            drawingContext.DrawImage(maskLayer, finalRegion, imageRect);
                         }
                     }
                 }

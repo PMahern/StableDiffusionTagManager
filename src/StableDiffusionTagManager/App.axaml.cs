@@ -99,7 +99,7 @@ namespace StableDiffusionTagManager
             {
                 // Line below is needed to remove Avalonia data validation.
                 // Without this line you will get duplicate validations from both Avalonia and CT
-                ExpressionObserver.DataValidators.RemoveAll(x => x is DataAnnotationsValidationPlugin);
+                //ExpressionObserver.DataValidators.RemoveAll(x => x is DataAnnotationsValidationPlugin);
                 MainWindow window = new();
                 desktop.MainWindow = window;
                 var mainVM = new MainWindowViewModel()

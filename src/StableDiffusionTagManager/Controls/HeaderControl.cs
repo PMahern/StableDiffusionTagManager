@@ -3,12 +3,8 @@ using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.VisualTree;
-using AvaloniaEdit;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace StableDiffusionTagManager.Controls
 {

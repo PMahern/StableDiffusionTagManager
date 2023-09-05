@@ -21,8 +21,7 @@
       <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
       <ListBox Name="ImageList"
                Grid.Column="2"
-               VirtualizationMode="Simple"
-               Items="{Binding Images}"
+               ItemsSource="{Binding Images}"
                SelectedItem="{Binding SelectedImage}"
                HorizontalAlignment="Stretch"
                ScrollViewer.VerticalScrollBarVisibility="Auto">

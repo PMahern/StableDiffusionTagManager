@@ -24,6 +24,15 @@ namespace StableDiffusionTagManager.Views
             Opened += TagPriortySetManagerDialog_Opened;
         }
 
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        {
+            base.OnPropertyChanged(change);
+
+            if(change.Property == SelectedPrioritySetProperty)
+            {
+                SelectedChildSet = null;
+            }
+        }
         private void TagPriortySetManagerDialog_Opened(object? sender, System.EventArgs e)
         {
             Loading = true;
@@ -43,28 +52,22 @@ namespace StableDiffusionTagManager.Views
         public static readonly StyledProperty<ObservableCollection<TagPrioritySetViewModel>> TagPrioritySetsProperty =
             AvaloniaProperty.Register<TagPrioritySetManagerDialog, ObservableCollection<TagPrioritySetViewModel>>(nameof(TagPrioritySets), null);
 
+        
+
         /// <summary>
         /// Gets or sets the image to be displayed
         /// </summary>
         public ReadOnlyObservableCollection<TagPrioritySetViewModel> TagPrioritySets
         {
+
             get
-            {
+            { 
                 return new ReadOnlyObservableCollection<TagPrioritySetViewModel>(GetValue(TagPrioritySetsProperty));
             }
         }
 
         public static readonly StyledProperty<TagPrioritySetViewModel?> SelectedPrioritySetProperty =
-            AvaloniaProperty.Register<TagPrioritySetManagerDialog, TagPrioritySetViewModel?>(nameof(SelectedPrioritySet), null, notifying: SelectedSetChanged);
-
-        private static void SelectedSetChanged(IAvaloniaObject @object, bool before)
-        {
-            var dialog = @object as TagPrioritySetManagerDialog;
-            if (dialog != null && !before)
-            {
-                dialog.SelectedChildSet = null;
-            }
-        }
+            AvaloniaProperty.Register<TagPrioritySetManagerDialog, TagPrioritySetViewModel?>(nameof(SelectedPrioritySet), null);
 
         /// <summary>
         /// Gets or sets the image to be displayed

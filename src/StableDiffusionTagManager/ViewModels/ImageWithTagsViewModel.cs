@@ -1,13 +1,10 @@
 ﻿using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HarfBuzzSharp;
 using SixLabors.ImageSharp;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -142,9 +139,8 @@ namespace StableDiffusionTagManager.ViewModels
                 var aspectRatio = (float)imageSource.PixelSize.Width / (float)imageSource.PixelSize.Height;
                 var pixelSize = aspectRatio > 1.0 ? new PixelSize(THUMBNAIL_SIZE, (int)((float)THUMBNAIL_SIZE / aspectRatio)) : new PixelSize((int)((float)THUMBNAIL_SIZE * aspectRatio), THUMBNAIL_SIZE);
                 var renderBitmap = new RenderTargetBitmap(pixelSize);
-                using var dc = renderBitmap.CreateDrawingContext(null);
-                using var drawingContext = new DrawingContext(dc, false);
-                drawingContext.DrawImage(imageSource, new Rect(0, 0, imageSource.PixelSize.Width, imageSource.PixelSize.Height), new Rect(0, 0, pixelSize.Width, pixelSize.Height));
+                using var dc = renderBitmap.CreateDrawingContext();
+                dc.DrawImage(imageSource, new Rect(0, 0, imageSource.PixelSize.Width, imageSource.PixelSize.Height), new Rect(0, 0, pixelSize.Width, pixelSize.Height));
                 return renderBitmap;
             }
             else
@@ -217,7 +213,10 @@ namespace StableDiffusionTagManager.ViewModels
         {
             var newOrder = this.tags.OrderBy(t => orderBy(t.Tag)).ToList();
             this.tags.Clear();
-            this.tags.AddRange(newOrder);
+            foreach (var tag in newOrder)
+            {
+                this.tags.Add(tag);
+            }
         }
     }
 }

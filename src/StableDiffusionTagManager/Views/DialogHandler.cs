@@ -1,5 +1,5 @@
 ﻿using Avalonia.Controls;
-using MessageBox.Avalonia.BaseWindows.Base;
+using MsBox.Avalonia.Base;
 using StableDiffusionTagManager.Controls;
 using System.Threading.Tasks;
 
@@ -14,9 +14,9 @@ namespace StableDiffusionTagManager.Views
             this.window = window;
         }
 
-        public Task<TResultType> ShowDialog<TResultType>(IMsBoxWindow<TResultType> msgBox)
+        public Task<TResultType> ShowDialog<TResultType>(IMsBox<TResultType> msgBox)
         {
-            return msgBox.ShowDialog(window);
+            return msgBox.ShowWindowDialogAsync(window);
         }
 
         public TResultType ShowDialog<TResultType>(IDialogWithResult<TResultType> dialogWithResult)
