@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:controls="using:StableDiffusionTagManager.Controls"
         Width="800"
         Height="800"
         x:Class="StableDiffusionTagManager.Views.TagPrioritySetManagerDialog"
@@ -40,7 +41,7 @@
         <ListBox.ItemTemplate>
           <DataTemplate>
             <Grid ColumnDefinitions="*, Auto">
-            <TextBox Text="{Binding Name}" />
+              <controls:TagAutoCompleteBox Tag="{Binding Name}" />
             <Button Grid.Column="1" Command="{Binding DataContext.DeletePrioritySetEntryCommand, ElementName=GridControl}" CommandParameter="{Binding}">
               <mi:MaterialIcon Kind="Delete"/>
             </Button>
@@ -52,7 +53,7 @@
         <ListBox.ItemTemplate>
         <DataTemplate>
           <Grid ColumnDefinitions="*, Auto">
-            <TextBox Text="{Binding Name}" />
+            <controls:TagAutoCompleteBox Tag="{Binding Name}" />
             <Button Grid.Column="1" Command="{Binding DataContext.DeleteChildSetEntryCommand, ElementName=GridControl}" CommandParameter="{Binding}">
               <mi:MaterialIcon Kind="Delete"/>
             </Button>

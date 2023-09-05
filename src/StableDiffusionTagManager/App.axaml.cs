@@ -8,18 +8,25 @@ using StableDiffusionTagManager.Models;
 using StableDiffusionTagManager.ViewModels;
 using StableDiffusionTagManager.Views;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace StableDiffusionTagManager
 {
     public partial class App : Application
     {
+        private static readonly string TagsPath = "tags.csv";
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
         }
 
         public static Settings Settings { get; set; } = new Settings("sdtmsettings.xml");
+
         public static string GetAppDirectory()
         {
             return AppDomain.CurrentDomain.BaseDirectory;
@@ -35,8 +42,59 @@ namespace StableDiffusionTagManager
             return path;
         }
 
+        private List<TagCountModel> _tagDictionary = new List<TagCountModel>();
+        private Task? tagsLoadTask;
+
+        public void LoadTagDictionary()
+        {
+            if (File.Exists(TagsPath))
+            {
+                _tagDictionary = File.ReadAllLines(TagsPath)
+                                    .Select(line =>
+                                    {
+                                        var pair = line.Split(',');
+                                        return new TagCountModel
+                                        {
+                                            Tag = pair[0],
+                                            Count = int.Parse(pair[1])
+                                        };
+                                    }).ToList();
+            }
+        }
+
+        public async Task<IEnumerable<object>> SearchTags(string text, CancellationToken token)
+        {
+
+            var desktop = ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
+            await tagsLoadTask.WaitAsync(TimeSpan.FromMilliseconds(-1));
+            if (desktop != null)
+            {
+                var mainWindow = desktop.MainWindow;
+                var mainWindowVm = mainWindow.DataContext as MainWindowViewModel;
+                if(mainWindowVm != null)
+                {
+                    var mainWindowTags = mainWindowVm.ImagesWithTags?.SelectMany(iwt => iwt.Tags.Where(a => a.Tag.StartsWith(text)).Select(a => a.Tag))
+                                       .GroupBy(tag => tag)
+                                       .OrderByDescending(t => t.Count())
+                                       .Select(t => t.Key);
+
+                    var tagDictionaryTags = _tagDictionary.Where(bt => bt.Tag.StartsWith(text)).Select(bt => bt.Tag);
+                    
+                    if (mainWindowTags != null)
+                    {
+                        return mainWindowTags.Union(tagDictionaryTags);
+                    }  
+                    
+                    return tagDictionaryTags;
+                }
+            }
+
+            return Enumerable.Empty<object>();   
+        }
+
         public override void OnFrameworkInitializationCompleted()
         {
+            tagsLoadTask = Task.Run(() => LoadTagDictionary());
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 // Line below is needed to remove Avalonia data validation.
@@ -52,20 +110,8 @@ namespace StableDiffusionTagManager
                         window.FocusTagAutoComplete(tag);
                     }
                 };
-
                 
                 window.DataContext = mainVM;
-                mainVM.ShowAddTagToAllDialogCallback = (title) =>
-                {
-                    var dialog = new TagSearchDialog();
-
-                    if (title != null)
-                    {
-                        dialog.Title = title;
-                    }
-                    dialog.SetSearchFunc(mainVM.SearchTags);
-                    return dialog.ShowAsync(desktop.MainWindow);
-                };
 
                 window.Closed += (sender, args) => desktop.Shutdown();
             }

@@ -21,13 +21,7 @@
           <RowDefinition Height="*" />
           <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <AutoCompleteBox Grid.Row="0" Name="TagAutoComplete" IsTextCompletionEnabled="True" AsyncPopulator="SearchTags">
-          <AutoCompleteBox.ItemTemplate>
-            <DataTemplate>
-              <TextBlock Text="{Binding}" />
-            </DataTemplate>
-          </AutoCompleteBox.ItemTemplate>
-        </AutoCompleteBox>
+        <controls:TagAutoCompleteBox Name="TagAutoComplete" />
         <StackPanel Classes="footer" Grid.Row="2">
           <Button Click="Ok_Clicked">Ok</Button>
           <Button Click="Cancel_Clicked">Cancel</Button>

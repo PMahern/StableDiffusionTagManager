@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using StableDiffusionTagManager.Controls;
 using StableDiffusionTagManager.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -48,25 +49,13 @@ namespace StableDiffusionTagManager.Views
 
             if (viewModel != null)
             {
-                viewModel.ShowAddTagToAllDialogCallback = (title) =>
-                {
-                    var dialog = new TagSearchDialog();
-
-                    if (title != null)
-                    {
-                        dialog.Title = title;
-                    }
-                    dialog.SetSearchFunc(viewModel.SearchTags);
-                    return dialog.ShowAsync(this);
-                };
-
                 viewModel.ShowFolderDialogCallback = () => new OpenFolderDialog().ShowAsync(this);
                 viewModel.FocusTagCallback = (tag) =>
                     {
                         this.FocusTagAutoComplete(tag);
                     };
 
-                viewModel.ShowDialogHandler = new MessageBoxDialogHandler(this);
+                viewModel.ShowDialogHandler = new DialogHandler(this);
                 viewModel.ExitCallback = () =>
                 {
                     //Remove the handler to prevent an infinite loop, if the vm says to close we KNOW we're closing.
@@ -179,15 +168,9 @@ namespace StableDiffusionTagManager.Views
             viewModel?.TagDrop(tag);
         }
 
-        public Task<IEnumerable<object>> SearchTags(string text, CancellationToken token)
-        {
-            var viewModel = this.DataContext as MainWindowViewModel;
-            return viewModel?.SearchTags(text, token) ?? Task.FromResult(Enumerable.Empty<object>());
-        }
-
         public void AutoCompleteAttached(object sender, VisualTreeAttachmentEventArgs args)
         {
-            var ac = sender as AutoCompleteBox;
+            var ac = sender as TagAutoCompleteBox;
             if (focusTag != null && focusTag == (ac.DataContext as TagViewModel))
             {
                 Dispatcher.UIThread.Post(() => ac?.Focus());

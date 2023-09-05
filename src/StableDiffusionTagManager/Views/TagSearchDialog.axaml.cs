@@ -9,10 +9,11 @@ using Avalonia.Threading;
 using Avalonia;
 using UVtools.AvaloniaControls;
 using CommunityToolkit.Mvvm.Input;
+using StableDiffusionTagManager.Controls;
 
 namespace StableDiffusionTagManager.Views
 {
-    public partial class TagSearchDialog : Window
+    public partial class TagSearchDialog : Window, IDialogWithResultAsync<string?>
     {
         public TagSearchDialog()
         {
@@ -24,32 +25,15 @@ namespace StableDiffusionTagManager.Views
             TagAutoComplete.AttachedToVisualTree += (s, e) => Dispatcher.UIThread.Post(() => TagAutoComplete.Focus());     
         }
 
-        public void SetSearchFunc(Func<string, CancellationToken, Task<IEnumerable<object>>> searchFunc)
-        {
-            this.searchFunc = searchFunc;
-        }        
-
         private bool success = false;
 
-        private Func<string, CancellationToken, Task<IEnumerable<object>>>? searchFunc;
-
-        public Task<IEnumerable<object>> SearchTags(string text, CancellationToken token)
-        {
-            if(this.searchFunc != null)
-            {
-                return searchFunc(text, token);
-            }
-            
-            return Task.FromResult(Enumerable.Empty<object>());
-        }
-
-        public async Task<string?> ShowAsync(Window parent)
+        public async Task<string?> ShowWithResult(Window parent)
         {
             await ShowDialog(parent);
 
-            if (this.success && !string.IsNullOrEmpty(TagAutoComplete.Text))
+            if (this.success && !string.IsNullOrEmpty(TagAutoComplete.Tag))
             {
-                return TagAutoComplete.Text;
+                return TagAutoComplete.Tag;
             }
             else
             {

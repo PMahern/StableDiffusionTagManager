@@ -119,13 +119,7 @@
                             <Border Classes="tag" DragDrop.AllowDrop="True">
                               <StackPanel Orientation="Horizontal" PointerPressed="TagDragStart" >
                                 <PathIcon Data="{StaticResource drag_regular}"/>
-                                <AutoCompleteBox Text="{Binding Tag, Mode=TwoWay}" IsTextCompletionEnabled="True" AsyncPopulator="SearchTags" AttachedToVisualTree="AutoCompleteAttached">
-                                  <AutoCompleteBox.ItemTemplate>
-                                    <DataTemplate>
-                                      <TextBlock Text="{Binding}" />
-                                    </DataTemplate>
-                                  </AutoCompleteBox.ItemTemplate>
-                                </AutoCompleteBox>
+                                <controls:TagAutoCompleteBox Tag="{Binding Tag, Mode=TwoWay}" AttachedToVisualTree="AutoCompleteAttached" />
                                 <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.SelectedImage.RemoveTagCommand}" CommandParameter="{Binding}">x</Button>
                               </StackPanel>
                             </Border>
@@ -135,7 +129,6 @@
                     </ItemsControl>
                   </ScrollViewer>
                 </Grid>
-
               </controls:HeaderControl>
               <GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" ResizeBehavior="PreviousAndNext"/>
               <Grid Grid.Row="2">

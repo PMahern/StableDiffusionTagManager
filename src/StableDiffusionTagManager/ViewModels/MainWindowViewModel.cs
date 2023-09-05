@@ -9,7 +9,6 @@ using Avalonia.Media.Imaging;
 using System.IO;
 using StableDiffusionTagManager.Models;
 using System.Collections.Generic;
-using System.Threading;
 using MessageBox.Avalonia.Enums;
 using StableDiffusionTagManager.Views;
 using MessageBox.Avalonia.BaseWindows.Base;
@@ -18,41 +17,19 @@ using SdWebUpApi.Api;
 using Newtonsoft.Json.Linq;
 using StableDiffusionTagManager.Extensions;
 using Avalonia.Media;
+using StableDiffusionTagManager.Controls;
 
 namespace StableDiffusionTagManager.ViewModels
 {
-    public class TagModel
-    {
-        public string Tag { get; set; } = "";
-        public int Count { get; set; } = 0;
-    }
-
     public partial class MainWindowViewModel : ViewModelBase
     {
-        private static readonly string TagsPath = "tags.csv";
         private static readonly string ProjectFolder = ".sdtmproj";
         private static readonly string ProjecFilename = "_project.xml";
         private static readonly string ArchiveFolder = "archive";
         private static readonly string TagPrioritySets = "TagPrioritySets";
 
-        private List<TagModel> _tagDictionary = new List<TagModel>();
-
         public MainWindowViewModel()
         {
-            if (File.Exists(TagsPath))
-            {
-                _tagDictionary = File.ReadAllLines(TagsPath)
-                                    .Select(line =>
-                                    {
-                                        var pair = line.Split(',');
-                                        return new TagModel
-                                        {
-                                            Tag = pair[0],
-                                            Count = int.Parse(pair[1])
-                                        };
-                                    }).ToList();
-            }
-
             UpdateTagPrioritySets();
         }
 
@@ -132,11 +109,9 @@ namespace StableDiffusionTagManager.ViewModels
         public bool IsProject { get => openProject != null; }
 
         #region Callbacks and Events
-        public MessageBoxDialogHandler? ShowDialogHandler { get; set; }
+        public DialogHandler? ShowDialogHandler { get; set; }
 
         public Func<Task<string?>>? ShowFolderDialogCallback { get; set; }
-
-        public Func<string?, Task<string?>>? ShowAddTagToAllDialogCallback { get; set; }
 
         public Action<TagViewModel>? FocusTagCallback { get; set; }
 
@@ -152,6 +127,15 @@ namespace StableDiffusionTagManager.ViewModels
                 return ShowDialogHandler.ShowDialog(mbox);
             }
             return Task.FromResult(default(TResult));
+        }
+
+        private async Task<TResult?> ShowDialog<TResult>(IDialogWithResultAsync<TResult> dialog)
+        {
+            if (ShowDialogHandler != null)
+            {
+                return await ShowDialogHandler.ShowDialog(dialog);
+            }
+            return default;
         }
 
         private Task<TResult> ShowDialog<TResult>(Window dialog) where TResult : struct
@@ -315,16 +299,6 @@ namespace StableDiffusionTagManager.ViewModels
             selectedImage?.TagDrop(dropTarget);
         }
 
-        public Task<IEnumerable<object>> SearchTags(string text, CancellationToken token)
-        {
-            return Task.FromResult(this.ImagesWithTags?.SelectMany(iwt => iwt.Tags.Where(a => a.Tag.StartsWith(text)).Select(a => a.Tag))
-                                       .GroupBy(tag => tag)
-                                       .OrderByDescending(t => t.Count())
-                                       .Select(t => t.Key)
-                                       .Union(_tagDictionary.Where(bt => bt.Tag.StartsWith(text)).Select(bt => bt.Tag)) ??
-                                       Enumerable.Empty<object>());
-        }
-
         public bool IsImageSelected => SelectedImage != null;
 
         public void AddTagInFrontOfTag(TagViewModel tag)
@@ -379,9 +353,10 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async void AddTagToEndOfAllImages()
         {
-            if (ShowAddTagToAllDialogCallback != null && ImagesWithTags != null)
+            if (ImagesWithTags != null)
             {
-                var tagResult = await ShowAddTagToAllDialogCallback(null);
+                var dialog = new TagSearchDialog();
+                var tagResult = await ShowDialog<string?>(dialog);
 
                 if (tagResult != null)
                 {
@@ -399,9 +374,10 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async void AddTagToStartOfAllImages()
         {
-            if (ShowAddTagToAllDialogCallback != null && ImagesWithTags != null)
+            if (ImagesWithTags != null)
             {
-                var tagResult = await ShowAddTagToAllDialogCallback(null);
+                var dialog = new TagSearchDialog();
+                var tagResult = await ShowDialog<string?>(dialog);
 
                 if (tagResult != null)
                 {
@@ -421,9 +397,10 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async void RemoveTagFromAllImages()
         {
-            if (ShowAddTagToAllDialogCallback != null && ImagesWithTags != null)
+            if (ImagesWithTags != null)
             {
-                var tagResult = await ShowAddTagToAllDialogCallback(null);
+                var dialog = new TagSearchDialog();
+                var tagResult = await ShowDialog<string?>(dialog);
 
                 if (tagResult != null)
                 {
