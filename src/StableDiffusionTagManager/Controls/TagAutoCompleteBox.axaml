@@ -7,7 +7,7 @@
              Name="ThisControl">
   <Grid DataContext="{Binding ElementName=ThisControl}">
     <AutoCompleteBox Name="AutoComplete"
-                     Text="{Binding Tag, Mode=TwoWay}"
+                     Text="{Binding Text, Mode=TwoWay}"
                      IsTextCompletionEnabled="True"
                      AsyncPopulator="SearchTags">
       <AutoCompleteBox.ItemTemplate>

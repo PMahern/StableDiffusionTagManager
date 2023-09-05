@@ -41,7 +41,7 @@
         <ListBox.ItemTemplate>
           <DataTemplate>
             <Grid ColumnDefinitions="*, Auto">
-              <controls:TagAutoCompleteBox Tag="{Binding Name}" />
+              <controls:TagAutoCompleteBox Text="{Binding Name}" />
             <Button Grid.Column="1" Command="{Binding DataContext.DeletePrioritySetEntryCommand, ElementName=GridControl}" CommandParameter="{Binding}">
               <mi:MaterialIcon Kind="Delete"/>
             </Button>
@@ -53,7 +53,7 @@
         <ListBox.ItemTemplate>
         <DataTemplate>
           <Grid ColumnDefinitions="*, Auto">
-            <controls:TagAutoCompleteBox Tag="{Binding Name}" />
+            <controls:TagAutoCompleteBox Text="{Binding Name}" />
             <Button Grid.Column="1" Command="{Binding DataContext.DeleteChildSetEntryCommand, ElementName=GridControl}" CommandParameter="{Binding}">
               <mi:MaterialIcon Kind="Delete"/>
             </Button>

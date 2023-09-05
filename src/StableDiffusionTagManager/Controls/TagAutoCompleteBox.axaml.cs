@@ -24,13 +24,13 @@ namespace StableDiffusionTagManager.Controls
             return Enumerable.Empty<object>();
         }
 
-        public static readonly StyledProperty<string> TagProperty =
-            AvaloniaProperty.Register<TagAutoCompleteBox, string>(nameof(Tag), "");
+        public static readonly StyledProperty<string> TextProperty =
+            AvaloniaProperty.Register<TagAutoCompleteBox, string>(nameof(Text), "");
 
-        public string Tag
+        public string Text
         {
-            get => GetValue(TagProperty);
-            set => SetValue(TagProperty, value);
+            get => GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
         }
 
         public new void Focus()

@@ -19,7 +19,6 @@
     <AvaloniaResource Remove="Styles\Controls\Overlay.axaml" />
     <AvaloniaResource Remove="Styles\Controls\Tag.axaml" />
     <AvaloniaResource Remove="Styles\Controls\Toolbar.axaml" />
-    <AvaloniaXaml Remove="Styles\DefaultTheme.axaml" />
     <AvaloniaXaml Remove="Styles\Icons.axaml" />
     <None Remove=".gitignore" />
   </ItemGroup>
@@ -71,9 +70,6 @@
     <AvaloniaXaml Update="Styles\Controls\Overlay.axaml">
       <SubType>Designer</SubType>
     </AvaloniaXaml>
-    <AvaloniaResource Update="Styles\DefaultTheme.axaml">
-      <SubType>Designer</SubType>
-    </AvaloniaResource>
     <AvaloniaResource Update="Styles\Icons.axaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>

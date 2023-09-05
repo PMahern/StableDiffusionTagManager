@@ -31,9 +31,9 @@ namespace StableDiffusionTagManager.Views
         {
             await ShowDialog(parent);
 
-            if (this.success && !string.IsNullOrEmpty(TagAutoComplete.Tag))
+            if (this.success && !string.IsNullOrEmpty(TagAutoComplete.Text))
             {
-                return TagAutoComplete.Tag;
+                return TagAutoComplete.Text;
             }
             else
             {
