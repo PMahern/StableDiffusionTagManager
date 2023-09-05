@@ -1,0 +1,25 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="using:StableDiffusionTagManager.Controls"
+        mc:Ignorable="d"
+        x:Class="StableDiffusionTagManager.Views.NewItemNameDialog"
+        CanResize="False"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="4"
+        ExtendClientAreaToDecorationsHint="True"
+        WindowStartupLocation="CenterOwner"
+        Icon="/Assets/logo.ico"
+        Name="ThisControl"
+        >
+  <controls:HeaderControl DataContext="{Binding ElementName=ThisControl}" Title="{Binding Title}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="5" CloseCommand="{Binding CancelCommand}">
+    <Grid RowDefinitions="*, Auto">
+      <TextBox Text="{Binding NewItemName}" />
+      <StackPanel Classes="footer" Grid.Row="1">
+        <Button Command="{Binding CreateCommand}">Save Changes</Button>
+        <Button Command="{Binding CancelCommand}">Cancel</Button>
+      </StackPanel>
+    </Grid>
+    </controls:HeaderControl>
+</Window>

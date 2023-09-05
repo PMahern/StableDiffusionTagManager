@@ -53,11 +53,7 @@ namespace StableDiffusionTagManager.ViewModels
                                     }).ToList();
             }
 
-            if (Directory.Exists(TagPrioritySets))
-            {
-                var txts = Directory.EnumerateFiles(TagPrioritySets, "*.txt").ToList();
-                tagPrioritySets = txts.Select(filename => new TagPrioritySet(filename)).ToList();
-            }
+            UpdateTagPrioritySets();
         }
 
         private ObservableCollection<ImageWithTagsViewModel>? imageWithTagsViewModel;
@@ -956,6 +952,20 @@ namespace StableDiffusionTagManager.ViewModels
             var dialog = new TagPrioritySetManagerDialog();
 
             await ShowDialog(dialog);
+
+            if(dialog.Success)
+            {
+                UpdateTagPrioritySets();
+            }
+        }
+
+        public void UpdateTagPrioritySets()
+        {
+            if (Directory.Exists(TagPrioritySets))
+            {
+                var txts = Directory.EnumerateFiles(TagPrioritySets, "*.txt").ToList();
+                tagPrioritySets = txts.Select(filename => new TagPrioritySet(filename)).ToList();
+            }
         }
         #endregion
     }

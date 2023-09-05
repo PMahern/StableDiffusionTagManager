@@ -1,11 +1,14 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using CommunityToolkit.Mvvm.Input;
 using StableDiffusionTagManager.Models;
 using StableDiffusionTagManager.ViewModels;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace StableDiffusionTagManager.Views
 {
@@ -17,6 +20,7 @@ namespace StableDiffusionTagManager.Views
         {
             InitializeComponent();
 
+            SetValue(TagPrioritySetsProperty, new ObservableCollection<TagPrioritySetViewModel>());
             Opened += TagPriortySetManagerDialog_Opened;
         }
 
@@ -29,37 +33,38 @@ namespace StableDiffusionTagManager.Views
         public async void LoadTagPrioritySets()
         {
             var txts = Directory.EnumerateFiles(PRIORITY_SETS_FOLDER, "*.txt").ToList();
-            var tagPrioritySets = new ObservableCollection<TagPrioritySetViewModel>(txts.Select(filename => new TagPrioritySetViewModel(filename)));
+            var tagPrioritySets = new ObservableCollection<TagPrioritySetViewModel>(txts.Select(filename => TagPrioritySetViewModel.CreateFromFile(filename)));
             Dispatcher.UIThread.Post(() =>
             {
                 SetValue(TagPrioritySetsProperty, tagPrioritySets);
             });
         }
 
-        public static readonly StyledProperty<ObservableCollection<TagPrioritySetViewModel>?> TagPrioritySetsProperty =
-            AvaloniaProperty.Register<TagPrioritySetManagerDialog, ObservableCollection<TagPrioritySetViewModel>?>(nameof(TagPrioritySets), null);
+        public static readonly StyledProperty<ObservableCollection<TagPrioritySetViewModel>> TagPrioritySetsProperty =
+            AvaloniaProperty.Register<TagPrioritySetManagerDialog, ObservableCollection<TagPrioritySetViewModel>>(nameof(TagPrioritySets), null);
 
         /// <summary>
         /// Gets or sets the image to be displayed
         /// </summary>
-        public ReadOnlyObservableCollection<TagPrioritySetViewModel>? TagPrioritySets
+        public ReadOnlyObservableCollection<TagPrioritySetViewModel> TagPrioritySets
         {
             get
             {
-                var value = GetValue(TagPrioritySetsProperty);
-                if (value != null)
-                {
-                    return new ReadOnlyObservableCollection<TagPrioritySetViewModel>(GetValue(TagPrioritySetsProperty));
-                }
-                else
-                {
-                    return null;
-                }
+                return new ReadOnlyObservableCollection<TagPrioritySetViewModel>(GetValue(TagPrioritySetsProperty));
             }
         }
 
         public static readonly StyledProperty<TagPrioritySetViewModel?> SelectedPrioritySetProperty =
-            AvaloniaProperty.Register<TagPrioritySetManagerDialog, TagPrioritySetViewModel?>(nameof(SelectedPrioritySet), null);
+            AvaloniaProperty.Register<TagPrioritySetManagerDialog, TagPrioritySetViewModel?>(nameof(SelectedPrioritySet), null, notifying: SelectedSetChanged);
+
+        private static void SelectedSetChanged(IAvaloniaObject @object, bool before)
+        {
+            var dialog = @object as TagPrioritySetManagerDialog;
+            if (dialog != null && !before)
+            {
+                dialog.SelectedChildSet = null;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the image to be displayed
@@ -70,9 +75,94 @@ namespace StableDiffusionTagManager.Views
             set => SetValue(SelectedPrioritySetProperty, value);
         }
 
+
+
+        public static readonly StyledProperty<TagPrioritySetViewModel?> SelectedChildSetProperty =
+        AvaloniaProperty.Register<TagPrioritySetManagerDialog, TagPrioritySetViewModel?>(nameof(SelectedChildSet), null);
+
+        /// <summary>
+        /// Gets or sets the image to be displayed
+        /// </summary>
+        public TagPrioritySetViewModel? SelectedChildSet
+        {
+            get => GetValue(SelectedChildSetProperty);
+            set => SetValue(SelectedChildSetProperty, value);
+        }
+
         //private ObservableCollection<TagPrioritySetViewModel> tagPrioritySets;
         //public ReadOnlyObservableCollection<TagPrioritySetViewModel> TagPrioritySets { get => new ReadOnlyObservableCollection<TagPrioritySetViewModel>(TagPrioritySets); }
         public bool Loading { get; set; } = false;
 
+        public bool Success { get; set; }
+
+        #region Commands
+        [RelayCommand]
+        public async Task AddTagPrioritySetCommand()
+        {
+            var dialog = new NewItemNameDialog();
+            dialog.Title = "New Tag Priority Set Name";
+
+            await dialog.ShowDialog(this);
+
+            if (dialog.Success && dialog.Name != null)
+            {
+                var collection = GetValue(TagPrioritySetsProperty);
+                collection.Add(new TagPrioritySetViewModel(dialog.NewItemName));
+            }
+        }
+
+        [RelayCommand]
+        public void Save()
+        {
+            this.Success = true;
+            foreach (var item in TagPrioritySets)
+            {
+                item.Save(PRIORITY_SETS_FOLDER);
+            }
+            Close();
+        }
+
+        [RelayCommand]
+        public void Cancel()
+        {
+            Close();
+        }
+
+        [RelayCommand]
+        public void DeletePrioritySetEntry(TagPrioritySetViewModel toDelete)
+        {
+            if(SelectedPrioritySet != null)
+            {
+                SelectedPrioritySet.RemoveEntry(toDelete);
+            }
+        }
+
+        [RelayCommand]
+        public void AddPrioritySetEntry()
+        {
+            if(SelectedPrioritySet != null)
+            {
+                SelectedPrioritySet.AddEntry();
+            }    
+        }
+
+        [RelayCommand]
+        public void DeleteChildSetEntry(TagPrioritySetViewModel toDelete)
+        {
+            if (SelectedChildSet != null)
+            {
+                SelectedChildSet.RemoveEntry(toDelete);
+            }
+        }
+
+        [RelayCommand]
+        public void AddChildSetEntry()
+        {
+            if (SelectedChildSet != null)
+            {
+                SelectedChildSet.AddEntry();
+            }
+        }
+        #endregion
     }
 }

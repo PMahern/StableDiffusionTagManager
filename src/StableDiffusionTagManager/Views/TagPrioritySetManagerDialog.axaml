@@ -2,13 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Width="500"
-        Height="500"
-        x:Class="StableDiffusionTagManager.Views.TagPrioritySetManagerDialog"
         xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-        Title="Managed Tag Priority Sets"
+        Width="800"
+        Height="800"
+        x:Class="StableDiffusionTagManager.Views.TagPrioritySetManagerDialog"
+        Title="Manage Tag Priority Sets"
         Name="ThisControl">
-  <Grid RowDefinitions="Auto,*,5,Auto" Margin="5" DataContext="{Binding ElementName=ThisControl}">
+  <Grid RowDefinitions="Auto,Auto,*,5,Auto" Margin="5" DataContext="{Binding ElementName=ThisControl}" Name="GridControl">
     <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
       <Border>
         <DropDown HorizontalAlignment="Stretch" Items="{Binding TagPrioritySets}" SelectedItem="{Binding SelectedPrioritySet}">
@@ -20,26 +20,50 @@
         </DropDown>
       </Border>
       <Border  Grid.Column="1">
-        <Button Margin="5,0,0,0">
+        <Button Margin="5,0,0,0" Command="{Binding AddTagPrioritySetCommand}">
           <mi:MaterialIcon Kind="Add"/>
         </Button>
       </Border>
     </Grid>
-    <Grid Grid.Row="1" Margin="0,5,0,0" ColumnDefinitions="*,5,*">
-      <ListBox ScrollViewer.VerticalScrollBarVisibility="Auto" Items="{Binding SelectedPrioritySet.Entries}" SelectedItem="{Binding SelectedTagSetReference}">
+    <StackPanel Grid.Row="1">
+      <Grid ColumnDefinitions="*,*">
+        <Button Margin="5,0,0,0" Command="{Binding AddPrioritySetEntryCommand}">
+          <mi:MaterialIcon Kind="Add"/>
+        </Button>
+        <Button Grid.Column="1" Margin="5,0,0,0" Command="{Binding AddChildSetEntryCommand}">
+          <mi:MaterialIcon Kind="Add"/>
+        </Button>
+      </Grid>
+    </StackPanel>
+    <Grid Grid.Row="2" Margin="0,5,0,0" ColumnDefinitions="*,5,*">
+      <ListBox ScrollViewer.VerticalScrollBarVisibility="Auto" Items="{Binding SelectedPrioritySet.Entries}" SelectedItem="{Binding SelectedChildSet}">
         <ListBox.ItemTemplate>
           <DataTemplate>
+            <Grid ColumnDefinitions="*, Auto">
             <TextBox Text="{Binding Name}" />
+            <Button Grid.Column="1" Command="{Binding DataContext.DeletePrioritySetEntryCommand, ElementName=GridControl}" CommandParameter="{Binding}">
+              <mi:MaterialIcon Kind="Delete"/>
+            </Button>
+          </Grid>
           </DataTemplate>
         </ListBox.ItemTemplate>
       </ListBox>
-      <ListBox Grid.Column="2" ScrollViewer.VerticalScrollBarVisibility="Auto">
-
+      <ListBox Grid.Column="2" ScrollViewer.VerticalScrollBarVisibility="Auto" Items="{Binding SelectedChildSet.Entries}">
+        <ListBox.ItemTemplate>
+        <DataTemplate>
+          <Grid ColumnDefinitions="*, Auto">
+            <TextBox Text="{Binding Name}" />
+            <Button Grid.Column="1" Command="{Binding DataContext.DeleteChildSetEntryCommand, ElementName=GridControl}" CommandParameter="{Binding}">
+              <mi:MaterialIcon Kind="Delete"/>
+            </Button>
+          </Grid>
+        </DataTemplate>
+        </ListBox.ItemTemplate>
       </ListBox>
     </Grid>
-    <StackPanel Classes="footer" Orientation="Horizontal" Grid.Row="3">
-      <Button>Save</Button>
-      <Button>Cancel</Button>
+    <StackPanel Classes="footer" Orientation="Horizontal" Grid.Row="4">
+      <Button Command="{Binding SaveCommand}">Save</Button>
+      <Button Command="{Binding CancelCommand}">Cancel</Button>
     </StackPanel>
   </Grid>
 </Window>

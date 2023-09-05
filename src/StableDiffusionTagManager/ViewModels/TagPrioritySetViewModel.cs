@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using StableDiffusionTagManager.Extensions;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -22,30 +23,34 @@ namespace StableDiffusionTagManager.ViewModels
         private ObservableCollection<TagPrioritySetViewModel> entries = new ObservableCollection<TagPrioritySetViewModel>();
         private string? name;
 
-        private TagPrioritySetViewModel()
-        {
-
-        }
-        public TagPrioritySetViewModel(string filename)
+        public static TagPrioritySetViewModel CreateFromFile(string filename)
         {
             var lines = File.ReadLines(filename);
             var i = 0;
-            Name = Path.GetFileNameWithoutExtension(filename);
+            var name = Path.GetFileNameWithoutExtension(filename);
             var viewModels = lines.Select(line =>
             {
                 if (line.StartsWith("###"))
                 {
                     var directory = Path.GetDirectoryName(filename);
-                    var subsetname = Path.Combine(new string[] { directory, Name, line.Substring(3).Trim() });
-                    return new TagPrioritySetViewModel(subsetname);
+                    var subsetname = Path.Combine(new string[] { directory, name, line.Substring(3).Trim() });
+                    return CreateFromFile(subsetname);
                 }
                 else
                 {
-                    return new TagPrioritySetViewModel() { name = line };
+                    return new TagPrioritySetViewModel(line);
                 }
-            });
+            }).ToObservableCollection();
 
-            entries = new ObservableCollection<TagPrioritySetViewModel>(viewModels);
+            return new TagPrioritySetViewModel(name)
+            {
+                entries = viewModels
+            };
+        }
+
+        public TagPrioritySetViewModel(string name)
+        {
+            this.name = name;
         }
 
         public ReadOnlyObservableCollection<TagPrioritySetViewModel> Entries { get => new ReadOnlyObservableCollection<TagPrioritySetViewModel>(entries); }
@@ -53,7 +58,7 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public void AddEntry()
         {
-            entries.Add(new TagPrioritySetViewModel());
+            entries.Add(new TagPrioritySetViewModel(""));
             OnPropertyChanged(nameof(IsSubset));
         }
 
@@ -62,6 +67,26 @@ namespace StableDiffusionTagManager.ViewModels
         {
             entries.Remove(target);
             OnPropertyChanged(nameof(IsSubset));
+        }
+
+        public void Save(string directory)
+        {
+            var filename = Path.Combine(directory, $"{name}.txt");
+            using var destFile = File.Create(filename);
+            using var fw = new StreamWriter(destFile);
+            foreach (var entry in entries)
+            {
+
+                if (entry.entries.Count > 0)
+                {
+                    fw.WriteLine($"### {entry.Name}.txt");
+                    entry.Save(Path.Combine(directory, name));
+                }
+                else
+                {
+                    fw.WriteLine(entry.name);
+                }
+            }
         }
     }
 }
