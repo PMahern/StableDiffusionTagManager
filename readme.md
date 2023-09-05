@@ -4,7 +4,7 @@ Stable Diffusion Tag Manager is a simple desktop GUI application for managing an
 
 ## Prequisites
 
-Stable Diffusion Tag Manager is a stand alone application with no prequisites to launch the application on linux and windows. However, some of it's functionality relies on other projects which have prerequisites.
+Stable Diffusion Tag Manager is a stand alone application with no prequisites to launch the application on linux, osx, and windows. However, some of it's functionality relies on other projects which have prerequisites.
 
 - Comic book panel extraction uses the [kumiko](https://github.com/njean42/kumiko) library by [njean42](https://github.com/njean42), which requires python.
 - Image interrogation and touchup via stable diffusion rely on a running instance of [Automatic1111's](https://github.com/AUTOMATIC1111) [stable diffusion webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) that can be reached from the local system.
