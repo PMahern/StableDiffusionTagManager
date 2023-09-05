@@ -55,7 +55,7 @@
           <RowDefinition Height="2"></RowDefinition>
           <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <ListBox Name="ImageList" VirtualizationMode="Simple" Items="{Binding ImagesWithTags}" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SelectedImage}">
+        <ListBox Name="ImageList" ItemsSource="{Binding ImagesWithTags}" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SelectedImage}">
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
               <StackPanel Orientation="Horizontal" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=Bounds.Height}" />
@@ -100,7 +100,7 @@
                     </Button>
                     <Button Name="ApplyTagPriorityButton" ToolTip.Tip="Apply Tag Priority">
                       <Button.Flyout>
-                        <MenuFlyout Placement="BottomEdgeAlignedLeft" Items="{Binding TagPrioritySets}">
+                        <MenuFlyout Placement="BottomEdgeAlignedLeft" ItemsSource="{Binding TagPrioritySets}">
                           <MenuFlyout.ItemTemplate>
                             <DataTemplate>
                               <MenuItem Header="{Binding Name}" Command="{Binding ElementName=mainWindow, Path=DataContext.ApplyTagPrioritySetCommand}" CommandParameter="{Binding}"/>
@@ -116,7 +116,7 @@
                                 HorizontalScrollBarVisibility="Disabled"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch">
-                    <ItemsControl Name="TagsList" Items="{Binding SelectedImage.Tags}">
+                    <ItemsControl Name="TagsList" ItemsSource="{Binding SelectedImage.Tags}">
                       <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                           <WrapPanel Orientation="Horizontal" Margin="5"/>
@@ -128,7 +128,7 @@
                             <Border Classes="tag" DragDrop.AllowDrop="True">
                               <StackPanel Orientation="Horizontal" PointerPressed="TagDragStart" >
                                 <PathIcon Data="{StaticResource drag_regular}"/>
-                                <controls:TagAutoCompleteBox Tag="{Binding Tag, Mode=TwoWay}" AttachedToVisualTree="AutoCompleteAttached" />
+                                <controls:TagAutoCompleteBox Text="{Binding Tag, Mode=TwoWay}" AttachedToVisualTree="AutoCompleteAttached" />
                                 <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.SelectedImage.RemoveTagCommand}" CommandParameter="{Binding}">x</Button>
                               </StackPanel>
                             </Border>
@@ -151,7 +151,7 @@
                                 HorizontalScrollBarVisibility="Disabled"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch">
-                    <ItemsControl Grid.Column="0"  Items="{Binding TagCollections}">
+                    <ItemsControl Grid.Column="0"  ItemsSource="{Binding TagCollections}">
                       <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                           <WrapPanel Orientation="Horizontal" Margin="5"/>
@@ -171,7 +171,7 @@
                                 HorizontalScrollBarVisibility="Disabled"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch">
-                    <ItemsControl Items="{Binding TagCounts}">
+                    <ItemsControl ItemsSource="{Binding TagCounts}">
                       <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                           <WrapPanel Orientation="Horizontal" Margin="5"/>

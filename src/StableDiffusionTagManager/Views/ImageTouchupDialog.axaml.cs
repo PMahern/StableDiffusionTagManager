@@ -4,6 +4,8 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 using SdWebUpApi;
 using SdWebUpApi.Api;
 using StableDiffusionTagManager.Extensions;
@@ -15,7 +17,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using MessageBox.Avalonia.Enums;
 
 namespace StableDiffusionTagManager.Views
 {
@@ -59,12 +60,12 @@ namespace StableDiffusionTagManager.Views
             {
                 Dispatcher.UIThread.Post(async () =>
                 {
-                    var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                                .GetMessageBoxStandardWindow("Failed to get samplers",
+                    var messageBoxStandardWindow = MessageBoxManager
+                                .GetMessageBoxStandard("Failed to get samplers",
                                                              $"Querying stable diffusion webui for the list of available samplers failed. This likely indicates the server can't be reached. Error message:\n\r {ex.Message}",
-                                                             ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                                                             ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
 
-                    await messageBoxStandardWindow.ShowDialog(this);
+                    await messageBoxStandardWindow.ShowWindowDialogAsync(this);
                 });
             }
         }
@@ -263,9 +264,10 @@ namespace StableDiffusionTagManager.Views
                             var renderTarget = new RenderTargetBitmap(Image.PixelSize);
                             var selectionRegion = ImageBox.SelectionRegion;
                             var whiteBrush = new SolidColorBrush(new Color(255, 255, 255, 255));
-                            using (var dc = renderTarget.CreateDrawingContext(null))
+                            var blackBrush = new SolidColorBrush(new Color(255, 0, 0, 0));
+                            using (var dc = renderTarget.CreateDrawingContext())
                             {
-                                dc.Clear(new Color(255, 0, 0, 0));
+                                dc.FillRectangle(blackBrush, new Rect(0, 0, Image.PixelSize.Width, Image.PixelSize.Height), 0);
                                 dc.DrawRectangle(whiteBrush, null, new RoundedRect(selectionRegion, 0));
                             }
 
@@ -318,12 +320,12 @@ namespace StableDiffusionTagManager.Views
                 }
                 catch (Exception ex)
                 {
-                    var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                                .GetMessageBoxStandardWindow("Failed to generate images",
+                    var messageBoxStandardWindow = MessageBoxManager
+                                .GetMessageBoxStandard("Failed to generate images",
                                                              $"Image generation failed. This likely indicates the server can't be reached or the input parameters are invalid. Error message:\n\r {ex.Message}",
-                                                             ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                                                             ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
 
-                    await messageBoxStandardWindow.ShowDialog(this);
+                    await messageBoxStandardWindow.ShowWindowDialogAsync(this);
                     this.IsLoading = false;
                 }
             }

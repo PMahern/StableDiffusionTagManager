@@ -33,6 +33,16 @@ namespace StableDiffusionTagManager.Controls
             PaintBrushColor = new Color(255, 255, 255, 255);
         }
 
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        {
+            base.OnPropertyChanged(change);
+
+            if(change.Property == ImageProperty)
+            {
+                UpdateSelectionRegion();
+                ImageBox.Image = Image;
+            }
+        }
         public event EventHandler<Bitmap>? ImageCropped;
         public Func<Bitmap, Task> SaveClicked;
         public Func<Bitmap, Task>? InterrogateClicked;
@@ -104,16 +114,8 @@ namespace StableDiffusionTagManager.Controls
         }
 
         public static readonly StyledProperty<Bitmap?> ImageProperty =
-            AvaloniaProperty.Register<ImageBoxWithControls, Bitmap?>(nameof(Image), null, notifying: (control, before) => ImageChanged((ImageBoxWithControls)control, before));
+            AvaloniaProperty.Register<ImageBoxWithControls, Bitmap?>(nameof(Image), null);
 
-        public static void ImageChanged(ImageBoxWithControls control, bool before)
-        {
-            if (!before)
-            {
-                control.UpdateSelectionRegion();
-                control.ImageBox.Image = control.Image;
-            }
-        }
         public Bitmap? Image
         {
             get => GetValue(ImageProperty);
@@ -392,7 +394,7 @@ namespace StableDiffusionTagManager.Controls
         [RelayCommand]
         public void CropSelection()
         {
-            if (!SelectionRegion.IsEmpty && Image != null)
+            if (SelectionRegion.Width > 0 && SelectionRegion.Height > 0 && Image != null)
             {
                 CropImageRegionAndCreateNewImage(SelectionRegion);
             }
@@ -401,7 +403,7 @@ namespace StableDiffusionTagManager.Controls
         [RelayCommand]
         public void CropSelectionToTargetImageSize()
         {
-            if (!SelectionRegion.IsEmpty && Image != null)
+            if (SelectionRegion.Width > 0 && SelectionRegion.Height > 0 && Image != null)
             {
                 CropImageRegionAndCreateNewImage(SelectionRegion, TargetImageSize);
             }
@@ -433,13 +435,13 @@ namespace StableDiffusionTagManager.Controls
                         {
                             if (window != null)
                             {
-                                var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                                        .GetMessageBoxStandardWindow(
+                                var messageBoxStandardWindow = MsBox.Avalonia.MessageBoxManager
+                                        .GetMessageBoxStandard(
                                             "Panel Extraction Failed",
                                             $"{e.Message}",
-                                            MessageBox.Avalonia.Enums.ButtonEnum.Ok);
+                                            MsBox.Avalonia.Enums.ButtonEnum.Ok);
 
-                                await messageBoxStandardWindow.ShowDialog(window);
+                                await messageBoxStandardWindow.ShowWindowDialogAsync(window);
                             }
                         }
                     }
@@ -563,6 +565,7 @@ namespace StableDiffusionTagManager.Controls
 
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
         {
+
         }
 
         /// <summary>

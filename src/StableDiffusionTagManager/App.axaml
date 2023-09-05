@@ -2,18 +2,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:StableDiffusionTagManager"
              x:Class="StableDiffusionTagManager.App"
-             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             RequestedThemeVariant="Dark">
+  <Application.DataTemplates>
+    <local:ViewLocator/>
+  </Application.DataTemplates>
 
-    <Application.Styles>
-        <FluentTheme Mode="Light"/>
-        <StyleInclude Source="/Styles/DefaultTheme.axaml" />
-        <StyleInclude Source="/Styles/Styles.axaml" />
-      <StyleInclude Source="/Styles/Icons.axaml" />
-      <StyleInclude Source="avares://ThemeEditor.Controls.ColorPicker/ColorPicker.axaml" />
-      <StyleInclude Source="avares://AvaloniaProgressRing/Styles/ProgressRing.xaml"/>
-      <StyleInclude Source="avares://Material.Icons.Avalonia/App.xaml" />
-    </Application.Styles>
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="/Styles/Styles.axaml" />
+    <StyleInclude Source="/Styles/Icons.axaml" />
+    <StyleInclude Source="avares://ThemeEditor.Controls.ColorPicker/ColorPicker.axaml" />
+    <StyleInclude Source="avares://AvaloniaProgressRing/Styles/ProgressRing.xaml"/>
+    <materialIcons:MaterialIconStyles />
+  </Application.Styles>
 </Application>

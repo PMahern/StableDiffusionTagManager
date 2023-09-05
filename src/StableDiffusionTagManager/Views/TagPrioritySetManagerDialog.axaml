@@ -12,13 +12,13 @@
   <Grid RowDefinitions="Auto,Auto,*,5,Auto" Margin="5" DataContext="{Binding ElementName=ThisControl}" Name="GridControl">
     <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
       <Border>
-        <DropDown HorizontalAlignment="Stretch" Items="{Binding TagPrioritySets}" SelectedItem="{Binding SelectedPrioritySet}">
-          <DropDown.ItemTemplate>
+        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding TagPrioritySets}" SelectedItem="{Binding SelectedPrioritySet}">
+          <ComboBox.ItemTemplate>
             <DataTemplate>
               <TextBlock Text="{Binding Name}"></TextBlock>
             </DataTemplate>
-          </DropDown.ItemTemplate>
-        </DropDown>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
       </Border>
       <Border  Grid.Column="1">
         <Button Margin="5,0,0,0" Command="{Binding AddTagPrioritySetCommand}">
@@ -37,11 +37,11 @@
       </Grid>
     </StackPanel>
     <Grid Grid.Row="2" Margin="0,5,0,0" ColumnDefinitions="*,5,*">
-      <ListBox ScrollViewer.VerticalScrollBarVisibility="Auto" Items="{Binding SelectedPrioritySet.Entries}" SelectedItem="{Binding SelectedChildSet}">
+      <ListBox ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding SelectedPrioritySet.Entries}" SelectedItem="{Binding SelectedChildSet}">
         <ListBox.ItemTemplate>
           <DataTemplate>
             <Grid ColumnDefinitions="*, Auto">
-              <controls:TagAutoCompleteBox Tag="{Binding Name}" />
+              <controls:TagAutoCompleteBox Text="{Binding Name}" />
             <Button Grid.Column="1" Command="{Binding DataContext.DeletePrioritySetEntryCommand, ElementName=GridControl}" CommandParameter="{Binding}">
               <mi:MaterialIcon Kind="Delete"/>
             </Button>
@@ -49,11 +49,11 @@
           </DataTemplate>
         </ListBox.ItemTemplate>
       </ListBox>
-      <ListBox Grid.Column="2" ScrollViewer.VerticalScrollBarVisibility="Auto" Items="{Binding SelectedChildSet.Entries}">
+      <ListBox Grid.Column="2" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding SelectedChildSet.Entries}">
         <ListBox.ItemTemplate>
         <DataTemplate>
           <Grid ColumnDefinitions="*, Auto">
-            <controls:TagAutoCompleteBox Tag="{Binding Name}" />
+            <controls:TagAutoCompleteBox Text="{Binding Name}" />
             <Button Grid.Column="1" Command="{Binding DataContext.DeleteChildSetEntryCommand, ElementName=GridControl}" CommandParameter="{Binding}">
               <mi:MaterialIcon Kind="Delete"/>
             </Button>

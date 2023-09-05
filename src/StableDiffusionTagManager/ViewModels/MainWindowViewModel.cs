@@ -9,15 +9,16 @@ using Avalonia.Media.Imaging;
 using System.IO;
 using StableDiffusionTagManager.Models;
 using System.Collections.Generic;
-using MessageBox.Avalonia.Enums;
 using StableDiffusionTagManager.Views;
-using MessageBox.Avalonia.BaseWindows.Base;
 using Avalonia.Controls;
 using SdWebUpApi.Api;
 using Newtonsoft.Json.Linq;
 using StableDiffusionTagManager.Extensions;
 using Avalonia.Media;
 using StableDiffusionTagManager.Controls;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
+using MsBox.Avalonia.Base;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -120,7 +121,7 @@ namespace StableDiffusionTagManager.ViewModels
         public Func<Bitmap, bool>? ImageDirtyCallback { get; set; }
         #endregion
 
-        private Task<TResult> ShowDialog<TResult>(IMsBoxWindow<TResult> mbox) where TResult : struct
+        private Task<TResult> ShowDialog<TResult>(IMsBox<TResult> mbox) where TResult : struct
         {
             if (ShowDialogHandler != null)
             {
@@ -175,8 +176,8 @@ namespace StableDiffusionTagManager.ViewModels
                     var projFile = Path.Combine(projectPath, PROJECT_FILE_NAME);
                     if (!projFolder)
                     {
-                        var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                            .GetMessageBoxStandardWindow("Create Project?",
+                        var messageBoxStandardWindow = MessageBoxManager
+                                .GetMessageBoxStandard("Create Project?",
                                                          "It appears you haven't created a project for this folder. Creating a project will back up all the current existing images and tag sets into a folder named .sdtmproj so you can restore them and will also let you set some properties on the project. Would you like to create a project now?",
                                                          ButtonEnum.YesNo,
                                                          Icon.Question);
@@ -185,8 +186,8 @@ namespace StableDiffusionTagManager.ViewModels
 
                             projFolder = true;
 
-                            messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                                .GetMessageBoxStandardWindow("Rename Images?",
+                            messageBoxStandardWindow = MessageBoxManager
+                                                        .GetMessageBoxStandard("Rename Images?",
                                                              "You can optionally rename all the images to have an increasing index instead of the current existing pattern.  Would you like to do this now?",
                                                              ButtonEnum.YesNo,
                                                              Icon.Question);
@@ -562,8 +563,8 @@ namespace StableDiffusionTagManager.ViewModels
         {
             if (SelectedImage != null && ImagesWithTags != null)
             {
-                var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                            .GetMessageBoxStandardWindow("Archive Image?",
+                var messageBoxStandardWindow = MessageBoxManager
+                            .GetMessageBoxStandard("Archive Image?",
                                                          "Really archive selected image? It will be moved to a subdirectory named archive.",
                                                          ButtonEnum.YesNo,
                                                          Icon.Warning);
@@ -671,8 +672,8 @@ namespace StableDiffusionTagManager.ViewModels
         {
             if (SelectedImage.Tags.Any())
             {
-                var dialog = MessageBox.Avalonia.MessageBoxManager
-                                    .GetMessageBoxStandardWindow("Delete all tags",
+                var dialog = MessageBoxManager
+                                    .GetMessageBoxStandard("Delete all tags",
                                                                  "This will delete all tags for the current image, are you sure?",
                                                                  ButtonEnum.YesNo,
                                                                  Icon.Warning);
@@ -696,8 +697,8 @@ namespace StableDiffusionTagManager.ViewModels
 
                 if (dirtyImages.Any() || dirtyTags.Any())
                 {
-                    var dialog = MessageBox.Avalonia.MessageBoxManager
-                                    .GetMessageBoxStandardWindow("Unsaved Changes",
+                    var dialog = MessageBoxManager
+                                    .GetMessageBoxStandard("Unsaved Changes",
                                                                  "You have unsaved changes, do you wish to save them now?",
                                                                  ButtonEnum.YesNoCancel,
                                                                  Icon.Warning);
@@ -765,8 +766,8 @@ namespace StableDiffusionTagManager.ViewModels
             }
             catch (Exception ex)
             {
-                var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                        .GetMessageBoxStandardWindow("Interrogate Failed",
+                var messageBoxStandardWindow = MessageBoxManager
+                        .GetMessageBoxStandard("Interrogate Failed",
                                                      $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}",
                                                      ButtonEnum.Ok,
                                                      Icon.Warning);
@@ -894,12 +895,11 @@ namespace StableDiffusionTagManager.ViewModels
                 var finalSize = new PixelSize(image.PixelSize.Width + dialog.ExpandLeft + dialog.ExpandRight, image.PixelSize.Height + dialog.ExpandUp + dialog.ExpandDown);
                 var imageRegion = new Rect(dialog.ExpandLeft, dialog.ExpandUp, image.PixelSize.Width, image.PixelSize.Height);
                 var newImage = new RenderTargetBitmap(finalSize);
-                using (var drawingContext = newImage.CreateDrawingContext(null))
+                using (var drawingContext = newImage.CreateDrawingContext())
                 {
-                    drawingContext.Clear(new Color(255, 255, 255, 255));
-                    var dc = new DrawingContext(drawingContext);
+                    drawingContext.FillRectangle(new SolidColorBrush(new Color(255, 255, 255, 255)), new Rect(0, 0, finalSize.Width, finalSize.Height));
 
-                    dc.DrawImage(image, new Rect(0, 0, image.PixelSize.Width, image.PixelSize.Height), imageRegion, Avalonia.Visuals.Media.Imaging.BitmapInterpolationMode.HighQuality);
+                    drawingContext.DrawImage(image, new Rect(0, 0, image.PixelSize.Width, image.PixelSize.Height), imageRegion);
                 }
 
                 AddNewImage(newImage, SelectedImage.Tags.Select(t => t.Tag));

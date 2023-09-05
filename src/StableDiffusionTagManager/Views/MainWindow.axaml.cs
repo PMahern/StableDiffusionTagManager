@@ -78,7 +78,7 @@ namespace StableDiffusionTagManager.Views
             var viewModel = this.DataContext as MainWindowViewModel;
             if (viewModel != null)
             {
-                var focusedElement = FocusManager.Instance.Current;
+                var focusedElement = FocusManager.GetFocusedElement() as Visual;
                 var imageListFocused = ImageList.IsFocused || (focusedElement != null && focusedElement.GetVisualAncestors().Any(p => p == ImageList));
                 if ((e.KeyModifiers & KeyModifiers.Alt) > 0 && e.Key == Key.Right && !imageListFocused)
                 {
@@ -156,7 +156,7 @@ namespace StableDiffusionTagManager.Views
 
         public void TagDropped(object? sender, DragEventArgs args)
         {
-            var element = args.Source as IStyledElement;
+            var element = args.Source as StyledElement;
             var tag = element?.DataContext as TagViewModel;
             while (tag == null && element != null)
             {
@@ -185,7 +185,7 @@ namespace StableDiffusionTagManager.Views
 
         private TagViewModel? GetFocusedTag()
         {
-            var currentFocus = FocusManager.Instance?.Current;
+            var currentFocus = FocusManager.GetFocusedElement();
             var tb = currentFocus as TextBox;
             var ac = tb?.GetVisualAncestors().OfType<AutoCompleteBox>().FirstOrDefault();
 
@@ -240,7 +240,7 @@ namespace StableDiffusionTagManager.Views
 
         public void FocusNextTag()
         {
-            var currentFocus = FocusManager.Instance?.Current;
+            var currentFocus = FocusManager.GetFocusedElement();
             var tb = currentFocus as TextBox;
             var ac = tb?.GetVisualAncestors().OfType<AutoCompleteBox>().FirstOrDefault();
             var autoCompletes = TagsList.GetVisualDescendants().OfType<AutoCompleteBox>().ToList();
@@ -267,7 +267,7 @@ namespace StableDiffusionTagManager.Views
 
         public void FocusPreviousTag()
         {
-            var currentFocus = FocusManager.Instance?.Current;
+            var currentFocus = FocusManager.GetFocusedElement();
             var tb = currentFocus as TextBox;
             var ac = tb?.GetVisualAncestors().OfType<AutoCompleteBox>().FirstOrDefault();
             var autoCompletes = TagsList.GetVisualDescendants().OfType<AutoCompleteBox>().ToList();
@@ -294,7 +294,7 @@ namespace StableDiffusionTagManager.Views
 
         public void DeleteFocusedTag()
         {
-            var currentFocus = FocusManager.Instance?.Current;
+            var currentFocus = FocusManager.GetFocusedElement();
             var tb = currentFocus as TextBox;
             var ac = tb?.GetVisualAncestors().OfType<AutoCompleteBox>().FirstOrDefault();
             if (ac != null)
