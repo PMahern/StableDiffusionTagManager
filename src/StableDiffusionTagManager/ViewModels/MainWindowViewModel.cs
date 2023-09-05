@@ -23,10 +23,10 @@ namespace StableDiffusionTagManager.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
-        private static readonly string ProjectFolder = ".sdtmproj";
-        private static readonly string ProjecFilename = "_project.xml";
-        private static readonly string ArchiveFolder = "archive";
-        private static readonly string TagPrioritySets = "TagPrioritySets";
+        private static readonly string PROJECT_FOLDER_NAME = ".sdtmproj";
+        private static readonly string PROJECT_FILE_NAME = "_project.xml";
+        private static readonly string ARCHIVE_FOLDER = "archive";
+        private static readonly string TAG_PRIORITY_SETS_FOLDER = "TagPrioritySets";
 
         public MainWindowViewModel()
         {
@@ -170,15 +170,15 @@ namespace StableDiffusionTagManager.ViewModels
 
                 if (pickResult != null)
                 {
-                    var projectPath = Path.Combine(pickResult, ProjectFolder);
+                    var projectPath = Path.Combine(pickResult, PROJECT_FOLDER_NAME);
                     var projFolder = Directory.Exists(projectPath);
-                    var projFile = Path.Combine(projectPath, ProjecFilename);
+                    var projFile = Path.Combine(projectPath, PROJECT_FILE_NAME);
                     if (!projFolder)
                     {
                         var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                            .GetMessageBoxStandardWindow("Create Project?", 
-                                                         "It appears you haven't created a project for this folder. Creating a project will back up all the current existing images and tag sets into a folder named .sdtmproj so you can restore them and will also let you set some properties on the project. Would you like to create a project now?", 
-                                                         ButtonEnum.YesNo, 
+                            .GetMessageBoxStandardWindow("Create Project?",
+                                                         "It appears you haven't created a project for this folder. Creating a project will back up all the current existing images and tag sets into a folder named .sdtmproj so you can restore them and will also let you set some properties on the project. Would you like to create a project now?",
+                                                         ButtonEnum.YesNo,
                                                          Icon.Question);
                         if ((await ShowDialog(messageBoxStandardWindow)) == ButtonResult.Yes)
                         {
@@ -186,9 +186,9 @@ namespace StableDiffusionTagManager.ViewModels
                             projFolder = true;
 
                             messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                                .GetMessageBoxStandardWindow("Rename Images?", 
-                                                             "You can optionally rename all the images to have an increasing index instead of the current existing pattern.  Would you like to do this now?", 
-                                                             ButtonEnum.YesNo, 
+                                .GetMessageBoxStandardWindow("Rename Images?",
+                                                             "You can optionally rename all the images to have an increasing index instead of the current existing pattern.  Would you like to do this now?",
+                                                             ButtonEnum.YesNo,
                                                              Icon.Question);
 
                             var renameImages = (await ShowDialog(messageBoxStandardWindow) == ButtonResult.Yes);
@@ -506,6 +506,7 @@ namespace StableDiffusionTagManager.ViewModels
                 OnPropertyChanged();
             }
         }
+
         #endregion
 
         private Dictionary<string, int> TagCountDictionary = new Dictionary<string, int>();
@@ -562,9 +563,9 @@ namespace StableDiffusionTagManager.ViewModels
             if (SelectedImage != null && ImagesWithTags != null)
             {
                 var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
-                            .GetMessageBoxStandardWindow("Archive Image?", 
+                            .GetMessageBoxStandardWindow("Archive Image?",
                                                          "Really archive selected image? It will be moved to a subdirectory named archive.",
-                                                         ButtonEnum.YesNo, 
+                                                         ButtonEnum.YesNo,
                                                          Icon.Warning);
 
                 var result = await ShowDialog(messageBoxStandardWindow);
@@ -590,7 +591,7 @@ namespace StableDiffusionTagManager.ViewModels
                         SelectedImage = null;
                     }
 
-                    var destDirectory = Path.Combine(openFolder, ArchiveFolder);
+                    var destDirectory = Path.Combine(openFolder, ARCHIVE_FOLDER);
                     if (!Directory.Exists(destDirectory))
                     {
                         Directory.CreateDirectory(destDirectory);
@@ -671,9 +672,9 @@ namespace StableDiffusionTagManager.ViewModels
             if (SelectedImage.Tags.Any())
             {
                 var dialog = MessageBox.Avalonia.MessageBoxManager
-                                    .GetMessageBoxStandardWindow("Delete all tags", 
-                                                                 "This will delete all tags for the current image, are you sure?", 
-                                                                 ButtonEnum.YesNo, 
+                                    .GetMessageBoxStandardWindow("Delete all tags",
+                                                                 "This will delete all tags for the current image, are you sure?",
+                                                                 ButtonEnum.YesNo,
                                                                  Icon.Warning);
 
                 var result = await ShowDialog(dialog);
@@ -696,9 +697,9 @@ namespace StableDiffusionTagManager.ViewModels
                 if (dirtyImages.Any() || dirtyTags.Any())
                 {
                     var dialog = MessageBox.Avalonia.MessageBoxManager
-                                    .GetMessageBoxStandardWindow("Unsaved Changes", 
-                                                                 "You have unsaved changes, do you wish to save them now?", 
-                                                                 ButtonEnum.YesNoCancel, 
+                                    .GetMessageBoxStandardWindow("Unsaved Changes",
+                                                                 "You have unsaved changes, do you wish to save them now?",
+                                                                 ButtonEnum.YesNoCancel,
                                                                  Icon.Warning);
 
                     var result = (await ShowDialog(dialog));
@@ -766,8 +767,8 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 var messageBoxStandardWindow = MessageBox.Avalonia.MessageBoxManager
                         .GetMessageBoxStandardWindow("Interrogate Failed",
-                                                     $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}", 
-                                                     ButtonEnum.Ok, 
+                                                     $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}",
+                                                     ButtonEnum.Ok,
                                                      Icon.Warning);
 
                 await ShowDialog(messageBoxStandardWindow);
@@ -883,7 +884,7 @@ namespace StableDiffusionTagManager.ViewModels
         public async Task ExpandImage(Bitmap image)
         {
             var dialog = new ExpandImageDialog();
-            if(openProject != null && openProject.TargetImageSize.HasValue && openProject.TargetImageSize.Value.Width > 0 && openProject.TargetImageSize.Value.Height > 0)
+            if (openProject != null && openProject.TargetImageSize.HasValue && openProject.TargetImageSize.Value.Width > 0 && openProject.TargetImageSize.Value.Height > 0)
             {
                 dialog.ComputeExpansionNeededForTargetAspectRatio(image.PixelSize.Width, image.PixelSize.Height, openProject.TargetImageSize.Value.Width, openProject.TargetImageSize.Value.Height);
             }
@@ -912,14 +913,23 @@ namespace StableDiffusionTagManager.ViewModels
 
 
         #region Tag Priority Sets
-        private List<TagPrioritySet>? tagPrioritySets;
+        private ObservableCollection<TagPrioritySetButtonViewModel>? tagPrioritySets;
+        public ObservableCollection<TagPrioritySetButtonViewModel>? TagPrioritySets
+        {
+            get => tagPrioritySets;
+            set
+            {
+                tagPrioritySets = value;
+                OnPropertyChanged();
+            }
+        }
 
         [RelayCommand]
-        public void ApplyTagPrioritySet()
+        public void ApplyTagPrioritySet(TagPrioritySetButtonViewModel buttonVM)
         {
             if (tagPrioritySets != null && tagPrioritySets.Any() && SelectedImage != null)
             {
-                SelectedImage.ApplyTagOrdering(t => tagPrioritySets.First().GetTagPriority(t));
+                SelectedImage.ApplyTagOrdering(t => buttonVM.PrioritySet.GetTagPriority(t));
             }
         }
 
@@ -930,7 +940,7 @@ namespace StableDiffusionTagManager.ViewModels
 
             await ShowDialog(dialog);
 
-            if(dialog.Success)
+            if (dialog.Success)
             {
                 UpdateTagPrioritySets();
             }
@@ -938,10 +948,14 @@ namespace StableDiffusionTagManager.ViewModels
 
         public void UpdateTagPrioritySets()
         {
-            if (Directory.Exists(TagPrioritySets))
+            if (Directory.Exists(TAG_PRIORITY_SETS_FOLDER))
             {
-                var txts = Directory.EnumerateFiles(TagPrioritySets, "*.txt").ToList();
-                tagPrioritySets = txts.Select(filename => new TagPrioritySet(filename)).ToList();
+                var txts = Directory.EnumerateFiles(TAG_PRIORITY_SETS_FOLDER, "*.txt").ToList();
+                TagPrioritySets = txts.Select(filename =>
+                                                new TagPrioritySetButtonViewModel(
+                                                        Path.GetFileNameWithoutExtension(filename), 
+                                                        new TagPrioritySet(filename)))
+                                  .ToObservableCollection();
             }
         }
         #endregion

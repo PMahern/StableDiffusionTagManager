@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace StableDiffusionTagManager.Models
 {
     public class TagPrioritySet
     {
-
         private Dictionary<string, int> tagPriorities = new Dictionary<string, int>();
 
         private List<(string tag, int index)> Wildcards = new List<(string, int)>();

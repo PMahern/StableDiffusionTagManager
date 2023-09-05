@@ -98,7 +98,16 @@
                     <Button Command="{Binding ClearTagsCommand}" ToolTip.Tip="Delete All Tags">
                       <mi:MaterialIcon Kind="DeleteSweep"/>
                     </Button>
-                    <Button Command="{Binding ApplyTagPrioritySetCommand}" ToolTip.Tip="Apply Tag Priority">
+                    <Button Name="ApplyTagPriorityButton" ToolTip.Tip="Apply Tag Priority">
+                      <Button.Flyout>
+                        <MenuFlyout Placement="BottomEdgeAlignedLeft" Items="{Binding TagPrioritySets}">
+                          <MenuFlyout.ItemTemplate>
+                            <DataTemplate>
+                              <MenuItem Header="{Binding Name}" Command="{Binding ElementName=mainWindow, Path=DataContext.ApplyTagPrioritySetCommand}" CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                          </MenuFlyout.ItemTemplate>
+                        </MenuFlyout>
+                      </Button.Flyout>
                       <mi:MaterialIcon Kind="OrderAlphabeticalAscending"/>
                     </Button>
                   </StackPanel>
