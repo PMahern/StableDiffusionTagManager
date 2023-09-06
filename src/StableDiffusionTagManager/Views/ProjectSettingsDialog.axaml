@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         x:Class="StableDiffusionTagManager.Views.ProjectSettingsDialog"
-        Height="290"
+        Height="310"
         Width="400"
         xmlns:controls="using:StableDiffusionTagManager.Controls"
         xmlns:conv="using:StableDiffusionTagManager.Converters"

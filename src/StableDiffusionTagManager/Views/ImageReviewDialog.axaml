@@ -38,6 +38,7 @@
               <Grid
                      HorizontalAlignment="Left"
                      VerticalAlignment="Top"
+                     Background="White"
                       Margin="5"
                      MinHeight="0"
                      MinWidth="0"
