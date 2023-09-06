@@ -12,11 +12,13 @@
         WindowStartupLocation="CenterOwner"
         Icon="/Assets/logo.ico"
         Name="ThisControl"
-        >
+        Title="New Item Name"
+        Width="240"
+        Height="140">
   <controls:HeaderControl DataContext="{Binding ElementName=ThisControl}" Title="{Binding Title}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="5" CloseCommand="{Binding CancelCommand}">
-    <Grid RowDefinitions="*, Auto">
+    <Grid RowDefinitions="Auto, *, Auto">
       <TextBox Text="{Binding NewItemName}" />
-      <StackPanel Classes="footer" Grid.Row="1">
+      <StackPanel Classes="footer" Grid.Row="2">
         <Button Command="{Binding CreateCommand}">Save Changes</Button>
         <Button Command="{Binding CancelCommand}">Cancel</Button>
       </StackPanel>
