@@ -187,7 +187,7 @@ namespace StableDiffusionTagManager.Views
         {
             var currentFocus = FocusManager.GetFocusedElement();
             var tb = currentFocus as TextBox;
-            var ac = tb?.GetVisualAncestors().OfType<AutoCompleteBox>().FirstOrDefault();
+            var ac = tb?.GetVisualAncestors().OfType<TagAutoCompleteBox>().FirstOrDefault();
 
             if (ac != null && ac.GetVisualAncestors().Any(anc => anc == TagsList))
             {
@@ -242,8 +242,8 @@ namespace StableDiffusionTagManager.Views
         {
             var currentFocus = FocusManager.GetFocusedElement();
             var tb = currentFocus as TextBox;
-            var ac = tb?.GetVisualAncestors().OfType<AutoCompleteBox>().FirstOrDefault();
-            var autoCompletes = TagsList.GetVisualDescendants().OfType<AutoCompleteBox>().ToList();
+            var ac = tb?.GetVisualAncestors().OfType<TagAutoCompleteBox>().FirstOrDefault();
+            var autoCompletes = TagsList.GetVisualDescendants().OfType<TagAutoCompleteBox>().ToList();
             if (autoCompletes.Any())
             {
                 if (ac != null && ac.DataContext is TagViewModel)
@@ -269,8 +269,8 @@ namespace StableDiffusionTagManager.Views
         {
             var currentFocus = FocusManager.GetFocusedElement();
             var tb = currentFocus as TextBox;
-            var ac = tb?.GetVisualAncestors().OfType<AutoCompleteBox>().FirstOrDefault();
-            var autoCompletes = TagsList.GetVisualDescendants().OfType<AutoCompleteBox>().ToList();
+            var ac = tb?.GetVisualAncestors().OfType<TagAutoCompleteBox>().FirstOrDefault();
+            var autoCompletes = TagsList.GetVisualDescendants().OfType<TagAutoCompleteBox>().ToList();
             if (autoCompletes.Any())
             {
                 if (ac != null && ac.DataContext is TagViewModel)
@@ -296,7 +296,7 @@ namespace StableDiffusionTagManager.Views
         {
             var currentFocus = FocusManager.GetFocusedElement();
             var tb = currentFocus as TextBox;
-            var ac = tb?.GetVisualAncestors().OfType<AutoCompleteBox>().FirstOrDefault();
+            var ac = tb?.GetVisualAncestors().OfType<TagAutoCompleteBox>().FirstOrDefault();
             if (ac != null)
             {
                 var tagModel = ac.DataContext as TagViewModel;
