@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using StableDiffusionTagManager.Extensions;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -87,6 +89,15 @@ namespace StableDiffusionTagManager.ViewModels
                     fw.WriteLine(entry.name);
                 }
             }
+        }
+
+        internal void MovePrioritySet(TagPrioritySetViewModel vm, TagPrioritySetViewModel destvm)
+        {
+            if(vm == destvm) return;
+
+            var index = entries.IndexOf(destvm);
+            entries.Remove(vm);
+            entries.Insert(index, vm);
         }
     }
 }

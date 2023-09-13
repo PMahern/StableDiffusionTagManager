@@ -50,6 +50,7 @@ namespace StableDiffusionTagManager.ViewModels
         public ObservableCollection<TagCollectionViewModel>? TagCollections { get => tagCollections; set { tagCollections = value; OnPropertyChanged(); } }
 
         List<string>? tagCache;
+
         ImageWithTagsViewModel? selectedImage;
         public ImageWithTagsViewModel? SelectedImage
         {
@@ -103,8 +104,8 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
-        FolderTagSets? FolderTagSets { get; set; }
         private Project? openProject = null;
+
         private string? openFolder = null;
 
         public bool IsProject { get => openProject != null; }
@@ -250,11 +251,12 @@ namespace StableDiffusionTagManager.ViewModels
                         UpdateProjectSettings();
                     }
 
-                    FolderTagSets = new FolderTagSets(pickResult);
+                    var FolderTagSets = new FolderTagSets(pickResult);
 
                     ImagesWithTags = new(FolderTagSets.TagsSets.Select(tagSet => new ImageWithTagsViewModel(tagSet.ImageFile, tagSet.TagSet, ImageDirtyHandler))
                                     .OrderBy(iwt => iwt.FirstNumberedChunk)
                                     .ThenBy(iwt => iwt.SecondNumberedChunk));
+
 
                     if (openProject != null)
                     {
@@ -840,6 +842,11 @@ namespace StableDiffusionTagManager.ViewModels
                 set.WriteFile();
             }
             ImagesWithTags.Insert(index + 1, newImageViewModel);
+        }
+
+        public void UpdateImageListForCompletionStatusChanging()
+        {
+
         }
 
         public void ImageCropped(Bitmap image)

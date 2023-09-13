@@ -24,6 +24,8 @@ namespace StableDiffusionTagManager.Models
         private const string DEFAULT_NEGATIVE_PROMPT_ATTRIBUTE = "DefaultNegativePrompt";
         private const string DEFAULT_DENOISE_STRENGTH_ATTRIBUTE = "DefaultDenoiseStrength";
         private const string ACTIVATION_KEYWORD_ATTRIBUTE = "ActivationKeyword";
+        private const string COMPLETED_IMAGES_ELEMENT = "CompletedImages";
+        private const string COMPLETED_IMAGE_ELEMENT = "Image";
 
         private string? defaultPromptPrefix = null;
         private string? defaultNegativePrompt = null;
@@ -33,6 +35,7 @@ namespace StableDiffusionTagManager.Models
         private InterrogateMethod interrogateMethod = InterrogateMethod.DeepDanBooru;
         private List<TagCollection> tagCollections = new List<TagCollection>();
         private List<(string oldfile, string newfile)> backedUpFileMaps = new List<(string, string)>();
+        private List<string> completedImages = new List<string>();
 
         public Action? ProjectUpdated { get; set; }
 
@@ -44,6 +47,7 @@ namespace StableDiffusionTagManager.Models
             LoadBackedUpFileMaps(doc);
             LoadTagCollections(doc);
             LoadDefaultPromptSettings(doc);
+            LoadCompletedImages(doc);
         }
 
         protected override void AddSettings(XDocument doc)
@@ -52,6 +56,7 @@ namespace StableDiffusionTagManager.Models
             SaveTargetImageSize(doc);
             SaveBackedUpFileMaps(doc);
             SaveTagCollections(doc);
+            SaveCompletedImages(doc);
         }
 
         public string? DefaultPromptPrefix
@@ -124,6 +129,16 @@ namespace StableDiffusionTagManager.Models
             set
             {
                 backedUpFileMaps = value;
+                ProjectUpdated?.Invoke();
+            }
+        }
+
+        public List<string> CompletedImages
+        {
+            get => completedImages;
+            set
+            {
+                completedImages = value;
                 ProjectUpdated?.Invoke();
             }
         }
@@ -239,6 +254,44 @@ namespace StableDiffusionTagManager.Models
             }
 
             doc.Root?.Add(collectionsElement);
+        }
+
+        public void SetImageCompletionStatus(string filename, bool completionStatus)
+        {
+            if(completionStatus)
+            {
+                this.completedImages.Remove(filename);
+            } else
+            {
+                this.completedImages.Add(filename);
+            }
+        }
+
+        public void LoadCompletedImages(XDocument doc)
+        {
+            var root = doc.Root;
+            if (root != null)
+            {
+                var completedImages = root.Element(COMPLETED_IMAGES_ELEMENT);
+                if (completedImages != null)
+                {
+                    var images = completedImages.Elements(COMPLETED_IMAGE_ELEMENT).ToList();
+
+                    this.CompletedImages = images.Select(i => i.Value).ToList();
+                }
+            }
+        }
+
+        public void SaveCompletedImages(XDocument doc)
+        {
+            var imagesElement = new XElement(COMPLETED_IMAGES_ELEMENT);
+            foreach (var completedImage in completedImages)
+            {
+                var imageElement = new XElement(COMPLETED_IMAGE_ELEMENT);
+                imageElement.SetValue(completedImage);
+            }
+
+            doc.Root?.Add(imagesElement);
         }
     }
 }

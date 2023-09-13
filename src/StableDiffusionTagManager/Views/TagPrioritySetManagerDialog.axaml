@@ -28,7 +28,7 @@
     </Grid>
     <StackPanel Grid.Row="1">
       <Grid ColumnDefinitions="*,*">
-        <Button Margin="5,0,0,0" Command="{Binding AddPrioritySetEntryCommand}">
+        <Button Margin="5,0,0,0" Command="{Binding AddPrioritySetEntryCommand}" >
           <mi:MaterialIcon Kind="Add"/>
         </Button>
         <Button Grid.Column="1" Margin="5,0,0,0" Command="{Binding AddChildSetEntryCommand}">
@@ -37,19 +37,19 @@
       </Grid>
     </StackPanel>
     <Grid Grid.Row="2" Margin="0,5,0,0" ColumnDefinitions="*,5,*">
-      <ListBox ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding SelectedPrioritySet.Entries}" SelectedItem="{Binding SelectedChildSet}">
+      <ListBox DragDrop.AllowDrop="{Binding IsDraggingParent}" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding SelectedPrioritySet.Entries}" SelectedItem="{Binding SelectedChildSet}" >
         <ListBox.ItemTemplate>
           <DataTemplate>
             <Grid ColumnDefinitions="*, Auto">
               <controls:TagAutoCompleteBox Text="{Binding Name}" />
-            <Button Grid.Column="1" Command="{Binding DataContext.DeletePrioritySetEntryCommand, ElementName=GridControl}" CommandParameter="{Binding}">
+                <Button Grid.Column="1" Command="{Binding DataContext.DeletePrioritySetEntryCommand, ElementName=GridControl}" CommandParameter="{Binding}">
               <mi:MaterialIcon Kind="Delete"/>
             </Button>
           </Grid>
           </DataTemplate>
         </ListBox.ItemTemplate>
       </ListBox>
-      <ListBox Grid.Column="2" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding SelectedChildSet.Entries}">
+      <ListBox Grid.Column="2" DragDrop.AllowDrop="{Binding IsDraggingChild}" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding SelectedChildSet.Entries}">
         <ListBox.ItemTemplate>
         <DataTemplate>
           <Grid ColumnDefinitions="*, Auto">
