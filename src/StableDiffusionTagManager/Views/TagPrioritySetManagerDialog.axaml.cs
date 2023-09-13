@@ -1,10 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.Input;
-using StableDiffusionTagManager.Models;
 using StableDiffusionTagManager.ViewModels;
-using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -14,6 +14,8 @@ namespace StableDiffusionTagManager.Views
 {
     public partial class TagPrioritySetManagerDialog : Window
     {
+        private const string CUSTOM_DRAG_FORMAT = "application/xxx-avalonia-controlcatalog-custom";
+
         private static readonly string PRIORITY_SETS_FOLDER = "TagPrioritySets";
 
         public TagPrioritySetManagerDialog()
@@ -21,6 +23,8 @@ namespace StableDiffusionTagManager.Views
             InitializeComponent();
 
             SetValue(TagPrioritySetsProperty, new ObservableCollection<TagPrioritySetViewModel>());
+            AddHandler(DragDrop.DropEvent, PrioritySetDropped);
+            AddHandler(PointerPressedEvent, InitiateDrag, handledEventsToo: true);
             Opened += TagPriortySetManagerDialog_Opened;
         }
 
@@ -37,6 +41,43 @@ namespace StableDiffusionTagManager.Views
         {
             Loading = true;
             LoadTagPrioritySets();
+        }
+
+        private async Task InitiateDrag(object sender, PointerPressedEventArgs args)
+        {
+            var element = args.Source as Visual;
+            var prioritySetViewModel = element?.DataContext as TagPrioritySetViewModel;
+            
+            if (prioritySetViewModel != null && !TagPrioritySets.Contains(prioritySetViewModel) && SelectedPrioritySet != null)
+            {
+                IsDraggingParent = SelectedPrioritySet.Entries.Contains(prioritySetViewModel);
+                IsDraggingChild = !IsDraggingParent;
+
+                var dataObject = new DataObject();
+                dataObject.Set(CUSTOM_DRAG_FORMAT, prioritySetViewModel);
+                await DragDrop.DoDragDrop(args, dataObject, DragDropEffects.Move);
+            }
+        }
+
+        public void PrioritySetDropped(object? sender, DragEventArgs args)
+        {
+            var targetDataSet = IsDraggingParent ? SelectedPrioritySet : SelectedChildSet;
+            if(targetDataSet != null)
+            {
+                var vm = args.Data.Get(CUSTOM_DRAG_FORMAT) as TagPrioritySetViewModel;
+                var sourceVisual = (args.Source as Visual);
+                if (vm != null && sourceVisual != null)
+                {
+                    var destVm = sourceVisual
+                                                .GetSelfAndVisualAncestors()
+                                                .FirstOrDefault(anc => anc.DataContext is TagPrioritySetViewModel)
+                                                ?.DataContext as TagPrioritySetViewModel;
+                    if(destVm != null)
+                    {
+                        targetDataSet.MovePrioritySet(vm, destVm);
+                    }
+                }     
+            }           
         }
 
         public async void LoadTagPrioritySets()
@@ -90,6 +131,43 @@ namespace StableDiffusionTagManager.Views
         {
             get => GetValue(SelectedChildSetProperty);
             set => SetValue(SelectedChildSetProperty, value);
+        }
+
+
+        public static readonly DirectProperty<TagPrioritySetManagerDialog, bool> IsDraggingChildProperty =
+            AvaloniaProperty.RegisterDirect<TagPrioritySetManagerDialog, bool>(
+                nameof(IsDraggingChild),
+                o => o.IsDraggingChild);
+
+        private bool _isDraggingChild = false;
+        /// <summary>
+        /// Gets or sets if control can render the image
+        /// </summary>
+        public bool IsDraggingChild
+        {
+            get => _isDraggingChild;
+            set
+            {
+                SetAndRaise(IsDraggingChildProperty, ref _isDraggingChild, value);
+            }
+        }
+
+        public static readonly DirectProperty<TagPrioritySetManagerDialog, bool> IsDraggingParentProperty =
+            AvaloniaProperty.RegisterDirect<TagPrioritySetManagerDialog, bool>(
+                nameof(IsDraggingParent),
+                o => o.IsDraggingParent);
+
+        private bool _isDraggingParent = false;
+        /// <summary>
+        /// Gets or sets if control can render the image
+        /// </summary>
+        public bool IsDraggingParent
+        {
+            get => _isDraggingParent;
+            set
+            {
+                SetAndRaise(IsDraggingParentProperty, ref _isDraggingParent, value);
+            }
         }
 
         //private ObservableCollection<TagPrioritySetViewModel> tagPrioritySets;

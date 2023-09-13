@@ -95,6 +95,21 @@ namespace StableDiffusionTagManager.ViewModels
             get { return new ReadOnlyObservableCollection<TagViewModel>(tags); }
         }
 
+
+        public Action? CompletionStatusChanged;
+
+        private bool isComplete;
+        public bool IsComplete { 
+            get => isComplete;
+            set
+            {
+                if (SetProperty(ref isComplete, value))
+                {
+                    CompletionStatusChanged?.Invoke();
+                }
+            }
+        }
+
         public int SecondNumberedChunk => secondNumberedChunk;
 
         public int FirstNumberedChunk => firstNumberedChunk;
