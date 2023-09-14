@@ -260,10 +260,9 @@ namespace StableDiffusionTagManager.Models
         {
             if(completionStatus)
             {
-                this.completedImages.Remove(filename);
-            } else
-            {
                 this.completedImages.Add(filename);
+            } else {
+                this.completedImages.Remove(filename);
             }
         }
 
@@ -289,6 +288,7 @@ namespace StableDiffusionTagManager.Models
             {
                 var imageElement = new XElement(COMPLETED_IMAGE_ELEMENT);
                 imageElement.SetValue(completedImage);
+                imagesElement.Add(imageElement);
             }
 
             doc.Root?.Add(imagesElement);

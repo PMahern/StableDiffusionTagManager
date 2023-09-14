@@ -84,6 +84,7 @@ namespace StableDiffusionTagManager.Views
                 {
                     viewModel.NextImage();
                 }
+
                 if ((e.KeyModifiers & KeyModifiers.Alt) > 0 && e.Key == Key.Left && !imageListFocused)
                 {
                     viewModel.PreviousImage();

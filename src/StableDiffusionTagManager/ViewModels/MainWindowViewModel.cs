@@ -19,6 +19,7 @@ using StableDiffusionTagManager.Controls;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using MsBox.Avalonia.Base;
+using System.Collections.Specialized;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -40,12 +41,63 @@ namespace StableDiffusionTagManager.ViewModels
             get => imageWithTagsViewModel;
             set
             {
+                if (imageWithTagsViewModel != null)
+                {
+                    imageWithTagsViewModel.CollectionChanged -= ImageWithTagsViewModel_CollectionChanged;
+                }
                 imageWithTagsViewModel = value;
+                if (imageWithTagsViewModel != null)
+                {
+                    imageWithTagsViewModel.CollectionChanged += ImageWithTagsViewModel_CollectionChanged;
+                }
+                RebuildFilteredImageSet();
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(ImagesLoaded));
             }
         }
 
+        public ObservableCollection<ImageWithTagsViewModel>? filteredImageSet;
+        public ObservableCollection<ImageWithTagsViewModel>? FilteredImageSet
+        {
+            get => filteredImageSet;
+            set
+            {
+                filteredImageSet = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void ImageWithTagsViewModel_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            RebuildFilteredImageSet();
+        }
+
+        private void RebuildFilteredImageSet()
+        {
+            if (this.imageWithTagsViewModel != null)
+            {
+                this.FilteredImageSet = new ObservableCollection<ImageWithTagsViewModel>(this.imageWithTagsViewModel.Where(PassesCurrentFilter));
+            }
+            else
+            {
+                this.FilteredImageSet = null;
+            }
+        }
+
+        public bool PassesCurrentFilter(ImageWithTagsViewModel imageWithTagsViewModel)
+        {
+            switch (currentImageFilterMode)
+            {
+                case ImageFilterMode.None:
+                    return true;
+                case ImageFilterMode.NotCompleted:
+                    return !imageWithTagsViewModel.IsComplete;
+                case ImageFilterMode.Completed:
+                    return imageWithTagsViewModel.IsComplete;
+            }
+
+            return false;
+        }
         private ObservableCollection<TagCollectionViewModel>? tagCollections;
         public ObservableCollection<TagCollectionViewModel>? TagCollections { get => tagCollections; set { tagCollections = value; OnPropertyChanged(); } }
 
@@ -244,12 +296,7 @@ namespace StableDiffusionTagManager.ViewModels
                         }
                     }
 
-                    if (projFolder)
-                    {
-                        openProject = new Project(projFile);
-                        openProject.ProjectUpdated += UpdateProjectSettings;
-                        UpdateProjectSettings();
-                    }
+
 
                     var FolderTagSets = new FolderTagSets(pickResult);
 
@@ -257,6 +304,13 @@ namespace StableDiffusionTagManager.ViewModels
                                     .OrderBy(iwt => iwt.FirstNumberedChunk)
                                     .ThenBy(iwt => iwt.SecondNumberedChunk));
 
+
+                    if (projFolder)
+                    {
+                        openProject = new Project(projFile);
+                        openProject.ProjectUpdated += UpdateProjectSettings;
+                        UpdateProjectSettings();
+                    }
 
                     if (openProject != null)
                     {
@@ -274,6 +328,13 @@ namespace StableDiffusionTagManager.ViewModels
         private void UpdateProjectSettings()
         {
             TargetImageSize = openProject?.TargetImageSize;
+            if (openProject != null && ImagesWithTags != null)
+            {
+                foreach (var image in ImagesWithTags)
+                {
+                    image.IsComplete = openProject.CompletedImages.Contains(image.Filename);
+                }
+            }
         }
 
         [RelayCommand]
@@ -423,18 +484,18 @@ namespace StableDiffusionTagManager.ViewModels
 
         internal void NextImage()
         {
-            if (ImagesWithTags?.Any() ?? false)
+            if (FilteredImageSet?.Any() ?? false)
             {
                 if (SelectedImage == null)
                 {
-                    SelectedImage = this.ImagesWithTags.First();
+                    SelectedImage = this.FilteredImageSet.First();
                 }
                 else
                 {
-                    var index = ImagesWithTags.IndexOf(SelectedImage);
-                    if (index < ImagesWithTags.Count() - 1)
+                    var index = FilteredImageSet.IndexOf(SelectedImage);
+                    if (index < FilteredImageSet.Count() - 1)
                     {
-                        SelectedImage = ImagesWithTags[index + 1];
+                        SelectedImage = FilteredImageSet[index + 1];
                     }
                 }
             }
@@ -442,14 +503,14 @@ namespace StableDiffusionTagManager.ViewModels
 
         internal void PreviousImage()
         {
-            if (ImagesWithTags?.Any() ?? false)
+            if (FilteredImageSet?.Any() ?? false)
             {
                 if (SelectedImage != null)
                 {
-                    var index = ImagesWithTags.IndexOf(SelectedImage);
+                    var index = FilteredImageSet.IndexOf(SelectedImage);
                     if (index > 0)
                     {
-                        SelectedImage = ImagesWithTags[index - 1];
+                        SelectedImage = FilteredImageSet[index - 1];
                     }
                 }
             }
@@ -813,6 +874,7 @@ namespace StableDiffusionTagManager.ViewModels
         }
 
         #endregion
+
         public void AddNewImage(Bitmap image, IEnumerable<string>? tags = null)
         {
             var index = ImagesWithTags.IndexOf(SelectedImage);
@@ -918,6 +980,19 @@ namespace StableDiffusionTagManager.ViewModels
             return ImageDirtyCallback?.Invoke(image) ?? false;
         }
 
+        private ImageFilterMode currentImageFilterMode;
+
+        public ImageFilterMode CurrentImageFilterMode
+        {
+            get { return currentImageFilterMode; }
+            set
+            {
+                if (SetProperty(ref currentImageFilterMode, value))
+                {
+                    RebuildFilteredImageSet();
+                }
+            }
+        }
 
         #region Tag Priority Sets
         private ObservableCollection<TagPrioritySetButtonViewModel>? tagPrioritySets;
@@ -953,6 +1028,28 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
+        [RelayCommand]
+        public void SetImageFilter(ImageFilterMode mode)
+        {
+            CurrentImageFilterMode = mode;
+        }
+
+        [RelayCommand]
+        public void ToggleImageComplete()
+        {
+            if (SelectedImage != null && openProject != null)
+            {
+                SelectedImage.IsComplete = !SelectedImage.IsComplete;
+                openProject.SetImageCompletionStatus(SelectedImage.Filename, SelectedImage.IsComplete);
+                openProject.Save();
+
+                if(CurrentImageFilterMode != ImageFilterMode.None && FilteredImageSet != null)
+                {
+                    FilteredImageSet.Remove(SelectedImage);
+                }
+            }
+        }
+
         public void UpdateTagPrioritySets()
         {
             if (Directory.Exists(TAG_PRIORITY_SETS_FOLDER))
@@ -960,7 +1057,7 @@ namespace StableDiffusionTagManager.ViewModels
                 var txts = Directory.EnumerateFiles(TAG_PRIORITY_SETS_FOLDER, "*.txt").ToList();
                 TagPrioritySets = txts.Select(filename =>
                                                 new TagPrioritySetButtonViewModel(
-                                                        Path.GetFileNameWithoutExtension(filename), 
+                                                        Path.GetFileNameWithoutExtension(filename),
                                                         new TagPrioritySet(filename)))
                                   .ToObservableCollection();
             }

@@ -18,14 +18,16 @@ namespace StableDiffusionTagManager
 {
     public partial class App : Application
     {
-        private static readonly string TagsPath = "tags.csv";
+        private static readonly string TEMP_DIRECTORY = "tmp";
+        private static readonly string TAGS_PATH = "tags.csv";
+        private static readonly string SETTINGS_FILE = "sdtmsettings.xml";
 
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
         }
 
-        public static Settings Settings { get; set; } = new Settings("sdtmsettings.xml");
+        public static Settings Settings { get; set; } = new Settings(SETTINGS_FILE);
 
         public static string GetAppDirectory()
         {
@@ -34,7 +36,7 @@ namespace StableDiffusionTagManager
 
         public static string GetTempFileDirectory()
         {
-            var path = Path.Combine(GetAppDirectory(), "tmp");
+            var path = Path.Combine(GetAppDirectory(), TEMP_DIRECTORY);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -47,9 +49,9 @@ namespace StableDiffusionTagManager
 
         public void LoadTagDictionary()
         {
-            if (File.Exists(TagsPath))
+            if (File.Exists(TAGS_PATH))
             {
-                _tagDictionary = File.ReadAllLines(TagsPath)
+                _tagDictionary = File.ReadAllLines(TAGS_PATH)
                                     .Select(line =>
                                     {
                                         var pair = line.Split(',');
@@ -112,7 +114,6 @@ namespace StableDiffusionTagManager
                 };
                 
                 window.DataContext = mainVM;
-
                 window.Closed += (sender, args) => desktop.Shutdown();
             }
 

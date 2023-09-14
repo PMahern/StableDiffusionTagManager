@@ -7,6 +7,7 @@
         xmlns:controls="using:StableDiffusionTagManager.Controls"
         xmlns:cp="clr-namespace:ThemeEditor.Controls.ColorPicker;assembly=ThemeEditor.Controls.ColorPicker"
         xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:models="using:StableDiffusionTagManager.Models"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="StableDiffusionTagManager.Views.MainWindow"
         Icon="/Assets/logo.ico"
@@ -42,6 +43,11 @@
         </MenuItem>
         <MenuItem  Header="_Images">
           <MenuItem Header="_Archive Selected Image" Command="{Binding DeleteSelectedImageCommand}"/>
+          <MenuItem Header="_Filter">
+            <MenuItem Header="_None"  Command="{Binding SetImageFilterCommand}" CommandParameter="{x:Static models:ImageFilterMode.None}"/>
+            <MenuItem Header="_Incomplete" Command="{Binding SetImageFilterCommand}" CommandParameter="{x:Static models:ImageFilterMode.NotCompleted}"/>
+            <MenuItem Header="_Completed" Command="{Binding SetImageFilterCommand}" CommandParameter="{x:Static models:ImageFilterMode.Completed}"/>
+          </MenuItem>
         </MenuItem>
         <MenuItem Header="_Automation">
           <MenuItem Header="Tag _Collections..." />
@@ -55,7 +61,7 @@
           <RowDefinition Height="2"></RowDefinition>
           <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <ListBox Name="ImageList" ItemsSource="{Binding ImagesWithTags}" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SelectedImage}">
+        <ListBox Name="ImageList" ItemsSource="{Binding FilteredImageSet}" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SelectedImage}">
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
               <StackPanel Orientation="Horizontal" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=Bounds.Height}" />
@@ -95,6 +101,9 @@
               <controls:HeaderControl Grid.Row="0" Title="Image Tags" MaxHeight="{Binding Path=Parent.ActualHeight, RelativeSource={RelativeSource Self}}" Padding="0">
                 <Grid RowDefinitions="Auto,*">
                   <StackPanel Orientation="Horizontal" Classes="toolbar" Grid.Column="0">
+                    <Button IsVisible="{Binding IsProject}" Command="{Binding ToggleImageCompleteCommand}" ToolTip.Tip="Mark Image Done">
+                      <mi:MaterialIcon Kind="Done"/>
+                    </Button>
                     <Button Command="{Binding ClearTagsCommand}" ToolTip.Tip="Delete All Tags">
                       <mi:MaterialIcon Kind="DeleteSweep"/>
                     </Button>
