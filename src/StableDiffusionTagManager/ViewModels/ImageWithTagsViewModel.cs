@@ -144,7 +144,7 @@ namespace StableDiffusionTagManager.ViewModels
 
         public string GetTagsFileName()
         {
-            return $"{System.IO.Path.GetFileNameWithoutExtension(Filename)}.txt";
+            return $"{Path.GetFileNameWithoutExtension(Filename)}.txt";
         }
 
         public Bitmap GenerateThumbnail()

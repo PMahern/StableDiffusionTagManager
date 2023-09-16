@@ -20,6 +20,7 @@ using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using MsBox.Avalonia.Base;
 using System.Collections.Specialized;
+using ImageUtil;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -120,31 +121,30 @@ namespace StableDiffusionTagManager.ViewModels
 
                         foreach (var removedTag in removedTags)
                         {
-                            var tag = TagCounts.First(t => t.Tag == removedTag);
-                            if (tag.Count == 1)
+                            if(TagCountDictionary.ContainsKey(removedTag))
                             {
-                                TagCounts.Remove(tag);
-                            }
-                            else
-                            {
-                                tag.Count--;
+                                var vm = TagCountDictionary[removedTag];
+                                vm.Count -= 1;
+                                if(vm.Count == 0)
+                                {
+                                    TagCountDictionary.Remove(removedTag);
+                                    TagCounts.Remove(vm);
+                                }
                             }
                         }
 
                         foreach (var addedTag in addedTags)
                         {
-                            var tag = TagCounts.FirstOrDefault(t => t.Tag == addedTag);
-                            if (tag == null)
+                            if (TagCountDictionary.ContainsKey(addedTag))
                             {
-                                TagCounts.Add(new TagWithCountViewModel(this) { Tag = addedTag, Count = 1 });
-                            }
-                            else
+                                TagCountDictionary[addedTag].Count += 1;
+                            } else
                             {
-                                tag.Count++;
+                                var added = new TagWithCountViewModel(this) { Tag = addedTag, Count = 1 };
+                                TagCountDictionary[addedTag] = new TagWithCountViewModel(this) { Tag = addedTag, Count =  1};
+                                TagCounts.Add(added);
                             }
                         }
-
-                        TagCounts = TagCounts.OrderBy(t => t.Tag).ToObservableCollection();
                     }
 
                     selectedImage = value;
@@ -210,6 +210,29 @@ namespace StableDiffusionTagManager.ViewModels
             return Task.CompletedTask;
         }
 
+        public async Task CheckForAndConvertUnspportedImageFormats(string folder)
+        {
+
+            var webps = Directory.EnumerateFiles(folder, "*.webp");
+
+            if (webps.Any())
+            {
+                var messageBoxStandardWindow = MessageBoxManager
+                                .GetMessageBoxStandard("Unsuppoted Image Formats Detected",
+                                                         "This tool only supports JPG and PNG image file formats, webp images can be automatically converted and the originals moved to the archive subdirectory, would you like to convert all webp images to png now?",
+                                                         ButtonEnum.YesNo,
+                                                         Icon.Question);
+                if ((await ShowDialog(messageBoxStandardWindow)) == ButtonResult.Yes)
+                {
+                    foreach (var webp in webps)
+                    {
+                        ImageConverter.ConvertImageFileToPng(webp);
+                        ArchiveImage(folder, webp);
+                    }
+                }
+            }
+        }
+
         [RelayCommand]
         public async Task LoadFolder()
         {
@@ -224,9 +247,12 @@ namespace StableDiffusionTagManager.ViewModels
 
                 if (pickResult != null)
                 {
+                    await CheckForAndConvertUnspportedImageFormats(pickResult);
+
                     var projectPath = Path.Combine(pickResult, PROJECT_FOLDER_NAME);
                     var projFolder = Directory.Exists(projectPath);
                     var projFile = Path.Combine(projectPath, PROJECT_FILE_NAME);
+
                     if (!projFolder)
                     {
                         var messageBoxStandardWindow = MessageBoxManager
@@ -236,7 +262,6 @@ namespace StableDiffusionTagManager.ViewModels
                                                          Icon.Question);
                         if ((await ShowDialog(messageBoxStandardWindow)) == ButtonResult.Yes)
                         {
-
                             projFolder = true;
 
                             messageBoxStandardWindow = MessageBoxManager
@@ -527,6 +552,7 @@ namespace StableDiffusionTagManager.ViewModels
         private ObservableCollection<TagWithCountViewModel> tagCounts = new ObservableCollection<TagWithCountViewModel>();
         public ObservableCollection<TagWithCountViewModel> TagCounts { get => tagCounts; set { tagCounts = value; OnPropertyChanged(); } }
 
+
         private PixelSize? targetImageSize;
         public PixelSize? TargetImageSize
         {
@@ -573,23 +599,31 @@ namespace StableDiffusionTagManager.ViewModels
 
         #endregion
 
-        private Dictionary<string, int> TagCountDictionary = new Dictionary<string, int>();
+        private Dictionary<string, TagWithCountViewModel> TagCountDictionary = new Dictionary<string, TagWithCountViewModel>();
 
 
         public void UpdateTagCounts()
         {
             if (ImagesWithTags != null)
             {
-                TagCounts = new ObservableCollection<TagWithCountViewModel>(ImagesWithTags.SelectMany(i => i.Tags.Select(t => t.Tag).Where(t => t != ""))
+                TagCountDictionary = ImagesWithTags.SelectMany(i => i.Tags.Select(t => t.Tag).Where(t => t != ""))
                         .GroupBy(t => t)
-                        .Select(pair => new TagWithCountViewModel(this)
-                        {
-                            Tag = pair.Key,
-                            Count = pair.Count()
-                        }).OrderBy(tc => tc.Tag));
+                        .ToDictionary(g => g.Key, g => new TagWithCountViewModel(this) { Tag = g.Key, Count = g.Count() });
+                //.Select(pair => new TagWithCountViewModel(this)
+                //{
+                //    Tag = pair.Key,
+                //    Count = pair.Count()
+                //}).OrderBy(tc => tc.Tag)); ;
 
                 tagCache = selectedImage?.Tags.Select(t => t.Tag).ToList();
+                UpdateTagCountsObservable();
             }
+        }
+
+        public void UpdateTagCountsObservable()
+        {
+            TagCounts = new ObservableCollection<TagWithCountViewModel>(TagCountDictionary
+                                                                            .Select(pair => pair.Value));
         }
 
         public void MoveTagLeft(TagViewModel tag)
@@ -619,6 +653,36 @@ namespace StableDiffusionTagManager.ViewModels
                     FocusTagCallback?.Invoke(tag);
                 }
             }
+        }
+
+        public void ArchiveImage(string targetFolder, string targetFile, string? tagsFilename = null)
+        {
+            var destDirectory = Path.Combine(targetFolder, ARCHIVE_FOLDER);
+            if (!Directory.Exists(destDirectory))
+            {
+                Directory.CreateDirectory(destDirectory);
+            }
+
+            var destFile = Path.Combine(destDirectory, targetFile);
+            var destFileWithoutExtension = Path.Combine(destDirectory, Path.GetFileNameWithoutExtension(targetFile));
+            var i = 0;
+            while (File.Exists(destFile))
+            {
+                destFileWithoutExtension = Path.Combine(destDirectory, $"{Path.GetFileNameWithoutExtension(targetFile)}_{i.ToString("00")}");
+                destFile = $"{destFileWithoutExtension}{Path.GetExtension(targetFile)}";
+            }
+
+            File.Move(Path.Combine(targetFolder, targetFile), destFile);
+
+            if (tagsFilename != null)
+            {
+                var tagFile = Path.Combine(targetFolder, tagsFilename);
+                if (File.Exists(tagFile))
+                {
+                    File.Move(tagFile, Path.Combine(destDirectory, $"{destFileWithoutExtension}.txt"));
+                }
+            }
+
         }
 
         [RelayCommand]
@@ -655,27 +719,7 @@ namespace StableDiffusionTagManager.ViewModels
                         SelectedImage = null;
                     }
 
-                    var destDirectory = Path.Combine(openFolder, ARCHIVE_FOLDER);
-                    if (!Directory.Exists(destDirectory))
-                    {
-                        Directory.CreateDirectory(destDirectory);
-                    }
-
-
-                    var destFile = Path.Combine(destDirectory, imageToDelete.Filename);
-                    var destFileWithoutExtension = Path.Combine(destDirectory, Path.GetFileNameWithoutExtension(imageToDelete.Filename));
-                    var i = 0;
-                    while (File.Exists(destFile))
-                    {
-                        destFileWithoutExtension = Path.Combine(destDirectory, $"{Path.GetFileNameWithoutExtension(imageToDelete.Filename)}_{i.ToString("00")}");
-                        destFile = $"{destFileWithoutExtension}{Path.GetExtension(imageToDelete.Filename)}";
-                    }
-                    File.Move(Path.Combine(openFolder, imageToDelete.Filename), destFile);
-                    var tagFile = Path.Combine(openFolder, imageToDelete.GetTagsFileName());
-                    if (File.Exists(tagFile))
-                    {
-                        File.Move(tagFile, Path.Combine(destDirectory, $"{destFileWithoutExtension}.txt"));
-                    }
+                    ArchiveImage(openFolder, imageToDelete.Filename, imageToDelete.GetTagsFileName());
                 }
             }
         }
@@ -1043,7 +1087,7 @@ namespace StableDiffusionTagManager.ViewModels
                 openProject.SetImageCompletionStatus(SelectedImage.Filename, SelectedImage.IsComplete);
                 openProject.Save();
 
-                if(CurrentImageFilterMode != ImageFilterMode.None && FilteredImageSet != null)
+                if (CurrentImageFilterMode != ImageFilterMode.None && FilteredImageSet != null)
                 {
                     FilteredImageSet.Remove(SelectedImage);
                 }

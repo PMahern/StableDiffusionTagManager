@@ -8,6 +8,7 @@
         xmlns:cp="clr-namespace:ThemeEditor.Controls.ColorPicker;assembly=ThemeEditor.Controls.ColorPicker"
         xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         xmlns:models="using:StableDiffusionTagManager.Models"
+        xmlns:conv="using:StableDiffusionTagManager.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="StableDiffusionTagManager.Views.MainWindow"
         Icon="/Assets/logo.ico"
@@ -82,7 +83,15 @@
           </Grid.ColumnDefinitions>
           <Border Classes="gridcontent" Grid.Column="0">
             <DockPanel>
-              <Label DockPanel.Dock="Bottom" HorizontalAlignment="Center" Content="{Binding SelectedImage.Filename}"></Label>
+              <Grid DockPanel.Dock="Bottom">
+                <Label  HorizontalAlignment="Left" Content="{Binding SelectedImage.Filename}" />
+                <StackPanel HorizontalAlignment="Right">
+                  <StackPanel.Resources>
+                    <conv:BitmapPixelSizeConverter x:Key="bitmapPixelSizeConverter" />
+                  </StackPanel.Resources>
+                  <Label  HorizontalAlignment="Right" Content="{Binding SelectedImage.ImageSource, Converter={StaticResource ResourceKey=bitmapPixelSizeConverter}}" />
+                </StackPanel>
+              </Grid>
               <controls:ImageBoxWithControls Name="ImageBox"
                                     Image="{Binding SelectedImage.ImageSource}"
                                     TargetImageSize="{Binding TargetImageSize}"
