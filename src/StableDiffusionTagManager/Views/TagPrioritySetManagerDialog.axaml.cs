@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.Input;
+using StableDiffusionTagManager.Controls;
 using StableDiffusionTagManager.ViewModels;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -32,7 +33,7 @@ namespace StableDiffusionTagManager.Views
         {
             base.OnPropertyChanged(change);
 
-            if(change.Property == SelectedPrioritySetProperty)
+            if (change.Property == SelectedPrioritySetProperty)
             {
                 SelectedChildSet = null;
             }
@@ -46,23 +47,26 @@ namespace StableDiffusionTagManager.Views
         private async Task InitiateDrag(object sender, PointerPressedEventArgs args)
         {
             var element = args.Source as Visual;
-            var prioritySetViewModel = element?.DataContext as TagPrioritySetViewModel;
-            
-            if (prioritySetViewModel != null && !TagPrioritySets.Contains(prioritySetViewModel) && SelectedPrioritySet != null)
+            if (element != null && (element.FindAncestorOfType<Button>()  == null) && (element.FindAncestorOfType<TagAutoCompleteBox>() == null))
             {
-                IsDraggingParent = SelectedPrioritySet.Entries.Contains(prioritySetViewModel);
-                IsDraggingChild = !IsDraggingParent;
+                var prioritySetViewModel = element.DataContext as TagPrioritySetViewModel;
 
-                var dataObject = new DataObject();
-                dataObject.Set(CUSTOM_DRAG_FORMAT, prioritySetViewModel);
-                await DragDrop.DoDragDrop(args, dataObject, DragDropEffects.Move);
+                if (prioritySetViewModel != null && !TagPrioritySets.Contains(prioritySetViewModel) && SelectedPrioritySet != null)
+                {
+                    IsDraggingParent = SelectedPrioritySet.Entries.Contains(prioritySetViewModel);
+                    IsDraggingChild = !IsDraggingParent;
+
+                    var dataObject = new DataObject();
+                    dataObject.Set(CUSTOM_DRAG_FORMAT, prioritySetViewModel);
+                    await DragDrop.DoDragDrop(args, dataObject, DragDropEffects.Move);
+                }
             }
         }
 
         public void PrioritySetDropped(object? sender, DragEventArgs args)
         {
             var targetDataSet = IsDraggingParent ? SelectedPrioritySet : SelectedChildSet;
-            if(targetDataSet != null)
+            if (targetDataSet != null)
             {
                 var vm = args.Data.Get(CUSTOM_DRAG_FORMAT) as TagPrioritySetViewModel;
                 var sourceVisual = (args.Source as Visual);
@@ -72,16 +76,20 @@ namespace StableDiffusionTagManager.Views
                                                 .GetSelfAndVisualAncestors()
                                                 .FirstOrDefault(anc => anc.DataContext is TagPrioritySetViewModel)
                                                 ?.DataContext as TagPrioritySetViewModel;
-                    if(destVm != null)
+                    if (destVm != null)
                     {
                         targetDataSet.MovePrioritySet(vm, destVm);
                     }
-                }     
-            }           
+                }
+            }
         }
 
         public async void LoadTagPrioritySets()
         {
+            if (!Directory.Exists(PRIORITY_SETS_FOLDER))
+            {
+                Directory.CreateDirectory(PRIORITY_SETS_FOLDER);
+            }
             var txts = Directory.EnumerateFiles(PRIORITY_SETS_FOLDER, "*.txt").ToList();
             var tagPrioritySets = new ObservableCollection<TagPrioritySetViewModel>(txts.Select(filename => TagPrioritySetViewModel.CreateFromFile(filename)));
             Dispatcher.UIThread.Post(() =>
@@ -93,7 +101,7 @@ namespace StableDiffusionTagManager.Views
         public static readonly StyledProperty<ObservableCollection<TagPrioritySetViewModel>> TagPrioritySetsProperty =
             AvaloniaProperty.Register<TagPrioritySetManagerDialog, ObservableCollection<TagPrioritySetViewModel>>(nameof(TagPrioritySets), null);
 
-        
+
 
         /// <summary>
         /// Gets or sets the image to be displayed
@@ -102,7 +110,7 @@ namespace StableDiffusionTagManager.Views
         {
 
             get
-            { 
+            {
                 return new ReadOnlyObservableCollection<TagPrioritySetViewModel>(GetValue(TagPrioritySetsProperty));
             }
         }
@@ -212,7 +220,7 @@ namespace StableDiffusionTagManager.Views
         [RelayCommand]
         public void DeletePrioritySetEntry(TagPrioritySetViewModel toDelete)
         {
-            if(SelectedPrioritySet != null)
+            if (SelectedPrioritySet != null)
             {
                 SelectedPrioritySet.RemoveEntry(toDelete);
             }
@@ -221,10 +229,10 @@ namespace StableDiffusionTagManager.Views
         [RelayCommand]
         public void AddPrioritySetEntry()
         {
-            if(SelectedPrioritySet != null)
+            if (SelectedPrioritySet != null)
             {
                 SelectedPrioritySet.AddEntry();
-            }    
+            }
         }
 
         [RelayCommand]

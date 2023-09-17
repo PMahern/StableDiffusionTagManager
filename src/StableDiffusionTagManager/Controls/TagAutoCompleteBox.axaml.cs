@@ -25,7 +25,7 @@ namespace StableDiffusionTagManager.Controls
         }
 
         public static readonly StyledProperty<string> TextProperty =
-            AvaloniaProperty.Register<TagAutoCompleteBox, string>(nameof(Text), "");
+            AvaloniaProperty.Register<TagAutoCompleteBox, string>(nameof(Text), "", defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
         public string Text
         {

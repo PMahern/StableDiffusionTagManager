@@ -1,10 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using StableDiffusionTagManager.Extensions;
-using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Threading;
 
 namespace StableDiffusionTagManager.ViewModels
 {
