@@ -8,10 +8,8 @@ using Avalonia.VisualTree;
 using StableDiffusionTagManager.Controls;
 using StableDiffusionTagManager.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace StableDiffusionTagManager.Views
@@ -29,7 +27,7 @@ namespace StableDiffusionTagManager.Views
 
             AddHandler(DragDrop.DropEvent, TagDropped);
 
-            AddHandler(KeyDownEvent, KeyDownHandler, handledEventsToo: true);
+            AddHandler(KeyDownEvent, KeyDownHandler, routes: Avalonia.Interactivity.RoutingStrategies.Tunnel);
             DataContextChanged += DataContextChangedHandler;
             Closing += ClosingHandler;
         }
@@ -79,58 +77,67 @@ namespace StableDiffusionTagManager.Views
             var viewModel = this.DataContext as MainWindowViewModel;
             if (viewModel != null)
             {
-                var focusedElement = FocusManager.GetFocusedElement() as Visual;
-                var imageListFocused = ImageList.IsFocused || (focusedElement != null && focusedElement.GetVisualAncestors().Any(p => p == ImageList));
-                if ((e.KeyModifiers & KeyModifiers.Alt) > 0 && e.Key == Key.Right && !imageListFocused)
+                if ((e.KeyModifiers & KeyModifiers.Alt) > 0 && e.Key == Key.Right)
                 {
+                    e.Handled = true;
                     viewModel.NextImage();
                 }
 
-                if ((e.KeyModifiers & KeyModifiers.Alt) > 0 && e.Key == Key.Left && !imageListFocused)
+                if ((e.KeyModifiers & KeyModifiers.Alt) > 0 && e.Key == Key.Left)
                 {
+                    e.Handled = true;
                     viewModel.PreviousImage();
                 }
 
                 if ((e.KeyModifiers & KeyModifiers.Alt) > 0 && e.Key == Key.Enter)
                 {
+                    e.Handled = true;
                     viewModel.AddTagToEnd();
                 }
 
                 if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.Enter)
                 {
+                    e.Handled = true;
                     AddTagInFrontOfCurrentFocusedTag();
                 }
 
                 if ((e.KeyModifiers & KeyModifiers.Control) > 0 && e.Key == Key.Enter)
                 {
+                    e.Handled = true;
                     viewModel.AddTagToFront();
                 }
 
                 if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.Right)
                 {
+                    e.Handled = true;
                     FocusNextTag();
                 }
                 if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.Left)
                 {
+                    e.Handled = true;
                     FocusPreviousTag();
                 }
 
                 if ((e.KeyModifiers & KeyModifiers.Alt) > 0 && e.Key == Key.Delete)
                 {
+                    e.Handled = true;
                     await viewModel.ArchiveSelectedImage();
                 }
 
                 if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.Delete)
                 {
+                    e.Handled = true;
                     DeleteFocusedTag();
                 }
 
                 if ((e.KeyModifiers & KeyModifiers.Control) > 0 && e.Key == Key.Right)
                 {
+                    e.Handled = true;
                     MoveTagRight();
                 }
                 if ((e.KeyModifiers & KeyModifiers.Control) > 0 && e.Key == Key.Left)
                 {
+                    e.Handled = true;
                     MoveTagLeft();
                 }
             }
