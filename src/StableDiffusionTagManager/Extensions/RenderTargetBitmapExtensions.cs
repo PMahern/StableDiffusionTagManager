@@ -30,8 +30,6 @@ namespace StableDiffusionTagManager.Extensions
                             BindingFlags.Public);
             var createFunc = funcs.First(m => m.Name == "CreateDrawingContext");
             
-            var createFuncReturnType = createFunc.ReturnType;
-
             var platformDrawingContextType = AppDomain.CurrentDomain.GetAssemblies()
                                                                     .SelectMany(x => x.GetTypes()
                                                                     .Where(t => t.Name == "PlatformDrawingContext" ))

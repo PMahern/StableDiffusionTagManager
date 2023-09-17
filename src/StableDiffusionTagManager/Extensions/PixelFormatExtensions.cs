@@ -1,5 +1,4 @@
 ﻿using Avalonia.Platform;
-using System;
 
 namespace StableDiffusionTagManager.Extensions
 {
@@ -12,7 +11,6 @@ namespace StableDiffusionTagManager.Extensions
                 return 2;
             }
 
-            //PixelFormat.Rgba8888 and PixelFormat.Bgra8888
             return 4;
         }
     }

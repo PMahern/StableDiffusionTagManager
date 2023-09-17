@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using StableDiffusionTagManager.Controls;
@@ -49,7 +50,7 @@ namespace StableDiffusionTagManager.Views
 
             if (viewModel != null)
             {
-                viewModel.ShowFolderDialogCallback = () => new OpenFolderDialog().ShowAsync(this);
+                viewModel.ShowFolderDialogCallback = () => this.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions() { AllowMultiple = false });
                 viewModel.FocusTagCallback = (tag) =>
                     {
                         this.FocusTagAutoComplete(tag);

@@ -104,14 +104,7 @@ namespace StableDiffusionTagManager
                 //ExpressionObserver.DataValidators.RemoveAll(x => x is DataAnnotationsValidationPlugin);
                 MainWindow window = new();
                 desktop.MainWindow = window;
-                var mainVM = new MainWindowViewModel()
-                {
-                    ShowFolderDialogCallback = () => new OpenFolderDialog().ShowAsync(desktop.MainWindow),
-                    FocusTagCallback = (tag) =>
-                    {
-                        window.FocusTagAutoComplete(tag);
-                    }
-                };
+                var mainVM = new MainWindowViewModel();
                 
                 window.DataContext = mainVM;
                 window.Closed += (sender, args) => desktop.Shutdown();
