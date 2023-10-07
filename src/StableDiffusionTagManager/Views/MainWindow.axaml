@@ -40,6 +40,7 @@
           <MenuItem Header="Add Tag to _End" Command="{Binding AddTagToEnd}"/>
           <MenuItem Header="Add Tag to _All Images " Command="{Binding AddTagToStartOfAllImages}"/>
           <MenuItem Header="Add Tag to End of All _Images " Command="{Binding AddTagToEndOfAllImages}"/>
+          <MenuItem Header="Re_place Tag in all Images" Command="{Binding ReplaceTagInAllImages}"/>
           <MenuItem Header="_Remove Tag from All Images" Command="{Binding RemoveTagFromAllImages}"/>
         </MenuItem>
         <MenuItem  Header="_Images">
@@ -198,12 +199,20 @@
                       <ItemsControl.ItemTemplate>
                         <DataTemplate>
                           <Border>
-                            <Button Command="{Binding AddTag}">
-                              <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Tag}"/>
-                                <TextBlock Margin="5,0,0,0" Text="{Binding Count}"/>
-                              </StackPanel>
-                            </Button>
+                            <StackPanel Orientation="Horizontal">
+                              <Button Command="{Binding AddTagCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                  <TextBlock Text="{Binding Tag}"/>
+                                  <TextBlock Margin="5,0,0,0" Text="{Binding Count}"/>
+                                </StackPanel>
+                              </Button>
+                              <Button Command="{Binding ReplaceTagInAllImagesCommand}">
+                                <mi:MaterialIcon Kind="Update"/>
+                              </Button>
+                              <Button Command="{Binding RemoveTagFromAllImagesCommand}">
+                                <mi:MaterialIcon Kind="Delete"/>
+                              </Button>
+                            </StackPanel>
                           </Border>
                         </DataTemplate>
                       </ItemsControl.ItemTemplate>

@@ -489,8 +489,35 @@ namespace StableDiffusionTagManager.ViewModels
             UpdateTagCounts();
         }
 
+        public async void ReplaceTagInAllImages(string target)
+        {
+            if (ImagesWithTags != null)
+            {
+                var dialog = new TagSearchDialog();
+                dialog.Title = $"Replace all instances of tag {target} with new tag";
+                var tagResult = await ShowDialog<string?>(dialog);
+
+                if (tagResult != null)
+                {
+                    foreach (var image in ImagesWithTags)
+                    {
+                        var found = image.Tags.FirstOrDefault(t => t.Tag == target);
+                        if(found != null)
+                        {
+                            image.RemoveTag(found);
+                            image.AddTagIfNotExists(new TagViewModel(tagResult));
+                        }
+                    }
+                }
+            }
+
+            UpdateTagCounts();
+        }
+
+        
+
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
-        public async void RemoveTagFromAllImages()
+        public async Task RemoveTagFromAllImages()
         {
             if (ImagesWithTags != null)
             {
@@ -499,18 +526,25 @@ namespace StableDiffusionTagManager.ViewModels
 
                 if (tagResult != null)
                 {
-                    foreach (var image in ImagesWithTags)
-                    {
-                        var toRemove = image.Tags.Where(t => t.Tag == tagResult).ToList();
-                        foreach (var tagToRemove in toRemove)
-                        {
-                            image.RemoveTag(tagToRemove);
-                        }
-                    }
+                    RemoveTagFromAllImages(tagResult);
                 }
             }
+        }
 
-            UpdateTagCounts();
+        public void RemoveTagFromAllImages(string tag)
+        {
+            if (ImagesWithTags != null)
+            {
+                foreach (var image in ImagesWithTags)
+                {
+                    var toRemove = image.Tags.Where(t => t.Tag == tag).ToList();
+                    foreach (var tagToRemove in toRemove)
+                    {
+                        image.RemoveTag(tagToRemove);
+                    }
+                }
+                UpdateTagCounts();
+            }
         }
 
         internal void NextImage()
@@ -614,6 +648,7 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 TagCountDictionary = ImagesWithTags.SelectMany(i => i.Tags.Select(t => t.Tag).Where(t => t != ""))
                         .GroupBy(t => t)
+                        .OrderBy(t => t.Key)
                         .ToDictionary(g => g.Key, g => new TagWithCountViewModel(this) { Tag = g.Key, Count = g.Count() });
                 //.Select(pair => new TagWithCountViewModel(this)
                 //{

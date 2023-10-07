@@ -23,6 +23,18 @@ namespace StableDiffusionTagManager.ViewModels
             parent.AddTagToEnd(Tag);
         }
 
+        [RelayCommand]
+        public void RemoveTagFromAllImages()
+        {
+            parent.RemoveTagFromAllImages(Tag);
+        }
+
+        [RelayCommand]
+        public void ReplaceTagInAllImages()
+        {
+            parent.ReplaceTagInAllImages(Tag);
+        }
+
         public string Tag { get => tag; set => SetProperty(ref tag, value); }
         public int Count { get => count; set => SetProperty(ref count, value); }
     }
