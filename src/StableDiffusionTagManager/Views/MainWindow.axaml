@@ -63,10 +63,10 @@
           <RowDefinition Height="2"></RowDefinition>
           <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <ListBox Name="ImageList" ItemsSource="{Binding FilteredImageSet}" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SelectedImage}">
+        <ListBox Name="ImageList" ItemsSource="{Binding FilteredImageSet}"  VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SelectedImage}">
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
-              <StackPanel Orientation="Horizontal" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=Bounds.Height}" />
+              <VirtualizingStackPanel Orientation="Horizontal" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=Bounds.Height}" />
             </ItemsPanelTemplate>
           </ListBox.ItemsPanel>
           <ListBox.ItemTemplate>

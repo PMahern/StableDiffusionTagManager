@@ -22,6 +22,7 @@ namespace StableDiffusionTagManager.ViewModels
         private readonly int firstNumberedChunk = -1;
         private readonly int secondNumberedChunk = -1;
         private bool isNumbered = false;
+        private string? imageFile = null;
 
         private ImageWithTagsViewModel(string imageFile, Func<Bitmap, bool> imageDirtyCallback)
         {
@@ -42,9 +43,10 @@ namespace StableDiffusionTagManager.ViewModels
 
         public ImageWithTagsViewModel(string imageFile, TagSet tagSet, Func<Bitmap, bool> imageDirtyCallback) : this(imageFile, imageDirtyCallback)
         {
-            using var stream = File.OpenRead(imageFile);
-            thumbnail = Bitmap.DecodeToHeight(stream, THUMBNAIL_SIZE);
-            imageSource = new Bitmap(imageFile);
+            this.imageFile = imageFile;
+            //using var stream = File.OpenRead(imageFile);
+            //thumbnail = Bitmap.DecodeToHeight(stream, THUMBNAIL_SIZE);
+            //imageSource = new Bitmap(imageFile);
             tags = new ObservableCollection<TagViewModel>(tagSet.Tags.Select(t => new TagViewModel(t)
             {
                 TagChanged = TagChangedHandler
@@ -55,7 +57,7 @@ namespace StableDiffusionTagManager.ViewModels
         public ImageWithTagsViewModel(Bitmap image, string newFileName, Func<Bitmap, bool> imageDirtyCallback, IEnumerable<string>? tags = null) : this(newFileName, imageDirtyCallback)
         {
             imageSource = image;
-            thumbnail = GenerateThumbnail();
+            //thumbnail = GenerateThumbnail();
 
             if (tags != null)
             {
@@ -79,11 +81,53 @@ namespace StableDiffusionTagManager.ViewModels
         public Action<string, string>? TagChanged;
         public Action<string>? TagRemoved;
 
-        private Bitmap imageSource;
-        public Bitmap ImageSource { get => imageSource; set { imageSource = value; OnPropertyChanged(); } }
+        private Bitmap? imageSource;
+        public Bitmap ImageSource
+        {
+            get
+            {
+                if (imageSource == null && this.imageFile != null)
+                {
+                    using var stream = File.OpenRead(imageFile);
+                    imageSource = new Bitmap(imageFile);
+                }
+                if (imageSource != null)
+                {
+                    return imageSource;
+                }
+                throw new Exception("No bitmap was generated for a target image.");
+            }
+            set
+            {
+                imageSource = value;
+                OnPropertyChanged();
+            }
+        }
 
-        private Bitmap thumbnail;
-        public Bitmap Thumbnail { get => thumbnail; set { thumbnail = value; OnPropertyChanged(); } }
+        private Bitmap? thumbnail = null;
+        public Bitmap Thumbnail
+        {
+            get
+            {
+                if (thumbnail == null)
+                {
+                    if (imageSource != null)
+                    {
+                        thumbnail = GenerateThumbnail();
+                    }
+                    else if (this.imageFile != null)
+                    {
+                        using var stream = File.OpenRead(imageFile);
+                        thumbnail = Bitmap.DecodeToHeight(stream, THUMBNAIL_SIZE);
+                    }
+                }
+                if (thumbnail != null)
+                {
+                    return thumbnail;
+                }
+                throw new Exception("No thumbnail was generated for a target image.");
+            }
+        }
 
         private string filename;
         public string Filename { get => filename; set => SetProperty(ref filename, value); }
@@ -99,7 +143,8 @@ namespace StableDiffusionTagManager.ViewModels
         public Action? CompletionStatusChanged;
 
         private bool isComplete;
-        public bool IsComplete { 
+        public bool IsComplete
+        {
             get => isComplete;
             set
             {
@@ -164,12 +209,13 @@ namespace StableDiffusionTagManager.ViewModels
 
         public void UpdateThumbnail()
         {
-            Thumbnail = GenerateThumbnail();
+            thumbnail = GenerateThumbnail();
+            OnPropertyChanged(nameof(Thumbnail));
         }
 
         public bool IsImageDirty()
         {
-            return imageDirtyCallback(ImageSource);
+            return imageSource != null && imageDirtyCallback(imageSource);
         }
 
         public void ClearTagsDirty()
