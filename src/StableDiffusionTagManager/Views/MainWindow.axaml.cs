@@ -53,7 +53,7 @@ namespace StableDiffusionTagManager.Views
                     {
                         this.FocusTagAutoComplete(tag);
                     };
-
+                 
                 viewModel.ShowDialogHandler = new DialogHandler(this);
                 viewModel.ExitCallback = () =>
                 {
