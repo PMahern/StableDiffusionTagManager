@@ -62,6 +62,15 @@ namespace StableDiffusionTagManager.Views
                     Close();
                 };
                 viewModel.ImageDirtyCallback = (image) => ImageBox.ImageBox.ImageHasPaint(image);
+                viewModel.GetModifiedImageDataCallback = (originalBitmap, clear) =>
+                {
+                    var bitmap = ImageBox.ImageBox.CreateNewImageWithLayersFromRegion();
+                    if (clear)
+                    {
+                        ImageBox.ImageBox.ClearMipsAndLayers(originalBitmap);
+                    }
+                    return bitmap;
+                };
                 ImageBox.SaveClicked = async (image) => await viewModel.SaveCurrentImage(image);
                 ImageBox.ComicPanelsExtracted = async (images) => await viewModel.ReviewComicPanels(images);
                 ImageBox.ImageCropped += (source, image) => viewModel.ImageCropped(image);

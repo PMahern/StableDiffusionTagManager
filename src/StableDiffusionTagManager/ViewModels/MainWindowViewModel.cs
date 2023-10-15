@@ -175,6 +175,7 @@ namespace StableDiffusionTagManager.ViewModels
         public Action? ExitCallback { get; set; }
 
         public Func<Bitmap, bool>? ImageDirtyCallback { get; set; }
+        public Func<Bitmap, bool, Bitmap>? GetModifiedImageDataCallback { get; set; }
         #endregion
 
         private Task<TResult> ShowDialog<TResult>(IMsBox<TResult> mbox) where TResult : struct
@@ -379,6 +380,12 @@ namespace StableDiffusionTagManager.ViewModels
                     set.WriteFile();
 
                     image.ClearTagsDirty();
+
+                    if(image.IsImageDirty() && GetModifiedImageDataCallback != null)
+                    {
+                        var newImageData = GetModifiedImageDataCallback(image.ImageSource, true);
+                        SaveUpdatedImage(image, newImageData);
+                    }
                 }
             }
         }
@@ -794,7 +801,7 @@ namespace StableDiffusionTagManager.ViewModels
         }
 
         [RelayCommand]
-        public async void ProjectSettings()
+        public async Task ProjectSettings()
         {
             if (openProject != null)
             {
@@ -807,7 +814,7 @@ namespace StableDiffusionTagManager.ViewModels
         }
 
         [RelayCommand]
-        public async void Exit()
+        public async Task Exit()
         {
             if (await CheckCanExit())
             {
@@ -816,9 +823,9 @@ namespace StableDiffusionTagManager.ViewModels
         }
 
         [RelayCommand]
-        public async void ClearTags()
+        public async Task ClearTags()
         {
-            if (SelectedImage.Tags.Any())
+            if (SelectedImage != null && SelectedImage.Tags.Any())
             {
                 var dialog = MessageBoxManager
                                     .GetMessageBoxStandard("Delete all tags",
@@ -1023,14 +1030,24 @@ namespace StableDiffusionTagManager.ViewModels
         {
             if (openFolder != null && SelectedImage != null)
             {
-                if (Path.GetExtension(SelectedImage.Filename) != ".png")
+                SaveUpdatedImage(SelectedImage, image);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public Task SaveUpdatedImage(ImageWithTagsViewModel targetImageWithTags, Bitmap image)
+        {
+            if (openFolder != null)
+            {
+                if (Path.GetExtension(targetImageWithTags.Filename) != ".png")
                 {
-                    image.Save(Path.Combine(openFolder, SelectedImage.Filename));
-                    SelectedImage.Filename = $"{Path.GetFileNameWithoutExtension(SelectedImage.Filename)}.png";
+                    image.Save(Path.Combine(openFolder, targetImageWithTags.Filename));
+                    targetImageWithTags.Filename = $"{Path.GetFileNameWithoutExtension(targetImageWithTags.Filename)}.png";
                 }
-                image.Save(Path.Combine(openFolder, SelectedImage.Filename));
-                SelectedImage.ImageSource = image;
-                SelectedImage.UpdateThumbnail();
+                image.Save(Path.Combine(openFolder, targetImageWithTags.Filename));
+                targetImageWithTags.ImageSource = image;
+                targetImageWithTags.UpdateThumbnail();
             }
 
             return Task.CompletedTask;
