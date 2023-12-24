@@ -52,10 +52,9 @@
           </MenuItem>
         </MenuItem>
         <MenuItem Header="_Automation">
-          <MenuItem Header="Tag _Collections..." />
-          <MenuItem Header="Tag _Priority Sets..." Command="{Binding EditTagPrioritySetsCommand}"/>
+          <MenuItem Header="Edit Tag _Priority Sets..." Command="{Binding EditTagPrioritySetsCommand}"/>
+          <MenuItem Header="_Apply Tag Priority Set to All Images..." Command="{Binding ApplyTagPrioritySetToAllImagesCommand}"/>
           <MenuItem Header="_Convert all image alpha channels to another color..." Command="{Binding ConvertAllImageAlphasToColor}"/>
-          <MenuItem Header="_Apply Tag Priority Set to All Images" Command="{Binding ApplyTagPrioritySetToAllImagesCommand}"/>
           <MenuItem Header="_Interrogate All Images" Command="{Binding InterrogateAllImagesCommand}"/>
         </MenuItem>
       </Menu>

@@ -1156,14 +1156,20 @@ namespace StableDiffusionTagManager.ViewModels
         }
 
         [RelayCommand]
-        public void ApplyTagPrioritySetToAllImages()
+        public async Task ApplyTagPrioritySetToAllImages()
         {
-            if (tagPrioritySets != null && tagPrioritySets.Any() && ImagesWithTags != null)
+            if (tagPrioritySets != null && ImagesWithTags != null)
             {
-                var set = tagPrioritySets.First().PrioritySet;
-                foreach (var image in ImagesWithTags)
+                var dialog = new TagPrioritySelectDialog();
+                dialog.TagPrioritySets = tagPrioritySets.ToList();
+
+                var result = await ShowDialog<TagPrioritySetButtonViewModel?>(dialog);
+                if(result != null)
                 {
-                    image.ApplyTagOrdering(t => set.GetTagPriority(t));
+                    foreach (var image in ImagesWithTags)
+                    {
+                        image.ApplyTagOrdering(t => result.PrioritySet.GetTagPriority(t));
+                    }
                 }
             }
         }
