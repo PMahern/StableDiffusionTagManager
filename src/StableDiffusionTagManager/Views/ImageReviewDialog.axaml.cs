@@ -28,7 +28,7 @@ namespace StableDiffusionTagManager.Views
             AvaloniaProperty.Register<ImageReviewDialog, ObservableCollection<ImageReviewViewModel>?>(nameof(Images), null);
 
         /// <summary>
-        /// Gets or sets the image to be displayed
+        /// Gets or sets the images to review.
         /// </summary>
         public ObservableCollection<ImageReviewViewModel>? Images
         {
@@ -40,7 +40,7 @@ namespace StableDiffusionTagManager.Views
             AvaloniaProperty.Register<ImageReviewDialog, ImageReviewViewModel?>(nameof(SelectedImage));
 
         /// <summary>
-        /// Gets or sets if control can render the image
+        /// Gets or sets the currently selected image of the dialog.
         /// </summary>
         public ImageReviewViewModel? SelectedImage
         {
@@ -54,7 +54,7 @@ namespace StableDiffusionTagManager.Views
             AvaloniaProperty.Register<ImageReviewDialog, ImageReviewDialogMode>(nameof(ReviewMode), ImageReviewDialogMode.SingleSelect);
 
         /// <summary>
-        /// Gets or sets if control can render the image
+        /// Gets or sets the review behavior of the dialog.
         /// </summary>
         public ImageReviewDialogMode ReviewMode
         {
@@ -75,6 +75,9 @@ namespace StableDiffusionTagManager.Views
             Close();
         }
 
+        /// <summary>
+        /// Indiates if the user completed the dialog of cancelled out.
+        /// </summary>
         public bool Success { get; set; } = false;
     }
 }
