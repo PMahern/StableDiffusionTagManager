@@ -187,6 +187,16 @@ namespace StableDiffusionTagManager.ViewModels
             TagRemoved?.Invoke(tag.Tag);
         }
 
+        public void RemoveTag(string tag)
+        {
+            var findResult = this.tags.FirstOrDefault(t => t.Tag == tag);
+            if(findResult != null)
+            {
+                this.tags.Remove(findResult);
+                TagRemoved?.Invoke(findResult.Tag);
+            }
+        }
+
         public string GetTagsFileName()
         {
             return $"{Path.GetFileNameWithoutExtension(Filename)}.txt";
@@ -277,6 +287,17 @@ namespace StableDiffusionTagManager.ViewModels
             foreach (var tag in newOrder)
             {
                 this.tags.Add(tag);
+            }
+        }
+
+        internal void ReplaceTagIfExists(string target, string toReplaceWith)
+        {
+            // Remove the target tag, if we find the replacement tag remove it as well, we want to put the new tag in the old tags location
+            var found = Tags.FirstOrDefault(t => t.Tag == target);
+            if (found != null)
+            {
+                RemoveTag(toReplaceWith);
+                found.Tag = toReplaceWith;
             }
         }
     }

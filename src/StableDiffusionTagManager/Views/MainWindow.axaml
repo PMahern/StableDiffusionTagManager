@@ -234,7 +234,9 @@
       </Grid>
     </DockPanel>
     <Border IsVisible="{Binding ShowProgressIndicator}" Classes="progressoverlay">
-      <ProgressBar  Minimum="0" Maximum="{Binding ProgressIndicatorMax}" Value="{Binding ProgressIndicatorProgress}" />
+      <controls:HeaderControl Title="{Binding ProgressIndicatorMessage}">
+        <ProgressBar Grid.Row="1" Minimum="0" Maximum="{Binding ProgressIndicatorMax}" Value="{Binding ProgressIndicatorProgress}" />
+      </controls:HeaderControl>
     </Border>
   </Grid>
 </Window>

@@ -473,7 +473,7 @@ namespace StableDiffusionTagManager.ViewModels
         public bool ImagesLoaded => this.ImagesWithTags?.Any() ?? false;
 
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
-        public async void AddTagToEndOfAllImages()
+        public async Task AddTagToEndOfAllImages()
         {
             if (ImagesWithTags != null)
             {
@@ -494,7 +494,7 @@ namespace StableDiffusionTagManager.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
-        public async void AddTagToStartOfAllImages()
+        public async Task AddTagToStartOfAllImages()
         {
             if (ImagesWithTags != null)
             {
@@ -528,16 +528,10 @@ namespace StableDiffusionTagManager.ViewModels
                 {
                     foreach (var image in ImagesWithTags)
                     {
-                        var found = image.Tags.FirstOrDefault(t => t.Tag == target);
-                        if (found != null)
-                        {
-                            image.RemoveTag(found);
-                            image.AddTagIfNotExists(new TagViewModel(tagResult));
-                        }
+                        image.ReplaceTagIfExists(target, tagResult);
                     }
                 }
             }
-
             UpdateTagCounts();
         }
 
@@ -664,6 +658,16 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
+        private string progressIndicatorMessage = "";
+        public string ProgressIndicatorMessage
+        {
+            get => progressIndicatorMessage;
+            private set
+            {
+                progressIndicatorMessage = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
 
         private Dictionary<string, TagWithCountViewModel> TagCountDictionary = new Dictionary<string, TagWithCountViewModel>();
@@ -961,6 +965,7 @@ namespace StableDiffusionTagManager.ViewModels
                 ShowProgressIndicator = true;
                 ProgressIndicatorMax = ImagesWithTags.Count();
                 ProgressIndicatorProgress = 0;
+                ProgressIndicatorMessage = "Interrogating all images...";
 
                 foreach (var image in ImagesWithTags)
                 {
@@ -1207,6 +1212,11 @@ namespace StableDiffusionTagManager.ViewModels
                 await ShowDialog<Color?>(dialog);
                 if(dialog.Success)
                 {
+                    ShowProgressIndicator = true;
+                    ProgressIndicatorMax = ImagesWithTags.Count();
+                    ProgressIndicatorProgress = 0;
+                    ProgressIndicatorMessage = "Converting image alpha channels...";
+
                     foreach (var image in ImagesWithTags)
                     {
                         var sourceImage = image.ImageSource;
@@ -1219,7 +1229,10 @@ namespace StableDiffusionTagManager.ViewModels
 
                         image.ImageSource = newImage;
                         image.ImageSource.Save(Path.Combine(this.openFolder, image.Filename));
+                        ProgressIndicatorProgress++;
                     }
+
+                    ShowProgressIndicator = false;
                 }   
             }
         }
