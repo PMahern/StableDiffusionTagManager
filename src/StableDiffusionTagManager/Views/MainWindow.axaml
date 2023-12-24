@@ -54,6 +54,8 @@
         <MenuItem Header="_Automation">
           <MenuItem Header="Tag _Collections..." />
           <MenuItem Header="Tag _Priority Sets..." Command="{Binding EditTagPrioritySetsCommand}"/>
+          <MenuItem Header="_Convert all image alpha channels to another color..." Command="{Binding ConvertAllImageAlphasToColor}"/>
+          <MenuItem Header="_Apply Tag Priority Set to All Images" Command="{Binding ApplyTagPrioritySetToAllImagesCommand}"/>
           <MenuItem Header="_Interrogate All Images" Command="{Binding InterrogateAllImagesCommand}"/>
         </MenuItem>
       </Menu>
@@ -128,6 +130,12 @@
                         </MenuFlyout>
                       </Button.Flyout>
                       <mi:MaterialIcon Kind="OrderAlphabeticalAscending"/>
+                    </Button>
+                    <Button Command="{Binding CopyTagsCommand}" ToolTip.Tip="Copy Image Tags">
+                      <mi:MaterialIcon Kind="ContentCopy"/>
+                    </Button>
+                    <Button IsVisible="{Binding HasCopiedTags}" Command="{Binding PasteTagsCommand}" ToolTip.Tip="Paste Tags">
+                      <mi:MaterialIcon Kind="ContentPaste"/>
                     </Button>
                   </StackPanel>
                   <ScrollViewer Grid.Row="1"

@@ -1,0 +1,35 @@
+<Window xmlns="https://github.com/avaloniaui"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      xmlns:cp="clr-namespace:ThemeEditor.Controls.ColorPicker;assembly=ThemeEditor.Controls.ColorPicker"
+      x:Class="StableDiffusionTagManager.Views.ColorPickerDialog"
+      Height="400"
+      Width="400"
+      xmlns:controls="using:StableDiffusionTagManager.Controls"
+      xmlns:conv="using:StableDiffusionTagManager.Converters"
+      xmlns:api="using:SdWebUpApi"
+      CanResize="False"
+      ExtendClientAreaChromeHints="NoChrome"
+      ExtendClientAreaTitleBarHeightHint="4"
+      ExtendClientAreaToDecorationsHint="True"
+      WindowStartupLocation="CenterOwner"
+      Title="Select Color"
+      Icon="/Assets/logo.ico"
+      Name="ThisControl">
+  <Window.Styles>
+    <Style Selector="RadioButton">
+      <Setter Property="Margin" Value="5,0,0,0"></Setter>
+    </Style>
+  </Window.Styles>
+  <controls:HeaderControl DataContext="{Binding ElementName=ThisControl}" Title="Select Color" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="5" CloseCommand="{Binding CancelCommand}">
+    <Grid RowDefinitions="Auto,Auto">
+      <cp:ColorPicker Color="{Binding SelectedColor, Mode=TwoWay}" />
+      <StackPanel Grid.Row="1" Classes="footer">
+        <Button Command="{Binding SaveCommand}">Select</Button>
+        <Button Command="{Binding CancelCommand}">Cancel</Button>
+      </StackPanel>
+    </Grid>
+  </controls:HeaderControl>
+</Window>

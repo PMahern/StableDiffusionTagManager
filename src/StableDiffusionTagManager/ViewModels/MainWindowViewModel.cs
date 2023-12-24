@@ -38,6 +38,26 @@ namespace StableDiffusionTagManager.ViewModels
             UpdateTagPrioritySets();
         }
 
+        private List<string>? _CopiedTags = null;
+
+        private List<string>? CopiedTags
+        {
+            get => _CopiedTags;
+            set  {
+                _CopiedTags = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasCopiedTags));
+            }
+        }
+
+        public bool HasCopiedTags
+        {
+            get
+            {
+                return _CopiedTags != null && _CopiedTags.Any();
+            }
+        }
+
         private ObservableCollection<ImageWithTagsViewModel>? imageWithTagsViewModel;
         public ObservableCollection<ImageWithTagsViewModel>? ImagesWithTags
         {
@@ -502,7 +522,7 @@ namespace StableDiffusionTagManager.ViewModels
                     foreach (var image in ImagesWithTags)
                     {
                         var found = image.Tags.FirstOrDefault(t => t.Tag == target);
-                        if(found != null)
+                        if (found != null)
                         {
                             image.RemoveTag(found);
                             image.AddTagIfNotExists(new TagViewModel(tagResult));
@@ -514,7 +534,7 @@ namespace StableDiffusionTagManager.ViewModels
             UpdateTagCounts();
         }
 
-        
+
 
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async Task RemoveTagFromAllImages()
@@ -1114,6 +1134,19 @@ namespace StableDiffusionTagManager.ViewModels
         }
 
         [RelayCommand]
+        public void ApplyTagPrioritySetToAllImages()
+        {
+            if (tagPrioritySets != null && tagPrioritySets.Any() && ImagesWithTags != null)
+            {
+                var set = tagPrioritySets.First().PrioritySet;
+                foreach (var image in ImagesWithTags)
+                {
+                    image.ApplyTagOrdering(t => set.GetTagPriority(t));
+                }
+            }
+        }
+
+        [RelayCommand]
         public void SetImageFilter(ImageFilterMode mode)
         {
             CurrentImageFilterMode = mode;
@@ -1145,6 +1178,53 @@ namespace StableDiffusionTagManager.ViewModels
                                                         Path.GetFileNameWithoutExtension(filename),
                                                         new TagPrioritySet(filename)))
                                   .ToObservableCollection();
+            }
+        }
+
+        [RelayCommand]
+        public async Task ConvertAllImageAlphasToColor()
+        {
+            if (openFolder != null && ImagesWithTags != null)
+            {
+                var dialog = new ColorPickerDialog();
+                await ShowDialog<Color?>(dialog);
+                if(dialog.Success)
+                {
+                    foreach (var image in ImagesWithTags)
+                    {
+                        var sourceImage = image.ImageSource;
+                        var newImage = new RenderTargetBitmap(sourceImage.PixelSize);
+                        using (var drawingContext = newImage.CreateDrawingContext())
+                        {
+                            drawingContext.FillRectangle(new SolidColorBrush(dialog.SelectedColor), new Rect(0, 0, sourceImage.PixelSize.Width, sourceImage.PixelSize.Height));
+                            drawingContext.DrawImage(sourceImage, new Rect(0, 0, sourceImage.PixelSize.Width, sourceImage.PixelSize.Height));
+                        }
+
+                        image.ImageSource = newImage;
+                        image.ImageSource.Save(Path.Combine(this.openFolder, image.Filename));
+                    }
+                }   
+            }
+        }
+
+        [RelayCommand]
+        public void CopyTags()
+        {
+            if (SelectedImage != null)
+            {
+                CopiedTags = new List<string>(SelectedImage.Tags.Select(t => t.Tag));
+            }
+        }
+
+        [RelayCommand]
+        public void PasteTags()
+        {
+            if (SelectedImage != null && CopiedTags != null)
+            {
+                foreach (var tag in CopiedTags)
+                {
+                    SelectedImage.AddTagIfNotExists(new TagViewModel(tag));
+                }
             }
         }
         #endregion

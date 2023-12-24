@@ -68,7 +68,7 @@ namespace StableDiffusionTagManager.Models
                     //Test the wildcard
                     var wildcardindex = item.tag.IndexOf("*");
                     var doesMatch = (wildcardindex > 0 ? tag.StartsWith(item.tag.Substring(0, wildcardindex)) : true) &&
-                                    (wildcardindex < item.tag.Length - 1) ? tag.EndsWith(item.tag.Substring(wildcardindex + 1, item.tag.Length - wildcardindex - 1)) : true;
+                                    ((wildcardindex < item.tag.Length - 1) ? tag.EndsWith(item.tag.Substring(wildcardindex + 1, item.tag.Length - wildcardindex - 1)) : true);
                     if(doesMatch)
                     {
                         return item.index;
