@@ -30,7 +30,7 @@ namespace StableDiffusionTagManager.Controls
         {
             InitializeComponent();
 
-            PaintBrushColor = new Color(255, 255, 255, 255);
+            paintBrushColor = new Color(255, 255, 255, 255);
         }
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
