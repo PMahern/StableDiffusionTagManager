@@ -36,12 +36,11 @@
           <MenuItem Header="_Settings" Command="{Binding ProjectSettingsCommand}" />
         </MenuItem>
         <MenuItem  Header="_Tags">
-          <MenuItem Header="Add Tag To _Start" Command="{Binding AddTagToFront}"/>
-          <MenuItem Header="Add Tag to _End" Command="{Binding AddTagToEnd}"/>
-          <MenuItem Header="Add Tag to _All Images " Command="{Binding AddTagToStartOfAllImages}"/>
-          <MenuItem Header="Add Tag to End of All _Images " Command="{Binding AddTagToEndOfAllImages}"/>
-          <MenuItem Header="Re_place Tag in all Images" Command="{Binding ReplaceTagInAllImages}"/>
-          <MenuItem Header="_Remove Tag from All Images" Command="{Binding RemoveTagFromAllImages}"/>
+          <MenuItem Header="Add Tag To _Start" Command="{Binding AddTagToFrontCommand}"/>
+          <MenuItem Header="Add Tag to _End" Command="{Binding AddTagToEndCommand}"/>
+          <MenuItem Header="Add Tag to _All Images " Command="{Binding AddTagToStartOfAllImagesCommand}"/>
+          <MenuItem Header="Add Tag to End of All _Images " Command="{Binding AddTagToEndOfAllImagesCommand}"/>
+          <MenuItem Header="_Remove Tag from All Images" Command="{Binding RemoveTagFromAllImagesCommand}"/>
         </MenuItem>
         <MenuItem  Header="_Images">
           <MenuItem Header="_Archive Selected Image" Command="{Binding DeleteSelectedImageCommand}"/>
@@ -54,7 +53,7 @@
         <MenuItem Header="_Automation">
           <MenuItem Header="Edit Tag _Priority Sets..." Command="{Binding EditTagPrioritySetsCommand}"/>
           <MenuItem Header="_Apply Tag Priority Set to All Images..." Command="{Binding ApplyTagPrioritySetToAllImagesCommand}"/>
-          <MenuItem Header="_Convert all image alpha channels to another color..." Command="{Binding ConvertAllImageAlphasToColor}"/>
+          <MenuItem Header="_Convert all image alpha channels to another color..." Command="{Binding ConvertAllImageAlphasToColorCommand}"/>
           <MenuItem Header="_Interrogate All Images" Command="{Binding InterrogateAllImagesCommand}"/>
         </MenuItem>
       </Menu>
@@ -173,23 +172,31 @@
                   <ColumnDefinition Width="3*" MinWidth="100"/>
                 </Grid.ColumnDefinitions>
                 <controls:HeaderControl Grid.Column="0" Title="Tag Collections" Padding="0">
-                  <ScrollViewer VerticalScrollBarVisibility="Visible"
-                                HorizontalScrollBarVisibility="Disabled"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch">
-                    <ItemsControl Grid.Column="0"  ItemsSource="{Binding TagCollections}">
-                      <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                          <WrapPanel Orientation="Horizontal" Margin="5"/>
-                        </ItemsPanelTemplate>
-                      </ItemsControl.ItemsPanel>
-                      <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                          <Button Content="{Binding Name}" Command="{Binding AddTags}"></Button>
-                        </DataTemplate>
-                      </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                  </ScrollViewer>
+                  <Grid RowDefinitions="Auto, *">
+                    <StackPanel Orientation="Horizontal" Classes="toolbar" Grid.Column="0">
+                      <Button Command="{Binding AddTagCollectionCommand}" ToolTip.Tip="Add New Tag Collection">
+                        <mi:MaterialIcon Kind="Add"/>
+                      </Button>
+                    </StackPanel>
+                    <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Visible"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch">
+                      <ItemsControl Grid.Column="0"  ItemsSource="{Binding TagCollections}">
+                        <ItemsControl.ItemsPanel>
+                          <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" Margin="5"/>
+                          </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                          <DataTemplate>
+                            <Button Content="{Binding Name}" Command="{Binding AddTags}"></Button>
+                          </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                      </ItemsControl>
+                    </ScrollViewer>
+                  </Grid>
                 </controls:HeaderControl>
                 <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
                 <controls:HeaderControl Grid.Column="2" Title="Tags Currently in the Project" Padding="0">

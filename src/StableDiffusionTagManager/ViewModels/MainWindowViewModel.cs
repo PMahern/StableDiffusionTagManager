@@ -22,7 +22,7 @@ using MsBox.Avalonia.Base;
 using System.Collections.Specialized;
 using ImageUtil;
 using Avalonia.Platform.Storage;
-using System.ComponentModel.DataAnnotations;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -76,6 +76,9 @@ namespace StableDiffusionTagManager.ViewModels
                 RebuildFilteredImageSet();
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(ImagesLoaded));
+                AddTagToEndOfAllImagesCommand.NotifyCanExecuteChanged();
+                AddTagToStartOfAllImagesCommand.NotifyCanExecuteChanged();
+                RemoveTagFromAllImagesCommand.NotifyCanExecuteChanged();
             }
         }
 
@@ -121,6 +124,8 @@ namespace StableDiffusionTagManager.ViewModels
 
             return false;
         }
+
+        #region Tag Collections+
         private ObservableCollection<TagCollectionViewModel>? tagCollections;
         public ObservableCollection<TagCollectionViewModel>? TagCollections { get => tagCollections; set { tagCollections = value; OnPropertyChanged(); } }
 
@@ -179,11 +184,20 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
-        private Project? openProject = null;
+        [RelayCommand(CanExecute = nameof(IsProject))]
+        public void AddTagCollection()
+        {
+
+        }
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(AddTagCollectionCommand))]
+        #endregion
+        private Project? openProject = null;        
+
+        public bool IsProject { get => OpenProject != null; }
 
         private string? openFolder = null;
-
-        public bool IsProject { get => openProject != null; }
 
         #region Callbacks and Events
         public DialogHandler? ShowDialogHandler { get; set; }
@@ -358,19 +372,18 @@ namespace StableDiffusionTagManager.ViewModels
 
                         if (projFolder)
                         {
-                            openProject = new Project(projFile);
-                            openProject.ProjectUpdated += UpdateProjectSettings;
+                            OpenProject = new Project(projFile);
+                            OpenProject.ProjectUpdated += UpdateProjectSettings;
                             UpdateProjectSettings();
                         }
 
-                        if (openProject != null)
+                        if (OpenProject != null)
                         {
-                            TagCollections = new ObservableCollection<TagCollectionViewModel>(openProject.TagCollections.Select(c => new TagCollectionViewModel(this, c.Name, c.Tags)));
+                            TagCollections = new ObservableCollection<TagCollectionViewModel>(OpenProject.TagCollections.Select(c => new TagCollectionViewModel(this, c.Name, c.Tags)));
                         }
 
                         openFolder = pickedFolderPath;
 
-                        OnPropertyChanged(nameof(IsProject));
                         UpdateTagCounts();
                     }
                 }
@@ -379,12 +392,12 @@ namespace StableDiffusionTagManager.ViewModels
 
         private void UpdateProjectSettings()
         {
-            TargetImageSize = openProject?.TargetImageSize;
-            if (openProject != null && ImagesWithTags != null)
+            TargetImageSize = OpenProject?.TargetImageSize;
+            if (OpenProject != null && ImagesWithTags != null)
             {
                 foreach (var image in ImagesWithTags)
                 {
-                    image.IsComplete = openProject.CompletedImages.Contains(image.Filename);
+                    image.IsComplete = OpenProject.CompletedImages.Contains(image.Filename);
                 }
             }
         }
@@ -534,8 +547,6 @@ namespace StableDiffusionTagManager.ViewModels
             }
             UpdateTagCounts();
         }
-
-
 
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async Task RemoveTagFromAllImages()
@@ -805,7 +816,7 @@ namespace StableDiffusionTagManager.ViewModels
 
                 dialog.Tags = SelectedImage.Tags.Select(t => t.Tag).ToList();
                 dialog.Image = image;
-                dialog.OpenProject = this.openProject;
+                dialog.OpenProject = this.OpenProject;
                 await ShowDialog(dialog);
 
                 if (dialog.Success)
@@ -827,11 +838,11 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public async Task ProjectSettings()
         {
-            if (openProject != null)
+            if (OpenProject != null)
             {
                 var dialog = new ProjectSettingsDialog();
 
-                dialog.Project = openProject;
+                dialog.Project = OpenProject;
 
                 await ShowDialog(dialog);
             }
@@ -919,7 +930,7 @@ namespace StableDiffusionTagManager.ViewModels
 
             var model = "deepdanbooru";
 
-            if (openProject != null && openProject.InterrogateMethod == SdWebUpApi.InterrogateMethod.Clip)
+            if (OpenProject != null && OpenProject.InterrogateMethod == SdWebUpApi.InterrogateMethod.Clip)
             {
                 model = "clip";
             }
@@ -957,7 +968,7 @@ namespace StableDiffusionTagManager.ViewModels
             return null;
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async Task InterrogateAllImages()
         {
             if (ImagesWithTags != null && ImagesWithTags.Count > 0)
@@ -1081,9 +1092,9 @@ namespace StableDiffusionTagManager.ViewModels
         public async Task ExpandImage(Bitmap image)
         {
             var dialog = new ExpandImageDialog();
-            if (openProject != null && openProject.TargetImageSize.HasValue && openProject.TargetImageSize.Value.Width > 0 && openProject.TargetImageSize.Value.Height > 0)
+            if (OpenProject != null && OpenProject.TargetImageSize.HasValue && OpenProject.TargetImageSize.Value.Width > 0 && OpenProject.TargetImageSize.Value.Height > 0)
             {
-                dialog.ComputeExpansionNeededForTargetAspectRatio(image.PixelSize.Width, image.PixelSize.Height, openProject.TargetImageSize.Value.Width, openProject.TargetImageSize.Value.Height);
+                dialog.ComputeExpansionNeededForTargetAspectRatio(image.PixelSize.Width, image.PixelSize.Height, OpenProject.TargetImageSize.Value.Width, OpenProject.TargetImageSize.Value.Height);
             }
             await ShowDialog(dialog);
             if (dialog.Success)
@@ -1155,7 +1166,7 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async Task ApplyTagPrioritySetToAllImages()
         {
             if (tagPrioritySets != null && ImagesWithTags != null)
@@ -1183,11 +1194,11 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public void ToggleImageComplete()
         {
-            if (SelectedImage != null && openProject != null)
+            if (SelectedImage != null && OpenProject != null)
             {
                 SelectedImage.IsComplete = !SelectedImage.IsComplete;
-                openProject.SetImageCompletionStatus(SelectedImage.Filename, SelectedImage.IsComplete);
-                openProject.Save();
+                OpenProject.SetImageCompletionStatus(SelectedImage.Filename, SelectedImage.IsComplete);
+                OpenProject.Save();
 
                 if (CurrentImageFilterMode != ImageFilterMode.None && FilteredImageSet != null)
                 {
@@ -1209,7 +1220,7 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async Task ConvertAllImageAlphasToColor()
         {
             if (openFolder != null && ImagesWithTags != null)
