@@ -18,7 +18,9 @@
                                        Image="{Binding Image}"
                                        ShowExtractComicPanelsButton="False"
                                        ShowEditImageButton="False"
-                                       ShowInterrogateButton="False"/>
+                                       ShowInterrogateButton="False"
+                                       ShowRemoveBackgroundButton="False"
+                                       ShowConvertAlphaButton="False"/>
         <DockPanel Grid.Column="1">
           <StackPanel  Orientation="Vertical" DockPanel.Dock="Top">
             <controls:HeaderControl Title="Prompt" >

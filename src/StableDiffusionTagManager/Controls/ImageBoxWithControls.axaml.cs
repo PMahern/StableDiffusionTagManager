@@ -46,6 +46,8 @@ namespace StableDiffusionTagManager.Controls
         public event EventHandler<Bitmap>? ImageCropped;
         public Func<Bitmap, Task> SaveClicked;
         public Func<Bitmap, Task>? InterrogateClicked;
+        public Func<Bitmap, Task>? RemoveBackgroundClicked;
+        public Func<Bitmap, Task>? ConvertAlphaClicked;
         public Func<Bitmap, Task>? EditImageClicked;
         public Func<List<Bitmap?>, Task>? ComicPanelsExtracted;
         public Func<Bitmap, Task>? ExpandClicked;
@@ -111,6 +113,24 @@ namespace StableDiffusionTagManager.Controls
         {
             get => GetValue(ShowInterrogateButtonProperty);
             set => SetValue(ShowInterrogateButtonProperty, value);
+        }
+
+        public static readonly StyledProperty<bool> ShowRemoveBackgroundButtonProperty =
+            AvaloniaProperty.Register<ImageBoxWithControls, bool>(nameof(ShowRemoveBackgroundButton), true);
+
+        public bool ShowRemoveBackgroundButton
+        {
+            get => GetValue(ShowRemoveBackgroundButtonProperty);
+            set => SetValue(ShowRemoveBackgroundButtonProperty, value);
+        }
+
+        public static readonly StyledProperty<bool> ShowConvertAlphaButtonProperty =
+            AvaloniaProperty.Register<ImageBoxWithControls, bool>(nameof(ShowConvertAlphaButton), true);
+
+        public bool ShowConvertAlphaButton
+        {
+            get => GetValue(ShowConvertAlphaButtonProperty);
+            set => SetValue(ShowConvertAlphaButtonProperty, value);
         }
 
         public static readonly StyledProperty<Bitmap?> ImageProperty =
@@ -489,6 +509,38 @@ namespace StableDiffusionTagManager.Controls
                     if (InterrogateClicked != null)
                     {
                         await InterrogateClicked(image);
+                    }
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async void RemoveBackground()
+        {
+            if (Image != null)
+            {
+                var image = ImageBox.CreateNewImageWithLayersFromRegion(null);
+                if (image != null)
+                {
+                    if (RemoveBackgroundClicked != null)
+                    {
+                        await RemoveBackgroundClicked(image);
+                    }
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async void ConvertAlpha()
+        {
+            if (Image != null)
+            {
+                var image = ImageBox.CreateNewImageWithLayersFromRegion(null);
+                if (image != null)
+                {
+                    if (ConvertAlphaClicked != null)
+                    {
+                        await ConvertAlphaClicked(image);
                     }
                 }
             }

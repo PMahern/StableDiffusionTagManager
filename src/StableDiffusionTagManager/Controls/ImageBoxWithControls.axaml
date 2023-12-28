@@ -44,6 +44,13 @@
           <Button Command="{Binding InterrogateCommand}" IsVisible="{Binding ShowInterrogateButton}" ToolTip.Tip="Interrogate SD Webui For Tags">
             <mi:MaterialIcon Kind="Eye"/>
           </Button>
+          <Button Command="{Binding RemoveBackgroundCommand}" IsVisible="{Binding ShowRemoveBackgroundButton}" ToolTip.Tip="Remove background using SD Webui">
+            <mi:MaterialIcon Kind="RemoveOutline"/>
+          </Button>
+          <Button Command="{Binding ConvertAlphaCommand}" IsVisible="{Binding ShowConvertAlphaButton}" ToolTip.Tip="Convert image alpha">
+            <mi:MaterialIcon Kind="CompareRemove"/>
+          </Button>
+          
           <Button Command="{Binding SaveCommand}" IsVisible="{Binding ShowSaveButton}" IsEnabled="{Binding IsPainted, ElementName=ImageBox}" ToolTip.Tip="Save Changes">
             <mi:MaterialIcon Kind="FloppyDisc"/>
           </Button>

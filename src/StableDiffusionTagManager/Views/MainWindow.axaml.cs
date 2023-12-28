@@ -75,6 +75,8 @@ namespace StableDiffusionTagManager.Views
                 ImageBox.ComicPanelsExtracted = async (images) => await viewModel.ReviewComicPanels(images);
                 ImageBox.ImageCropped += (source, image) => viewModel.ImageCropped(image);
                 ImageBox.InterrogateClicked = async (image) => await viewModel.InterrogateAndApplyToSelectedImage(image);
+                ImageBox.RemoveBackgroundClicked = async (image) => await viewModel.ReviewRemoveBackground(image);
+                ImageBox.ConvertAlphaClicked = async (image) => await viewModel.ReviewConvertAlpha(image);
                 ImageBox.ExpandClicked = async (image) => await viewModel.ExpandImage(image);
                 ImageBox.EditImageClicked = async (image) => await viewModel.RunImgToImg(image);
                 

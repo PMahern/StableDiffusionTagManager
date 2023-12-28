@@ -23,6 +23,7 @@ using System.Collections.Specialized;
 using ImageUtil;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
+using SdWebUiApi;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -981,8 +982,6 @@ namespace StableDiffusionTagManager.ViewModels
 
             return true;
         }
-
-        #region Image Interrogation
         public async Task InterrogateAndApplyToSelectedImage(Bitmap bitmap)
         {
             //Cache the selected image in case it's changed during async operation
@@ -997,6 +996,48 @@ namespace StableDiffusionTagManager.ViewModels
                 }
             }
         }
+
+        #region Image Interrogation
+        public async Task ReviewRemoveBackground(Bitmap bitmap)
+        {
+            //Cache the selected image in case it's changed during async operation
+            var selectedImage = SelectedImage;
+
+            var api = new DefaultApi(App.Settings.WebUiAddress);
+
+            using var uploadStream = new MemoryStream();
+            bitmap.Save(uploadStream);
+            var imagebase64 = Convert.ToBase64String(uploadStream.ToArray());
+
+            var result = await api.RembgRemoveRembgPostAsync(new SdWebUiApi.Model.BodyRembgRemoveRembgPost
+            {
+                Model = RembgModels.U2NetHumanSeg,
+                InputImage = imagebase64,
+            });
+
+            var jtokResult = result as JToken;
+            var convertedresult = jtokResult?.ToObject<RemBgResult>();
+            if (convertedresult != null)
+            {
+                using (var mstream = new MemoryStream(Convert.FromBase64String(convertedresult.image)))
+                {
+                    var imageResult = new Bitmap(mstream);
+
+                    var viewer = new ImageReviewDialog();
+                    viewer.Title = "Review image with removed background";
+                    viewer.Images = new ObservableCollection<ImageReviewViewModel>(){ new ImageReviewViewModel(imageResult) };
+                    viewer.ReviewMode = ImageReviewDialogMode.SingleSelect;
+                    await ShowDialog(viewer);
+
+                    if (viewer.Success)
+                    {
+                        selectedImage.ImageSource = imageResult;
+                        selectedImage.ImageSource.Save(Path.Combine(this.openFolder, selectedImage.Filename));
+                    }
+                }
+            }
+        }
+
         public async Task<IEnumerable<TagViewModel>?> Interrogate(Bitmap image)
         {
             var api = new DefaultApi(App.Settings.WebUiAddress);
@@ -1293,6 +1334,17 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
+        public Bitmap ConvertImageAlphaToColor(Bitmap sourceImage, Color color)
+        {
+            var newImage = new RenderTargetBitmap(sourceImage.PixelSize);
+            using (var drawingContext = newImage.CreateDrawingContext())
+            {
+                drawingContext.FillRectangle(new SolidColorBrush(color), new Rect(0, 0, sourceImage.PixelSize.Width, sourceImage.PixelSize.Height));
+                drawingContext.DrawImage(sourceImage, new Rect(0, 0, sourceImage.PixelSize.Width, sourceImage.PixelSize.Height));
+            }
+            return newImage;
+        }
+
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async Task ConvertAllImageAlphasToColor()
         {
@@ -1310,22 +1362,44 @@ namespace StableDiffusionTagManager.ViewModels
                     foreach (var image in ImagesWithTags)
                     {
                         var sourceImage = image.ImageSource;
-                        var newImage = new RenderTargetBitmap(sourceImage.PixelSize);
-                        using (var drawingContext = newImage.CreateDrawingContext())
-                        {
-                            drawingContext.FillRectangle(new SolidColorBrush(dialog.SelectedColor), new Rect(0, 0, sourceImage.PixelSize.Width, sourceImage.PixelSize.Height));
-                            drawingContext.DrawImage(sourceImage, new Rect(0, 0, sourceImage.PixelSize.Width, sourceImage.PixelSize.Height));
-                        }
+                        var newImage = ConvertImageAlphaToColor(sourceImage, dialog.SelectedColor);
 
                         image.ImageSource = newImage;
                         image.ImageSource.Save(Path.Combine(this.openFolder, image.Filename));
                         ProgressIndicatorProgress++;
-                    }
 
+                        await Task.Delay(1);
+                    }
+                    
                     ShowProgressIndicator = false;
                 }
             }
         }
+
+        public async Task ReviewConvertAlpha(Bitmap bitmap)
+        {
+            //Cache the selected image in case it's changed during async operation
+            var selectedImage = SelectedImage;
+
+            var dialog = new ColorPickerDialog();
+            await ShowDialog<Color?>(dialog);
+            if (dialog.Success)
+            {
+                var imageResult = ConvertImageAlphaToColor(bitmap, dialog.SelectedColor);
+                var viewer = new ImageReviewDialog();
+                viewer.Title = "Review converted image";
+                viewer.Images = new ObservableCollection<ImageReviewViewModel>() { new ImageReviewViewModel(imageResult) };
+                viewer.ReviewMode = ImageReviewDialogMode.SingleSelect;
+                await ShowDialog(viewer);
+
+                if (viewer.Success)
+                {
+                    selectedImage.ImageSource = imageResult;
+                    selectedImage.ImageSource.Save(Path.Combine(this.openFolder, selectedImage.Filename));
+                }
+            }
+        }
+
 
         [RelayCommand]
         public void CopyTags()
