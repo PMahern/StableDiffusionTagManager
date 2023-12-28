@@ -10,7 +10,7 @@
 
 using System;
 
-namespace SdWebUpApi.Client
+namespace SdWebUiApi.Client
 {
     /// <summary>
     /// Represents configuration aspects required to interact with the API endpoints.

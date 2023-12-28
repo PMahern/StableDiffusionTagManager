@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// ResetBody
     /// </summary>
     [DataContract(Name = "ResetBody")]
-    public partial class ResetBody : IEquatable<ResetBody>, IValidatableObject
+    public partial class ResetBody : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ResetBody" /> class.
@@ -85,57 +85,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as ResetBody);
-        }
-
-        /// <summary>
-        /// Returns true if ResetBody instances are equal
-        /// </summary>
-        /// <param name="input">Instance of ResetBody to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(ResetBody input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.SessionHash == input.SessionHash ||
-                    (this.SessionHash != null &&
-                    this.SessionHash.Equals(input.SessionHash))
-                ) && 
-                (
-                    this.FnIndex == input.FnIndex ||
-                    this.FnIndex.Equals(input.FnIndex)
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.SessionHash != null)
-                {
-                    hashCode = (hashCode * 59) + this.SessionHash.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.FnIndex.GetHashCode();
-                return hashCode;
-            }
         }
 
         /// <summary>

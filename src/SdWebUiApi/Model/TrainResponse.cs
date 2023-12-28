@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// TrainResponse
     /// </summary>
     [DataContract(Name = "TrainResponse")]
-    public partial class TrainResponse : IEquatable<TrainResponse>, IValidatableObject
+    public partial class TrainResponse : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TrainResponse" /> class.
@@ -77,52 +77,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as TrainResponse);
-        }
-
-        /// <summary>
-        /// Returns true if TrainResponse instances are equal
-        /// </summary>
-        /// <param name="input">Instance of TrainResponse to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(TrainResponse input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Info == input.Info ||
-                    (this.Info != null &&
-                    this.Info.Equals(input.Info))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.Info != null)
-                {
-                    hashCode = (hashCode * 59) + this.Info.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

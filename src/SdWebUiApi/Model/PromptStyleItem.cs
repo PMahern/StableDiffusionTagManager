@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// PromptStyleItem
     /// </summary>
     [DataContract(Name = "PromptStyleItem")]
-    public partial class PromptStyleItem : IEquatable<PromptStyleItem>, IValidatableObject
+    public partial class PromptStyleItem : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PromptStyleItem" /> class.
@@ -94,70 +94,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as PromptStyleItem);
-        }
-
-        /// <summary>
-        /// Returns true if PromptStyleItem instances are equal
-        /// </summary>
-        /// <param name="input">Instance of PromptStyleItem to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(PromptStyleItem input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Name == input.Name ||
-                    (this.Name != null &&
-                    this.Name.Equals(input.Name))
-                ) && 
-                (
-                    this.Prompt == input.Prompt ||
-                    (this.Prompt != null &&
-                    this.Prompt.Equals(input.Prompt))
-                ) && 
-                (
-                    this.NegativePrompt == input.NegativePrompt ||
-                    (this.NegativePrompt != null &&
-                    this.NegativePrompt.Equals(input.NegativePrompt))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.Name != null)
-                {
-                    hashCode = (hashCode * 59) + this.Name.GetHashCode();
-                }
-                if (this.Prompt != null)
-                {
-                    hashCode = (hashCode * 59) + this.Prompt.GetHashCode();
-                }
-                if (this.NegativePrompt != null)
-                {
-                    hashCode = (hashCode * 59) + this.NegativePrompt.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

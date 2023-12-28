@@ -6,8 +6,8 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
-using SdWebUpApi;
-using SdWebUpApi.Api;
+using SdWebUiApi;
+using SdWebUiApi.Api;
 using StableDiffusionTagManager.Extensions;
 using StableDiffusionTagManager.Models;
 using StableDiffusionTagManager.ViewModels;
@@ -280,7 +280,7 @@ namespace StableDiffusionTagManager.Views
                         maskImage.Dispose();
 
 
-                        var r = await api.Img2imgapiSdapiV1Img2imgPostAsync(new SdWebUpApi.Model.StableDiffusionProcessingImg2Img
+                        var r = await api.Img2imgapiSdapiV1Img2imgPostAsync(new SdWebUiApi.Model.StableDiffusionProcessingImg2Img
                         {
                             Prompt = Prompt,
                             NegativePrompt = NegativePrompt,

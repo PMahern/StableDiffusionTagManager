@@ -11,7 +11,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace SdWebUpApi.Client
+namespace SdWebUiApi.Client
 {
     /// <summary>
     /// Contract for Asynchronous RESTful API interactions.

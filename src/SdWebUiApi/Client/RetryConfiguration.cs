@@ -11,7 +11,7 @@
 using Polly;
 using RestSharp;
 
-namespace SdWebUpApi.Client
+namespace SdWebUiApi.Client
 {
     /// <summary>
     /// Configuration class to set the polly retry policies to be applied to the requests.

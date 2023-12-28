@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// UpscalerItem
     /// </summary>
     [DataContract(Name = "UpscalerItem")]
-    public partial class UpscalerItem : IEquatable<UpscalerItem>, IValidatableObject
+    public partial class UpscalerItem : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UpscalerItem" /> class.
@@ -112,84 +112,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as UpscalerItem);
-        }
-
-        /// <summary>
-        /// Returns true if UpscalerItem instances are equal
-        /// </summary>
-        /// <param name="input">Instance of UpscalerItem to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(UpscalerItem input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Name == input.Name ||
-                    (this.Name != null &&
-                    this.Name.Equals(input.Name))
-                ) && 
-                (
-                    this.ModelName == input.ModelName ||
-                    (this.ModelName != null &&
-                    this.ModelName.Equals(input.ModelName))
-                ) && 
-                (
-                    this.ModelPath == input.ModelPath ||
-                    (this.ModelPath != null &&
-                    this.ModelPath.Equals(input.ModelPath))
-                ) && 
-                (
-                    this.ModelUrl == input.ModelUrl ||
-                    (this.ModelUrl != null &&
-                    this.ModelUrl.Equals(input.ModelUrl))
-                ) && 
-                (
-                    this.Scale == input.Scale ||
-                    this.Scale.Equals(input.Scale)
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.Name != null)
-                {
-                    hashCode = (hashCode * 59) + this.Name.GetHashCode();
-                }
-                if (this.ModelName != null)
-                {
-                    hashCode = (hashCode * 59) + this.ModelName.GetHashCode();
-                }
-                if (this.ModelPath != null)
-                {
-                    hashCode = (hashCode * 59) + this.ModelPath.GetHashCode();
-                }
-                if (this.ModelUrl != null)
-                {
-                    hashCode = (hashCode * 59) + this.ModelUrl.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.Scale.GetHashCode();
-                return hashCode;
-            }
         }
 
         /// <summary>

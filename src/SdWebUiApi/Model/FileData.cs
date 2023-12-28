@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// FileData
     /// </summary>
     [DataContract(Name = "FileData")]
-    public partial class FileData : IEquatable<FileData>, IValidatableObject
+    public partial class FileData : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FileData" /> class.
@@ -91,61 +91,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as FileData);
-        }
-
-        /// <summary>
-        /// Returns true if FileData instances are equal
-        /// </summary>
-        /// <param name="input">Instance of FileData to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(FileData input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Data == input.Data ||
-                    (this.Data != null &&
-                    this.Data.Equals(input.Data))
-                ) && 
-                (
-                    this.Name == input.Name ||
-                    (this.Name != null &&
-                    this.Name.Equals(input.Name))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.Data != null)
-                {
-                    hashCode = (hashCode * 59) + this.Data.GetHashCode();
-                }
-                if (this.Name != null)
-                {
-                    hashCode = (hashCode * 59) + this.Name.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

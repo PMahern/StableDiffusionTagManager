@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// Options
     /// </summary>
     [DataContract(Name = "Options")]
-    public partial class Options : IEquatable<Options>, IValidatableObject
+    public partial class Options : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Options" /> class.
@@ -68,6 +68,7 @@ namespace SdWebUpApi.Model
         /// <param name="saveInitImg">Save init images when using img2img.</param>
         /// <param name="tempDir">Directory for temporary images; leave empty for default.</param>
         /// <param name="cleanTempDirAtStart">Cleanup non-default temporary directory when starting webui.</param>
+        /// <param name="saveIncompleteImages">Save incomplete images.</param>
         /// <param name="outdirSamples">Output directory for images; if empty, defaults to three directories below.</param>
         /// <param name="outdirTxt2imgSamples">Output directory for txt2img images (default to &quot;outputs/txt2img-images&quot;).</param>
         /// <param name="outdirImg2imgSamples">Output directory for img2img images (default to &quot;outputs/img2img-images&quot;).</param>
@@ -86,16 +87,23 @@ namespace SdWebUpApi.Model
         /// <param name="eSRGANTileOverlap">Tile overlap for ESRGAN upscalers. (default to 8M).</param>
         /// <param name="realesrganEnabledModels">Select which Real-ESRGAN models to show in the web UI..</param>
         /// <param name="upscalerForImg2img">Upscaler for img2img.</param>
+        /// <param name="faceRestoration">Restore faces.</param>
         /// <param name="faceRestorationModel">Face restoration model (default to &quot;CodeFormer&quot;).</param>
         /// <param name="codeFormerWeight">CodeFormer weight (default to 0.5M).</param>
         /// <param name="faceRestorationUnload">Move face restoration model from VRAM into RAM after processing.</param>
+        /// <param name="autoLaunchBrowser">Automatically open webui in browser on startup (default to &quot;Local&quot;).</param>
         /// <param name="showWarnings">Show warnings in console..</param>
+        /// <param name="showGradioDeprecationWarnings">Show gradio deprecation warnings in console. (default to true).</param>
         /// <param name="memmonPollRate">VRAM usage polls per second during generation. (default to 8M).</param>
         /// <param name="samplesLogStdout">Always print all generation info to standard output.</param>
         /// <param name="multipleTqdm">Add a second progress bar to the console that shows progress for an entire job. (default to true).</param>
         /// <param name="printHypernetExtra">Print extra hypernetwork information to console..</param>
         /// <param name="listHiddenFiles">Load models/files in hidden directories (default to true).</param>
         /// <param name="disableMmapLoadSafetensors">Disable memmapping for loading .safetensors files..</param>
+        /// <param name="hideLdmPrints">Prevent Stability-AI&#39;s ldm/sgm modules from printing noise to console. (default to true).</param>
+        /// <param name="apiEnableRequests">Allow http:// and https:// URLs for input images in API (default to true).</param>
+        /// <param name="apiForbidLocalRequests">Forbid URLs to local resources (default to true).</param>
+        /// <param name="apiUseragent">User agent for requests.</param>
         /// <param name="unloadModelsWhenTraining">Move VAE and CLIP to RAM when training if possible. Saves VRAM..</param>
         /// <param name="pinMemory">Turn on pin_memory for DataLoader. Makes training slightly faster but can increase memory usage..</param>
         /// <param name="saveOptimizerState">Saves Optimizer state as separate *.optim file. Training of embedding or HN can be resumed with the matching optim file..</param>
@@ -109,41 +117,60 @@ namespace SdWebUpApi.Model
         /// <param name="trainingTensorboardSaveImages">Save generated images within tensorboard..</param>
         /// <param name="trainingTensorboardFlushEvery">How often, in seconds, to flush the pending tensorboard events and summaries to disk. (default to 120M).</param>
         /// <param name="sdModelCheckpoint">Stable Diffusion checkpoint.</param>
+        /// <param name="sdCheckpointsLimit">Maximum number of checkpoints loaded at the same time (default to 1M).</param>
+        /// <param name="sdCheckpointsKeepInCpu">Only keep one model on device (default to true).</param>
         /// <param name="sdCheckpointCache">Checkpoints to cache in RAM.</param>
-        /// <param name="sdVaeCheckpointCache">VAE Checkpoints to cache in RAM.</param>
-        /// <param name="sdVae">SD VAE (default to &quot;Automatic&quot;).</param>
-        /// <param name="sdVaeAsDefault">Ignore selected VAE for stable diffusion checkpoints that have their own .vae.pt next to them (default to true).</param>
         /// <param name="sdUnet">SD Unet (default to &quot;Automatic&quot;).</param>
-        /// <param name="inpaintingMaskWeight">Inpainting conditioning mask strength (default to 1.0M).</param>
-        /// <param name="initialNoiseMultiplier">Noise multiplier for img2img (default to 1.0M).</param>
-        /// <param name="img2imgColorCorrection">Apply color correction to img2img results to match original colors..</param>
-        /// <param name="img2imgFixSteps">With img2img, do exactly the amount of steps the slider specifies..</param>
-        /// <param name="img2imgBackgroundColor">With img2img, fill image&#39;s transparent parts with this color. (default to &quot;#ffffff&quot;).</param>
-        /// <param name="enableQuantization">Enable quantization in K samplers for sharper and cleaner results. This may change existing seeds. Requires restart to apply..</param>
+        /// <param name="enableQuantization">Enable quantization in K samplers for sharper and cleaner results. This may change existing seeds.</param>
         /// <param name="enableEmphasis">Enable emphasis (default to true).</param>
         /// <param name="enableBatchSeeds">Make K-diffusion samplers produce same images in a batch as when making a single image (default to true).</param>
         /// <param name="commaPaddingBacktrack">Prompt word wrap length limit (default to 20M).</param>
         /// <param name="cLIPStopAtLastLayers">Clip skip (default to 1M).</param>
         /// <param name="upcastAttn">Upcast cross attention layer to float32.</param>
-        /// <param name="autoVaePrecision">Automaticlly revert VAE to 32-bit floats (default to true).</param>
         /// <param name="randnSource">Random number generator source. (default to &quot;GPU&quot;).</param>
+        /// <param name="tiling">Tiling.</param>
+        /// <param name="hiresFixRefinerPass">Hires fix: which pass to enable refiner for (default to &quot;second pass&quot;).</param>
         /// <param name="sdxlCropTop">crop top coordinate.</param>
         /// <param name="sdxlCropLeft">crop left coordinate.</param>
         /// <param name="sdxlRefinerLowAestheticScore">SDXL low aesthetic score (default to 2.5M).</param>
         /// <param name="sdxlRefinerHighAestheticScore">SDXL high aesthetic score (default to 6.0M).</param>
+        /// <param name="sdVaeExplanation">sdVaeExplanation (default to &quot;&lt;abbr title&#x3D;&#39;Variational autoencoder&#39;&gt;VAE&lt;/abbr&gt; is a neural network that transforms a standard &lt;abbr title&#x3D;&#39;red/green/blue&#39;&gt;RGB&lt;/abbr&gt;
+        /// image into latent space representation and back. Latent space representation is what stable diffusion is working on during sampling
+        /// (i.e. when the progress bar is between empty and full). For txt2img, VAE is used to create a resulting image after the sampling is finished.
+        /// For img2img, VAE is used to process user&#39;s input image before the sampling, and to create an image after sampling.&quot;).</param>
+        /// <param name="sdVaeCheckpointCache">VAE Checkpoints to cache in RAM.</param>
+        /// <param name="sdVae">SD VAE (default to &quot;Automatic&quot;).</param>
+        /// <param name="sdVaeOverridesPerModelPreferences">Selected VAE overrides per-model preferences (default to true).</param>
+        /// <param name="autoVaePrecision">Automatically revert VAE to 32-bit floats (default to true).</param>
+        /// <param name="sdVaeEncodeMethod">VAE type for encode (default to &quot;Full&quot;).</param>
+        /// <param name="sdVaeDecodeMethod">VAE type for decode (default to &quot;Full&quot;).</param>
+        /// <param name="inpaintingMaskWeight">Inpainting conditioning mask strength (default to 1.0M).</param>
+        /// <param name="initialNoiseMultiplier">Noise multiplier for img2img (default to 1.0M).</param>
+        /// <param name="img2imgExtraNoise">Extra noise multiplier for img2img and hires fix.</param>
+        /// <param name="img2imgColorCorrection">Apply color correction to img2img results to match original colors..</param>
+        /// <param name="img2imgFixSteps">With img2img, do exactly the amount of steps the slider specifies..</param>
+        /// <param name="img2imgBackgroundColor">With img2img, fill transparent parts of the input image with this color. (default to &quot;#ffffff&quot;).</param>
+        /// <param name="img2imgEditorHeight">Height of the image editor (default to 720M).</param>
+        /// <param name="img2imgSketchDefaultBrushColor">Sketch initial brush color (default to &quot;#ffffff&quot;).</param>
+        /// <param name="img2imgInpaintMaskBrushColor">Inpaint mask brush color (default to &quot;#ffffff&quot;).</param>
+        /// <param name="img2imgInpaintSketchDefaultBrushColor">Inpaint sketch initial brush color (default to &quot;#ffffff&quot;).</param>
+        /// <param name="returnMask">For inpainting, include the greyscale mask in results for web.</param>
+        /// <param name="returnMaskComposite">For inpainting, include masked composite in results for web.</param>
         /// <param name="crossAttentionOptimization">Cross attention optimization (default to &quot;Automatic&quot;).</param>
         /// <param name="sMinUncond">Negative Guidance minimum sigma.</param>
         /// <param name="tokenMergingRatio">Token merging ratio.</param>
         /// <param name="tokenMergingRatioImg2img">Token merging ratio for img2img.</param>
         /// <param name="tokenMergingRatioHr">Token merging ratio for high-res pass.</param>
         /// <param name="padCondUncond">Pad prompt/negative prompt to be same length.</param>
-        /// <param name="experimentalPersistentCondCache">persistent cond cache.</param>
+        /// <param name="persistentCondCache">Persistent cond cache (default to true).</param>
+        /// <param name="batchCondUncond">Batch cond/uncond (default to true).</param>
         /// <param name="useOldEmphasisImplementation">Use old emphasis implementation. Can be useful to reproduce old seeds..</param>
         /// <param name="useOldKarrasSchedulerSigmas">Use old karras scheduler sigmas (0.1 to 10)..</param>
         /// <param name="noDpmppSdeBatchDeterminism">Do not make DPM++ SDE deterministic across different batch sizes..</param>
         /// <param name="useOldHiresFixWidthHeight">For hires fix, use width/height sliders to set final resolution rather than first pass (disables Upscale by, Resize width/height to)..</param>
         /// <param name="dontFixSecondOrderSamplersSchedule">Do not fix prompt schedule for second order samplers..</param>
         /// <param name="hiresFixUseFirstpassConds">For hires fix, calculate conds of second pass using extra networks of first pass..</param>
+        /// <param name="useOldScheduling">Use old prompt editing timelines..</param>
         /// <param name="interrogateKeepModelsInMemory">Keep models in VRAM.</param>
         /// <param name="interrogateReturnRanks">Include ranks of model tags matches in results..</param>
         /// <param name="interrogateClipNumBeams">BLIP: num_beams (default to 1M).</param>
@@ -170,10 +197,9 @@ namespace SdWebUpApi.Model
         /// <param name="sdHypernetwork">Add hypernetwork to prompt (default to &quot;None&quot;).</param>
         /// <param name="localization">Localization (default to &quot;None&quot;).</param>
         /// <param name="gradioTheme">Gradio theme (default to &quot;Default&quot;).</param>
-        /// <param name="img2imgEditorHeight">img2img: height of image editor (default to 720M).</param>
+        /// <param name="gradioThemesCache">Cache gradio themes locally (default to true).</param>
+        /// <param name="galleryHeight">Gallery height.</param>
         /// <param name="returnGrid">Show grid in results for web (default to true).</param>
-        /// <param name="returnMask">For inpainting, include the greyscale mask in results for web.</param>
-        /// <param name="returnMaskComposite">For inpainting, include masked composite in results for web.</param>
         /// <param name="doNotShowImages">Do not show any images in results for web.</param>
         /// <param name="sendSeed">Send seed when sending prompt or image to other interface (default to true).</param>
         /// <param name="sendSize">Send size when sending prompt or image to another interface (default to true).</param>
@@ -192,7 +218,7 @@ namespace SdWebUpApi.Model
         /// <param name="uiTabOrder">UI tab order.</param>
         /// <param name="hiddenTabs">Hidden UI tabs.</param>
         /// <param name="uiReorderList">txt2img/img2img UI item order.</param>
-        /// <param name="hiresFixShowSampler">Hires fix: show hires sampler selection.</param>
+        /// <param name="hiresFixShowSampler">Hires fix: show hires checkpoint and sampler selection.</param>
         /// <param name="hiresFixShowPrompts">Hires fix: show hires prompt and negative prompt.</param>
         /// <param name="disableTokenCounters">Disable prompt token counters.</param>
         /// <param name="addModelHashToInfo">Add model hash to generation information (default to true).</param>
@@ -207,21 +233,25 @@ namespace SdWebUpApi.Model
         /// <param name="showProgressGrid">Show previews of all images generated in a batch as a grid (default to true).</param>
         /// <param name="showProgressEveryNSteps">Live preview display period (default to 10M).</param>
         /// <param name="showProgressType">Live preview method (default to &quot;Approx NN&quot;).</param>
+        /// <param name="livePreviewAllowLowvramFull">Allow Full live preview method with lowvram/medvram.</param>
         /// <param name="livePreviewContent">Live preview subject (default to &quot;Prompt&quot;).</param>
         /// <param name="livePreviewRefreshPeriod">Progressbar and preview update period (default to 1000M).</param>
+        /// <param name="livePreviewFastInterrupt">Return image with chosen live preview method on interrupt.</param>
         /// <param name="hideSamplers">Hide samplers in user interface.</param>
         /// <param name="etaDdim">Eta for DDIM.</param>
-        /// <param name="etaAncestral">Eta for ancestral samplers (default to 1.0M).</param>
+        /// <param name="etaAncestral">Eta for k-diffusion samplers (default to 1.0M).</param>
         /// <param name="ddimDiscretize">img2img DDIM discretize (default to &quot;uniform&quot;).</param>
         /// <param name="sChurn">sigma churn.</param>
         /// <param name="sTmin">sigma tmin.</param>
+        /// <param name="sTmax">sigma tmax.</param>
         /// <param name="sNoise">sigma noise (default to 1.0M).</param>
-        /// <param name="kSchedType">scheduler type (default to &quot;Automatic&quot;).</param>
+        /// <param name="kSchedType">Scheduler type (default to &quot;Automatic&quot;).</param>
         /// <param name="sigmaMin">sigma min.</param>
         /// <param name="sigmaMax">sigma max.</param>
         /// <param name="rho">rho.</param>
         /// <param name="etaNoiseSeedDelta">Eta noise seed delta.</param>
         /// <param name="alwaysDiscardNextToLastSigma">Always discard next-to-last sigma.</param>
+        /// <param name="sgmNoiseMultiplier">SGM noise multiplier.</param>
         /// <param name="uniPcVariant">UniPC variant (default to &quot;bh1&quot;).</param>
         /// <param name="uniPcSkipType">UniPC skip type (default to &quot;time_uniform&quot;).</param>
         /// <param name="uniPcOrder">UniPC order (default to 3M).</param>
@@ -233,7 +263,10 @@ namespace SdWebUpApi.Model
         /// <param name="disableAllExtensions">Disable all extensions (preserves the list of disabled extensions) (default to &quot;none&quot;).</param>
         /// <param name="restoreConfigStateFile">Config state file to restore from, under &#39;config-states/&#39; folder.</param>
         /// <param name="sdCheckpointHash">SHA256 hash of the current checkpoint.</param>
-        public Options(bool samplesSave = true, string samplesFormat = @"png", Object samplesFilenamePattern = default(Object), bool saveImagesAddNumber = true, bool gridSave = true, string gridFormat = @"png", Object gridExtendedFilename = default(Object), bool gridOnlyIfMultiple = true, Object gridPreventEmptySpots = default(Object), Object gridZipFilenamePattern = default(Object), decimal nRows = -1M, Object font = default(Object), string gridTextActiveColor = @"#000000", string gridTextInactiveColor = @"#999999", string gridBackgroundColor = @"#ffffff", bool enablePnginfo = true, Object saveTxt = default(Object), Object saveImagesBeforeFaceRestoration = default(Object), Object saveImagesBeforeHighresFix = default(Object), Object saveImagesBeforeColorCorrection = default(Object), Object saveMask = default(Object), Object saveMaskComposite = default(Object), decimal jpegQuality = 80M, Object webpLossless = default(Object), bool exportFor4chan = true, decimal imgDownscaleThreshold = 4.0M, decimal targetSideLength = 4000M, decimal imgMaxSizeMp = 200M, bool useOriginalNameBatch = true, Object useUpscalerNameAsSuffix = default(Object), bool saveSelectedOnly = true, Object saveInitImg = default(Object), Object tempDir = default(Object), Object cleanTempDirAtStart = default(Object), Object outdirSamples = default(Object), string outdirTxt2imgSamples = @"outputs/txt2img-images", string outdirImg2imgSamples = @"outputs/img2img-images", string outdirExtrasSamples = @"outputs/extras-images", Object outdirGrids = default(Object), string outdirTxt2imgGrids = @"outputs/txt2img-grids", string outdirImg2imgGrids = @"outputs/img2img-grids", string outdirSave = @"log/images", string outdirInitImages = @"outputs/init-images", bool saveToDirs = true, bool gridSaveToDirs = true, Object useSaveToDirsForUi = default(Object), string directoriesFilenamePattern = @"[date]", decimal directoriesMaxPromptWords = 8M, decimal eSRGANTile = 192M, decimal eSRGANTileOverlap = 8M, List<Object> realesrganEnabledModels = default(List<Object>), Object upscalerForImg2img = default(Object), string faceRestorationModel = @"CodeFormer", decimal codeFormerWeight = 0.5M, Object faceRestorationUnload = default(Object), Object showWarnings = default(Object), decimal memmonPollRate = 8M, Object samplesLogStdout = default(Object), bool multipleTqdm = true, Object printHypernetExtra = default(Object), bool listHiddenFiles = true, Object disableMmapLoadSafetensors = default(Object), Object unloadModelsWhenTraining = default(Object), Object pinMemory = default(Object), Object saveOptimizerState = default(Object), bool saveTrainingSettingsToTxt = true, Object datasetFilenameWordRegex = default(Object), string datasetFilenameJoinString = @" ", decimal trainingImageRepeatsPerEpoch = 1M, decimal trainingWriteCsvEvery = 500M, Object trainingXattentionOptimizations = default(Object), Object trainingEnableTensorboard = default(Object), Object trainingTensorboardSaveImages = default(Object), decimal trainingTensorboardFlushEvery = 120M, Object sdModelCheckpoint = default(Object), Object sdCheckpointCache = default(Object), Object sdVaeCheckpointCache = default(Object), string sdVae = @"Automatic", bool sdVaeAsDefault = true, string sdUnet = @"Automatic", decimal inpaintingMaskWeight = 1.0M, decimal initialNoiseMultiplier = 1.0M, Object img2imgColorCorrection = default(Object), Object img2imgFixSteps = default(Object), string img2imgBackgroundColor = @"#ffffff", Object enableQuantization = default(Object), bool enableEmphasis = true, bool enableBatchSeeds = true, decimal commaPaddingBacktrack = 20M, decimal cLIPStopAtLastLayers = 1M, Object upcastAttn = default(Object), bool autoVaePrecision = true, string randnSource = @"GPU", Object sdxlCropTop = default(Object), Object sdxlCropLeft = default(Object), decimal sdxlRefinerLowAestheticScore = 2.5M, decimal sdxlRefinerHighAestheticScore = 6.0M, string crossAttentionOptimization = @"Automatic", Object sMinUncond = default(Object), Object tokenMergingRatio = default(Object), Object tokenMergingRatioImg2img = default(Object), Object tokenMergingRatioHr = default(Object), Object padCondUncond = default(Object), Object experimentalPersistentCondCache = default(Object), Object useOldEmphasisImplementation = default(Object), Object useOldKarrasSchedulerSigmas = default(Object), Object noDpmppSdeBatchDeterminism = default(Object), Object useOldHiresFixWidthHeight = default(Object), Object dontFixSecondOrderSamplersSchedule = default(Object), Object hiresFixUseFirstpassConds = default(Object), Object interrogateKeepModelsInMemory = default(Object), Object interrogateReturnRanks = default(Object), decimal interrogateClipNumBeams = 1M, decimal interrogateClipMinLength = 24M, decimal interrogateClipMaxLength = 48M, decimal interrogateClipDictLimit = 1500M, Object interrogateClipSkipCategories = default(Object), decimal interrogateDeepbooruScoreThreshold = 0.5M, bool deepbooruSortAlpha = true, bool deepbooruUseSpaces = true, bool deepbooruEscape = true, Object deepbooruFilterTags = default(Object), bool extraNetworksShowHiddenDirectories = true, string extraNetworksHiddenModels = @"When searched", decimal extraNetworksDefaultMultiplier = 1.0M, Object extraNetworksCardWidth = default(Object), Object extraNetworksCardHeight = default(Object), decimal extraNetworksCardTextScale = 1.0M, bool extraNetworksCardShowDesc = true, string extraNetworksAddTextSeparator = @" ", Object uiExtraNetworksTabReorder = default(Object), Object textualInversionPrintAtLoad = default(Object), bool textualInversionAddHashesToInfotext = true, string sdHypernetwork = @"None", string localization = @"None", string gradioTheme = @"Default", decimal img2imgEditorHeight = 720M, bool returnGrid = true, Object returnMask = default(Object), Object returnMaskComposite = default(Object), Object doNotShowImages = default(Object), bool sendSeed = true, bool sendSize = true, bool jsModalLightbox = true, bool jsModalLightboxInitiallyZoomed = true, Object jsModalLightboxGamepad = default(Object), decimal jsModalLightboxGamepadRepeat = 250M, bool showProgressInTitle = true, bool samplersInDropdown = true, bool dimensionsAndBatchTogether = true, decimal keyeditPrecisionAttention = 0.1M, decimal keyeditPrecisionExtra = 0.05M, string keyeditDelimiters = @".,\/!?%^*;:{}=`~()", bool keyeditMove = true, List<Object> quicksettingsList = default(List<Object>), Object uiTabOrder = default(Object), Object hiddenTabs = default(Object), Object uiReorderList = default(Object), Object hiresFixShowSampler = default(Object), Object hiresFixShowPrompts = default(Object), Object disableTokenCounters = default(Object), bool addModelHashToInfo = true, bool addModelNameToInfo = true, Object addUserNameToInfo = default(Object), bool addVersionToInfotext = true, bool disableWeightsAutoSwap = true, string infotextStyles = @"Apply if any", bool showProgressbar = true, bool livePreviewsEnable = true, string livePreviewsImageFormat = @"png", bool showProgressGrid = true, decimal showProgressEveryNSteps = 10M, string showProgressType = @"Approx NN", string livePreviewContent = @"Prompt", decimal livePreviewRefreshPeriod = 1000M, Object hideSamplers = default(Object), Object etaDdim = default(Object), decimal etaAncestral = 1.0M, string ddimDiscretize = @"uniform", Object sChurn = default(Object), Object sTmin = default(Object), decimal sNoise = 1.0M, string kSchedType = @"Automatic", Object sigmaMin = default(Object), Object sigmaMax = default(Object), Object rho = default(Object), Object etaNoiseSeedDelta = default(Object), Object alwaysDiscardNextToLastSigma = default(Object), string uniPcVariant = @"bh1", string uniPcSkipType = @"time_uniform", decimal uniPcOrder = 3M, bool uniPcLowerOrderFinal = true, Object postprocessingEnableInMainUi = default(Object), Object postprocessingOperationOrder = default(Object), decimal upscalingMaxImagesInCache = 5M, Object disabledExtensions = default(Object), string disableAllExtensions = @"none", Object restoreConfigStateFile = default(Object), Object sdCheckpointHash = default(Object))
+        public Options(bool samplesSave = true, string samplesFormat = @"png", Object samplesFilenamePattern = default(Object), bool saveImagesAddNumber = true, bool gridSave = true, string gridFormat = @"png", Object gridExtendedFilename = default(Object), bool gridOnlyIfMultiple = true, Object gridPreventEmptySpots = default(Object), Object gridZipFilenamePattern = default(Object), decimal nRows = -1M, Object font = default(Object), string gridTextActiveColor = @"#000000", string gridTextInactiveColor = @"#999999", string gridBackgroundColor = @"#ffffff", bool enablePnginfo = true, Object saveTxt = default(Object), Object saveImagesBeforeFaceRestoration = default(Object), Object saveImagesBeforeHighresFix = default(Object), Object saveImagesBeforeColorCorrection = default(Object), Object saveMask = default(Object), Object saveMaskComposite = default(Object), decimal jpegQuality = 80M, Object webpLossless = default(Object), bool exportFor4chan = true, decimal imgDownscaleThreshold = 4.0M, decimal targetSideLength = 4000M, decimal imgMaxSizeMp = 200M, bool useOriginalNameBatch = true, Object useUpscalerNameAsSuffix = default(Object), bool saveSelectedOnly = true, Object saveInitImg = default(Object), Object tempDir = default(Object), Object cleanTempDirAtStart = default(Object), Object saveIncompleteImages = default(Object), Object outdirSamples = default(Object), string outdirTxt2imgSamples = @"outputs/txt2img-images", string outdirImg2imgSamples = @"outputs/img2img-images", string outdirExtrasSamples = @"outputs/extras-images", Object outdirGrids = default(Object), string outdirTxt2imgGrids = @"outputs/txt2img-grids", string outdirImg2imgGrids = @"outputs/img2img-grids", string outdirSave = @"log/images", string outdirInitImages = @"outputs/init-images", bool saveToDirs = true, bool gridSaveToDirs = true, Object useSaveToDirsForUi = default(Object), string directoriesFilenamePattern = @"[date]", decimal directoriesMaxPromptWords = 8M, decimal eSRGANTile = 192M, decimal eSRGANTileOverlap = 8M, List<Object> realesrganEnabledModels = default(List<Object>), Object upscalerForImg2img = default(Object), Object faceRestoration = default(Object), string faceRestorationModel = @"CodeFormer", decimal codeFormerWeight = 0.5M, Object faceRestorationUnload = default(Object), string autoLaunchBrowser = @"Local", Object showWarnings = default(Object), bool showGradioDeprecationWarnings = true, decimal memmonPollRate = 8M, Object samplesLogStdout = default(Object), bool multipleTqdm = true, Object printHypernetExtra = default(Object), bool listHiddenFiles = true, Object disableMmapLoadSafetensors = default(Object), bool hideLdmPrints = true, bool apiEnableRequests = true, bool apiForbidLocalRequests = true, Object apiUseragent = default(Object), Object unloadModelsWhenTraining = default(Object), Object pinMemory = default(Object), Object saveOptimizerState = default(Object), bool saveTrainingSettingsToTxt = true, Object datasetFilenameWordRegex = default(Object), string datasetFilenameJoinString = @" ", decimal trainingImageRepeatsPerEpoch = 1M, decimal trainingWriteCsvEvery = 500M, Object trainingXattentionOptimizations = default(Object), Object trainingEnableTensorboard = default(Object), Object trainingTensorboardSaveImages = default(Object), decimal trainingTensorboardFlushEvery = 120M, Object sdModelCheckpoint = default(Object), decimal sdCheckpointsLimit = 1M, bool sdCheckpointsKeepInCpu = true, Object sdCheckpointCache = default(Object), string sdUnet = @"Automatic", Object enableQuantization = default(Object), bool enableEmphasis = true, bool enableBatchSeeds = true, decimal commaPaddingBacktrack = 20M, decimal cLIPStopAtLastLayers = 1M, Object upcastAttn = default(Object), string randnSource = @"GPU", Object tiling = default(Object), string hiresFixRefinerPass = @"second pass", Object sdxlCropTop = default(Object), Object sdxlCropLeft = default(Object), decimal sdxlRefinerLowAestheticScore = 2.5M, decimal sdxlRefinerHighAestheticScore = 6.0M, string sdVaeExplanation = @"<abbr title='Variational autoencoder'>VAE</abbr> is a neural network that transforms a standard <abbr title='red/green/blue'>RGB</abbr>
+image into latent space representation and back. Latent space representation is what stable diffusion is working on during sampling
+(i.e. when the progress bar is between empty and full). For txt2img, VAE is used to create a resulting image after the sampling is finished.
+For img2img, VAE is used to process user's input image before the sampling, and to create an image after sampling.", Object sdVaeCheckpointCache = default(Object), string sdVae = @"Automatic", bool sdVaeOverridesPerModelPreferences = true, bool autoVaePrecision = true, string sdVaeEncodeMethod = @"Full", string sdVaeDecodeMethod = @"Full", decimal inpaintingMaskWeight = 1.0M, decimal initialNoiseMultiplier = 1.0M, Object img2imgExtraNoise = default(Object), Object img2imgColorCorrection = default(Object), Object img2imgFixSteps = default(Object), string img2imgBackgroundColor = @"#ffffff", decimal img2imgEditorHeight = 720M, string img2imgSketchDefaultBrushColor = @"#ffffff", string img2imgInpaintMaskBrushColor = @"#ffffff", string img2imgInpaintSketchDefaultBrushColor = @"#ffffff", Object returnMask = default(Object), Object returnMaskComposite = default(Object), string crossAttentionOptimization = @"Automatic", Object sMinUncond = default(Object), Object tokenMergingRatio = default(Object), Object tokenMergingRatioImg2img = default(Object), Object tokenMergingRatioHr = default(Object), Object padCondUncond = default(Object), bool persistentCondCache = true, bool batchCondUncond = true, Object useOldEmphasisImplementation = default(Object), Object useOldKarrasSchedulerSigmas = default(Object), Object noDpmppSdeBatchDeterminism = default(Object), Object useOldHiresFixWidthHeight = default(Object), Object dontFixSecondOrderSamplersSchedule = default(Object), Object hiresFixUseFirstpassConds = default(Object), Object useOldScheduling = default(Object), Object interrogateKeepModelsInMemory = default(Object), Object interrogateReturnRanks = default(Object), decimal interrogateClipNumBeams = 1M, decimal interrogateClipMinLength = 24M, decimal interrogateClipMaxLength = 48M, decimal interrogateClipDictLimit = 1500M, Object interrogateClipSkipCategories = default(Object), decimal interrogateDeepbooruScoreThreshold = 0.5M, bool deepbooruSortAlpha = true, bool deepbooruUseSpaces = true, bool deepbooruEscape = true, Object deepbooruFilterTags = default(Object), bool extraNetworksShowHiddenDirectories = true, string extraNetworksHiddenModels = @"When searched", decimal extraNetworksDefaultMultiplier = 1.0M, Object extraNetworksCardWidth = default(Object), Object extraNetworksCardHeight = default(Object), decimal extraNetworksCardTextScale = 1.0M, bool extraNetworksCardShowDesc = true, string extraNetworksAddTextSeparator = @" ", Object uiExtraNetworksTabReorder = default(Object), Object textualInversionPrintAtLoad = default(Object), bool textualInversionAddHashesToInfotext = true, string sdHypernetwork = @"None", string localization = @"None", string gradioTheme = @"Default", bool gradioThemesCache = true, Object galleryHeight = default(Object), bool returnGrid = true, Object doNotShowImages = default(Object), bool sendSeed = true, bool sendSize = true, bool jsModalLightbox = true, bool jsModalLightboxInitiallyZoomed = true, Object jsModalLightboxGamepad = default(Object), decimal jsModalLightboxGamepadRepeat = 250M, bool showProgressInTitle = true, bool samplersInDropdown = true, bool dimensionsAndBatchTogether = true, decimal keyeditPrecisionAttention = 0.1M, decimal keyeditPrecisionExtra = 0.05M, string keyeditDelimiters = @".,\/!?%^*;:{}=`~()", bool keyeditMove = true, List<Object> quicksettingsList = default(List<Object>), Object uiTabOrder = default(Object), Object hiddenTabs = default(Object), Object uiReorderList = default(Object), Object hiresFixShowSampler = default(Object), Object hiresFixShowPrompts = default(Object), Object disableTokenCounters = default(Object), bool addModelHashToInfo = true, bool addModelNameToInfo = true, Object addUserNameToInfo = default(Object), bool addVersionToInfotext = true, bool disableWeightsAutoSwap = true, string infotextStyles = @"Apply if any", bool showProgressbar = true, bool livePreviewsEnable = true, string livePreviewsImageFormat = @"png", bool showProgressGrid = true, decimal showProgressEveryNSteps = 10M, string showProgressType = @"Approx NN", Object livePreviewAllowLowvramFull = default(Object), string livePreviewContent = @"Prompt", decimal livePreviewRefreshPeriod = 1000M, Object livePreviewFastInterrupt = default(Object), Object hideSamplers = default(Object), Object etaDdim = default(Object), decimal etaAncestral = 1.0M, string ddimDiscretize = @"uniform", Object sChurn = default(Object), Object sTmin = default(Object), Object sTmax = default(Object), decimal sNoise = 1.0M, string kSchedType = @"Automatic", Object sigmaMin = default(Object), Object sigmaMax = default(Object), Object rho = default(Object), Object etaNoiseSeedDelta = default(Object), Object alwaysDiscardNextToLastSigma = default(Object), Object sgmNoiseMultiplier = default(Object), string uniPcVariant = @"bh1", string uniPcSkipType = @"time_uniform", decimal uniPcOrder = 3M, bool uniPcLowerOrderFinal = true, Object postprocessingEnableInMainUi = default(Object), Object postprocessingOperationOrder = default(Object), decimal upscalingMaxImagesInCache = 5M, Object disabledExtensions = default(Object), string disableAllExtensions = @"none", Object restoreConfigStateFile = default(Object), Object sdCheckpointHash = default(Object))
         {
             this.SamplesSave = samplesSave;
             // use default value if no "samplesFormat" provided
@@ -274,6 +307,7 @@ namespace SdWebUpApi.Model
             this.SaveInitImg = saveInitImg;
             this.TempDir = tempDir;
             this.CleanTempDirAtStart = cleanTempDirAtStart;
+            this.SaveIncompleteImages = saveIncompleteImages;
             this.OutdirSamples = outdirSamples;
             // use default value if no "outdirTxt2imgSamples" provided
             this.OutdirTxt2imgSamples = outdirTxt2imgSamples ?? @"outputs/txt2img-images";
@@ -300,17 +334,25 @@ namespace SdWebUpApi.Model
             this.ESRGANTileOverlap = eSRGANTileOverlap;
             this.RealesrganEnabledModels = realesrganEnabledModels;
             this.UpscalerForImg2img = upscalerForImg2img;
+            this.FaceRestoration = faceRestoration;
             // use default value if no "faceRestorationModel" provided
             this.FaceRestorationModel = faceRestorationModel ?? @"CodeFormer";
             this.CodeFormerWeight = codeFormerWeight;
             this.FaceRestorationUnload = faceRestorationUnload;
+            // use default value if no "autoLaunchBrowser" provided
+            this.AutoLaunchBrowser = autoLaunchBrowser ?? @"Local";
             this.ShowWarnings = showWarnings;
+            this.ShowGradioDeprecationWarnings = showGradioDeprecationWarnings;
             this.MemmonPollRate = memmonPollRate;
             this.SamplesLogStdout = samplesLogStdout;
             this.MultipleTqdm = multipleTqdm;
             this.PrintHypernetExtra = printHypernetExtra;
             this.ListHiddenFiles = listHiddenFiles;
             this.DisableMmapLoadSafetensors = disableMmapLoadSafetensors;
+            this.HideLdmPrints = hideLdmPrints;
+            this.ApiEnableRequests = apiEnableRequests;
+            this.ApiForbidLocalRequests = apiForbidLocalRequests;
+            this.ApiUseragent = apiUseragent;
             this.UnloadModelsWhenTraining = unloadModelsWhenTraining;
             this.PinMemory = pinMemory;
             this.SaveOptimizerState = saveOptimizerState;
@@ -325,32 +367,56 @@ namespace SdWebUpApi.Model
             this.TrainingTensorboardSaveImages = trainingTensorboardSaveImages;
             this.TrainingTensorboardFlushEvery = trainingTensorboardFlushEvery;
             this.SdModelCheckpoint = sdModelCheckpoint;
+            this.SdCheckpointsLimit = sdCheckpointsLimit;
+            this.SdCheckpointsKeepInCpu = sdCheckpointsKeepInCpu;
             this.SdCheckpointCache = sdCheckpointCache;
-            this.SdVaeCheckpointCache = sdVaeCheckpointCache;
-            // use default value if no "sdVae" provided
-            this.SdVae = sdVae ?? @"Automatic";
-            this.SdVaeAsDefault = sdVaeAsDefault;
             // use default value if no "sdUnet" provided
             this.SdUnet = sdUnet ?? @"Automatic";
-            this.InpaintingMaskWeight = inpaintingMaskWeight;
-            this.InitialNoiseMultiplier = initialNoiseMultiplier;
-            this.Img2imgColorCorrection = img2imgColorCorrection;
-            this.Img2imgFixSteps = img2imgFixSteps;
-            // use default value if no "img2imgBackgroundColor" provided
-            this.Img2imgBackgroundColor = img2imgBackgroundColor ?? @"#ffffff";
             this.EnableQuantization = enableQuantization;
             this.EnableEmphasis = enableEmphasis;
             this.EnableBatchSeeds = enableBatchSeeds;
             this.CommaPaddingBacktrack = commaPaddingBacktrack;
             this.CLIPStopAtLastLayers = cLIPStopAtLastLayers;
             this.UpcastAttn = upcastAttn;
-            this.AutoVaePrecision = autoVaePrecision;
             // use default value if no "randnSource" provided
             this.RandnSource = randnSource ?? @"GPU";
+            this.Tiling = tiling;
+            // use default value if no "hiresFixRefinerPass" provided
+            this.HiresFixRefinerPass = hiresFixRefinerPass ?? @"second pass";
             this.SdxlCropTop = sdxlCropTop;
             this.SdxlCropLeft = sdxlCropLeft;
             this.SdxlRefinerLowAestheticScore = sdxlRefinerLowAestheticScore;
             this.SdxlRefinerHighAestheticScore = sdxlRefinerHighAestheticScore;
+            // use default value if no "sdVaeExplanation" provided
+            this.SdVaeExplanation = sdVaeExplanation ?? @"<abbr title='Variational autoencoder'>VAE</abbr> is a neural network that transforms a standard <abbr title='red/green/blue'>RGB</abbr>
+image into latent space representation and back. Latent space representation is what stable diffusion is working on during sampling
+(i.e. when the progress bar is between empty and full). For txt2img, VAE is used to create a resulting image after the sampling is finished.
+For img2img, VAE is used to process user's input image before the sampling, and to create an image after sampling.";
+            this.SdVaeCheckpointCache = sdVaeCheckpointCache;
+            // use default value if no "sdVae" provided
+            this.SdVae = sdVae ?? @"Automatic";
+            this.SdVaeOverridesPerModelPreferences = sdVaeOverridesPerModelPreferences;
+            this.AutoVaePrecision = autoVaePrecision;
+            // use default value if no "sdVaeEncodeMethod" provided
+            this.SdVaeEncodeMethod = sdVaeEncodeMethod ?? @"Full";
+            // use default value if no "sdVaeDecodeMethod" provided
+            this.SdVaeDecodeMethod = sdVaeDecodeMethod ?? @"Full";
+            this.InpaintingMaskWeight = inpaintingMaskWeight;
+            this.InitialNoiseMultiplier = initialNoiseMultiplier;
+            this.Img2imgExtraNoise = img2imgExtraNoise;
+            this.Img2imgColorCorrection = img2imgColorCorrection;
+            this.Img2imgFixSteps = img2imgFixSteps;
+            // use default value if no "img2imgBackgroundColor" provided
+            this.Img2imgBackgroundColor = img2imgBackgroundColor ?? @"#ffffff";
+            this.Img2imgEditorHeight = img2imgEditorHeight;
+            // use default value if no "img2imgSketchDefaultBrushColor" provided
+            this.Img2imgSketchDefaultBrushColor = img2imgSketchDefaultBrushColor ?? @"#ffffff";
+            // use default value if no "img2imgInpaintMaskBrushColor" provided
+            this.Img2imgInpaintMaskBrushColor = img2imgInpaintMaskBrushColor ?? @"#ffffff";
+            // use default value if no "img2imgInpaintSketchDefaultBrushColor" provided
+            this.Img2imgInpaintSketchDefaultBrushColor = img2imgInpaintSketchDefaultBrushColor ?? @"#ffffff";
+            this.ReturnMask = returnMask;
+            this.ReturnMaskComposite = returnMaskComposite;
             // use default value if no "crossAttentionOptimization" provided
             this.CrossAttentionOptimization = crossAttentionOptimization ?? @"Automatic";
             this.SMinUncond = sMinUncond;
@@ -358,13 +424,15 @@ namespace SdWebUpApi.Model
             this.TokenMergingRatioImg2img = tokenMergingRatioImg2img;
             this.TokenMergingRatioHr = tokenMergingRatioHr;
             this.PadCondUncond = padCondUncond;
-            this.ExperimentalPersistentCondCache = experimentalPersistentCondCache;
+            this.PersistentCondCache = persistentCondCache;
+            this.BatchCondUncond = batchCondUncond;
             this.UseOldEmphasisImplementation = useOldEmphasisImplementation;
             this.UseOldKarrasSchedulerSigmas = useOldKarrasSchedulerSigmas;
             this.NoDpmppSdeBatchDeterminism = noDpmppSdeBatchDeterminism;
             this.UseOldHiresFixWidthHeight = useOldHiresFixWidthHeight;
             this.DontFixSecondOrderSamplersSchedule = dontFixSecondOrderSamplersSchedule;
             this.HiresFixUseFirstpassConds = hiresFixUseFirstpassConds;
+            this.UseOldScheduling = useOldScheduling;
             this.InterrogateKeepModelsInMemory = interrogateKeepModelsInMemory;
             this.InterrogateReturnRanks = interrogateReturnRanks;
             this.InterrogateClipNumBeams = interrogateClipNumBeams;
@@ -396,10 +464,9 @@ namespace SdWebUpApi.Model
             this.Localization = localization ?? @"None";
             // use default value if no "gradioTheme" provided
             this.GradioTheme = gradioTheme ?? @"Default";
-            this.Img2imgEditorHeight = img2imgEditorHeight;
+            this.GradioThemesCache = gradioThemesCache;
+            this.GalleryHeight = galleryHeight;
             this.ReturnGrid = returnGrid;
-            this.ReturnMask = returnMask;
-            this.ReturnMaskComposite = returnMaskComposite;
             this.DoNotShowImages = doNotShowImages;
             this.SendSeed = sendSeed;
             this.SendSize = sendSize;
@@ -437,9 +504,11 @@ namespace SdWebUpApi.Model
             this.ShowProgressEveryNSteps = showProgressEveryNSteps;
             // use default value if no "showProgressType" provided
             this.ShowProgressType = showProgressType ?? @"Approx NN";
+            this.LivePreviewAllowLowvramFull = livePreviewAllowLowvramFull;
             // use default value if no "livePreviewContent" provided
             this.LivePreviewContent = livePreviewContent ?? @"Prompt";
             this.LivePreviewRefreshPeriod = livePreviewRefreshPeriod;
+            this.LivePreviewFastInterrupt = livePreviewFastInterrupt;
             this.HideSamplers = hideSamplers;
             this.EtaDdim = etaDdim;
             this.EtaAncestral = etaAncestral;
@@ -447,6 +516,7 @@ namespace SdWebUpApi.Model
             this.DdimDiscretize = ddimDiscretize ?? @"uniform";
             this.SChurn = sChurn;
             this.STmin = sTmin;
+            this.STmax = sTmax;
             this.SNoise = sNoise;
             // use default value if no "kSchedType" provided
             this.KSchedType = kSchedType ?? @"Automatic";
@@ -455,6 +525,7 @@ namespace SdWebUpApi.Model
             this.Rho = rho;
             this.EtaNoiseSeedDelta = etaNoiseSeedDelta;
             this.AlwaysDiscardNextToLastSigma = alwaysDiscardNextToLastSigma;
+            this.SgmNoiseMultiplier = sgmNoiseMultiplier;
             // use default value if no "uniPcVariant" provided
             this.UniPcVariant = uniPcVariant ?? @"bh1";
             // use default value if no "uniPcSkipType" provided
@@ -710,6 +781,13 @@ namespace SdWebUpApi.Model
         public Object CleanTempDirAtStart { get; set; }
 
         /// <summary>
+        /// Save incomplete images
+        /// </summary>
+        /// <value>Save incomplete images</value>
+        [DataMember(Name = "save_incomplete_images", EmitDefaultValue = true)]
+        public Object SaveIncompleteImages { get; set; }
+
+        /// <summary>
         /// Output directory for images; if empty, defaults to three directories below
         /// </summary>
         /// <value>Output directory for images; if empty, defaults to three directories below</value>
@@ -836,6 +914,13 @@ namespace SdWebUpApi.Model
         public Object UpscalerForImg2img { get; set; }
 
         /// <summary>
+        /// Restore faces
+        /// </summary>
+        /// <value>Restore faces</value>
+        [DataMember(Name = "face_restoration", EmitDefaultValue = true)]
+        public Object FaceRestoration { get; set; }
+
+        /// <summary>
         /// Face restoration model
         /// </summary>
         /// <value>Face restoration model</value>
@@ -857,11 +942,25 @@ namespace SdWebUpApi.Model
         public Object FaceRestorationUnload { get; set; }
 
         /// <summary>
+        /// Automatically open webui in browser on startup
+        /// </summary>
+        /// <value>Automatically open webui in browser on startup</value>
+        [DataMember(Name = "auto_launch_browser", EmitDefaultValue = false)]
+        public string AutoLaunchBrowser { get; set; }
+
+        /// <summary>
         /// Show warnings in console.
         /// </summary>
         /// <value>Show warnings in console.</value>
         [DataMember(Name = "show_warnings", EmitDefaultValue = true)]
         public Object ShowWarnings { get; set; }
+
+        /// <summary>
+        /// Show gradio deprecation warnings in console.
+        /// </summary>
+        /// <value>Show gradio deprecation warnings in console.</value>
+        [DataMember(Name = "show_gradio_deprecation_warnings", EmitDefaultValue = true)]
+        public bool ShowGradioDeprecationWarnings { get; set; }
 
         /// <summary>
         /// VRAM usage polls per second during generation.
@@ -904,6 +1003,34 @@ namespace SdWebUpApi.Model
         /// <value>Disable memmapping for loading .safetensors files.</value>
         [DataMember(Name = "disable_mmap_load_safetensors", EmitDefaultValue = true)]
         public Object DisableMmapLoadSafetensors { get; set; }
+
+        /// <summary>
+        /// Prevent Stability-AI&#39;s ldm/sgm modules from printing noise to console.
+        /// </summary>
+        /// <value>Prevent Stability-AI&#39;s ldm/sgm modules from printing noise to console.</value>
+        [DataMember(Name = "hide_ldm_prints", EmitDefaultValue = true)]
+        public bool HideLdmPrints { get; set; }
+
+        /// <summary>
+        /// Allow http:// and https:// URLs for input images in API
+        /// </summary>
+        /// <value>Allow http:// and https:// URLs for input images in API</value>
+        [DataMember(Name = "api_enable_requests", EmitDefaultValue = true)]
+        public bool ApiEnableRequests { get; set; }
+
+        /// <summary>
+        /// Forbid URLs to local resources
+        /// </summary>
+        /// <value>Forbid URLs to local resources</value>
+        [DataMember(Name = "api_forbid_local_requests", EmitDefaultValue = true)]
+        public bool ApiForbidLocalRequests { get; set; }
+
+        /// <summary>
+        /// User agent for requests
+        /// </summary>
+        /// <value>User agent for requests</value>
+        [DataMember(Name = "api_useragent", EmitDefaultValue = true)]
+        public Object ApiUseragent { get; set; }
 
         /// <summary>
         /// Move VAE and CLIP to RAM when training if possible. Saves VRAM.
@@ -997,32 +1124,25 @@ namespace SdWebUpApi.Model
         public Object SdModelCheckpoint { get; set; }
 
         /// <summary>
+        /// Maximum number of checkpoints loaded at the same time
+        /// </summary>
+        /// <value>Maximum number of checkpoints loaded at the same time</value>
+        [DataMember(Name = "sd_checkpoints_limit", EmitDefaultValue = false)]
+        public decimal SdCheckpointsLimit { get; set; }
+
+        /// <summary>
+        /// Only keep one model on device
+        /// </summary>
+        /// <value>Only keep one model on device</value>
+        [DataMember(Name = "sd_checkpoints_keep_in_cpu", EmitDefaultValue = true)]
+        public bool SdCheckpointsKeepInCpu { get; set; }
+
+        /// <summary>
         /// Checkpoints to cache in RAM
         /// </summary>
         /// <value>Checkpoints to cache in RAM</value>
         [DataMember(Name = "sd_checkpoint_cache", EmitDefaultValue = true)]
         public Object SdCheckpointCache { get; set; }
-
-        /// <summary>
-        /// VAE Checkpoints to cache in RAM
-        /// </summary>
-        /// <value>VAE Checkpoints to cache in RAM</value>
-        [DataMember(Name = "sd_vae_checkpoint_cache", EmitDefaultValue = true)]
-        public Object SdVaeCheckpointCache { get; set; }
-
-        /// <summary>
-        /// SD VAE
-        /// </summary>
-        /// <value>SD VAE</value>
-        [DataMember(Name = "sd_vae", EmitDefaultValue = false)]
-        public string SdVae { get; set; }
-
-        /// <summary>
-        /// Ignore selected VAE for stable diffusion checkpoints that have their own .vae.pt next to them
-        /// </summary>
-        /// <value>Ignore selected VAE for stable diffusion checkpoints that have their own .vae.pt next to them</value>
-        [DataMember(Name = "sd_vae_as_default", EmitDefaultValue = true)]
-        public bool SdVaeAsDefault { get; set; }
 
         /// <summary>
         /// SD Unet
@@ -1032,44 +1152,9 @@ namespace SdWebUpApi.Model
         public string SdUnet { get; set; }
 
         /// <summary>
-        /// Inpainting conditioning mask strength
+        /// Enable quantization in K samplers for sharper and cleaner results. This may change existing seeds
         /// </summary>
-        /// <value>Inpainting conditioning mask strength</value>
-        [DataMember(Name = "inpainting_mask_weight", EmitDefaultValue = false)]
-        public decimal InpaintingMaskWeight { get; set; }
-
-        /// <summary>
-        /// Noise multiplier for img2img
-        /// </summary>
-        /// <value>Noise multiplier for img2img</value>
-        [DataMember(Name = "initial_noise_multiplier", EmitDefaultValue = false)]
-        public decimal InitialNoiseMultiplier { get; set; }
-
-        /// <summary>
-        /// Apply color correction to img2img results to match original colors.
-        /// </summary>
-        /// <value>Apply color correction to img2img results to match original colors.</value>
-        [DataMember(Name = "img2img_color_correction", EmitDefaultValue = true)]
-        public Object Img2imgColorCorrection { get; set; }
-
-        /// <summary>
-        /// With img2img, do exactly the amount of steps the slider specifies.
-        /// </summary>
-        /// <value>With img2img, do exactly the amount of steps the slider specifies.</value>
-        [DataMember(Name = "img2img_fix_steps", EmitDefaultValue = true)]
-        public Object Img2imgFixSteps { get; set; }
-
-        /// <summary>
-        /// With img2img, fill image&#39;s transparent parts with this color.
-        /// </summary>
-        /// <value>With img2img, fill image&#39;s transparent parts with this color.</value>
-        [DataMember(Name = "img2img_background_color", EmitDefaultValue = false)]
-        public string Img2imgBackgroundColor { get; set; }
-
-        /// <summary>
-        /// Enable quantization in K samplers for sharper and cleaner results. This may change existing seeds. Requires restart to apply.
-        /// </summary>
-        /// <value>Enable quantization in K samplers for sharper and cleaner results. This may change existing seeds. Requires restart to apply.</value>
+        /// <value>Enable quantization in K samplers for sharper and cleaner results. This may change existing seeds</value>
         [DataMember(Name = "enable_quantization", EmitDefaultValue = true)]
         public Object EnableQuantization { get; set; }
 
@@ -1109,18 +1194,25 @@ namespace SdWebUpApi.Model
         public Object UpcastAttn { get; set; }
 
         /// <summary>
-        /// Automaticlly revert VAE to 32-bit floats
-        /// </summary>
-        /// <value>Automaticlly revert VAE to 32-bit floats</value>
-        [DataMember(Name = "auto_vae_precision", EmitDefaultValue = true)]
-        public bool AutoVaePrecision { get; set; }
-
-        /// <summary>
         /// Random number generator source.
         /// </summary>
         /// <value>Random number generator source.</value>
         [DataMember(Name = "randn_source", EmitDefaultValue = false)]
         public string RandnSource { get; set; }
+
+        /// <summary>
+        /// Tiling
+        /// </summary>
+        /// <value>Tiling</value>
+        [DataMember(Name = "tiling", EmitDefaultValue = true)]
+        public Object Tiling { get; set; }
+
+        /// <summary>
+        /// Hires fix: which pass to enable refiner for
+        /// </summary>
+        /// <value>Hires fix: which pass to enable refiner for</value>
+        [DataMember(Name = "hires_fix_refiner_pass", EmitDefaultValue = false)]
+        public string HiresFixRefinerPass { get; set; }
 
         /// <summary>
         /// crop top coordinate
@@ -1149,6 +1241,138 @@ namespace SdWebUpApi.Model
         /// <value>SDXL high aesthetic score</value>
         [DataMember(Name = "sdxl_refiner_high_aesthetic_score", EmitDefaultValue = false)]
         public decimal SdxlRefinerHighAestheticScore { get; set; }
+
+        /// <summary>
+        /// Gets or Sets SdVaeExplanation
+        /// </summary>
+        [DataMember(Name = "sd_vae_explanation", EmitDefaultValue = false)]
+        public string SdVaeExplanation { get; set; }
+
+        /// <summary>
+        /// VAE Checkpoints to cache in RAM
+        /// </summary>
+        /// <value>VAE Checkpoints to cache in RAM</value>
+        [DataMember(Name = "sd_vae_checkpoint_cache", EmitDefaultValue = true)]
+        public Object SdVaeCheckpointCache { get; set; }
+
+        /// <summary>
+        /// SD VAE
+        /// </summary>
+        /// <value>SD VAE</value>
+        [DataMember(Name = "sd_vae", EmitDefaultValue = false)]
+        public string SdVae { get; set; }
+
+        /// <summary>
+        /// Selected VAE overrides per-model preferences
+        /// </summary>
+        /// <value>Selected VAE overrides per-model preferences</value>
+        [DataMember(Name = "sd_vae_overrides_per_model_preferences", EmitDefaultValue = true)]
+        public bool SdVaeOverridesPerModelPreferences { get; set; }
+
+        /// <summary>
+        /// Automatically revert VAE to 32-bit floats
+        /// </summary>
+        /// <value>Automatically revert VAE to 32-bit floats</value>
+        [DataMember(Name = "auto_vae_precision", EmitDefaultValue = true)]
+        public bool AutoVaePrecision { get; set; }
+
+        /// <summary>
+        /// VAE type for encode
+        /// </summary>
+        /// <value>VAE type for encode</value>
+        [DataMember(Name = "sd_vae_encode_method", EmitDefaultValue = false)]
+        public string SdVaeEncodeMethod { get; set; }
+
+        /// <summary>
+        /// VAE type for decode
+        /// </summary>
+        /// <value>VAE type for decode</value>
+        [DataMember(Name = "sd_vae_decode_method", EmitDefaultValue = false)]
+        public string SdVaeDecodeMethod { get; set; }
+
+        /// <summary>
+        /// Inpainting conditioning mask strength
+        /// </summary>
+        /// <value>Inpainting conditioning mask strength</value>
+        [DataMember(Name = "inpainting_mask_weight", EmitDefaultValue = false)]
+        public decimal InpaintingMaskWeight { get; set; }
+
+        /// <summary>
+        /// Noise multiplier for img2img
+        /// </summary>
+        /// <value>Noise multiplier for img2img</value>
+        [DataMember(Name = "initial_noise_multiplier", EmitDefaultValue = false)]
+        public decimal InitialNoiseMultiplier { get; set; }
+
+        /// <summary>
+        /// Extra noise multiplier for img2img and hires fix
+        /// </summary>
+        /// <value>Extra noise multiplier for img2img and hires fix</value>
+        [DataMember(Name = "img2img_extra_noise", EmitDefaultValue = true)]
+        public Object Img2imgExtraNoise { get; set; }
+
+        /// <summary>
+        /// Apply color correction to img2img results to match original colors.
+        /// </summary>
+        /// <value>Apply color correction to img2img results to match original colors.</value>
+        [DataMember(Name = "img2img_color_correction", EmitDefaultValue = true)]
+        public Object Img2imgColorCorrection { get; set; }
+
+        /// <summary>
+        /// With img2img, do exactly the amount of steps the slider specifies.
+        /// </summary>
+        /// <value>With img2img, do exactly the amount of steps the slider specifies.</value>
+        [DataMember(Name = "img2img_fix_steps", EmitDefaultValue = true)]
+        public Object Img2imgFixSteps { get; set; }
+
+        /// <summary>
+        /// With img2img, fill transparent parts of the input image with this color.
+        /// </summary>
+        /// <value>With img2img, fill transparent parts of the input image with this color.</value>
+        [DataMember(Name = "img2img_background_color", EmitDefaultValue = false)]
+        public string Img2imgBackgroundColor { get; set; }
+
+        /// <summary>
+        /// Height of the image editor
+        /// </summary>
+        /// <value>Height of the image editor</value>
+        [DataMember(Name = "img2img_editor_height", EmitDefaultValue = false)]
+        public decimal Img2imgEditorHeight { get; set; }
+
+        /// <summary>
+        /// Sketch initial brush color
+        /// </summary>
+        /// <value>Sketch initial brush color</value>
+        [DataMember(Name = "img2img_sketch_default_brush_color", EmitDefaultValue = false)]
+        public string Img2imgSketchDefaultBrushColor { get; set; }
+
+        /// <summary>
+        /// Inpaint mask brush color
+        /// </summary>
+        /// <value>Inpaint mask brush color</value>
+        [DataMember(Name = "img2img_inpaint_mask_brush_color", EmitDefaultValue = false)]
+        public string Img2imgInpaintMaskBrushColor { get; set; }
+
+        /// <summary>
+        /// Inpaint sketch initial brush color
+        /// </summary>
+        /// <value>Inpaint sketch initial brush color</value>
+        [DataMember(Name = "img2img_inpaint_sketch_default_brush_color", EmitDefaultValue = false)]
+        public string Img2imgInpaintSketchDefaultBrushColor { get; set; }
+
+        /// <summary>
+        /// For inpainting, include the greyscale mask in results for web
+        /// </summary>
+        /// <value>For inpainting, include the greyscale mask in results for web</value>
+        [DataMember(Name = "return_mask", EmitDefaultValue = true)]
+        public Object ReturnMask { get; set; }
+
+        /// <summary>
+        /// For inpainting, include masked composite in results for web
+        /// </summary>
+        /// <value>For inpainting, include masked composite in results for web</value>
+        [DataMember(Name = "return_mask_composite", EmitDefaultValue = true)]
+        public Object ReturnMaskComposite { get; set; }
 
         /// <summary>
         /// Cross attention optimization
@@ -1193,11 +1417,18 @@ namespace SdWebUpApi.Model
         public Object PadCondUncond { get; set; }
 
         /// <summary>
-        /// persistent cond cache
+        /// Persistent cond cache
         /// </summary>
-        /// <value>persistent cond cache</value>
-        [DataMember(Name = "experimental_persistent_cond_cache", EmitDefaultValue = true)]
-        public Object ExperimentalPersistentCondCache { get; set; }
+        /// <value>Persistent cond cache</value>
+        [DataMember(Name = "persistent_cond_cache", EmitDefaultValue = true)]
+        public bool PersistentCondCache { get; set; }
+
+        /// <summary>
+        /// Batch cond/uncond
+        /// </summary>
+        /// <value>Batch cond/uncond</value>
+        [DataMember(Name = "batch_cond_uncond", EmitDefaultValue = true)]
+        public bool BatchCondUncond { get; set; }
 
         /// <summary>
         /// Use old emphasis implementation. Can be useful to reproduce old seeds.
@@ -1240,6 +1471,13 @@ namespace SdWebUpApi.Model
         /// <value>For hires fix, calculate conds of second pass using extra networks of first pass.</value>
         [DataMember(Name = "hires_fix_use_firstpass_conds", EmitDefaultValue = true)]
         public Object HiresFixUseFirstpassConds { get; set; }
+
+        /// <summary>
+        /// Use old prompt editing timelines.
+        /// </summary>
+        /// <value>Use old prompt editing timelines.</value>
+        [DataMember(Name = "use_old_scheduling", EmitDefaultValue = true)]
+        public Object UseOldScheduling { get; set; }
 
         /// <summary>
         /// Keep models in VRAM
@@ -1424,11 +1662,18 @@ namespace SdWebUpApi.Model
         public string GradioTheme { get; set; }
 
         /// <summary>
-        /// img2img: height of image editor
+        /// Cache gradio themes locally
         /// </summary>
-        /// <value>img2img: height of image editor</value>
-        [DataMember(Name = "img2img_editor_height", EmitDefaultValue = false)]
-        public decimal Img2imgEditorHeight { get; set; }
+        /// <value>Cache gradio themes locally</value>
+        [DataMember(Name = "gradio_themes_cache", EmitDefaultValue = true)]
+        public bool GradioThemesCache { get; set; }
+
+        /// <summary>
+        /// Gallery height
+        /// </summary>
+        /// <value>Gallery height</value>
+        [DataMember(Name = "gallery_height", EmitDefaultValue = true)]
+        public Object GalleryHeight { get; set; }
 
         /// <summary>
         /// Show grid in results for web
@@ -1436,20 +1681,6 @@ namespace SdWebUpApi.Model
         /// <value>Show grid in results for web</value>
         [DataMember(Name = "return_grid", EmitDefaultValue = true)]
         public bool ReturnGrid { get; set; }
-
-        /// <summary>
-        /// For inpainting, include the greyscale mask in results for web
-        /// </summary>
-        /// <value>For inpainting, include the greyscale mask in results for web</value>
-        [DataMember(Name = "return_mask", EmitDefaultValue = true)]
-        public Object ReturnMask { get; set; }
-
-        /// <summary>
-        /// For inpainting, include masked composite in results for web
-        /// </summary>
-        /// <value>For inpainting, include masked composite in results for web</value>
-        [DataMember(Name = "return_mask_composite", EmitDefaultValue = true)]
-        public Object ReturnMaskComposite { get; set; }
 
         /// <summary>
         /// Do not show any images in results for web
@@ -1578,9 +1809,9 @@ namespace SdWebUpApi.Model
         public Object UiReorderList { get; set; }
 
         /// <summary>
-        /// Hires fix: show hires sampler selection
+        /// Hires fix: show hires checkpoint and sampler selection
         /// </summary>
-        /// <value>Hires fix: show hires sampler selection</value>
+        /// <value>Hires fix: show hires checkpoint and sampler selection</value>
         [DataMember(Name = "hires_fix_show_sampler", EmitDefaultValue = true)]
         public Object HiresFixShowSampler { get; set; }
 
@@ -1683,6 +1914,13 @@ namespace SdWebUpApi.Model
         public string ShowProgressType { get; set; }
 
         /// <summary>
+        /// Allow Full live preview method with lowvram/medvram
+        /// </summary>
+        /// <value>Allow Full live preview method with lowvram/medvram</value>
+        [DataMember(Name = "live_preview_allow_lowvram_full", EmitDefaultValue = true)]
+        public Object LivePreviewAllowLowvramFull { get; set; }
+
+        /// <summary>
         /// Live preview subject
         /// </summary>
         /// <value>Live preview subject</value>
@@ -1695,6 +1933,13 @@ namespace SdWebUpApi.Model
         /// <value>Progressbar and preview update period</value>
         [DataMember(Name = "live_preview_refresh_period", EmitDefaultValue = false)]
         public decimal LivePreviewRefreshPeriod { get; set; }
+
+        /// <summary>
+        /// Return image with chosen live preview method on interrupt
+        /// </summary>
+        /// <value>Return image with chosen live preview method on interrupt</value>
+        [DataMember(Name = "live_preview_fast_interrupt", EmitDefaultValue = true)]
+        public Object LivePreviewFastInterrupt { get; set; }
 
         /// <summary>
         /// Hide samplers in user interface
@@ -1711,9 +1956,9 @@ namespace SdWebUpApi.Model
         public Object EtaDdim { get; set; }
 
         /// <summary>
-        /// Eta for ancestral samplers
+        /// Eta for k-diffusion samplers
         /// </summary>
-        /// <value>Eta for ancestral samplers</value>
+        /// <value>Eta for k-diffusion samplers</value>
         [DataMember(Name = "eta_ancestral", EmitDefaultValue = false)]
         public decimal EtaAncestral { get; set; }
 
@@ -1739,6 +1984,13 @@ namespace SdWebUpApi.Model
         public Object STmin { get; set; }
 
         /// <summary>
+        /// sigma tmax
+        /// </summary>
+        /// <value>sigma tmax</value>
+        [DataMember(Name = "s_tmax", EmitDefaultValue = true)]
+        public Object STmax { get; set; }
+
+        /// <summary>
         /// sigma noise
         /// </summary>
         /// <value>sigma noise</value>
@@ -1746,9 +1998,9 @@ namespace SdWebUpApi.Model
         public decimal SNoise { get; set; }
 
         /// <summary>
-        /// scheduler type
+        /// Scheduler type
         /// </summary>
-        /// <value>scheduler type</value>
+        /// <value>Scheduler type</value>
         [DataMember(Name = "k_sched_type", EmitDefaultValue = false)]
         public string KSchedType { get; set; }
 
@@ -1786,6 +2038,13 @@ namespace SdWebUpApi.Model
         /// <value>Always discard next-to-last sigma</value>
         [DataMember(Name = "always_discard_next_to_last_sigma", EmitDefaultValue = true)]
         public Object AlwaysDiscardNextToLastSigma { get; set; }
+
+        /// <summary>
+        /// SGM noise multiplier
+        /// </summary>
+        /// <value>SGM noise multiplier</value>
+        [DataMember(Name = "sgm_noise_multiplier", EmitDefaultValue = true)]
+        public Object SgmNoiseMultiplier { get; set; }
 
         /// <summary>
         /// UniPC variant
@@ -1906,6 +2165,7 @@ namespace SdWebUpApi.Model
             sb.Append("  SaveInitImg: ").Append(SaveInitImg).Append("\n");
             sb.Append("  TempDir: ").Append(TempDir).Append("\n");
             sb.Append("  CleanTempDirAtStart: ").Append(CleanTempDirAtStart).Append("\n");
+            sb.Append("  SaveIncompleteImages: ").Append(SaveIncompleteImages).Append("\n");
             sb.Append("  OutdirSamples: ").Append(OutdirSamples).Append("\n");
             sb.Append("  OutdirTxt2imgSamples: ").Append(OutdirTxt2imgSamples).Append("\n");
             sb.Append("  OutdirImg2imgSamples: ").Append(OutdirImg2imgSamples).Append("\n");
@@ -1924,16 +2184,23 @@ namespace SdWebUpApi.Model
             sb.Append("  ESRGANTileOverlap: ").Append(ESRGANTileOverlap).Append("\n");
             sb.Append("  RealesrganEnabledModels: ").Append(RealesrganEnabledModels).Append("\n");
             sb.Append("  UpscalerForImg2img: ").Append(UpscalerForImg2img).Append("\n");
+            sb.Append("  FaceRestoration: ").Append(FaceRestoration).Append("\n");
             sb.Append("  FaceRestorationModel: ").Append(FaceRestorationModel).Append("\n");
             sb.Append("  CodeFormerWeight: ").Append(CodeFormerWeight).Append("\n");
             sb.Append("  FaceRestorationUnload: ").Append(FaceRestorationUnload).Append("\n");
+            sb.Append("  AutoLaunchBrowser: ").Append(AutoLaunchBrowser).Append("\n");
             sb.Append("  ShowWarnings: ").Append(ShowWarnings).Append("\n");
+            sb.Append("  ShowGradioDeprecationWarnings: ").Append(ShowGradioDeprecationWarnings).Append("\n");
             sb.Append("  MemmonPollRate: ").Append(MemmonPollRate).Append("\n");
             sb.Append("  SamplesLogStdout: ").Append(SamplesLogStdout).Append("\n");
             sb.Append("  MultipleTqdm: ").Append(MultipleTqdm).Append("\n");
             sb.Append("  PrintHypernetExtra: ").Append(PrintHypernetExtra).Append("\n");
             sb.Append("  ListHiddenFiles: ").Append(ListHiddenFiles).Append("\n");
             sb.Append("  DisableMmapLoadSafetensors: ").Append(DisableMmapLoadSafetensors).Append("\n");
+            sb.Append("  HideLdmPrints: ").Append(HideLdmPrints).Append("\n");
+            sb.Append("  ApiEnableRequests: ").Append(ApiEnableRequests).Append("\n");
+            sb.Append("  ApiForbidLocalRequests: ").Append(ApiForbidLocalRequests).Append("\n");
+            sb.Append("  ApiUseragent: ").Append(ApiUseragent).Append("\n");
             sb.Append("  UnloadModelsWhenTraining: ").Append(UnloadModelsWhenTraining).Append("\n");
             sb.Append("  PinMemory: ").Append(PinMemory).Append("\n");
             sb.Append("  SaveOptimizerState: ").Append(SaveOptimizerState).Append("\n");
@@ -1947,41 +2214,57 @@ namespace SdWebUpApi.Model
             sb.Append("  TrainingTensorboardSaveImages: ").Append(TrainingTensorboardSaveImages).Append("\n");
             sb.Append("  TrainingTensorboardFlushEvery: ").Append(TrainingTensorboardFlushEvery).Append("\n");
             sb.Append("  SdModelCheckpoint: ").Append(SdModelCheckpoint).Append("\n");
+            sb.Append("  SdCheckpointsLimit: ").Append(SdCheckpointsLimit).Append("\n");
+            sb.Append("  SdCheckpointsKeepInCpu: ").Append(SdCheckpointsKeepInCpu).Append("\n");
             sb.Append("  SdCheckpointCache: ").Append(SdCheckpointCache).Append("\n");
-            sb.Append("  SdVaeCheckpointCache: ").Append(SdVaeCheckpointCache).Append("\n");
-            sb.Append("  SdVae: ").Append(SdVae).Append("\n");
-            sb.Append("  SdVaeAsDefault: ").Append(SdVaeAsDefault).Append("\n");
             sb.Append("  SdUnet: ").Append(SdUnet).Append("\n");
-            sb.Append("  InpaintingMaskWeight: ").Append(InpaintingMaskWeight).Append("\n");
-            sb.Append("  InitialNoiseMultiplier: ").Append(InitialNoiseMultiplier).Append("\n");
-            sb.Append("  Img2imgColorCorrection: ").Append(Img2imgColorCorrection).Append("\n");
-            sb.Append("  Img2imgFixSteps: ").Append(Img2imgFixSteps).Append("\n");
-            sb.Append("  Img2imgBackgroundColor: ").Append(Img2imgBackgroundColor).Append("\n");
             sb.Append("  EnableQuantization: ").Append(EnableQuantization).Append("\n");
             sb.Append("  EnableEmphasis: ").Append(EnableEmphasis).Append("\n");
             sb.Append("  EnableBatchSeeds: ").Append(EnableBatchSeeds).Append("\n");
             sb.Append("  CommaPaddingBacktrack: ").Append(CommaPaddingBacktrack).Append("\n");
             sb.Append("  CLIPStopAtLastLayers: ").Append(CLIPStopAtLastLayers).Append("\n");
             sb.Append("  UpcastAttn: ").Append(UpcastAttn).Append("\n");
-            sb.Append("  AutoVaePrecision: ").Append(AutoVaePrecision).Append("\n");
             sb.Append("  RandnSource: ").Append(RandnSource).Append("\n");
+            sb.Append("  Tiling: ").Append(Tiling).Append("\n");
+            sb.Append("  HiresFixRefinerPass: ").Append(HiresFixRefinerPass).Append("\n");
             sb.Append("  SdxlCropTop: ").Append(SdxlCropTop).Append("\n");
             sb.Append("  SdxlCropLeft: ").Append(SdxlCropLeft).Append("\n");
             sb.Append("  SdxlRefinerLowAestheticScore: ").Append(SdxlRefinerLowAestheticScore).Append("\n");
             sb.Append("  SdxlRefinerHighAestheticScore: ").Append(SdxlRefinerHighAestheticScore).Append("\n");
+            sb.Append("  SdVaeExplanation: ").Append(SdVaeExplanation).Append("\n");
+            sb.Append("  SdVaeCheckpointCache: ").Append(SdVaeCheckpointCache).Append("\n");
+            sb.Append("  SdVae: ").Append(SdVae).Append("\n");
+            sb.Append("  SdVaeOverridesPerModelPreferences: ").Append(SdVaeOverridesPerModelPreferences).Append("\n");
+            sb.Append("  AutoVaePrecision: ").Append(AutoVaePrecision).Append("\n");
+            sb.Append("  SdVaeEncodeMethod: ").Append(SdVaeEncodeMethod).Append("\n");
+            sb.Append("  SdVaeDecodeMethod: ").Append(SdVaeDecodeMethod).Append("\n");
+            sb.Append("  InpaintingMaskWeight: ").Append(InpaintingMaskWeight).Append("\n");
+            sb.Append("  InitialNoiseMultiplier: ").Append(InitialNoiseMultiplier).Append("\n");
+            sb.Append("  Img2imgExtraNoise: ").Append(Img2imgExtraNoise).Append("\n");
+            sb.Append("  Img2imgColorCorrection: ").Append(Img2imgColorCorrection).Append("\n");
+            sb.Append("  Img2imgFixSteps: ").Append(Img2imgFixSteps).Append("\n");
+            sb.Append("  Img2imgBackgroundColor: ").Append(Img2imgBackgroundColor).Append("\n");
+            sb.Append("  Img2imgEditorHeight: ").Append(Img2imgEditorHeight).Append("\n");
+            sb.Append("  Img2imgSketchDefaultBrushColor: ").Append(Img2imgSketchDefaultBrushColor).Append("\n");
+            sb.Append("  Img2imgInpaintMaskBrushColor: ").Append(Img2imgInpaintMaskBrushColor).Append("\n");
+            sb.Append("  Img2imgInpaintSketchDefaultBrushColor: ").Append(Img2imgInpaintSketchDefaultBrushColor).Append("\n");
+            sb.Append("  ReturnMask: ").Append(ReturnMask).Append("\n");
+            sb.Append("  ReturnMaskComposite: ").Append(ReturnMaskComposite).Append("\n");
             sb.Append("  CrossAttentionOptimization: ").Append(CrossAttentionOptimization).Append("\n");
             sb.Append("  SMinUncond: ").Append(SMinUncond).Append("\n");
             sb.Append("  TokenMergingRatio: ").Append(TokenMergingRatio).Append("\n");
             sb.Append("  TokenMergingRatioImg2img: ").Append(TokenMergingRatioImg2img).Append("\n");
             sb.Append("  TokenMergingRatioHr: ").Append(TokenMergingRatioHr).Append("\n");
             sb.Append("  PadCondUncond: ").Append(PadCondUncond).Append("\n");
-            sb.Append("  ExperimentalPersistentCondCache: ").Append(ExperimentalPersistentCondCache).Append("\n");
+            sb.Append("  PersistentCondCache: ").Append(PersistentCondCache).Append("\n");
+            sb.Append("  BatchCondUncond: ").Append(BatchCondUncond).Append("\n");
             sb.Append("  UseOldEmphasisImplementation: ").Append(UseOldEmphasisImplementation).Append("\n");
             sb.Append("  UseOldKarrasSchedulerSigmas: ").Append(UseOldKarrasSchedulerSigmas).Append("\n");
             sb.Append("  NoDpmppSdeBatchDeterminism: ").Append(NoDpmppSdeBatchDeterminism).Append("\n");
             sb.Append("  UseOldHiresFixWidthHeight: ").Append(UseOldHiresFixWidthHeight).Append("\n");
             sb.Append("  DontFixSecondOrderSamplersSchedule: ").Append(DontFixSecondOrderSamplersSchedule).Append("\n");
             sb.Append("  HiresFixUseFirstpassConds: ").Append(HiresFixUseFirstpassConds).Append("\n");
+            sb.Append("  UseOldScheduling: ").Append(UseOldScheduling).Append("\n");
             sb.Append("  InterrogateKeepModelsInMemory: ").Append(InterrogateKeepModelsInMemory).Append("\n");
             sb.Append("  InterrogateReturnRanks: ").Append(InterrogateReturnRanks).Append("\n");
             sb.Append("  InterrogateClipNumBeams: ").Append(InterrogateClipNumBeams).Append("\n");
@@ -2008,10 +2291,9 @@ namespace SdWebUpApi.Model
             sb.Append("  SdHypernetwork: ").Append(SdHypernetwork).Append("\n");
             sb.Append("  Localization: ").Append(Localization).Append("\n");
             sb.Append("  GradioTheme: ").Append(GradioTheme).Append("\n");
-            sb.Append("  Img2imgEditorHeight: ").Append(Img2imgEditorHeight).Append("\n");
+            sb.Append("  GradioThemesCache: ").Append(GradioThemesCache).Append("\n");
+            sb.Append("  GalleryHeight: ").Append(GalleryHeight).Append("\n");
             sb.Append("  ReturnGrid: ").Append(ReturnGrid).Append("\n");
-            sb.Append("  ReturnMask: ").Append(ReturnMask).Append("\n");
-            sb.Append("  ReturnMaskComposite: ").Append(ReturnMaskComposite).Append("\n");
             sb.Append("  DoNotShowImages: ").Append(DoNotShowImages).Append("\n");
             sb.Append("  SendSeed: ").Append(SendSeed).Append("\n");
             sb.Append("  SendSize: ").Append(SendSize).Append("\n");
@@ -2045,14 +2327,17 @@ namespace SdWebUpApi.Model
             sb.Append("  ShowProgressGrid: ").Append(ShowProgressGrid).Append("\n");
             sb.Append("  ShowProgressEveryNSteps: ").Append(ShowProgressEveryNSteps).Append("\n");
             sb.Append("  ShowProgressType: ").Append(ShowProgressType).Append("\n");
+            sb.Append("  LivePreviewAllowLowvramFull: ").Append(LivePreviewAllowLowvramFull).Append("\n");
             sb.Append("  LivePreviewContent: ").Append(LivePreviewContent).Append("\n");
             sb.Append("  LivePreviewRefreshPeriod: ").Append(LivePreviewRefreshPeriod).Append("\n");
+            sb.Append("  LivePreviewFastInterrupt: ").Append(LivePreviewFastInterrupt).Append("\n");
             sb.Append("  HideSamplers: ").Append(HideSamplers).Append("\n");
             sb.Append("  EtaDdim: ").Append(EtaDdim).Append("\n");
             sb.Append("  EtaAncestral: ").Append(EtaAncestral).Append("\n");
             sb.Append("  DdimDiscretize: ").Append(DdimDiscretize).Append("\n");
             sb.Append("  SChurn: ").Append(SChurn).Append("\n");
             sb.Append("  STmin: ").Append(STmin).Append("\n");
+            sb.Append("  STmax: ").Append(STmax).Append("\n");
             sb.Append("  SNoise: ").Append(SNoise).Append("\n");
             sb.Append("  KSchedType: ").Append(KSchedType).Append("\n");
             sb.Append("  SigmaMin: ").Append(SigmaMin).Append("\n");
@@ -2060,6 +2345,7 @@ namespace SdWebUpApi.Model
             sb.Append("  Rho: ").Append(Rho).Append("\n");
             sb.Append("  EtaNoiseSeedDelta: ").Append(EtaNoiseSeedDelta).Append("\n");
             sb.Append("  AlwaysDiscardNextToLastSigma: ").Append(AlwaysDiscardNextToLastSigma).Append("\n");
+            sb.Append("  SgmNoiseMultiplier: ").Append(SgmNoiseMultiplier).Append("\n");
             sb.Append("  UniPcVariant: ").Append(UniPcVariant).Append("\n");
             sb.Append("  UniPcSkipType: ").Append(UniPcSkipType).Append("\n");
             sb.Append("  UniPcOrder: ").Append(UniPcOrder).Append("\n");
@@ -2082,1532 +2368,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as Options);
-        }
-
-        /// <summary>
-        /// Returns true if Options instances are equal
-        /// </summary>
-        /// <param name="input">Instance of Options to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(Options input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.SamplesSave == input.SamplesSave ||
-                    this.SamplesSave.Equals(input.SamplesSave)
-                ) && 
-                (
-                    this.SamplesFormat == input.SamplesFormat ||
-                    (this.SamplesFormat != null &&
-                    this.SamplesFormat.Equals(input.SamplesFormat))
-                ) && 
-                (
-                    this.SamplesFilenamePattern == input.SamplesFilenamePattern ||
-                    (this.SamplesFilenamePattern != null &&
-                    this.SamplesFilenamePattern.Equals(input.SamplesFilenamePattern))
-                ) && 
-                (
-                    this.SaveImagesAddNumber == input.SaveImagesAddNumber ||
-                    this.SaveImagesAddNumber.Equals(input.SaveImagesAddNumber)
-                ) && 
-                (
-                    this.GridSave == input.GridSave ||
-                    this.GridSave.Equals(input.GridSave)
-                ) && 
-                (
-                    this.GridFormat == input.GridFormat ||
-                    (this.GridFormat != null &&
-                    this.GridFormat.Equals(input.GridFormat))
-                ) && 
-                (
-                    this.GridExtendedFilename == input.GridExtendedFilename ||
-                    (this.GridExtendedFilename != null &&
-                    this.GridExtendedFilename.Equals(input.GridExtendedFilename))
-                ) && 
-                (
-                    this.GridOnlyIfMultiple == input.GridOnlyIfMultiple ||
-                    this.GridOnlyIfMultiple.Equals(input.GridOnlyIfMultiple)
-                ) && 
-                (
-                    this.GridPreventEmptySpots == input.GridPreventEmptySpots ||
-                    (this.GridPreventEmptySpots != null &&
-                    this.GridPreventEmptySpots.Equals(input.GridPreventEmptySpots))
-                ) && 
-                (
-                    this.GridZipFilenamePattern == input.GridZipFilenamePattern ||
-                    (this.GridZipFilenamePattern != null &&
-                    this.GridZipFilenamePattern.Equals(input.GridZipFilenamePattern))
-                ) && 
-                (
-                    this.NRows == input.NRows ||
-                    this.NRows.Equals(input.NRows)
-                ) && 
-                (
-                    this.Font == input.Font ||
-                    (this.Font != null &&
-                    this.Font.Equals(input.Font))
-                ) && 
-                (
-                    this.GridTextActiveColor == input.GridTextActiveColor ||
-                    (this.GridTextActiveColor != null &&
-                    this.GridTextActiveColor.Equals(input.GridTextActiveColor))
-                ) && 
-                (
-                    this.GridTextInactiveColor == input.GridTextInactiveColor ||
-                    (this.GridTextInactiveColor != null &&
-                    this.GridTextInactiveColor.Equals(input.GridTextInactiveColor))
-                ) && 
-                (
-                    this.GridBackgroundColor == input.GridBackgroundColor ||
-                    (this.GridBackgroundColor != null &&
-                    this.GridBackgroundColor.Equals(input.GridBackgroundColor))
-                ) && 
-                (
-                    this.EnablePnginfo == input.EnablePnginfo ||
-                    this.EnablePnginfo.Equals(input.EnablePnginfo)
-                ) && 
-                (
-                    this.SaveTxt == input.SaveTxt ||
-                    (this.SaveTxt != null &&
-                    this.SaveTxt.Equals(input.SaveTxt))
-                ) && 
-                (
-                    this.SaveImagesBeforeFaceRestoration == input.SaveImagesBeforeFaceRestoration ||
-                    (this.SaveImagesBeforeFaceRestoration != null &&
-                    this.SaveImagesBeforeFaceRestoration.Equals(input.SaveImagesBeforeFaceRestoration))
-                ) && 
-                (
-                    this.SaveImagesBeforeHighresFix == input.SaveImagesBeforeHighresFix ||
-                    (this.SaveImagesBeforeHighresFix != null &&
-                    this.SaveImagesBeforeHighresFix.Equals(input.SaveImagesBeforeHighresFix))
-                ) && 
-                (
-                    this.SaveImagesBeforeColorCorrection == input.SaveImagesBeforeColorCorrection ||
-                    (this.SaveImagesBeforeColorCorrection != null &&
-                    this.SaveImagesBeforeColorCorrection.Equals(input.SaveImagesBeforeColorCorrection))
-                ) && 
-                (
-                    this.SaveMask == input.SaveMask ||
-                    (this.SaveMask != null &&
-                    this.SaveMask.Equals(input.SaveMask))
-                ) && 
-                (
-                    this.SaveMaskComposite == input.SaveMaskComposite ||
-                    (this.SaveMaskComposite != null &&
-                    this.SaveMaskComposite.Equals(input.SaveMaskComposite))
-                ) && 
-                (
-                    this.JpegQuality == input.JpegQuality ||
-                    this.JpegQuality.Equals(input.JpegQuality)
-                ) && 
-                (
-                    this.WebpLossless == input.WebpLossless ||
-                    (this.WebpLossless != null &&
-                    this.WebpLossless.Equals(input.WebpLossless))
-                ) && 
-                (
-                    this.ExportFor4chan == input.ExportFor4chan ||
-                    this.ExportFor4chan.Equals(input.ExportFor4chan)
-                ) && 
-                (
-                    this.ImgDownscaleThreshold == input.ImgDownscaleThreshold ||
-                    this.ImgDownscaleThreshold.Equals(input.ImgDownscaleThreshold)
-                ) && 
-                (
-                    this.TargetSideLength == input.TargetSideLength ||
-                    this.TargetSideLength.Equals(input.TargetSideLength)
-                ) && 
-                (
-                    this.ImgMaxSizeMp == input.ImgMaxSizeMp ||
-                    this.ImgMaxSizeMp.Equals(input.ImgMaxSizeMp)
-                ) && 
-                (
-                    this.UseOriginalNameBatch == input.UseOriginalNameBatch ||
-                    this.UseOriginalNameBatch.Equals(input.UseOriginalNameBatch)
-                ) && 
-                (
-                    this.UseUpscalerNameAsSuffix == input.UseUpscalerNameAsSuffix ||
-                    (this.UseUpscalerNameAsSuffix != null &&
-                    this.UseUpscalerNameAsSuffix.Equals(input.UseUpscalerNameAsSuffix))
-                ) && 
-                (
-                    this.SaveSelectedOnly == input.SaveSelectedOnly ||
-                    this.SaveSelectedOnly.Equals(input.SaveSelectedOnly)
-                ) && 
-                (
-                    this.SaveInitImg == input.SaveInitImg ||
-                    (this.SaveInitImg != null &&
-                    this.SaveInitImg.Equals(input.SaveInitImg))
-                ) && 
-                (
-                    this.TempDir == input.TempDir ||
-                    (this.TempDir != null &&
-                    this.TempDir.Equals(input.TempDir))
-                ) && 
-                (
-                    this.CleanTempDirAtStart == input.CleanTempDirAtStart ||
-                    (this.CleanTempDirAtStart != null &&
-                    this.CleanTempDirAtStart.Equals(input.CleanTempDirAtStart))
-                ) && 
-                (
-                    this.OutdirSamples == input.OutdirSamples ||
-                    (this.OutdirSamples != null &&
-                    this.OutdirSamples.Equals(input.OutdirSamples))
-                ) && 
-                (
-                    this.OutdirTxt2imgSamples == input.OutdirTxt2imgSamples ||
-                    (this.OutdirTxt2imgSamples != null &&
-                    this.OutdirTxt2imgSamples.Equals(input.OutdirTxt2imgSamples))
-                ) && 
-                (
-                    this.OutdirImg2imgSamples == input.OutdirImg2imgSamples ||
-                    (this.OutdirImg2imgSamples != null &&
-                    this.OutdirImg2imgSamples.Equals(input.OutdirImg2imgSamples))
-                ) && 
-                (
-                    this.OutdirExtrasSamples == input.OutdirExtrasSamples ||
-                    (this.OutdirExtrasSamples != null &&
-                    this.OutdirExtrasSamples.Equals(input.OutdirExtrasSamples))
-                ) && 
-                (
-                    this.OutdirGrids == input.OutdirGrids ||
-                    (this.OutdirGrids != null &&
-                    this.OutdirGrids.Equals(input.OutdirGrids))
-                ) && 
-                (
-                    this.OutdirTxt2imgGrids == input.OutdirTxt2imgGrids ||
-                    (this.OutdirTxt2imgGrids != null &&
-                    this.OutdirTxt2imgGrids.Equals(input.OutdirTxt2imgGrids))
-                ) && 
-                (
-                    this.OutdirImg2imgGrids == input.OutdirImg2imgGrids ||
-                    (this.OutdirImg2imgGrids != null &&
-                    this.OutdirImg2imgGrids.Equals(input.OutdirImg2imgGrids))
-                ) && 
-                (
-                    this.OutdirSave == input.OutdirSave ||
-                    (this.OutdirSave != null &&
-                    this.OutdirSave.Equals(input.OutdirSave))
-                ) && 
-                (
-                    this.OutdirInitImages == input.OutdirInitImages ||
-                    (this.OutdirInitImages != null &&
-                    this.OutdirInitImages.Equals(input.OutdirInitImages))
-                ) && 
-                (
-                    this.SaveToDirs == input.SaveToDirs ||
-                    this.SaveToDirs.Equals(input.SaveToDirs)
-                ) && 
-                (
-                    this.GridSaveToDirs == input.GridSaveToDirs ||
-                    this.GridSaveToDirs.Equals(input.GridSaveToDirs)
-                ) && 
-                (
-                    this.UseSaveToDirsForUi == input.UseSaveToDirsForUi ||
-                    (this.UseSaveToDirsForUi != null &&
-                    this.UseSaveToDirsForUi.Equals(input.UseSaveToDirsForUi))
-                ) && 
-                (
-                    this.DirectoriesFilenamePattern == input.DirectoriesFilenamePattern ||
-                    (this.DirectoriesFilenamePattern != null &&
-                    this.DirectoriesFilenamePattern.Equals(input.DirectoriesFilenamePattern))
-                ) && 
-                (
-                    this.DirectoriesMaxPromptWords == input.DirectoriesMaxPromptWords ||
-                    this.DirectoriesMaxPromptWords.Equals(input.DirectoriesMaxPromptWords)
-                ) && 
-                (
-                    this.ESRGANTile == input.ESRGANTile ||
-                    this.ESRGANTile.Equals(input.ESRGANTile)
-                ) && 
-                (
-                    this.ESRGANTileOverlap == input.ESRGANTileOverlap ||
-                    this.ESRGANTileOverlap.Equals(input.ESRGANTileOverlap)
-                ) && 
-                (
-                    this.RealesrganEnabledModels == input.RealesrganEnabledModels ||
-                    this.RealesrganEnabledModels != null &&
-                    input.RealesrganEnabledModels != null &&
-                    this.RealesrganEnabledModels.SequenceEqual(input.RealesrganEnabledModels)
-                ) && 
-                (
-                    this.UpscalerForImg2img == input.UpscalerForImg2img ||
-                    (this.UpscalerForImg2img != null &&
-                    this.UpscalerForImg2img.Equals(input.UpscalerForImg2img))
-                ) && 
-                (
-                    this.FaceRestorationModel == input.FaceRestorationModel ||
-                    (this.FaceRestorationModel != null &&
-                    this.FaceRestorationModel.Equals(input.FaceRestorationModel))
-                ) && 
-                (
-                    this.CodeFormerWeight == input.CodeFormerWeight ||
-                    this.CodeFormerWeight.Equals(input.CodeFormerWeight)
-                ) && 
-                (
-                    this.FaceRestorationUnload == input.FaceRestorationUnload ||
-                    (this.FaceRestorationUnload != null &&
-                    this.FaceRestorationUnload.Equals(input.FaceRestorationUnload))
-                ) && 
-                (
-                    this.ShowWarnings == input.ShowWarnings ||
-                    (this.ShowWarnings != null &&
-                    this.ShowWarnings.Equals(input.ShowWarnings))
-                ) && 
-                (
-                    this.MemmonPollRate == input.MemmonPollRate ||
-                    this.MemmonPollRate.Equals(input.MemmonPollRate)
-                ) && 
-                (
-                    this.SamplesLogStdout == input.SamplesLogStdout ||
-                    (this.SamplesLogStdout != null &&
-                    this.SamplesLogStdout.Equals(input.SamplesLogStdout))
-                ) && 
-                (
-                    this.MultipleTqdm == input.MultipleTqdm ||
-                    this.MultipleTqdm.Equals(input.MultipleTqdm)
-                ) && 
-                (
-                    this.PrintHypernetExtra == input.PrintHypernetExtra ||
-                    (this.PrintHypernetExtra != null &&
-                    this.PrintHypernetExtra.Equals(input.PrintHypernetExtra))
-                ) && 
-                (
-                    this.ListHiddenFiles == input.ListHiddenFiles ||
-                    this.ListHiddenFiles.Equals(input.ListHiddenFiles)
-                ) && 
-                (
-                    this.DisableMmapLoadSafetensors == input.DisableMmapLoadSafetensors ||
-                    (this.DisableMmapLoadSafetensors != null &&
-                    this.DisableMmapLoadSafetensors.Equals(input.DisableMmapLoadSafetensors))
-                ) && 
-                (
-                    this.UnloadModelsWhenTraining == input.UnloadModelsWhenTraining ||
-                    (this.UnloadModelsWhenTraining != null &&
-                    this.UnloadModelsWhenTraining.Equals(input.UnloadModelsWhenTraining))
-                ) && 
-                (
-                    this.PinMemory == input.PinMemory ||
-                    (this.PinMemory != null &&
-                    this.PinMemory.Equals(input.PinMemory))
-                ) && 
-                (
-                    this.SaveOptimizerState == input.SaveOptimizerState ||
-                    (this.SaveOptimizerState != null &&
-                    this.SaveOptimizerState.Equals(input.SaveOptimizerState))
-                ) && 
-                (
-                    this.SaveTrainingSettingsToTxt == input.SaveTrainingSettingsToTxt ||
-                    this.SaveTrainingSettingsToTxt.Equals(input.SaveTrainingSettingsToTxt)
-                ) && 
-                (
-                    this.DatasetFilenameWordRegex == input.DatasetFilenameWordRegex ||
-                    (this.DatasetFilenameWordRegex != null &&
-                    this.DatasetFilenameWordRegex.Equals(input.DatasetFilenameWordRegex))
-                ) && 
-                (
-                    this.DatasetFilenameJoinString == input.DatasetFilenameJoinString ||
-                    (this.DatasetFilenameJoinString != null &&
-                    this.DatasetFilenameJoinString.Equals(input.DatasetFilenameJoinString))
-                ) && 
-                (
-                    this.TrainingImageRepeatsPerEpoch == input.TrainingImageRepeatsPerEpoch ||
-                    this.TrainingImageRepeatsPerEpoch.Equals(input.TrainingImageRepeatsPerEpoch)
-                ) && 
-                (
-                    this.TrainingWriteCsvEvery == input.TrainingWriteCsvEvery ||
-                    this.TrainingWriteCsvEvery.Equals(input.TrainingWriteCsvEvery)
-                ) && 
-                (
-                    this.TrainingXattentionOptimizations == input.TrainingXattentionOptimizations ||
-                    (this.TrainingXattentionOptimizations != null &&
-                    this.TrainingXattentionOptimizations.Equals(input.TrainingXattentionOptimizations))
-                ) && 
-                (
-                    this.TrainingEnableTensorboard == input.TrainingEnableTensorboard ||
-                    (this.TrainingEnableTensorboard != null &&
-                    this.TrainingEnableTensorboard.Equals(input.TrainingEnableTensorboard))
-                ) && 
-                (
-                    this.TrainingTensorboardSaveImages == input.TrainingTensorboardSaveImages ||
-                    (this.TrainingTensorboardSaveImages != null &&
-                    this.TrainingTensorboardSaveImages.Equals(input.TrainingTensorboardSaveImages))
-                ) && 
-                (
-                    this.TrainingTensorboardFlushEvery == input.TrainingTensorboardFlushEvery ||
-                    this.TrainingTensorboardFlushEvery.Equals(input.TrainingTensorboardFlushEvery)
-                ) && 
-                (
-                    this.SdModelCheckpoint == input.SdModelCheckpoint ||
-                    (this.SdModelCheckpoint != null &&
-                    this.SdModelCheckpoint.Equals(input.SdModelCheckpoint))
-                ) && 
-                (
-                    this.SdCheckpointCache == input.SdCheckpointCache ||
-                    (this.SdCheckpointCache != null &&
-                    this.SdCheckpointCache.Equals(input.SdCheckpointCache))
-                ) && 
-                (
-                    this.SdVaeCheckpointCache == input.SdVaeCheckpointCache ||
-                    (this.SdVaeCheckpointCache != null &&
-                    this.SdVaeCheckpointCache.Equals(input.SdVaeCheckpointCache))
-                ) && 
-                (
-                    this.SdVae == input.SdVae ||
-                    (this.SdVae != null &&
-                    this.SdVae.Equals(input.SdVae))
-                ) && 
-                (
-                    this.SdVaeAsDefault == input.SdVaeAsDefault ||
-                    this.SdVaeAsDefault.Equals(input.SdVaeAsDefault)
-                ) && 
-                (
-                    this.SdUnet == input.SdUnet ||
-                    (this.SdUnet != null &&
-                    this.SdUnet.Equals(input.SdUnet))
-                ) && 
-                (
-                    this.InpaintingMaskWeight == input.InpaintingMaskWeight ||
-                    this.InpaintingMaskWeight.Equals(input.InpaintingMaskWeight)
-                ) && 
-                (
-                    this.InitialNoiseMultiplier == input.InitialNoiseMultiplier ||
-                    this.InitialNoiseMultiplier.Equals(input.InitialNoiseMultiplier)
-                ) && 
-                (
-                    this.Img2imgColorCorrection == input.Img2imgColorCorrection ||
-                    (this.Img2imgColorCorrection != null &&
-                    this.Img2imgColorCorrection.Equals(input.Img2imgColorCorrection))
-                ) && 
-                (
-                    this.Img2imgFixSteps == input.Img2imgFixSteps ||
-                    (this.Img2imgFixSteps != null &&
-                    this.Img2imgFixSteps.Equals(input.Img2imgFixSteps))
-                ) && 
-                (
-                    this.Img2imgBackgroundColor == input.Img2imgBackgroundColor ||
-                    (this.Img2imgBackgroundColor != null &&
-                    this.Img2imgBackgroundColor.Equals(input.Img2imgBackgroundColor))
-                ) && 
-                (
-                    this.EnableQuantization == input.EnableQuantization ||
-                    (this.EnableQuantization != null &&
-                    this.EnableQuantization.Equals(input.EnableQuantization))
-                ) && 
-                (
-                    this.EnableEmphasis == input.EnableEmphasis ||
-                    this.EnableEmphasis.Equals(input.EnableEmphasis)
-                ) && 
-                (
-                    this.EnableBatchSeeds == input.EnableBatchSeeds ||
-                    this.EnableBatchSeeds.Equals(input.EnableBatchSeeds)
-                ) && 
-                (
-                    this.CommaPaddingBacktrack == input.CommaPaddingBacktrack ||
-                    this.CommaPaddingBacktrack.Equals(input.CommaPaddingBacktrack)
-                ) && 
-                (
-                    this.CLIPStopAtLastLayers == input.CLIPStopAtLastLayers ||
-                    this.CLIPStopAtLastLayers.Equals(input.CLIPStopAtLastLayers)
-                ) && 
-                (
-                    this.UpcastAttn == input.UpcastAttn ||
-                    (this.UpcastAttn != null &&
-                    this.UpcastAttn.Equals(input.UpcastAttn))
-                ) && 
-                (
-                    this.AutoVaePrecision == input.AutoVaePrecision ||
-                    this.AutoVaePrecision.Equals(input.AutoVaePrecision)
-                ) && 
-                (
-                    this.RandnSource == input.RandnSource ||
-                    (this.RandnSource != null &&
-                    this.RandnSource.Equals(input.RandnSource))
-                ) && 
-                (
-                    this.SdxlCropTop == input.SdxlCropTop ||
-                    (this.SdxlCropTop != null &&
-                    this.SdxlCropTop.Equals(input.SdxlCropTop))
-                ) && 
-                (
-                    this.SdxlCropLeft == input.SdxlCropLeft ||
-                    (this.SdxlCropLeft != null &&
-                    this.SdxlCropLeft.Equals(input.SdxlCropLeft))
-                ) && 
-                (
-                    this.SdxlRefinerLowAestheticScore == input.SdxlRefinerLowAestheticScore ||
-                    this.SdxlRefinerLowAestheticScore.Equals(input.SdxlRefinerLowAestheticScore)
-                ) && 
-                (
-                    this.SdxlRefinerHighAestheticScore == input.SdxlRefinerHighAestheticScore ||
-                    this.SdxlRefinerHighAestheticScore.Equals(input.SdxlRefinerHighAestheticScore)
-                ) && 
-                (
-                    this.CrossAttentionOptimization == input.CrossAttentionOptimization ||
-                    (this.CrossAttentionOptimization != null &&
-                    this.CrossAttentionOptimization.Equals(input.CrossAttentionOptimization))
-                ) && 
-                (
-                    this.SMinUncond == input.SMinUncond ||
-                    (this.SMinUncond != null &&
-                    this.SMinUncond.Equals(input.SMinUncond))
-                ) && 
-                (
-                    this.TokenMergingRatio == input.TokenMergingRatio ||
-                    (this.TokenMergingRatio != null &&
-                    this.TokenMergingRatio.Equals(input.TokenMergingRatio))
-                ) && 
-                (
-                    this.TokenMergingRatioImg2img == input.TokenMergingRatioImg2img ||
-                    (this.TokenMergingRatioImg2img != null &&
-                    this.TokenMergingRatioImg2img.Equals(input.TokenMergingRatioImg2img))
-                ) && 
-                (
-                    this.TokenMergingRatioHr == input.TokenMergingRatioHr ||
-                    (this.TokenMergingRatioHr != null &&
-                    this.TokenMergingRatioHr.Equals(input.TokenMergingRatioHr))
-                ) && 
-                (
-                    this.PadCondUncond == input.PadCondUncond ||
-                    (this.PadCondUncond != null &&
-                    this.PadCondUncond.Equals(input.PadCondUncond))
-                ) && 
-                (
-                    this.ExperimentalPersistentCondCache == input.ExperimentalPersistentCondCache ||
-                    (this.ExperimentalPersistentCondCache != null &&
-                    this.ExperimentalPersistentCondCache.Equals(input.ExperimentalPersistentCondCache))
-                ) && 
-                (
-                    this.UseOldEmphasisImplementation == input.UseOldEmphasisImplementation ||
-                    (this.UseOldEmphasisImplementation != null &&
-                    this.UseOldEmphasisImplementation.Equals(input.UseOldEmphasisImplementation))
-                ) && 
-                (
-                    this.UseOldKarrasSchedulerSigmas == input.UseOldKarrasSchedulerSigmas ||
-                    (this.UseOldKarrasSchedulerSigmas != null &&
-                    this.UseOldKarrasSchedulerSigmas.Equals(input.UseOldKarrasSchedulerSigmas))
-                ) && 
-                (
-                    this.NoDpmppSdeBatchDeterminism == input.NoDpmppSdeBatchDeterminism ||
-                    (this.NoDpmppSdeBatchDeterminism != null &&
-                    this.NoDpmppSdeBatchDeterminism.Equals(input.NoDpmppSdeBatchDeterminism))
-                ) && 
-                (
-                    this.UseOldHiresFixWidthHeight == input.UseOldHiresFixWidthHeight ||
-                    (this.UseOldHiresFixWidthHeight != null &&
-                    this.UseOldHiresFixWidthHeight.Equals(input.UseOldHiresFixWidthHeight))
-                ) && 
-                (
-                    this.DontFixSecondOrderSamplersSchedule == input.DontFixSecondOrderSamplersSchedule ||
-                    (this.DontFixSecondOrderSamplersSchedule != null &&
-                    this.DontFixSecondOrderSamplersSchedule.Equals(input.DontFixSecondOrderSamplersSchedule))
-                ) && 
-                (
-                    this.HiresFixUseFirstpassConds == input.HiresFixUseFirstpassConds ||
-                    (this.HiresFixUseFirstpassConds != null &&
-                    this.HiresFixUseFirstpassConds.Equals(input.HiresFixUseFirstpassConds))
-                ) && 
-                (
-                    this.InterrogateKeepModelsInMemory == input.InterrogateKeepModelsInMemory ||
-                    (this.InterrogateKeepModelsInMemory != null &&
-                    this.InterrogateKeepModelsInMemory.Equals(input.InterrogateKeepModelsInMemory))
-                ) && 
-                (
-                    this.InterrogateReturnRanks == input.InterrogateReturnRanks ||
-                    (this.InterrogateReturnRanks != null &&
-                    this.InterrogateReturnRanks.Equals(input.InterrogateReturnRanks))
-                ) && 
-                (
-                    this.InterrogateClipNumBeams == input.InterrogateClipNumBeams ||
-                    this.InterrogateClipNumBeams.Equals(input.InterrogateClipNumBeams)
-                ) && 
-                (
-                    this.InterrogateClipMinLength == input.InterrogateClipMinLength ||
-                    this.InterrogateClipMinLength.Equals(input.InterrogateClipMinLength)
-                ) && 
-                (
-                    this.InterrogateClipMaxLength == input.InterrogateClipMaxLength ||
-                    this.InterrogateClipMaxLength.Equals(input.InterrogateClipMaxLength)
-                ) && 
-                (
-                    this.InterrogateClipDictLimit == input.InterrogateClipDictLimit ||
-                    this.InterrogateClipDictLimit.Equals(input.InterrogateClipDictLimit)
-                ) && 
-                (
-                    this.InterrogateClipSkipCategories == input.InterrogateClipSkipCategories ||
-                    (this.InterrogateClipSkipCategories != null &&
-                    this.InterrogateClipSkipCategories.Equals(input.InterrogateClipSkipCategories))
-                ) && 
-                (
-                    this.InterrogateDeepbooruScoreThreshold == input.InterrogateDeepbooruScoreThreshold ||
-                    this.InterrogateDeepbooruScoreThreshold.Equals(input.InterrogateDeepbooruScoreThreshold)
-                ) && 
-                (
-                    this.DeepbooruSortAlpha == input.DeepbooruSortAlpha ||
-                    this.DeepbooruSortAlpha.Equals(input.DeepbooruSortAlpha)
-                ) && 
-                (
-                    this.DeepbooruUseSpaces == input.DeepbooruUseSpaces ||
-                    this.DeepbooruUseSpaces.Equals(input.DeepbooruUseSpaces)
-                ) && 
-                (
-                    this.DeepbooruEscape == input.DeepbooruEscape ||
-                    this.DeepbooruEscape.Equals(input.DeepbooruEscape)
-                ) && 
-                (
-                    this.DeepbooruFilterTags == input.DeepbooruFilterTags ||
-                    (this.DeepbooruFilterTags != null &&
-                    this.DeepbooruFilterTags.Equals(input.DeepbooruFilterTags))
-                ) && 
-                (
-                    this.ExtraNetworksShowHiddenDirectories == input.ExtraNetworksShowHiddenDirectories ||
-                    this.ExtraNetworksShowHiddenDirectories.Equals(input.ExtraNetworksShowHiddenDirectories)
-                ) && 
-                (
-                    this.ExtraNetworksHiddenModels == input.ExtraNetworksHiddenModels ||
-                    (this.ExtraNetworksHiddenModels != null &&
-                    this.ExtraNetworksHiddenModels.Equals(input.ExtraNetworksHiddenModels))
-                ) && 
-                (
-                    this.ExtraNetworksDefaultMultiplier == input.ExtraNetworksDefaultMultiplier ||
-                    this.ExtraNetworksDefaultMultiplier.Equals(input.ExtraNetworksDefaultMultiplier)
-                ) && 
-                (
-                    this.ExtraNetworksCardWidth == input.ExtraNetworksCardWidth ||
-                    (this.ExtraNetworksCardWidth != null &&
-                    this.ExtraNetworksCardWidth.Equals(input.ExtraNetworksCardWidth))
-                ) && 
-                (
-                    this.ExtraNetworksCardHeight == input.ExtraNetworksCardHeight ||
-                    (this.ExtraNetworksCardHeight != null &&
-                    this.ExtraNetworksCardHeight.Equals(input.ExtraNetworksCardHeight))
-                ) && 
-                (
-                    this.ExtraNetworksCardTextScale == input.ExtraNetworksCardTextScale ||
-                    this.ExtraNetworksCardTextScale.Equals(input.ExtraNetworksCardTextScale)
-                ) && 
-                (
-                    this.ExtraNetworksCardShowDesc == input.ExtraNetworksCardShowDesc ||
-                    this.ExtraNetworksCardShowDesc.Equals(input.ExtraNetworksCardShowDesc)
-                ) && 
-                (
-                    this.ExtraNetworksAddTextSeparator == input.ExtraNetworksAddTextSeparator ||
-                    (this.ExtraNetworksAddTextSeparator != null &&
-                    this.ExtraNetworksAddTextSeparator.Equals(input.ExtraNetworksAddTextSeparator))
-                ) && 
-                (
-                    this.UiExtraNetworksTabReorder == input.UiExtraNetworksTabReorder ||
-                    (this.UiExtraNetworksTabReorder != null &&
-                    this.UiExtraNetworksTabReorder.Equals(input.UiExtraNetworksTabReorder))
-                ) && 
-                (
-                    this.TextualInversionPrintAtLoad == input.TextualInversionPrintAtLoad ||
-                    (this.TextualInversionPrintAtLoad != null &&
-                    this.TextualInversionPrintAtLoad.Equals(input.TextualInversionPrintAtLoad))
-                ) && 
-                (
-                    this.TextualInversionAddHashesToInfotext == input.TextualInversionAddHashesToInfotext ||
-                    this.TextualInversionAddHashesToInfotext.Equals(input.TextualInversionAddHashesToInfotext)
-                ) && 
-                (
-                    this.SdHypernetwork == input.SdHypernetwork ||
-                    (this.SdHypernetwork != null &&
-                    this.SdHypernetwork.Equals(input.SdHypernetwork))
-                ) && 
-                (
-                    this.Localization == input.Localization ||
-                    (this.Localization != null &&
-                    this.Localization.Equals(input.Localization))
-                ) && 
-                (
-                    this.GradioTheme == input.GradioTheme ||
-                    (this.GradioTheme != null &&
-                    this.GradioTheme.Equals(input.GradioTheme))
-                ) && 
-                (
-                    this.Img2imgEditorHeight == input.Img2imgEditorHeight ||
-                    this.Img2imgEditorHeight.Equals(input.Img2imgEditorHeight)
-                ) && 
-                (
-                    this.ReturnGrid == input.ReturnGrid ||
-                    this.ReturnGrid.Equals(input.ReturnGrid)
-                ) && 
-                (
-                    this.ReturnMask == input.ReturnMask ||
-                    (this.ReturnMask != null &&
-                    this.ReturnMask.Equals(input.ReturnMask))
-                ) && 
-                (
-                    this.ReturnMaskComposite == input.ReturnMaskComposite ||
-                    (this.ReturnMaskComposite != null &&
-                    this.ReturnMaskComposite.Equals(input.ReturnMaskComposite))
-                ) && 
-                (
-                    this.DoNotShowImages == input.DoNotShowImages ||
-                    (this.DoNotShowImages != null &&
-                    this.DoNotShowImages.Equals(input.DoNotShowImages))
-                ) && 
-                (
-                    this.SendSeed == input.SendSeed ||
-                    this.SendSeed.Equals(input.SendSeed)
-                ) && 
-                (
-                    this.SendSize == input.SendSize ||
-                    this.SendSize.Equals(input.SendSize)
-                ) && 
-                (
-                    this.JsModalLightbox == input.JsModalLightbox ||
-                    this.JsModalLightbox.Equals(input.JsModalLightbox)
-                ) && 
-                (
-                    this.JsModalLightboxInitiallyZoomed == input.JsModalLightboxInitiallyZoomed ||
-                    this.JsModalLightboxInitiallyZoomed.Equals(input.JsModalLightboxInitiallyZoomed)
-                ) && 
-                (
-                    this.JsModalLightboxGamepad == input.JsModalLightboxGamepad ||
-                    (this.JsModalLightboxGamepad != null &&
-                    this.JsModalLightboxGamepad.Equals(input.JsModalLightboxGamepad))
-                ) && 
-                (
-                    this.JsModalLightboxGamepadRepeat == input.JsModalLightboxGamepadRepeat ||
-                    this.JsModalLightboxGamepadRepeat.Equals(input.JsModalLightboxGamepadRepeat)
-                ) && 
-                (
-                    this.ShowProgressInTitle == input.ShowProgressInTitle ||
-                    this.ShowProgressInTitle.Equals(input.ShowProgressInTitle)
-                ) && 
-                (
-                    this.SamplersInDropdown == input.SamplersInDropdown ||
-                    this.SamplersInDropdown.Equals(input.SamplersInDropdown)
-                ) && 
-                (
-                    this.DimensionsAndBatchTogether == input.DimensionsAndBatchTogether ||
-                    this.DimensionsAndBatchTogether.Equals(input.DimensionsAndBatchTogether)
-                ) && 
-                (
-                    this.KeyeditPrecisionAttention == input.KeyeditPrecisionAttention ||
-                    this.KeyeditPrecisionAttention.Equals(input.KeyeditPrecisionAttention)
-                ) && 
-                (
-                    this.KeyeditPrecisionExtra == input.KeyeditPrecisionExtra ||
-                    this.KeyeditPrecisionExtra.Equals(input.KeyeditPrecisionExtra)
-                ) && 
-                (
-                    this.KeyeditDelimiters == input.KeyeditDelimiters ||
-                    (this.KeyeditDelimiters != null &&
-                    this.KeyeditDelimiters.Equals(input.KeyeditDelimiters))
-                ) && 
-                (
-                    this.KeyeditMove == input.KeyeditMove ||
-                    this.KeyeditMove.Equals(input.KeyeditMove)
-                ) && 
-                (
-                    this.QuicksettingsList == input.QuicksettingsList ||
-                    this.QuicksettingsList != null &&
-                    input.QuicksettingsList != null &&
-                    this.QuicksettingsList.SequenceEqual(input.QuicksettingsList)
-                ) && 
-                (
-                    this.UiTabOrder == input.UiTabOrder ||
-                    (this.UiTabOrder != null &&
-                    this.UiTabOrder.Equals(input.UiTabOrder))
-                ) && 
-                (
-                    this.HiddenTabs == input.HiddenTabs ||
-                    (this.HiddenTabs != null &&
-                    this.HiddenTabs.Equals(input.HiddenTabs))
-                ) && 
-                (
-                    this.UiReorderList == input.UiReorderList ||
-                    (this.UiReorderList != null &&
-                    this.UiReorderList.Equals(input.UiReorderList))
-                ) && 
-                (
-                    this.HiresFixShowSampler == input.HiresFixShowSampler ||
-                    (this.HiresFixShowSampler != null &&
-                    this.HiresFixShowSampler.Equals(input.HiresFixShowSampler))
-                ) && 
-                (
-                    this.HiresFixShowPrompts == input.HiresFixShowPrompts ||
-                    (this.HiresFixShowPrompts != null &&
-                    this.HiresFixShowPrompts.Equals(input.HiresFixShowPrompts))
-                ) && 
-                (
-                    this.DisableTokenCounters == input.DisableTokenCounters ||
-                    (this.DisableTokenCounters != null &&
-                    this.DisableTokenCounters.Equals(input.DisableTokenCounters))
-                ) && 
-                (
-                    this.AddModelHashToInfo == input.AddModelHashToInfo ||
-                    this.AddModelHashToInfo.Equals(input.AddModelHashToInfo)
-                ) && 
-                (
-                    this.AddModelNameToInfo == input.AddModelNameToInfo ||
-                    this.AddModelNameToInfo.Equals(input.AddModelNameToInfo)
-                ) && 
-                (
-                    this.AddUserNameToInfo == input.AddUserNameToInfo ||
-                    (this.AddUserNameToInfo != null &&
-                    this.AddUserNameToInfo.Equals(input.AddUserNameToInfo))
-                ) && 
-                (
-                    this.AddVersionToInfotext == input.AddVersionToInfotext ||
-                    this.AddVersionToInfotext.Equals(input.AddVersionToInfotext)
-                ) && 
-                (
-                    this.DisableWeightsAutoSwap == input.DisableWeightsAutoSwap ||
-                    this.DisableWeightsAutoSwap.Equals(input.DisableWeightsAutoSwap)
-                ) && 
-                (
-                    this.InfotextStyles == input.InfotextStyles ||
-                    (this.InfotextStyles != null &&
-                    this.InfotextStyles.Equals(input.InfotextStyles))
-                ) && 
-                (
-                    this.ShowProgressbar == input.ShowProgressbar ||
-                    this.ShowProgressbar.Equals(input.ShowProgressbar)
-                ) && 
-                (
-                    this.LivePreviewsEnable == input.LivePreviewsEnable ||
-                    this.LivePreviewsEnable.Equals(input.LivePreviewsEnable)
-                ) && 
-                (
-                    this.LivePreviewsImageFormat == input.LivePreviewsImageFormat ||
-                    (this.LivePreviewsImageFormat != null &&
-                    this.LivePreviewsImageFormat.Equals(input.LivePreviewsImageFormat))
-                ) && 
-                (
-                    this.ShowProgressGrid == input.ShowProgressGrid ||
-                    this.ShowProgressGrid.Equals(input.ShowProgressGrid)
-                ) && 
-                (
-                    this.ShowProgressEveryNSteps == input.ShowProgressEveryNSteps ||
-                    this.ShowProgressEveryNSteps.Equals(input.ShowProgressEveryNSteps)
-                ) && 
-                (
-                    this.ShowProgressType == input.ShowProgressType ||
-                    (this.ShowProgressType != null &&
-                    this.ShowProgressType.Equals(input.ShowProgressType))
-                ) && 
-                (
-                    this.LivePreviewContent == input.LivePreviewContent ||
-                    (this.LivePreviewContent != null &&
-                    this.LivePreviewContent.Equals(input.LivePreviewContent))
-                ) && 
-                (
-                    this.LivePreviewRefreshPeriod == input.LivePreviewRefreshPeriod ||
-                    this.LivePreviewRefreshPeriod.Equals(input.LivePreviewRefreshPeriod)
-                ) && 
-                (
-                    this.HideSamplers == input.HideSamplers ||
-                    (this.HideSamplers != null &&
-                    this.HideSamplers.Equals(input.HideSamplers))
-                ) && 
-                (
-                    this.EtaDdim == input.EtaDdim ||
-                    (this.EtaDdim != null &&
-                    this.EtaDdim.Equals(input.EtaDdim))
-                ) && 
-                (
-                    this.EtaAncestral == input.EtaAncestral ||
-                    this.EtaAncestral.Equals(input.EtaAncestral)
-                ) && 
-                (
-                    this.DdimDiscretize == input.DdimDiscretize ||
-                    (this.DdimDiscretize != null &&
-                    this.DdimDiscretize.Equals(input.DdimDiscretize))
-                ) && 
-                (
-                    this.SChurn == input.SChurn ||
-                    (this.SChurn != null &&
-                    this.SChurn.Equals(input.SChurn))
-                ) && 
-                (
-                    this.STmin == input.STmin ||
-                    (this.STmin != null &&
-                    this.STmin.Equals(input.STmin))
-                ) && 
-                (
-                    this.SNoise == input.SNoise ||
-                    this.SNoise.Equals(input.SNoise)
-                ) && 
-                (
-                    this.KSchedType == input.KSchedType ||
-                    (this.KSchedType != null &&
-                    this.KSchedType.Equals(input.KSchedType))
-                ) && 
-                (
-                    this.SigmaMin == input.SigmaMin ||
-                    (this.SigmaMin != null &&
-                    this.SigmaMin.Equals(input.SigmaMin))
-                ) && 
-                (
-                    this.SigmaMax == input.SigmaMax ||
-                    (this.SigmaMax != null &&
-                    this.SigmaMax.Equals(input.SigmaMax))
-                ) && 
-                (
-                    this.Rho == input.Rho ||
-                    (this.Rho != null &&
-                    this.Rho.Equals(input.Rho))
-                ) && 
-                (
-                    this.EtaNoiseSeedDelta == input.EtaNoiseSeedDelta ||
-                    (this.EtaNoiseSeedDelta != null &&
-                    this.EtaNoiseSeedDelta.Equals(input.EtaNoiseSeedDelta))
-                ) && 
-                (
-                    this.AlwaysDiscardNextToLastSigma == input.AlwaysDiscardNextToLastSigma ||
-                    (this.AlwaysDiscardNextToLastSigma != null &&
-                    this.AlwaysDiscardNextToLastSigma.Equals(input.AlwaysDiscardNextToLastSigma))
-                ) && 
-                (
-                    this.UniPcVariant == input.UniPcVariant ||
-                    (this.UniPcVariant != null &&
-                    this.UniPcVariant.Equals(input.UniPcVariant))
-                ) && 
-                (
-                    this.UniPcSkipType == input.UniPcSkipType ||
-                    (this.UniPcSkipType != null &&
-                    this.UniPcSkipType.Equals(input.UniPcSkipType))
-                ) && 
-                (
-                    this.UniPcOrder == input.UniPcOrder ||
-                    this.UniPcOrder.Equals(input.UniPcOrder)
-                ) && 
-                (
-                    this.UniPcLowerOrderFinal == input.UniPcLowerOrderFinal ||
-                    this.UniPcLowerOrderFinal.Equals(input.UniPcLowerOrderFinal)
-                ) && 
-                (
-                    this.PostprocessingEnableInMainUi == input.PostprocessingEnableInMainUi ||
-                    (this.PostprocessingEnableInMainUi != null &&
-                    this.PostprocessingEnableInMainUi.Equals(input.PostprocessingEnableInMainUi))
-                ) && 
-                (
-                    this.PostprocessingOperationOrder == input.PostprocessingOperationOrder ||
-                    (this.PostprocessingOperationOrder != null &&
-                    this.PostprocessingOperationOrder.Equals(input.PostprocessingOperationOrder))
-                ) && 
-                (
-                    this.UpscalingMaxImagesInCache == input.UpscalingMaxImagesInCache ||
-                    this.UpscalingMaxImagesInCache.Equals(input.UpscalingMaxImagesInCache)
-                ) && 
-                (
-                    this.DisabledExtensions == input.DisabledExtensions ||
-                    (this.DisabledExtensions != null &&
-                    this.DisabledExtensions.Equals(input.DisabledExtensions))
-                ) && 
-                (
-                    this.DisableAllExtensions == input.DisableAllExtensions ||
-                    (this.DisableAllExtensions != null &&
-                    this.DisableAllExtensions.Equals(input.DisableAllExtensions))
-                ) && 
-                (
-                    this.RestoreConfigStateFile == input.RestoreConfigStateFile ||
-                    (this.RestoreConfigStateFile != null &&
-                    this.RestoreConfigStateFile.Equals(input.RestoreConfigStateFile))
-                ) && 
-                (
-                    this.SdCheckpointHash == input.SdCheckpointHash ||
-                    (this.SdCheckpointHash != null &&
-                    this.SdCheckpointHash.Equals(input.SdCheckpointHash))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                hashCode = (hashCode * 59) + this.SamplesSave.GetHashCode();
-                if (this.SamplesFormat != null)
-                {
-                    hashCode = (hashCode * 59) + this.SamplesFormat.GetHashCode();
-                }
-                if (this.SamplesFilenamePattern != null)
-                {
-                    hashCode = (hashCode * 59) + this.SamplesFilenamePattern.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.SaveImagesAddNumber.GetHashCode();
-                hashCode = (hashCode * 59) + this.GridSave.GetHashCode();
-                if (this.GridFormat != null)
-                {
-                    hashCode = (hashCode * 59) + this.GridFormat.GetHashCode();
-                }
-                if (this.GridExtendedFilename != null)
-                {
-                    hashCode = (hashCode * 59) + this.GridExtendedFilename.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.GridOnlyIfMultiple.GetHashCode();
-                if (this.GridPreventEmptySpots != null)
-                {
-                    hashCode = (hashCode * 59) + this.GridPreventEmptySpots.GetHashCode();
-                }
-                if (this.GridZipFilenamePattern != null)
-                {
-                    hashCode = (hashCode * 59) + this.GridZipFilenamePattern.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.NRows.GetHashCode();
-                if (this.Font != null)
-                {
-                    hashCode = (hashCode * 59) + this.Font.GetHashCode();
-                }
-                if (this.GridTextActiveColor != null)
-                {
-                    hashCode = (hashCode * 59) + this.GridTextActiveColor.GetHashCode();
-                }
-                if (this.GridTextInactiveColor != null)
-                {
-                    hashCode = (hashCode * 59) + this.GridTextInactiveColor.GetHashCode();
-                }
-                if (this.GridBackgroundColor != null)
-                {
-                    hashCode = (hashCode * 59) + this.GridBackgroundColor.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.EnablePnginfo.GetHashCode();
-                if (this.SaveTxt != null)
-                {
-                    hashCode = (hashCode * 59) + this.SaveTxt.GetHashCode();
-                }
-                if (this.SaveImagesBeforeFaceRestoration != null)
-                {
-                    hashCode = (hashCode * 59) + this.SaveImagesBeforeFaceRestoration.GetHashCode();
-                }
-                if (this.SaveImagesBeforeHighresFix != null)
-                {
-                    hashCode = (hashCode * 59) + this.SaveImagesBeforeHighresFix.GetHashCode();
-                }
-                if (this.SaveImagesBeforeColorCorrection != null)
-                {
-                    hashCode = (hashCode * 59) + this.SaveImagesBeforeColorCorrection.GetHashCode();
-                }
-                if (this.SaveMask != null)
-                {
-                    hashCode = (hashCode * 59) + this.SaveMask.GetHashCode();
-                }
-                if (this.SaveMaskComposite != null)
-                {
-                    hashCode = (hashCode * 59) + this.SaveMaskComposite.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.JpegQuality.GetHashCode();
-                if (this.WebpLossless != null)
-                {
-                    hashCode = (hashCode * 59) + this.WebpLossless.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.ExportFor4chan.GetHashCode();
-                hashCode = (hashCode * 59) + this.ImgDownscaleThreshold.GetHashCode();
-                hashCode = (hashCode * 59) + this.TargetSideLength.GetHashCode();
-                hashCode = (hashCode * 59) + this.ImgMaxSizeMp.GetHashCode();
-                hashCode = (hashCode * 59) + this.UseOriginalNameBatch.GetHashCode();
-                if (this.UseUpscalerNameAsSuffix != null)
-                {
-                    hashCode = (hashCode * 59) + this.UseUpscalerNameAsSuffix.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.SaveSelectedOnly.GetHashCode();
-                if (this.SaveInitImg != null)
-                {
-                    hashCode = (hashCode * 59) + this.SaveInitImg.GetHashCode();
-                }
-                if (this.TempDir != null)
-                {
-                    hashCode = (hashCode * 59) + this.TempDir.GetHashCode();
-                }
-                if (this.CleanTempDirAtStart != null)
-                {
-                    hashCode = (hashCode * 59) + this.CleanTempDirAtStart.GetHashCode();
-                }
-                if (this.OutdirSamples != null)
-                {
-                    hashCode = (hashCode * 59) + this.OutdirSamples.GetHashCode();
-                }
-                if (this.OutdirTxt2imgSamples != null)
-                {
-                    hashCode = (hashCode * 59) + this.OutdirTxt2imgSamples.GetHashCode();
-                }
-                if (this.OutdirImg2imgSamples != null)
-                {
-                    hashCode = (hashCode * 59) + this.OutdirImg2imgSamples.GetHashCode();
-                }
-                if (this.OutdirExtrasSamples != null)
-                {
-                    hashCode = (hashCode * 59) + this.OutdirExtrasSamples.GetHashCode();
-                }
-                if (this.OutdirGrids != null)
-                {
-                    hashCode = (hashCode * 59) + this.OutdirGrids.GetHashCode();
-                }
-                if (this.OutdirTxt2imgGrids != null)
-                {
-                    hashCode = (hashCode * 59) + this.OutdirTxt2imgGrids.GetHashCode();
-                }
-                if (this.OutdirImg2imgGrids != null)
-                {
-                    hashCode = (hashCode * 59) + this.OutdirImg2imgGrids.GetHashCode();
-                }
-                if (this.OutdirSave != null)
-                {
-                    hashCode = (hashCode * 59) + this.OutdirSave.GetHashCode();
-                }
-                if (this.OutdirInitImages != null)
-                {
-                    hashCode = (hashCode * 59) + this.OutdirInitImages.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.SaveToDirs.GetHashCode();
-                hashCode = (hashCode * 59) + this.GridSaveToDirs.GetHashCode();
-                if (this.UseSaveToDirsForUi != null)
-                {
-                    hashCode = (hashCode * 59) + this.UseSaveToDirsForUi.GetHashCode();
-                }
-                if (this.DirectoriesFilenamePattern != null)
-                {
-                    hashCode = (hashCode * 59) + this.DirectoriesFilenamePattern.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.DirectoriesMaxPromptWords.GetHashCode();
-                hashCode = (hashCode * 59) + this.ESRGANTile.GetHashCode();
-                hashCode = (hashCode * 59) + this.ESRGANTileOverlap.GetHashCode();
-                if (this.RealesrganEnabledModels != null)
-                {
-                    hashCode = (hashCode * 59) + this.RealesrganEnabledModels.GetHashCode();
-                }
-                if (this.UpscalerForImg2img != null)
-                {
-                    hashCode = (hashCode * 59) + this.UpscalerForImg2img.GetHashCode();
-                }
-                if (this.FaceRestorationModel != null)
-                {
-                    hashCode = (hashCode * 59) + this.FaceRestorationModel.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.CodeFormerWeight.GetHashCode();
-                if (this.FaceRestorationUnload != null)
-                {
-                    hashCode = (hashCode * 59) + this.FaceRestorationUnload.GetHashCode();
-                }
-                if (this.ShowWarnings != null)
-                {
-                    hashCode = (hashCode * 59) + this.ShowWarnings.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.MemmonPollRate.GetHashCode();
-                if (this.SamplesLogStdout != null)
-                {
-                    hashCode = (hashCode * 59) + this.SamplesLogStdout.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.MultipleTqdm.GetHashCode();
-                if (this.PrintHypernetExtra != null)
-                {
-                    hashCode = (hashCode * 59) + this.PrintHypernetExtra.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.ListHiddenFiles.GetHashCode();
-                if (this.DisableMmapLoadSafetensors != null)
-                {
-                    hashCode = (hashCode * 59) + this.DisableMmapLoadSafetensors.GetHashCode();
-                }
-                if (this.UnloadModelsWhenTraining != null)
-                {
-                    hashCode = (hashCode * 59) + this.UnloadModelsWhenTraining.GetHashCode();
-                }
-                if (this.PinMemory != null)
-                {
-                    hashCode = (hashCode * 59) + this.PinMemory.GetHashCode();
-                }
-                if (this.SaveOptimizerState != null)
-                {
-                    hashCode = (hashCode * 59) + this.SaveOptimizerState.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.SaveTrainingSettingsToTxt.GetHashCode();
-                if (this.DatasetFilenameWordRegex != null)
-                {
-                    hashCode = (hashCode * 59) + this.DatasetFilenameWordRegex.GetHashCode();
-                }
-                if (this.DatasetFilenameJoinString != null)
-                {
-                    hashCode = (hashCode * 59) + this.DatasetFilenameJoinString.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.TrainingImageRepeatsPerEpoch.GetHashCode();
-                hashCode = (hashCode * 59) + this.TrainingWriteCsvEvery.GetHashCode();
-                if (this.TrainingXattentionOptimizations != null)
-                {
-                    hashCode = (hashCode * 59) + this.TrainingXattentionOptimizations.GetHashCode();
-                }
-                if (this.TrainingEnableTensorboard != null)
-                {
-                    hashCode = (hashCode * 59) + this.TrainingEnableTensorboard.GetHashCode();
-                }
-                if (this.TrainingTensorboardSaveImages != null)
-                {
-                    hashCode = (hashCode * 59) + this.TrainingTensorboardSaveImages.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.TrainingTensorboardFlushEvery.GetHashCode();
-                if (this.SdModelCheckpoint != null)
-                {
-                    hashCode = (hashCode * 59) + this.SdModelCheckpoint.GetHashCode();
-                }
-                if (this.SdCheckpointCache != null)
-                {
-                    hashCode = (hashCode * 59) + this.SdCheckpointCache.GetHashCode();
-                }
-                if (this.SdVaeCheckpointCache != null)
-                {
-                    hashCode = (hashCode * 59) + this.SdVaeCheckpointCache.GetHashCode();
-                }
-                if (this.SdVae != null)
-                {
-                    hashCode = (hashCode * 59) + this.SdVae.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.SdVaeAsDefault.GetHashCode();
-                if (this.SdUnet != null)
-                {
-                    hashCode = (hashCode * 59) + this.SdUnet.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.InpaintingMaskWeight.GetHashCode();
-                hashCode = (hashCode * 59) + this.InitialNoiseMultiplier.GetHashCode();
-                if (this.Img2imgColorCorrection != null)
-                {
-                    hashCode = (hashCode * 59) + this.Img2imgColorCorrection.GetHashCode();
-                }
-                if (this.Img2imgFixSteps != null)
-                {
-                    hashCode = (hashCode * 59) + this.Img2imgFixSteps.GetHashCode();
-                }
-                if (this.Img2imgBackgroundColor != null)
-                {
-                    hashCode = (hashCode * 59) + this.Img2imgBackgroundColor.GetHashCode();
-                }
-                if (this.EnableQuantization != null)
-                {
-                    hashCode = (hashCode * 59) + this.EnableQuantization.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.EnableEmphasis.GetHashCode();
-                hashCode = (hashCode * 59) + this.EnableBatchSeeds.GetHashCode();
-                hashCode = (hashCode * 59) + this.CommaPaddingBacktrack.GetHashCode();
-                hashCode = (hashCode * 59) + this.CLIPStopAtLastLayers.GetHashCode();
-                if (this.UpcastAttn != null)
-                {
-                    hashCode = (hashCode * 59) + this.UpcastAttn.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.AutoVaePrecision.GetHashCode();
-                if (this.RandnSource != null)
-                {
-                    hashCode = (hashCode * 59) + this.RandnSource.GetHashCode();
-                }
-                if (this.SdxlCropTop != null)
-                {
-                    hashCode = (hashCode * 59) + this.SdxlCropTop.GetHashCode();
-                }
-                if (this.SdxlCropLeft != null)
-                {
-                    hashCode = (hashCode * 59) + this.SdxlCropLeft.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.SdxlRefinerLowAestheticScore.GetHashCode();
-                hashCode = (hashCode * 59) + this.SdxlRefinerHighAestheticScore.GetHashCode();
-                if (this.CrossAttentionOptimization != null)
-                {
-                    hashCode = (hashCode * 59) + this.CrossAttentionOptimization.GetHashCode();
-                }
-                if (this.SMinUncond != null)
-                {
-                    hashCode = (hashCode * 59) + this.SMinUncond.GetHashCode();
-                }
-                if (this.TokenMergingRatio != null)
-                {
-                    hashCode = (hashCode * 59) + this.TokenMergingRatio.GetHashCode();
-                }
-                if (this.TokenMergingRatioImg2img != null)
-                {
-                    hashCode = (hashCode * 59) + this.TokenMergingRatioImg2img.GetHashCode();
-                }
-                if (this.TokenMergingRatioHr != null)
-                {
-                    hashCode = (hashCode * 59) + this.TokenMergingRatioHr.GetHashCode();
-                }
-                if (this.PadCondUncond != null)
-                {
-                    hashCode = (hashCode * 59) + this.PadCondUncond.GetHashCode();
-                }
-                if (this.ExperimentalPersistentCondCache != null)
-                {
-                    hashCode = (hashCode * 59) + this.ExperimentalPersistentCondCache.GetHashCode();
-                }
-                if (this.UseOldEmphasisImplementation != null)
-                {
-                    hashCode = (hashCode * 59) + this.UseOldEmphasisImplementation.GetHashCode();
-                }
-                if (this.UseOldKarrasSchedulerSigmas != null)
-                {
-                    hashCode = (hashCode * 59) + this.UseOldKarrasSchedulerSigmas.GetHashCode();
-                }
-                if (this.NoDpmppSdeBatchDeterminism != null)
-                {
-                    hashCode = (hashCode * 59) + this.NoDpmppSdeBatchDeterminism.GetHashCode();
-                }
-                if (this.UseOldHiresFixWidthHeight != null)
-                {
-                    hashCode = (hashCode * 59) + this.UseOldHiresFixWidthHeight.GetHashCode();
-                }
-                if (this.DontFixSecondOrderSamplersSchedule != null)
-                {
-                    hashCode = (hashCode * 59) + this.DontFixSecondOrderSamplersSchedule.GetHashCode();
-                }
-                if (this.HiresFixUseFirstpassConds != null)
-                {
-                    hashCode = (hashCode * 59) + this.HiresFixUseFirstpassConds.GetHashCode();
-                }
-                if (this.InterrogateKeepModelsInMemory != null)
-                {
-                    hashCode = (hashCode * 59) + this.InterrogateKeepModelsInMemory.GetHashCode();
-                }
-                if (this.InterrogateReturnRanks != null)
-                {
-                    hashCode = (hashCode * 59) + this.InterrogateReturnRanks.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.InterrogateClipNumBeams.GetHashCode();
-                hashCode = (hashCode * 59) + this.InterrogateClipMinLength.GetHashCode();
-                hashCode = (hashCode * 59) + this.InterrogateClipMaxLength.GetHashCode();
-                hashCode = (hashCode * 59) + this.InterrogateClipDictLimit.GetHashCode();
-                if (this.InterrogateClipSkipCategories != null)
-                {
-                    hashCode = (hashCode * 59) + this.InterrogateClipSkipCategories.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.InterrogateDeepbooruScoreThreshold.GetHashCode();
-                hashCode = (hashCode * 59) + this.DeepbooruSortAlpha.GetHashCode();
-                hashCode = (hashCode * 59) + this.DeepbooruUseSpaces.GetHashCode();
-                hashCode = (hashCode * 59) + this.DeepbooruEscape.GetHashCode();
-                if (this.DeepbooruFilterTags != null)
-                {
-                    hashCode = (hashCode * 59) + this.DeepbooruFilterTags.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.ExtraNetworksShowHiddenDirectories.GetHashCode();
-                if (this.ExtraNetworksHiddenModels != null)
-                {
-                    hashCode = (hashCode * 59) + this.ExtraNetworksHiddenModels.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.ExtraNetworksDefaultMultiplier.GetHashCode();
-                if (this.ExtraNetworksCardWidth != null)
-                {
-                    hashCode = (hashCode * 59) + this.ExtraNetworksCardWidth.GetHashCode();
-                }
-                if (this.ExtraNetworksCardHeight != null)
-                {
-                    hashCode = (hashCode * 59) + this.ExtraNetworksCardHeight.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.ExtraNetworksCardTextScale.GetHashCode();
-                hashCode = (hashCode * 59) + this.ExtraNetworksCardShowDesc.GetHashCode();
-                if (this.ExtraNetworksAddTextSeparator != null)
-                {
-                    hashCode = (hashCode * 59) + this.ExtraNetworksAddTextSeparator.GetHashCode();
-                }
-                if (this.UiExtraNetworksTabReorder != null)
-                {
-                    hashCode = (hashCode * 59) + this.UiExtraNetworksTabReorder.GetHashCode();
-                }
-                if (this.TextualInversionPrintAtLoad != null)
-                {
-                    hashCode = (hashCode * 59) + this.TextualInversionPrintAtLoad.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.TextualInversionAddHashesToInfotext.GetHashCode();
-                if (this.SdHypernetwork != null)
-                {
-                    hashCode = (hashCode * 59) + this.SdHypernetwork.GetHashCode();
-                }
-                if (this.Localization != null)
-                {
-                    hashCode = (hashCode * 59) + this.Localization.GetHashCode();
-                }
-                if (this.GradioTheme != null)
-                {
-                    hashCode = (hashCode * 59) + this.GradioTheme.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.Img2imgEditorHeight.GetHashCode();
-                hashCode = (hashCode * 59) + this.ReturnGrid.GetHashCode();
-                if (this.ReturnMask != null)
-                {
-                    hashCode = (hashCode * 59) + this.ReturnMask.GetHashCode();
-                }
-                if (this.ReturnMaskComposite != null)
-                {
-                    hashCode = (hashCode * 59) + this.ReturnMaskComposite.GetHashCode();
-                }
-                if (this.DoNotShowImages != null)
-                {
-                    hashCode = (hashCode * 59) + this.DoNotShowImages.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.SendSeed.GetHashCode();
-                hashCode = (hashCode * 59) + this.SendSize.GetHashCode();
-                hashCode = (hashCode * 59) + this.JsModalLightbox.GetHashCode();
-                hashCode = (hashCode * 59) + this.JsModalLightboxInitiallyZoomed.GetHashCode();
-                if (this.JsModalLightboxGamepad != null)
-                {
-                    hashCode = (hashCode * 59) + this.JsModalLightboxGamepad.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.JsModalLightboxGamepadRepeat.GetHashCode();
-                hashCode = (hashCode * 59) + this.ShowProgressInTitle.GetHashCode();
-                hashCode = (hashCode * 59) + this.SamplersInDropdown.GetHashCode();
-                hashCode = (hashCode * 59) + this.DimensionsAndBatchTogether.GetHashCode();
-                hashCode = (hashCode * 59) + this.KeyeditPrecisionAttention.GetHashCode();
-                hashCode = (hashCode * 59) + this.KeyeditPrecisionExtra.GetHashCode();
-                if (this.KeyeditDelimiters != null)
-                {
-                    hashCode = (hashCode * 59) + this.KeyeditDelimiters.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.KeyeditMove.GetHashCode();
-                if (this.QuicksettingsList != null)
-                {
-                    hashCode = (hashCode * 59) + this.QuicksettingsList.GetHashCode();
-                }
-                if (this.UiTabOrder != null)
-                {
-                    hashCode = (hashCode * 59) + this.UiTabOrder.GetHashCode();
-                }
-                if (this.HiddenTabs != null)
-                {
-                    hashCode = (hashCode * 59) + this.HiddenTabs.GetHashCode();
-                }
-                if (this.UiReorderList != null)
-                {
-                    hashCode = (hashCode * 59) + this.UiReorderList.GetHashCode();
-                }
-                if (this.HiresFixShowSampler != null)
-                {
-                    hashCode = (hashCode * 59) + this.HiresFixShowSampler.GetHashCode();
-                }
-                if (this.HiresFixShowPrompts != null)
-                {
-                    hashCode = (hashCode * 59) + this.HiresFixShowPrompts.GetHashCode();
-                }
-                if (this.DisableTokenCounters != null)
-                {
-                    hashCode = (hashCode * 59) + this.DisableTokenCounters.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.AddModelHashToInfo.GetHashCode();
-                hashCode = (hashCode * 59) + this.AddModelNameToInfo.GetHashCode();
-                if (this.AddUserNameToInfo != null)
-                {
-                    hashCode = (hashCode * 59) + this.AddUserNameToInfo.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.AddVersionToInfotext.GetHashCode();
-                hashCode = (hashCode * 59) + this.DisableWeightsAutoSwap.GetHashCode();
-                if (this.InfotextStyles != null)
-                {
-                    hashCode = (hashCode * 59) + this.InfotextStyles.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.ShowProgressbar.GetHashCode();
-                hashCode = (hashCode * 59) + this.LivePreviewsEnable.GetHashCode();
-                if (this.LivePreviewsImageFormat != null)
-                {
-                    hashCode = (hashCode * 59) + this.LivePreviewsImageFormat.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.ShowProgressGrid.GetHashCode();
-                hashCode = (hashCode * 59) + this.ShowProgressEveryNSteps.GetHashCode();
-                if (this.ShowProgressType != null)
-                {
-                    hashCode = (hashCode * 59) + this.ShowProgressType.GetHashCode();
-                }
-                if (this.LivePreviewContent != null)
-                {
-                    hashCode = (hashCode * 59) + this.LivePreviewContent.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.LivePreviewRefreshPeriod.GetHashCode();
-                if (this.HideSamplers != null)
-                {
-                    hashCode = (hashCode * 59) + this.HideSamplers.GetHashCode();
-                }
-                if (this.EtaDdim != null)
-                {
-                    hashCode = (hashCode * 59) + this.EtaDdim.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.EtaAncestral.GetHashCode();
-                if (this.DdimDiscretize != null)
-                {
-                    hashCode = (hashCode * 59) + this.DdimDiscretize.GetHashCode();
-                }
-                if (this.SChurn != null)
-                {
-                    hashCode = (hashCode * 59) + this.SChurn.GetHashCode();
-                }
-                if (this.STmin != null)
-                {
-                    hashCode = (hashCode * 59) + this.STmin.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.SNoise.GetHashCode();
-                if (this.KSchedType != null)
-                {
-                    hashCode = (hashCode * 59) + this.KSchedType.GetHashCode();
-                }
-                if (this.SigmaMin != null)
-                {
-                    hashCode = (hashCode * 59) + this.SigmaMin.GetHashCode();
-                }
-                if (this.SigmaMax != null)
-                {
-                    hashCode = (hashCode * 59) + this.SigmaMax.GetHashCode();
-                }
-                if (this.Rho != null)
-                {
-                    hashCode = (hashCode * 59) + this.Rho.GetHashCode();
-                }
-                if (this.EtaNoiseSeedDelta != null)
-                {
-                    hashCode = (hashCode * 59) + this.EtaNoiseSeedDelta.GetHashCode();
-                }
-                if (this.AlwaysDiscardNextToLastSigma != null)
-                {
-                    hashCode = (hashCode * 59) + this.AlwaysDiscardNextToLastSigma.GetHashCode();
-                }
-                if (this.UniPcVariant != null)
-                {
-                    hashCode = (hashCode * 59) + this.UniPcVariant.GetHashCode();
-                }
-                if (this.UniPcSkipType != null)
-                {
-                    hashCode = (hashCode * 59) + this.UniPcSkipType.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.UniPcOrder.GetHashCode();
-                hashCode = (hashCode * 59) + this.UniPcLowerOrderFinal.GetHashCode();
-                if (this.PostprocessingEnableInMainUi != null)
-                {
-                    hashCode = (hashCode * 59) + this.PostprocessingEnableInMainUi.GetHashCode();
-                }
-                if (this.PostprocessingOperationOrder != null)
-                {
-                    hashCode = (hashCode * 59) + this.PostprocessingOperationOrder.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.UpscalingMaxImagesInCache.GetHashCode();
-                if (this.DisabledExtensions != null)
-                {
-                    hashCode = (hashCode * 59) + this.DisabledExtensions.GetHashCode();
-                }
-                if (this.DisableAllExtensions != null)
-                {
-                    hashCode = (hashCode * 59) + this.DisableAllExtensions.GetHashCode();
-                }
-                if (this.RestoreConfigStateFile != null)
-                {
-                    hashCode = (hashCode * 59) + this.RestoreConfigStateFile.GetHashCode();
-                }
-                if (this.SdCheckpointHash != null)
-                {
-                    hashCode = (hashCode * 59) + this.SdCheckpointHash.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

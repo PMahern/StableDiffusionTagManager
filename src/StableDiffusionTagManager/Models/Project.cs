@@ -1,5 +1,5 @@
 ﻿using Avalonia;
-using SdWebUpApi;
+using SdWebUiApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;

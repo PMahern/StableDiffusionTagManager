@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SdWebUpApi
+namespace SdWebUiApi
 {
     public enum MaskedContent : int
     {

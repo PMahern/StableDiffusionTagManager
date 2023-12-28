@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// Estimation
     /// </summary>
     [DataContract(Name = "Estimation")]
-    public partial class Estimation : IEquatable<Estimation>, IValidatableObject
+    public partial class Estimation : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Estimation" /> class.
@@ -126,82 +126,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as Estimation);
-        }
-
-        /// <summary>
-        /// Returns true if Estimation instances are equal
-        /// </summary>
-        /// <param name="input">Instance of Estimation to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(Estimation input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Msg == input.Msg ||
-                    (this.Msg != null &&
-                    this.Msg.Equals(input.Msg))
-                ) && 
-                (
-                    this.Rank == input.Rank ||
-                    this.Rank.Equals(input.Rank)
-                ) && 
-                (
-                    this.QueueSize == input.QueueSize ||
-                    this.QueueSize.Equals(input.QueueSize)
-                ) && 
-                (
-                    this.AvgEventProcessTime == input.AvgEventProcessTime ||
-                    this.AvgEventProcessTime.Equals(input.AvgEventProcessTime)
-                ) && 
-                (
-                    this.AvgEventConcurrentProcessTime == input.AvgEventConcurrentProcessTime ||
-                    this.AvgEventConcurrentProcessTime.Equals(input.AvgEventConcurrentProcessTime)
-                ) && 
-                (
-                    this.RankEta == input.RankEta ||
-                    this.RankEta.Equals(input.RankEta)
-                ) && 
-                (
-                    this.QueueEta == input.QueueEta ||
-                    this.QueueEta.Equals(input.QueueEta)
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.Msg != null)
-                {
-                    hashCode = (hashCode * 59) + this.Msg.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.Rank.GetHashCode();
-                hashCode = (hashCode * 59) + this.QueueSize.GetHashCode();
-                hashCode = (hashCode * 59) + this.AvgEventProcessTime.GetHashCode();
-                hashCode = (hashCode * 59) + this.AvgEventConcurrentProcessTime.GetHashCode();
-                hashCode = (hashCode * 59) + this.RankEta.GetHashCode();
-                hashCode = (hashCode * 59) + this.QueueEta.GetHashCode();
-                return hashCode;
-            }
         }
 
         /// <summary>

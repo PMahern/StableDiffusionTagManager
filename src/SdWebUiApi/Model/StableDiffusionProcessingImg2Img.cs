@@ -21,33 +21,21 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// StableDiffusionProcessingImg2Img
     /// </summary>
     [DataContract(Name = "StableDiffusionProcessingImg2Img")]
-    public partial class StableDiffusionProcessingImg2Img : IEquatable<StableDiffusionProcessingImg2Img>, IValidatableObject
+    public partial class StableDiffusionProcessingImg2Img : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StableDiffusionProcessingImg2Img" /> class.
         /// </summary>
-        /// <param name="initImages">initImages.</param>
-        /// <param name="resizeMode">resizeMode (default to 0).</param>
-        /// <param name="denoisingStrength">denoisingStrength (default to 0.75M).</param>
-        /// <param name="imageCfgScale">imageCfgScale.</param>
-        /// <param name="mask">mask.</param>
-        /// <param name="maskBlur">maskBlur.</param>
-        /// <param name="maskBlurX">maskBlurX (default to 4).</param>
-        /// <param name="maskBlurY">maskBlurY (default to 4).</param>
-        /// <param name="inpaintingFill">inpaintingFill (default to 0).</param>
-        /// <param name="inpaintFullRes">inpaintFullRes (default to true).</param>
-        /// <param name="inpaintFullResPadding">inpaintFullResPadding (default to 0).</param>
-        /// <param name="inpaintingMaskInvert">inpaintingMaskInvert (default to 0).</param>
-        /// <param name="initialNoiseMultiplier">initialNoiseMultiplier.</param>
         /// <param name="prompt">prompt (default to &quot;&quot;).</param>
+        /// <param name="negativePrompt">negativePrompt (default to &quot;&quot;).</param>
         /// <param name="styles">styles.</param>
         /// <param name="seed">seed (default to -1).</param>
         /// <param name="subseed">subseed (default to -1).</param>
@@ -61,43 +49,49 @@ namespace SdWebUpApi.Model
         /// <param name="cfgScale">cfgScale (default to 7.0M).</param>
         /// <param name="width">width (default to 512).</param>
         /// <param name="height">height (default to 512).</param>
-        /// <param name="restoreFaces">restoreFaces (default to false).</param>
-        /// <param name="tiling">tiling (default to false).</param>
+        /// <param name="restoreFaces">restoreFaces.</param>
+        /// <param name="tiling">tiling.</param>
         /// <param name="doNotSaveSamples">doNotSaveSamples (default to false).</param>
         /// <param name="doNotSaveGrid">doNotSaveGrid (default to false).</param>
-        /// <param name="negativePrompt">negativePrompt.</param>
         /// <param name="eta">eta.</param>
-        /// <param name="sMinUncond">sMinUncond (default to 0.0M).</param>
-        /// <param name="sChurn">sChurn (default to 0.0M).</param>
+        /// <param name="denoisingStrength">denoisingStrength (default to 0.75M).</param>
+        /// <param name="sMinUncond">sMinUncond.</param>
+        /// <param name="sChurn">sChurn.</param>
         /// <param name="sTmax">sTmax.</param>
-        /// <param name="sTmin">sTmin (default to 0.0M).</param>
-        /// <param name="sNoise">sNoise (default to 1.0M).</param>
+        /// <param name="sTmin">sTmin.</param>
+        /// <param name="sNoise">sNoise.</param>
         /// <param name="overrideSettings">overrideSettings.</param>
         /// <param name="overrideSettingsRestoreAfterwards">overrideSettingsRestoreAfterwards (default to true).</param>
-        /// <param name="scriptArgs">scriptArgs.</param>
+        /// <param name="refinerCheckpoint">refinerCheckpoint.</param>
+        /// <param name="refinerSwitchAt">refinerSwitchAt.</param>
+        /// <param name="disableExtraNetworks">disableExtraNetworks (default to false).</param>
+        /// <param name="comments">comments.</param>
+        /// <param name="initImages">initImages.</param>
+        /// <param name="resizeMode">resizeMode (default to 0).</param>
+        /// <param name="imageCfgScale">imageCfgScale.</param>
+        /// <param name="mask">mask.</param>
+        /// <param name="maskBlurX">maskBlurX (default to 4).</param>
+        /// <param name="maskBlurY">maskBlurY (default to 4).</param>
+        /// <param name="maskBlur">maskBlur.</param>
+        /// <param name="inpaintingFill">inpaintingFill (default to 0).</param>
+        /// <param name="inpaintFullRes">inpaintFullRes (default to true).</param>
+        /// <param name="inpaintFullResPadding">inpaintFullResPadding (default to 0).</param>
+        /// <param name="inpaintingMaskInvert">inpaintingMaskInvert (default to 0).</param>
+        /// <param name="initialNoiseMultiplier">initialNoiseMultiplier.</param>
+        /// <param name="latentMask">latentMask.</param>
         /// <param name="samplerIndex">samplerIndex (default to &quot;Euler&quot;).</param>
         /// <param name="includeInitImages">includeInitImages (default to false).</param>
         /// <param name="scriptName">scriptName.</param>
+        /// <param name="scriptArgs">scriptArgs.</param>
         /// <param name="sendImages">sendImages (default to true).</param>
         /// <param name="saveImages">saveImages (default to false).</param>
         /// <param name="alwaysonScripts">alwaysonScripts.</param>
-        public StableDiffusionProcessingImg2Img(List<Object> initImages = default(List<Object>), int resizeMode = 0, decimal denoisingStrength = 0.75M, decimal imageCfgScale = default(decimal), string mask = default(string), int maskBlur = default(int), int maskBlurX = 4, int maskBlurY = 4, int inpaintingFill = 0, bool inpaintFullRes = true, int inpaintFullResPadding = 0, int inpaintingMaskInvert = 0, decimal initialNoiseMultiplier = default(decimal), string prompt = @"", List<string> styles = default(List<string>), int seed = -1, int subseed = -1, decimal subseedStrength = 0M, int seedResizeFromH = -1, int seedResizeFromW = -1, string samplerName = default(string), int batchSize = 1, int nIter = 1, int steps = 50, decimal cfgScale = 7.0M, int width = 512, int height = 512, bool restoreFaces = false, bool tiling = false, bool doNotSaveSamples = false, bool doNotSaveGrid = false, string negativePrompt = default(string), decimal eta = default(decimal), decimal sMinUncond = 0.0M, decimal sChurn = 0.0M, decimal sTmax = default(decimal), decimal sTmin = 0.0M, decimal sNoise = 1.0M, Object overrideSettings = default(Object), bool overrideSettingsRestoreAfterwards = true, List<Object> scriptArgs = default(List<Object>), string samplerIndex = @"Euler", bool includeInitImages = false, string scriptName = default(string), bool sendImages = true, bool saveImages = false, Object alwaysonScripts = default(Object))
+        public StableDiffusionProcessingImg2Img(string prompt = @"", string negativePrompt = @"", List<string> styles = default(List<string>), int seed = -1, int subseed = -1, decimal subseedStrength = 0M, int seedResizeFromH = -1, int seedResizeFromW = -1, string samplerName = default(string), int batchSize = 1, int nIter = 1, int steps = 50, decimal cfgScale = 7.0M, int width = 512, int height = 512, bool restoreFaces = default(bool), bool tiling = default(bool), bool doNotSaveSamples = false, bool doNotSaveGrid = false, decimal eta = default(decimal), decimal denoisingStrength = 0.75M, decimal sMinUncond = default(decimal), decimal sChurn = default(decimal), decimal sTmax = default(decimal), decimal sTmin = default(decimal), decimal sNoise = default(decimal), Object overrideSettings = default(Object), bool overrideSettingsRestoreAfterwards = true, string refinerCheckpoint = default(string), decimal refinerSwitchAt = default(decimal), bool disableExtraNetworks = false, Object comments = default(Object), List<Object> initImages = default(List<Object>), int resizeMode = 0, decimal imageCfgScale = default(decimal), string mask = default(string), int maskBlurX = 4, int maskBlurY = 4, int maskBlur = default(int), int inpaintingFill = 0, bool inpaintFullRes = true, int inpaintFullResPadding = 0, int inpaintingMaskInvert = 0, decimal initialNoiseMultiplier = default(decimal), string latentMask = default(string), string samplerIndex = @"Euler", bool includeInitImages = false, string scriptName = default(string), List<Object> scriptArgs = default(List<Object>), bool sendImages = true, bool saveImages = false, Object alwaysonScripts = default(Object))
         {
-            this.InitImages = initImages;
-            this.ResizeMode = resizeMode;
-            this.DenoisingStrength = denoisingStrength;
-            this.ImageCfgScale = imageCfgScale;
-            this.Mask = mask;
-            this.MaskBlur = maskBlur;
-            this.MaskBlurX = maskBlurX;
-            this.MaskBlurY = maskBlurY;
-            this.InpaintingFill = inpaintingFill;
-            this.InpaintFullRes = inpaintFullRes;
-            this.InpaintFullResPadding = inpaintFullResPadding;
-            this.InpaintingMaskInvert = inpaintingMaskInvert;
-            this.InitialNoiseMultiplier = initialNoiseMultiplier;
             // use default value if no "prompt" provided
             this.Prompt = prompt ?? @"";
+            // use default value if no "negativePrompt" provided
+            this.NegativePrompt = negativePrompt ?? @"";
             this.Styles = styles;
             this.Seed = seed;
             this.Subseed = subseed;
@@ -115,8 +109,8 @@ namespace SdWebUpApi.Model
             this.Tiling = tiling;
             this.DoNotSaveSamples = doNotSaveSamples;
             this.DoNotSaveGrid = doNotSaveGrid;
-            this.NegativePrompt = negativePrompt;
             this.Eta = eta;
+            this.DenoisingStrength = denoisingStrength;
             this.SMinUncond = sMinUncond;
             this.SChurn = sChurn;
             this.STmax = sTmax;
@@ -124,99 +118,44 @@ namespace SdWebUpApi.Model
             this.SNoise = sNoise;
             this.OverrideSettings = overrideSettings;
             this.OverrideSettingsRestoreAfterwards = overrideSettingsRestoreAfterwards;
-            this.ScriptArgs = scriptArgs;
+            this.RefinerCheckpoint = refinerCheckpoint;
+            this.RefinerSwitchAt = refinerSwitchAt;
+            this.DisableExtraNetworks = disableExtraNetworks;
+            this.Comments = comments;
+            this.InitImages = initImages;
+            this.ResizeMode = resizeMode;
+            this.ImageCfgScale = imageCfgScale;
+            this.Mask = mask;
+            this.MaskBlurX = maskBlurX;
+            this.MaskBlurY = maskBlurY;
+            this.MaskBlur = maskBlur;
+            this.InpaintingFill = inpaintingFill;
+            this.InpaintFullRes = inpaintFullRes;
+            this.InpaintFullResPadding = inpaintFullResPadding;
+            this.InpaintingMaskInvert = inpaintingMaskInvert;
+            this.InitialNoiseMultiplier = initialNoiseMultiplier;
+            this.LatentMask = latentMask;
             // use default value if no "samplerIndex" provided
             this.SamplerIndex = samplerIndex ?? @"Euler";
             this.IncludeInitImages = includeInitImages;
             this.ScriptName = scriptName;
+            this.ScriptArgs = scriptArgs;
             this.SendImages = sendImages;
             this.SaveImages = saveImages;
             this.AlwaysonScripts = alwaysonScripts;
         }
 
         /// <summary>
-        /// Gets or Sets InitImages
-        /// </summary>
-        [DataMember(Name = "init_images", EmitDefaultValue = false)]
-        public List<Object> InitImages { get; set; }
-
-        /// <summary>
-        /// Gets or Sets ResizeMode
-        /// </summary>
-        [DataMember(Name = "resize_mode", EmitDefaultValue = false)]
-        public int ResizeMode { get; set; }
-
-        /// <summary>
-        /// Gets or Sets DenoisingStrength
-        /// </summary>
-        [DataMember(Name = "denoising_strength", EmitDefaultValue = false)]
-        public decimal DenoisingStrength { get; set; }
-
-        /// <summary>
-        /// Gets or Sets ImageCfgScale
-        /// </summary>
-        [DataMember(Name = "image_cfg_scale", EmitDefaultValue = false)]
-        public decimal ImageCfgScale { get; set; }
-
-        /// <summary>
-        /// Gets or Sets Mask
-        /// </summary>
-        [DataMember(Name = "mask", EmitDefaultValue = false)]
-        public string Mask { get; set; }
-
-        /// <summary>
-        /// Gets or Sets MaskBlur
-        /// </summary>
-        [DataMember(Name = "mask_blur", EmitDefaultValue = false)]
-        public int MaskBlur { get; set; }
-
-        /// <summary>
-        /// Gets or Sets MaskBlurX
-        /// </summary>
-        [DataMember(Name = "mask_blur_x", EmitDefaultValue = false)]
-        public int MaskBlurX { get; set; }
-
-        /// <summary>
-        /// Gets or Sets MaskBlurY
-        /// </summary>
-        [DataMember(Name = "mask_blur_y", EmitDefaultValue = false)]
-        public int MaskBlurY { get; set; }
-
-        /// <summary>
-        /// Gets or Sets InpaintingFill
-        /// </summary>
-        [DataMember(Name = "inpainting_fill", EmitDefaultValue = false)]
-        public int InpaintingFill { get; set; }
-
-        /// <summary>
-        /// Gets or Sets InpaintFullRes
-        /// </summary>
-        [DataMember(Name = "inpaint_full_res", EmitDefaultValue = true)]
-        public bool InpaintFullRes { get; set; }
-
-        /// <summary>
-        /// Gets or Sets InpaintFullResPadding
-        /// </summary>
-        [DataMember(Name = "inpaint_full_res_padding", EmitDefaultValue = false)]
-        public int InpaintFullResPadding { get; set; }
-
-        /// <summary>
-        /// Gets or Sets InpaintingMaskInvert
-        /// </summary>
-        [DataMember(Name = "inpainting_mask_invert", EmitDefaultValue = false)]
-        public int InpaintingMaskInvert { get; set; }
-
-        /// <summary>
-        /// Gets or Sets InitialNoiseMultiplier
-        /// </summary>
-        [DataMember(Name = "initial_noise_multiplier", EmitDefaultValue = false)]
-        public decimal InitialNoiseMultiplier { get; set; }
-
-        /// <summary>
         /// Gets or Sets Prompt
         /// </summary>
         [DataMember(Name = "prompt", EmitDefaultValue = false)]
         public string Prompt { get; set; }
+
+        /// <summary>
+        /// Gets or Sets NegativePrompt
+        /// </summary>
+        [DataMember(Name = "negative_prompt", EmitDefaultValue = false)]
+        public string NegativePrompt { get; set; }
 
         /// <summary>
         /// Gets or Sets Styles
@@ -321,16 +260,16 @@ namespace SdWebUpApi.Model
         public bool DoNotSaveGrid { get; set; }
 
         /// <summary>
-        /// Gets or Sets NegativePrompt
-        /// </summary>
-        [DataMember(Name = "negative_prompt", EmitDefaultValue = false)]
-        public string NegativePrompt { get; set; }
-
-        /// <summary>
         /// Gets or Sets Eta
         /// </summary>
         [DataMember(Name = "eta", EmitDefaultValue = false)]
         public decimal Eta { get; set; }
+
+        /// <summary>
+        /// Gets or Sets DenoisingStrength
+        /// </summary>
+        [DataMember(Name = "denoising_strength", EmitDefaultValue = false)]
+        public decimal DenoisingStrength { get; set; }
 
         /// <summary>
         /// Gets or Sets SMinUncond
@@ -375,10 +314,106 @@ namespace SdWebUpApi.Model
         public bool OverrideSettingsRestoreAfterwards { get; set; }
 
         /// <summary>
-        /// Gets or Sets ScriptArgs
+        /// Gets or Sets RefinerCheckpoint
         /// </summary>
-        [DataMember(Name = "script_args", EmitDefaultValue = false)]
-        public List<Object> ScriptArgs { get; set; }
+        [DataMember(Name = "refiner_checkpoint", EmitDefaultValue = false)]
+        public string RefinerCheckpoint { get; set; }
+
+        /// <summary>
+        /// Gets or Sets RefinerSwitchAt
+        /// </summary>
+        [DataMember(Name = "refiner_switch_at", EmitDefaultValue = false)]
+        public decimal RefinerSwitchAt { get; set; }
+
+        /// <summary>
+        /// Gets or Sets DisableExtraNetworks
+        /// </summary>
+        [DataMember(Name = "disable_extra_networks", EmitDefaultValue = true)]
+        public bool DisableExtraNetworks { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Comments
+        /// </summary>
+        [DataMember(Name = "comments", EmitDefaultValue = false)]
+        public Object Comments { get; set; }
+
+        /// <summary>
+        /// Gets or Sets InitImages
+        /// </summary>
+        [DataMember(Name = "init_images", EmitDefaultValue = false)]
+        public List<Object> InitImages { get; set; }
+
+        /// <summary>
+        /// Gets or Sets ResizeMode
+        /// </summary>
+        [DataMember(Name = "resize_mode", EmitDefaultValue = false)]
+        public int ResizeMode { get; set; }
+
+        /// <summary>
+        /// Gets or Sets ImageCfgScale
+        /// </summary>
+        [DataMember(Name = "image_cfg_scale", EmitDefaultValue = false)]
+        public decimal ImageCfgScale { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Mask
+        /// </summary>
+        [DataMember(Name = "mask", EmitDefaultValue = false)]
+        public string Mask { get; set; }
+
+        /// <summary>
+        /// Gets or Sets MaskBlurX
+        /// </summary>
+        [DataMember(Name = "mask_blur_x", EmitDefaultValue = false)]
+        public int MaskBlurX { get; set; }
+
+        /// <summary>
+        /// Gets or Sets MaskBlurY
+        /// </summary>
+        [DataMember(Name = "mask_blur_y", EmitDefaultValue = false)]
+        public int MaskBlurY { get; set; }
+
+        /// <summary>
+        /// Gets or Sets MaskBlur
+        /// </summary>
+        [DataMember(Name = "mask_blur", EmitDefaultValue = false)]
+        public int MaskBlur { get; set; }
+
+        /// <summary>
+        /// Gets or Sets InpaintingFill
+        /// </summary>
+        [DataMember(Name = "inpainting_fill", EmitDefaultValue = false)]
+        public int InpaintingFill { get; set; }
+
+        /// <summary>
+        /// Gets or Sets InpaintFullRes
+        /// </summary>
+        [DataMember(Name = "inpaint_full_res", EmitDefaultValue = true)]
+        public bool InpaintFullRes { get; set; }
+
+        /// <summary>
+        /// Gets or Sets InpaintFullResPadding
+        /// </summary>
+        [DataMember(Name = "inpaint_full_res_padding", EmitDefaultValue = false)]
+        public int InpaintFullResPadding { get; set; }
+
+        /// <summary>
+        /// Gets or Sets InpaintingMaskInvert
+        /// </summary>
+        [DataMember(Name = "inpainting_mask_invert", EmitDefaultValue = false)]
+        public int InpaintingMaskInvert { get; set; }
+
+        /// <summary>
+        /// Gets or Sets InitialNoiseMultiplier
+        /// </summary>
+        [DataMember(Name = "initial_noise_multiplier", EmitDefaultValue = false)]
+        public decimal InitialNoiseMultiplier { get; set; }
+
+        /// <summary>
+        /// Gets or Sets LatentMask
+        /// </summary>
+        [DataMember(Name = "latent_mask", EmitDefaultValue = false)]
+        public string LatentMask { get; set; }
 
         /// <summary>
         /// Gets or Sets SamplerIndex
@@ -397,6 +432,12 @@ namespace SdWebUpApi.Model
         /// </summary>
         [DataMember(Name = "script_name", EmitDefaultValue = false)]
         public string ScriptName { get; set; }
+
+        /// <summary>
+        /// Gets or Sets ScriptArgs
+        /// </summary>
+        [DataMember(Name = "script_args", EmitDefaultValue = false)]
+        public List<Object> ScriptArgs { get; set; }
 
         /// <summary>
         /// Gets or Sets SendImages
@@ -424,20 +465,8 @@ namespace SdWebUpApi.Model
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("class StableDiffusionProcessingImg2Img {\n");
-            sb.Append("  InitImages: ").Append(InitImages).Append("\n");
-            sb.Append("  ResizeMode: ").Append(ResizeMode).Append("\n");
-            sb.Append("  DenoisingStrength: ").Append(DenoisingStrength).Append("\n");
-            sb.Append("  ImageCfgScale: ").Append(ImageCfgScale).Append("\n");
-            sb.Append("  Mask: ").Append(Mask).Append("\n");
-            sb.Append("  MaskBlur: ").Append(MaskBlur).Append("\n");
-            sb.Append("  MaskBlurX: ").Append(MaskBlurX).Append("\n");
-            sb.Append("  MaskBlurY: ").Append(MaskBlurY).Append("\n");
-            sb.Append("  InpaintingFill: ").Append(InpaintingFill).Append("\n");
-            sb.Append("  InpaintFullRes: ").Append(InpaintFullRes).Append("\n");
-            sb.Append("  InpaintFullResPadding: ").Append(InpaintFullResPadding).Append("\n");
-            sb.Append("  InpaintingMaskInvert: ").Append(InpaintingMaskInvert).Append("\n");
-            sb.Append("  InitialNoiseMultiplier: ").Append(InitialNoiseMultiplier).Append("\n");
             sb.Append("  Prompt: ").Append(Prompt).Append("\n");
+            sb.Append("  NegativePrompt: ").Append(NegativePrompt).Append("\n");
             sb.Append("  Styles: ").Append(Styles).Append("\n");
             sb.Append("  Seed: ").Append(Seed).Append("\n");
             sb.Append("  Subseed: ").Append(Subseed).Append("\n");
@@ -455,8 +484,8 @@ namespace SdWebUpApi.Model
             sb.Append("  Tiling: ").Append(Tiling).Append("\n");
             sb.Append("  DoNotSaveSamples: ").Append(DoNotSaveSamples).Append("\n");
             sb.Append("  DoNotSaveGrid: ").Append(DoNotSaveGrid).Append("\n");
-            sb.Append("  NegativePrompt: ").Append(NegativePrompt).Append("\n");
             sb.Append("  Eta: ").Append(Eta).Append("\n");
+            sb.Append("  DenoisingStrength: ").Append(DenoisingStrength).Append("\n");
             sb.Append("  SMinUncond: ").Append(SMinUncond).Append("\n");
             sb.Append("  SChurn: ").Append(SChurn).Append("\n");
             sb.Append("  STmax: ").Append(STmax).Append("\n");
@@ -464,10 +493,27 @@ namespace SdWebUpApi.Model
             sb.Append("  SNoise: ").Append(SNoise).Append("\n");
             sb.Append("  OverrideSettings: ").Append(OverrideSettings).Append("\n");
             sb.Append("  OverrideSettingsRestoreAfterwards: ").Append(OverrideSettingsRestoreAfterwards).Append("\n");
-            sb.Append("  ScriptArgs: ").Append(ScriptArgs).Append("\n");
+            sb.Append("  RefinerCheckpoint: ").Append(RefinerCheckpoint).Append("\n");
+            sb.Append("  RefinerSwitchAt: ").Append(RefinerSwitchAt).Append("\n");
+            sb.Append("  DisableExtraNetworks: ").Append(DisableExtraNetworks).Append("\n");
+            sb.Append("  Comments: ").Append(Comments).Append("\n");
+            sb.Append("  InitImages: ").Append(InitImages).Append("\n");
+            sb.Append("  ResizeMode: ").Append(ResizeMode).Append("\n");
+            sb.Append("  ImageCfgScale: ").Append(ImageCfgScale).Append("\n");
+            sb.Append("  Mask: ").Append(Mask).Append("\n");
+            sb.Append("  MaskBlurX: ").Append(MaskBlurX).Append("\n");
+            sb.Append("  MaskBlurY: ").Append(MaskBlurY).Append("\n");
+            sb.Append("  MaskBlur: ").Append(MaskBlur).Append("\n");
+            sb.Append("  InpaintingFill: ").Append(InpaintingFill).Append("\n");
+            sb.Append("  InpaintFullRes: ").Append(InpaintFullRes).Append("\n");
+            sb.Append("  InpaintFullResPadding: ").Append(InpaintFullResPadding).Append("\n");
+            sb.Append("  InpaintingMaskInvert: ").Append(InpaintingMaskInvert).Append("\n");
+            sb.Append("  InitialNoiseMultiplier: ").Append(InitialNoiseMultiplier).Append("\n");
+            sb.Append("  LatentMask: ").Append(LatentMask).Append("\n");
             sb.Append("  SamplerIndex: ").Append(SamplerIndex).Append("\n");
             sb.Append("  IncludeInitImages: ").Append(IncludeInitImages).Append("\n");
             sb.Append("  ScriptName: ").Append(ScriptName).Append("\n");
+            sb.Append("  ScriptArgs: ").Append(ScriptArgs).Append("\n");
             sb.Append("  SendImages: ").Append(SendImages).Append("\n");
             sb.Append("  SaveImages: ").Append(SaveImages).Append("\n");
             sb.Append("  AlwaysonScripts: ").Append(AlwaysonScripts).Append("\n");
@@ -482,325 +528,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as StableDiffusionProcessingImg2Img);
-        }
-
-        /// <summary>
-        /// Returns true if StableDiffusionProcessingImg2Img instances are equal
-        /// </summary>
-        /// <param name="input">Instance of StableDiffusionProcessingImg2Img to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(StableDiffusionProcessingImg2Img input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.InitImages == input.InitImages ||
-                    this.InitImages != null &&
-                    input.InitImages != null &&
-                    this.InitImages.SequenceEqual(input.InitImages)
-                ) && 
-                (
-                    this.ResizeMode == input.ResizeMode ||
-                    this.ResizeMode.Equals(input.ResizeMode)
-                ) && 
-                (
-                    this.DenoisingStrength == input.DenoisingStrength ||
-                    this.DenoisingStrength.Equals(input.DenoisingStrength)
-                ) && 
-                (
-                    this.ImageCfgScale == input.ImageCfgScale ||
-                    this.ImageCfgScale.Equals(input.ImageCfgScale)
-                ) && 
-                (
-                    this.Mask == input.Mask ||
-                    (this.Mask != null &&
-                    this.Mask.Equals(input.Mask))
-                ) && 
-                (
-                    this.MaskBlur == input.MaskBlur ||
-                    this.MaskBlur.Equals(input.MaskBlur)
-                ) && 
-                (
-                    this.MaskBlurX == input.MaskBlurX ||
-                    this.MaskBlurX.Equals(input.MaskBlurX)
-                ) && 
-                (
-                    this.MaskBlurY == input.MaskBlurY ||
-                    this.MaskBlurY.Equals(input.MaskBlurY)
-                ) && 
-                (
-                    this.InpaintingFill == input.InpaintingFill ||
-                    this.InpaintingFill.Equals(input.InpaintingFill)
-                ) && 
-                (
-                    this.InpaintFullRes == input.InpaintFullRes ||
-                    this.InpaintFullRes.Equals(input.InpaintFullRes)
-                ) && 
-                (
-                    this.InpaintFullResPadding == input.InpaintFullResPadding ||
-                    this.InpaintFullResPadding.Equals(input.InpaintFullResPadding)
-                ) && 
-                (
-                    this.InpaintingMaskInvert == input.InpaintingMaskInvert ||
-                    this.InpaintingMaskInvert.Equals(input.InpaintingMaskInvert)
-                ) && 
-                (
-                    this.InitialNoiseMultiplier == input.InitialNoiseMultiplier ||
-                    this.InitialNoiseMultiplier.Equals(input.InitialNoiseMultiplier)
-                ) && 
-                (
-                    this.Prompt == input.Prompt ||
-                    (this.Prompt != null &&
-                    this.Prompt.Equals(input.Prompt))
-                ) && 
-                (
-                    this.Styles == input.Styles ||
-                    this.Styles != null &&
-                    input.Styles != null &&
-                    this.Styles.SequenceEqual(input.Styles)
-                ) && 
-                (
-                    this.Seed == input.Seed ||
-                    this.Seed.Equals(input.Seed)
-                ) && 
-                (
-                    this.Subseed == input.Subseed ||
-                    this.Subseed.Equals(input.Subseed)
-                ) && 
-                (
-                    this.SubseedStrength == input.SubseedStrength ||
-                    this.SubseedStrength.Equals(input.SubseedStrength)
-                ) && 
-                (
-                    this.SeedResizeFromH == input.SeedResizeFromH ||
-                    this.SeedResizeFromH.Equals(input.SeedResizeFromH)
-                ) && 
-                (
-                    this.SeedResizeFromW == input.SeedResizeFromW ||
-                    this.SeedResizeFromW.Equals(input.SeedResizeFromW)
-                ) && 
-                (
-                    this.SamplerName == input.SamplerName ||
-                    (this.SamplerName != null &&
-                    this.SamplerName.Equals(input.SamplerName))
-                ) && 
-                (
-                    this.BatchSize == input.BatchSize ||
-                    this.BatchSize.Equals(input.BatchSize)
-                ) && 
-                (
-                    this.NIter == input.NIter ||
-                    this.NIter.Equals(input.NIter)
-                ) && 
-                (
-                    this.Steps == input.Steps ||
-                    this.Steps.Equals(input.Steps)
-                ) && 
-                (
-                    this.CfgScale == input.CfgScale ||
-                    this.CfgScale.Equals(input.CfgScale)
-                ) && 
-                (
-                    this.Width == input.Width ||
-                    this.Width.Equals(input.Width)
-                ) && 
-                (
-                    this.Height == input.Height ||
-                    this.Height.Equals(input.Height)
-                ) && 
-                (
-                    this.RestoreFaces == input.RestoreFaces ||
-                    this.RestoreFaces.Equals(input.RestoreFaces)
-                ) && 
-                (
-                    this.Tiling == input.Tiling ||
-                    this.Tiling.Equals(input.Tiling)
-                ) && 
-                (
-                    this.DoNotSaveSamples == input.DoNotSaveSamples ||
-                    this.DoNotSaveSamples.Equals(input.DoNotSaveSamples)
-                ) && 
-                (
-                    this.DoNotSaveGrid == input.DoNotSaveGrid ||
-                    this.DoNotSaveGrid.Equals(input.DoNotSaveGrid)
-                ) && 
-                (
-                    this.NegativePrompt == input.NegativePrompt ||
-                    (this.NegativePrompt != null &&
-                    this.NegativePrompt.Equals(input.NegativePrompt))
-                ) && 
-                (
-                    this.Eta == input.Eta ||
-                    this.Eta.Equals(input.Eta)
-                ) && 
-                (
-                    this.SMinUncond == input.SMinUncond ||
-                    this.SMinUncond.Equals(input.SMinUncond)
-                ) && 
-                (
-                    this.SChurn == input.SChurn ||
-                    this.SChurn.Equals(input.SChurn)
-                ) && 
-                (
-                    this.STmax == input.STmax ||
-                    this.STmax.Equals(input.STmax)
-                ) && 
-                (
-                    this.STmin == input.STmin ||
-                    this.STmin.Equals(input.STmin)
-                ) && 
-                (
-                    this.SNoise == input.SNoise ||
-                    this.SNoise.Equals(input.SNoise)
-                ) && 
-                (
-                    this.OverrideSettings == input.OverrideSettings ||
-                    (this.OverrideSettings != null &&
-                    this.OverrideSettings.Equals(input.OverrideSettings))
-                ) && 
-                (
-                    this.OverrideSettingsRestoreAfterwards == input.OverrideSettingsRestoreAfterwards ||
-                    this.OverrideSettingsRestoreAfterwards.Equals(input.OverrideSettingsRestoreAfterwards)
-                ) && 
-                (
-                    this.ScriptArgs == input.ScriptArgs ||
-                    this.ScriptArgs != null &&
-                    input.ScriptArgs != null &&
-                    this.ScriptArgs.SequenceEqual(input.ScriptArgs)
-                ) && 
-                (
-                    this.SamplerIndex == input.SamplerIndex ||
-                    (this.SamplerIndex != null &&
-                    this.SamplerIndex.Equals(input.SamplerIndex))
-                ) && 
-                (
-                    this.IncludeInitImages == input.IncludeInitImages ||
-                    this.IncludeInitImages.Equals(input.IncludeInitImages)
-                ) && 
-                (
-                    this.ScriptName == input.ScriptName ||
-                    (this.ScriptName != null &&
-                    this.ScriptName.Equals(input.ScriptName))
-                ) && 
-                (
-                    this.SendImages == input.SendImages ||
-                    this.SendImages.Equals(input.SendImages)
-                ) && 
-                (
-                    this.SaveImages == input.SaveImages ||
-                    this.SaveImages.Equals(input.SaveImages)
-                ) && 
-                (
-                    this.AlwaysonScripts == input.AlwaysonScripts ||
-                    (this.AlwaysonScripts != null &&
-                    this.AlwaysonScripts.Equals(input.AlwaysonScripts))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.InitImages != null)
-                {
-                    hashCode = (hashCode * 59) + this.InitImages.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.ResizeMode.GetHashCode();
-                hashCode = (hashCode * 59) + this.DenoisingStrength.GetHashCode();
-                hashCode = (hashCode * 59) + this.ImageCfgScale.GetHashCode();
-                if (this.Mask != null)
-                {
-                    hashCode = (hashCode * 59) + this.Mask.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.MaskBlur.GetHashCode();
-                hashCode = (hashCode * 59) + this.MaskBlurX.GetHashCode();
-                hashCode = (hashCode * 59) + this.MaskBlurY.GetHashCode();
-                hashCode = (hashCode * 59) + this.InpaintingFill.GetHashCode();
-                hashCode = (hashCode * 59) + this.InpaintFullRes.GetHashCode();
-                hashCode = (hashCode * 59) + this.InpaintFullResPadding.GetHashCode();
-                hashCode = (hashCode * 59) + this.InpaintingMaskInvert.GetHashCode();
-                hashCode = (hashCode * 59) + this.InitialNoiseMultiplier.GetHashCode();
-                if (this.Prompt != null)
-                {
-                    hashCode = (hashCode * 59) + this.Prompt.GetHashCode();
-                }
-                if (this.Styles != null)
-                {
-                    hashCode = (hashCode * 59) + this.Styles.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.Seed.GetHashCode();
-                hashCode = (hashCode * 59) + this.Subseed.GetHashCode();
-                hashCode = (hashCode * 59) + this.SubseedStrength.GetHashCode();
-                hashCode = (hashCode * 59) + this.SeedResizeFromH.GetHashCode();
-                hashCode = (hashCode * 59) + this.SeedResizeFromW.GetHashCode();
-                if (this.SamplerName != null)
-                {
-                    hashCode = (hashCode * 59) + this.SamplerName.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.BatchSize.GetHashCode();
-                hashCode = (hashCode * 59) + this.NIter.GetHashCode();
-                hashCode = (hashCode * 59) + this.Steps.GetHashCode();
-                hashCode = (hashCode * 59) + this.CfgScale.GetHashCode();
-                hashCode = (hashCode * 59) + this.Width.GetHashCode();
-                hashCode = (hashCode * 59) + this.Height.GetHashCode();
-                hashCode = (hashCode * 59) + this.RestoreFaces.GetHashCode();
-                hashCode = (hashCode * 59) + this.Tiling.GetHashCode();
-                hashCode = (hashCode * 59) + this.DoNotSaveSamples.GetHashCode();
-                hashCode = (hashCode * 59) + this.DoNotSaveGrid.GetHashCode();
-                if (this.NegativePrompt != null)
-                {
-                    hashCode = (hashCode * 59) + this.NegativePrompt.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.Eta.GetHashCode();
-                hashCode = (hashCode * 59) + this.SMinUncond.GetHashCode();
-                hashCode = (hashCode * 59) + this.SChurn.GetHashCode();
-                hashCode = (hashCode * 59) + this.STmax.GetHashCode();
-                hashCode = (hashCode * 59) + this.STmin.GetHashCode();
-                hashCode = (hashCode * 59) + this.SNoise.GetHashCode();
-                if (this.OverrideSettings != null)
-                {
-                    hashCode = (hashCode * 59) + this.OverrideSettings.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.OverrideSettingsRestoreAfterwards.GetHashCode();
-                if (this.ScriptArgs != null)
-                {
-                    hashCode = (hashCode * 59) + this.ScriptArgs.GetHashCode();
-                }
-                if (this.SamplerIndex != null)
-                {
-                    hashCode = (hashCode * 59) + this.SamplerIndex.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.IncludeInitImages.GetHashCode();
-                if (this.ScriptName != null)
-                {
-                    hashCode = (hashCode * 59) + this.ScriptName.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.SendImages.GetHashCode();
-                hashCode = (hashCode * 59) + this.SaveImages.GetHashCode();
-                if (this.AlwaysonScripts != null)
-                {
-                    hashCode = (hashCode * 59) + this.AlwaysonScripts.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

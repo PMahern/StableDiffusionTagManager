@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// MemoryResponse
     /// </summary>
     [DataContract(Name = "MemoryResponse")]
-    public partial class MemoryResponse : IEquatable<MemoryResponse>, IValidatableObject
+    public partial class MemoryResponse : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MemoryResponse" /> class.
@@ -92,61 +92,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as MemoryResponse);
-        }
-
-        /// <summary>
-        /// Returns true if MemoryResponse instances are equal
-        /// </summary>
-        /// <param name="input">Instance of MemoryResponse to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(MemoryResponse input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Ram == input.Ram ||
-                    (this.Ram != null &&
-                    this.Ram.Equals(input.Ram))
-                ) && 
-                (
-                    this.Cuda == input.Cuda ||
-                    (this.Cuda != null &&
-                    this.Cuda.Equals(input.Cuda))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.Ram != null)
-                {
-                    hashCode = (hashCode * 59) + this.Ram.GetHashCode();
-                }
-                if (this.Cuda != null)
-                {
-                    hashCode = (hashCode * 59) + this.Cuda.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

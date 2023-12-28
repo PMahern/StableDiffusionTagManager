@@ -26,43 +26,51 @@ using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 namespace SdWebUiApi.Model
 {
     /// <summary>
-    /// FaceRestorerItem
+    /// PoseData
     /// </summary>
-    [DataContract(Name = "FaceRestorerItem")]
-    public partial class FaceRestorerItem : IValidatableObject
+    [DataContract(Name = "PoseData")]
+    public partial class PoseData : IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FaceRestorerItem" /> class.
+        /// Initializes a new instance of the <see cref="PoseData" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected FaceRestorerItem() { }
+        protected PoseData() { }
         /// <summary>
-        /// Initializes a new instance of the <see cref="FaceRestorerItem" /> class.
+        /// Initializes a new instance of the <see cref="PoseData" /> class.
         /// </summary>
-        /// <param name="name">name (required).</param>
-        /// <param name="cmdDir">cmdDir.</param>
-        public FaceRestorerItem(string name = default(string), string cmdDir = default(string))
+        /// <param name="people">people (required).</param>
+        /// <param name="canvasWidth">canvasWidth (required).</param>
+        /// <param name="canvasHeight">canvasHeight (required).</param>
+        public PoseData(List<Person> people = default(List<Person>), int canvasWidth = default(int), int canvasHeight = default(int))
         {
-            // to ensure "name" is required (not null)
-            if (name == null)
+            // to ensure "people" is required (not null)
+            if (people == null)
             {
-                throw new ArgumentNullException("name is a required property for FaceRestorerItem and cannot be null");
+                throw new ArgumentNullException("people is a required property for PoseData and cannot be null");
             }
-            this.Name = name;
-            this.CmdDir = cmdDir;
+            this.People = people;
+            this.CanvasWidth = canvasWidth;
+            this.CanvasHeight = canvasHeight;
         }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Gets or Sets People
         /// </summary>
-        [DataMember(Name = "name", IsRequired = true, EmitDefaultValue = true)]
-        public string Name { get; set; }
+        [DataMember(Name = "people", IsRequired = true, EmitDefaultValue = true)]
+        public List<Person> People { get; set; }
 
         /// <summary>
-        /// Gets or Sets CmdDir
+        /// Gets or Sets CanvasWidth
         /// </summary>
-        [DataMember(Name = "cmd_dir", EmitDefaultValue = false)]
-        public string CmdDir { get; set; }
+        [DataMember(Name = "canvas_width", IsRequired = true, EmitDefaultValue = true)]
+        public int CanvasWidth { get; set; }
+
+        /// <summary>
+        /// Gets or Sets CanvasHeight
+        /// </summary>
+        [DataMember(Name = "canvas_height", IsRequired = true, EmitDefaultValue = true)]
+        public int CanvasHeight { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -71,9 +79,10 @@ namespace SdWebUiApi.Model
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("class FaceRestorerItem {\n");
-            sb.Append("  Name: ").Append(Name).Append("\n");
-            sb.Append("  CmdDir: ").Append(CmdDir).Append("\n");
+            sb.Append("class PoseData {\n");
+            sb.Append("  People: ").Append(People).Append("\n");
+            sb.Append("  CanvasWidth: ").Append(CanvasWidth).Append("\n");
+            sb.Append("  CanvasHeight: ").Append(CanvasHeight).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

@@ -21,32 +21,21 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// StableDiffusionProcessingTxt2Img
     /// </summary>
     [DataContract(Name = "StableDiffusionProcessingTxt2Img")]
-    public partial class StableDiffusionProcessingTxt2Img : IEquatable<StableDiffusionProcessingTxt2Img>, IValidatableObject
+    public partial class StableDiffusionProcessingTxt2Img : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StableDiffusionProcessingTxt2Img" /> class.
         /// </summary>
-        /// <param name="enableHr">enableHr (default to false).</param>
-        /// <param name="denoisingStrength">denoisingStrength (default to 0M).</param>
-        /// <param name="firstphaseWidth">firstphaseWidth (default to 0).</param>
-        /// <param name="firstphaseHeight">firstphaseHeight (default to 0).</param>
-        /// <param name="hrScale">hrScale (default to 2.0M).</param>
-        /// <param name="hrUpscaler">hrUpscaler.</param>
-        /// <param name="hrSecondPassSteps">hrSecondPassSteps (default to 0).</param>
-        /// <param name="hrResizeX">hrResizeX (default to 0).</param>
-        /// <param name="hrResizeY">hrResizeY (default to 0).</param>
-        /// <param name="hrSamplerName">hrSamplerName.</param>
-        /// <param name="hrPrompt">hrPrompt (default to &quot;&quot;).</param>
-        /// <param name="hrNegativePrompt">hrNegativePrompt (default to &quot;&quot;).</param>
         /// <param name="prompt">prompt (default to &quot;&quot;).</param>
+        /// <param name="negativePrompt">negativePrompt (default to &quot;&quot;).</param>
         /// <param name="styles">styles.</param>
         /// <param name="seed">seed (default to -1).</param>
         /// <param name="subseed">subseed (default to -1).</param>
@@ -60,43 +49,47 @@ namespace SdWebUpApi.Model
         /// <param name="cfgScale">cfgScale (default to 7.0M).</param>
         /// <param name="width">width (default to 512).</param>
         /// <param name="height">height (default to 512).</param>
-        /// <param name="restoreFaces">restoreFaces (default to false).</param>
-        /// <param name="tiling">tiling (default to false).</param>
+        /// <param name="restoreFaces">restoreFaces.</param>
+        /// <param name="tiling">tiling.</param>
         /// <param name="doNotSaveSamples">doNotSaveSamples (default to false).</param>
         /// <param name="doNotSaveGrid">doNotSaveGrid (default to false).</param>
-        /// <param name="negativePrompt">negativePrompt.</param>
         /// <param name="eta">eta.</param>
-        /// <param name="sMinUncond">sMinUncond (default to 0.0M).</param>
-        /// <param name="sChurn">sChurn (default to 0.0M).</param>
+        /// <param name="denoisingStrength">denoisingStrength (default to 0M).</param>
+        /// <param name="sMinUncond">sMinUncond.</param>
+        /// <param name="sChurn">sChurn.</param>
         /// <param name="sTmax">sTmax.</param>
-        /// <param name="sTmin">sTmin (default to 0.0M).</param>
-        /// <param name="sNoise">sNoise (default to 1.0M).</param>
+        /// <param name="sTmin">sTmin.</param>
+        /// <param name="sNoise">sNoise.</param>
         /// <param name="overrideSettings">overrideSettings.</param>
         /// <param name="overrideSettingsRestoreAfterwards">overrideSettingsRestoreAfterwards (default to true).</param>
-        /// <param name="scriptArgs">scriptArgs.</param>
+        /// <param name="refinerCheckpoint">refinerCheckpoint.</param>
+        /// <param name="refinerSwitchAt">refinerSwitchAt.</param>
+        /// <param name="disableExtraNetworks">disableExtraNetworks (default to false).</param>
+        /// <param name="comments">comments.</param>
+        /// <param name="enableHr">enableHr (default to false).</param>
+        /// <param name="firstphaseWidth">firstphaseWidth (default to 0).</param>
+        /// <param name="firstphaseHeight">firstphaseHeight (default to 0).</param>
+        /// <param name="hrScale">hrScale (default to 2.0M).</param>
+        /// <param name="hrUpscaler">hrUpscaler.</param>
+        /// <param name="hrSecondPassSteps">hrSecondPassSteps (default to 0).</param>
+        /// <param name="hrResizeX">hrResizeX (default to 0).</param>
+        /// <param name="hrResizeY">hrResizeY (default to 0).</param>
+        /// <param name="hrCheckpointName">hrCheckpointName.</param>
+        /// <param name="hrSamplerName">hrSamplerName.</param>
+        /// <param name="hrPrompt">hrPrompt (default to &quot;&quot;).</param>
+        /// <param name="hrNegativePrompt">hrNegativePrompt (default to &quot;&quot;).</param>
         /// <param name="samplerIndex">samplerIndex (default to &quot;Euler&quot;).</param>
         /// <param name="scriptName">scriptName.</param>
+        /// <param name="scriptArgs">scriptArgs.</param>
         /// <param name="sendImages">sendImages (default to true).</param>
         /// <param name="saveImages">saveImages (default to false).</param>
         /// <param name="alwaysonScripts">alwaysonScripts.</param>
-        public StableDiffusionProcessingTxt2Img(bool enableHr = false, decimal denoisingStrength = 0M, int firstphaseWidth = 0, int firstphaseHeight = 0, decimal hrScale = 2.0M, string hrUpscaler = default(string), int hrSecondPassSteps = 0, int hrResizeX = 0, int hrResizeY = 0, string hrSamplerName = default(string), string hrPrompt = @"", string hrNegativePrompt = @"", string prompt = @"", List<string> styles = default(List<string>), int seed = -1, int subseed = -1, decimal subseedStrength = 0M, int seedResizeFromH = -1, int seedResizeFromW = -1, string samplerName = default(string), int batchSize = 1, int nIter = 1, int steps = 50, decimal cfgScale = 7.0M, int width = 512, int height = 512, bool restoreFaces = false, bool tiling = false, bool doNotSaveSamples = false, bool doNotSaveGrid = false, string negativePrompt = default(string), decimal eta = default(decimal), decimal sMinUncond = 0.0M, decimal sChurn = 0.0M, decimal sTmax = default(decimal), decimal sTmin = 0.0M, decimal sNoise = 1.0M, Object overrideSettings = default(Object), bool overrideSettingsRestoreAfterwards = true, List<Object> scriptArgs = default(List<Object>), string samplerIndex = @"Euler", string scriptName = default(string), bool sendImages = true, bool saveImages = false, Object alwaysonScripts = default(Object))
+        public StableDiffusionProcessingTxt2Img(string prompt = @"", string negativePrompt = @"", List<string> styles = default(List<string>), int seed = -1, int subseed = -1, decimal subseedStrength = 0M, int seedResizeFromH = -1, int seedResizeFromW = -1, string samplerName = default(string), int batchSize = 1, int nIter = 1, int steps = 50, decimal cfgScale = 7.0M, int width = 512, int height = 512, bool restoreFaces = default(bool), bool tiling = default(bool), bool doNotSaveSamples = false, bool doNotSaveGrid = false, decimal eta = default(decimal), decimal denoisingStrength = 0M, decimal sMinUncond = default(decimal), decimal sChurn = default(decimal), decimal sTmax = default(decimal), decimal sTmin = default(decimal), decimal sNoise = default(decimal), Object overrideSettings = default(Object), bool overrideSettingsRestoreAfterwards = true, string refinerCheckpoint = default(string), decimal refinerSwitchAt = default(decimal), bool disableExtraNetworks = false, Object comments = default(Object), bool enableHr = false, int firstphaseWidth = 0, int firstphaseHeight = 0, decimal hrScale = 2.0M, string hrUpscaler = default(string), int hrSecondPassSteps = 0, int hrResizeX = 0, int hrResizeY = 0, string hrCheckpointName = default(string), string hrSamplerName = default(string), string hrPrompt = @"", string hrNegativePrompt = @"", string samplerIndex = @"Euler", string scriptName = default(string), List<Object> scriptArgs = default(List<Object>), bool sendImages = true, bool saveImages = false, Object alwaysonScripts = default(Object))
         {
-            this.EnableHr = enableHr;
-            this.DenoisingStrength = denoisingStrength;
-            this.FirstphaseWidth = firstphaseWidth;
-            this.FirstphaseHeight = firstphaseHeight;
-            this.HrScale = hrScale;
-            this.HrUpscaler = hrUpscaler;
-            this.HrSecondPassSteps = hrSecondPassSteps;
-            this.HrResizeX = hrResizeX;
-            this.HrResizeY = hrResizeY;
-            this.HrSamplerName = hrSamplerName;
-            // use default value if no "hrPrompt" provided
-            this.HrPrompt = hrPrompt ?? @"";
-            // use default value if no "hrNegativePrompt" provided
-            this.HrNegativePrompt = hrNegativePrompt ?? @"";
             // use default value if no "prompt" provided
             this.Prompt = prompt ?? @"";
+            // use default value if no "negativePrompt" provided
+            this.NegativePrompt = negativePrompt ?? @"";
             this.Styles = styles;
             this.Seed = seed;
             this.Subseed = subseed;
@@ -114,8 +107,8 @@ namespace SdWebUpApi.Model
             this.Tiling = tiling;
             this.DoNotSaveSamples = doNotSaveSamples;
             this.DoNotSaveGrid = doNotSaveGrid;
-            this.NegativePrompt = negativePrompt;
             this.Eta = eta;
+            this.DenoisingStrength = denoisingStrength;
             this.SMinUncond = sMinUncond;
             this.SChurn = sChurn;
             this.STmax = sTmax;
@@ -123,92 +116,44 @@ namespace SdWebUpApi.Model
             this.SNoise = sNoise;
             this.OverrideSettings = overrideSettings;
             this.OverrideSettingsRestoreAfterwards = overrideSettingsRestoreAfterwards;
-            this.ScriptArgs = scriptArgs;
+            this.RefinerCheckpoint = refinerCheckpoint;
+            this.RefinerSwitchAt = refinerSwitchAt;
+            this.DisableExtraNetworks = disableExtraNetworks;
+            this.Comments = comments;
+            this.EnableHr = enableHr;
+            this.FirstphaseWidth = firstphaseWidth;
+            this.FirstphaseHeight = firstphaseHeight;
+            this.HrScale = hrScale;
+            this.HrUpscaler = hrUpscaler;
+            this.HrSecondPassSteps = hrSecondPassSteps;
+            this.HrResizeX = hrResizeX;
+            this.HrResizeY = hrResizeY;
+            this.HrCheckpointName = hrCheckpointName;
+            this.HrSamplerName = hrSamplerName;
+            // use default value if no "hrPrompt" provided
+            this.HrPrompt = hrPrompt ?? @"";
+            // use default value if no "hrNegativePrompt" provided
+            this.HrNegativePrompt = hrNegativePrompt ?? @"";
             // use default value if no "samplerIndex" provided
             this.SamplerIndex = samplerIndex ?? @"Euler";
             this.ScriptName = scriptName;
+            this.ScriptArgs = scriptArgs;
             this.SendImages = sendImages;
             this.SaveImages = saveImages;
             this.AlwaysonScripts = alwaysonScripts;
         }
 
         /// <summary>
-        /// Gets or Sets EnableHr
-        /// </summary>
-        [DataMember(Name = "enable_hr", EmitDefaultValue = true)]
-        public bool EnableHr { get; set; }
-
-        /// <summary>
-        /// Gets or Sets DenoisingStrength
-        /// </summary>
-        [DataMember(Name = "denoising_strength", EmitDefaultValue = false)]
-        public decimal DenoisingStrength { get; set; }
-
-        /// <summary>
-        /// Gets or Sets FirstphaseWidth
-        /// </summary>
-        [DataMember(Name = "firstphase_width", EmitDefaultValue = false)]
-        public int FirstphaseWidth { get; set; }
-
-        /// <summary>
-        /// Gets or Sets FirstphaseHeight
-        /// </summary>
-        [DataMember(Name = "firstphase_height", EmitDefaultValue = false)]
-        public int FirstphaseHeight { get; set; }
-
-        /// <summary>
-        /// Gets or Sets HrScale
-        /// </summary>
-        [DataMember(Name = "hr_scale", EmitDefaultValue = false)]
-        public decimal HrScale { get; set; }
-
-        /// <summary>
-        /// Gets or Sets HrUpscaler
-        /// </summary>
-        [DataMember(Name = "hr_upscaler", EmitDefaultValue = false)]
-        public string HrUpscaler { get; set; }
-
-        /// <summary>
-        /// Gets or Sets HrSecondPassSteps
-        /// </summary>
-        [DataMember(Name = "hr_second_pass_steps", EmitDefaultValue = false)]
-        public int HrSecondPassSteps { get; set; }
-
-        /// <summary>
-        /// Gets or Sets HrResizeX
-        /// </summary>
-        [DataMember(Name = "hr_resize_x", EmitDefaultValue = false)]
-        public int HrResizeX { get; set; }
-
-        /// <summary>
-        /// Gets or Sets HrResizeY
-        /// </summary>
-        [DataMember(Name = "hr_resize_y", EmitDefaultValue = false)]
-        public int HrResizeY { get; set; }
-
-        /// <summary>
-        /// Gets or Sets HrSamplerName
-        /// </summary>
-        [DataMember(Name = "hr_sampler_name", EmitDefaultValue = false)]
-        public string HrSamplerName { get; set; }
-
-        /// <summary>
-        /// Gets or Sets HrPrompt
-        /// </summary>
-        [DataMember(Name = "hr_prompt", EmitDefaultValue = false)]
-        public string HrPrompt { get; set; }
-
-        /// <summary>
-        /// Gets or Sets HrNegativePrompt
-        /// </summary>
-        [DataMember(Name = "hr_negative_prompt", EmitDefaultValue = false)]
-        public string HrNegativePrompt { get; set; }
-
-        /// <summary>
         /// Gets or Sets Prompt
         /// </summary>
         [DataMember(Name = "prompt", EmitDefaultValue = false)]
         public string Prompt { get; set; }
+
+        /// <summary>
+        /// Gets or Sets NegativePrompt
+        /// </summary>
+        [DataMember(Name = "negative_prompt", EmitDefaultValue = false)]
+        public string NegativePrompt { get; set; }
 
         /// <summary>
         /// Gets or Sets Styles
@@ -313,16 +258,16 @@ namespace SdWebUpApi.Model
         public bool DoNotSaveGrid { get; set; }
 
         /// <summary>
-        /// Gets or Sets NegativePrompt
-        /// </summary>
-        [DataMember(Name = "negative_prompt", EmitDefaultValue = false)]
-        public string NegativePrompt { get; set; }
-
-        /// <summary>
         /// Gets or Sets Eta
         /// </summary>
         [DataMember(Name = "eta", EmitDefaultValue = false)]
         public decimal Eta { get; set; }
+
+        /// <summary>
+        /// Gets or Sets DenoisingStrength
+        /// </summary>
+        [DataMember(Name = "denoising_strength", EmitDefaultValue = false)]
+        public decimal DenoisingStrength { get; set; }
 
         /// <summary>
         /// Gets or Sets SMinUncond
@@ -367,10 +312,100 @@ namespace SdWebUpApi.Model
         public bool OverrideSettingsRestoreAfterwards { get; set; }
 
         /// <summary>
-        /// Gets or Sets ScriptArgs
+        /// Gets or Sets RefinerCheckpoint
         /// </summary>
-        [DataMember(Name = "script_args", EmitDefaultValue = false)]
-        public List<Object> ScriptArgs { get; set; }
+        [DataMember(Name = "refiner_checkpoint", EmitDefaultValue = false)]
+        public string RefinerCheckpoint { get; set; }
+
+        /// <summary>
+        /// Gets or Sets RefinerSwitchAt
+        /// </summary>
+        [DataMember(Name = "refiner_switch_at", EmitDefaultValue = false)]
+        public decimal RefinerSwitchAt { get; set; }
+
+        /// <summary>
+        /// Gets or Sets DisableExtraNetworks
+        /// </summary>
+        [DataMember(Name = "disable_extra_networks", EmitDefaultValue = true)]
+        public bool DisableExtraNetworks { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Comments
+        /// </summary>
+        [DataMember(Name = "comments", EmitDefaultValue = false)]
+        public Object Comments { get; set; }
+
+        /// <summary>
+        /// Gets or Sets EnableHr
+        /// </summary>
+        [DataMember(Name = "enable_hr", EmitDefaultValue = true)]
+        public bool EnableHr { get; set; }
+
+        /// <summary>
+        /// Gets or Sets FirstphaseWidth
+        /// </summary>
+        [DataMember(Name = "firstphase_width", EmitDefaultValue = false)]
+        public int FirstphaseWidth { get; set; }
+
+        /// <summary>
+        /// Gets or Sets FirstphaseHeight
+        /// </summary>
+        [DataMember(Name = "firstphase_height", EmitDefaultValue = false)]
+        public int FirstphaseHeight { get; set; }
+
+        /// <summary>
+        /// Gets or Sets HrScale
+        /// </summary>
+        [DataMember(Name = "hr_scale", EmitDefaultValue = false)]
+        public decimal HrScale { get; set; }
+
+        /// <summary>
+        /// Gets or Sets HrUpscaler
+        /// </summary>
+        [DataMember(Name = "hr_upscaler", EmitDefaultValue = false)]
+        public string HrUpscaler { get; set; }
+
+        /// <summary>
+        /// Gets or Sets HrSecondPassSteps
+        /// </summary>
+        [DataMember(Name = "hr_second_pass_steps", EmitDefaultValue = false)]
+        public int HrSecondPassSteps { get; set; }
+
+        /// <summary>
+        /// Gets or Sets HrResizeX
+        /// </summary>
+        [DataMember(Name = "hr_resize_x", EmitDefaultValue = false)]
+        public int HrResizeX { get; set; }
+
+        /// <summary>
+        /// Gets or Sets HrResizeY
+        /// </summary>
+        [DataMember(Name = "hr_resize_y", EmitDefaultValue = false)]
+        public int HrResizeY { get; set; }
+
+        /// <summary>
+        /// Gets or Sets HrCheckpointName
+        /// </summary>
+        [DataMember(Name = "hr_checkpoint_name", EmitDefaultValue = false)]
+        public string HrCheckpointName { get; set; }
+
+        /// <summary>
+        /// Gets or Sets HrSamplerName
+        /// </summary>
+        [DataMember(Name = "hr_sampler_name", EmitDefaultValue = false)]
+        public string HrSamplerName { get; set; }
+
+        /// <summary>
+        /// Gets or Sets HrPrompt
+        /// </summary>
+        [DataMember(Name = "hr_prompt", EmitDefaultValue = false)]
+        public string HrPrompt { get; set; }
+
+        /// <summary>
+        /// Gets or Sets HrNegativePrompt
+        /// </summary>
+        [DataMember(Name = "hr_negative_prompt", EmitDefaultValue = false)]
+        public string HrNegativePrompt { get; set; }
 
         /// <summary>
         /// Gets or Sets SamplerIndex
@@ -383,6 +418,12 @@ namespace SdWebUpApi.Model
         /// </summary>
         [DataMember(Name = "script_name", EmitDefaultValue = false)]
         public string ScriptName { get; set; }
+
+        /// <summary>
+        /// Gets or Sets ScriptArgs
+        /// </summary>
+        [DataMember(Name = "script_args", EmitDefaultValue = false)]
+        public List<Object> ScriptArgs { get; set; }
 
         /// <summary>
         /// Gets or Sets SendImages
@@ -410,19 +451,8 @@ namespace SdWebUpApi.Model
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("class StableDiffusionProcessingTxt2Img {\n");
-            sb.Append("  EnableHr: ").Append(EnableHr).Append("\n");
-            sb.Append("  DenoisingStrength: ").Append(DenoisingStrength).Append("\n");
-            sb.Append("  FirstphaseWidth: ").Append(FirstphaseWidth).Append("\n");
-            sb.Append("  FirstphaseHeight: ").Append(FirstphaseHeight).Append("\n");
-            sb.Append("  HrScale: ").Append(HrScale).Append("\n");
-            sb.Append("  HrUpscaler: ").Append(HrUpscaler).Append("\n");
-            sb.Append("  HrSecondPassSteps: ").Append(HrSecondPassSteps).Append("\n");
-            sb.Append("  HrResizeX: ").Append(HrResizeX).Append("\n");
-            sb.Append("  HrResizeY: ").Append(HrResizeY).Append("\n");
-            sb.Append("  HrSamplerName: ").Append(HrSamplerName).Append("\n");
-            sb.Append("  HrPrompt: ").Append(HrPrompt).Append("\n");
-            sb.Append("  HrNegativePrompt: ").Append(HrNegativePrompt).Append("\n");
             sb.Append("  Prompt: ").Append(Prompt).Append("\n");
+            sb.Append("  NegativePrompt: ").Append(NegativePrompt).Append("\n");
             sb.Append("  Styles: ").Append(Styles).Append("\n");
             sb.Append("  Seed: ").Append(Seed).Append("\n");
             sb.Append("  Subseed: ").Append(Subseed).Append("\n");
@@ -440,8 +470,8 @@ namespace SdWebUpApi.Model
             sb.Append("  Tiling: ").Append(Tiling).Append("\n");
             sb.Append("  DoNotSaveSamples: ").Append(DoNotSaveSamples).Append("\n");
             sb.Append("  DoNotSaveGrid: ").Append(DoNotSaveGrid).Append("\n");
-            sb.Append("  NegativePrompt: ").Append(NegativePrompt).Append("\n");
             sb.Append("  Eta: ").Append(Eta).Append("\n");
+            sb.Append("  DenoisingStrength: ").Append(DenoisingStrength).Append("\n");
             sb.Append("  SMinUncond: ").Append(SMinUncond).Append("\n");
             sb.Append("  SChurn: ").Append(SChurn).Append("\n");
             sb.Append("  STmax: ").Append(STmax).Append("\n");
@@ -449,9 +479,25 @@ namespace SdWebUpApi.Model
             sb.Append("  SNoise: ").Append(SNoise).Append("\n");
             sb.Append("  OverrideSettings: ").Append(OverrideSettings).Append("\n");
             sb.Append("  OverrideSettingsRestoreAfterwards: ").Append(OverrideSettingsRestoreAfterwards).Append("\n");
-            sb.Append("  ScriptArgs: ").Append(ScriptArgs).Append("\n");
+            sb.Append("  RefinerCheckpoint: ").Append(RefinerCheckpoint).Append("\n");
+            sb.Append("  RefinerSwitchAt: ").Append(RefinerSwitchAt).Append("\n");
+            sb.Append("  DisableExtraNetworks: ").Append(DisableExtraNetworks).Append("\n");
+            sb.Append("  Comments: ").Append(Comments).Append("\n");
+            sb.Append("  EnableHr: ").Append(EnableHr).Append("\n");
+            sb.Append("  FirstphaseWidth: ").Append(FirstphaseWidth).Append("\n");
+            sb.Append("  FirstphaseHeight: ").Append(FirstphaseHeight).Append("\n");
+            sb.Append("  HrScale: ").Append(HrScale).Append("\n");
+            sb.Append("  HrUpscaler: ").Append(HrUpscaler).Append("\n");
+            sb.Append("  HrSecondPassSteps: ").Append(HrSecondPassSteps).Append("\n");
+            sb.Append("  HrResizeX: ").Append(HrResizeX).Append("\n");
+            sb.Append("  HrResizeY: ").Append(HrResizeY).Append("\n");
+            sb.Append("  HrCheckpointName: ").Append(HrCheckpointName).Append("\n");
+            sb.Append("  HrSamplerName: ").Append(HrSamplerName).Append("\n");
+            sb.Append("  HrPrompt: ").Append(HrPrompt).Append("\n");
+            sb.Append("  HrNegativePrompt: ").Append(HrNegativePrompt).Append("\n");
             sb.Append("  SamplerIndex: ").Append(SamplerIndex).Append("\n");
             sb.Append("  ScriptName: ").Append(ScriptName).Append("\n");
+            sb.Append("  ScriptArgs: ").Append(ScriptArgs).Append("\n");
             sb.Append("  SendImages: ").Append(SendImages).Append("\n");
             sb.Append("  SaveImages: ").Append(SaveImages).Append("\n");
             sb.Append("  AlwaysonScripts: ").Append(AlwaysonScripts).Append("\n");
@@ -466,322 +512,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as StableDiffusionProcessingTxt2Img);
-        }
-
-        /// <summary>
-        /// Returns true if StableDiffusionProcessingTxt2Img instances are equal
-        /// </summary>
-        /// <param name="input">Instance of StableDiffusionProcessingTxt2Img to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(StableDiffusionProcessingTxt2Img input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.EnableHr == input.EnableHr ||
-                    this.EnableHr.Equals(input.EnableHr)
-                ) && 
-                (
-                    this.DenoisingStrength == input.DenoisingStrength ||
-                    this.DenoisingStrength.Equals(input.DenoisingStrength)
-                ) && 
-                (
-                    this.FirstphaseWidth == input.FirstphaseWidth ||
-                    this.FirstphaseWidth.Equals(input.FirstphaseWidth)
-                ) && 
-                (
-                    this.FirstphaseHeight == input.FirstphaseHeight ||
-                    this.FirstphaseHeight.Equals(input.FirstphaseHeight)
-                ) && 
-                (
-                    this.HrScale == input.HrScale ||
-                    this.HrScale.Equals(input.HrScale)
-                ) && 
-                (
-                    this.HrUpscaler == input.HrUpscaler ||
-                    (this.HrUpscaler != null &&
-                    this.HrUpscaler.Equals(input.HrUpscaler))
-                ) && 
-                (
-                    this.HrSecondPassSteps == input.HrSecondPassSteps ||
-                    this.HrSecondPassSteps.Equals(input.HrSecondPassSteps)
-                ) && 
-                (
-                    this.HrResizeX == input.HrResizeX ||
-                    this.HrResizeX.Equals(input.HrResizeX)
-                ) && 
-                (
-                    this.HrResizeY == input.HrResizeY ||
-                    this.HrResizeY.Equals(input.HrResizeY)
-                ) && 
-                (
-                    this.HrSamplerName == input.HrSamplerName ||
-                    (this.HrSamplerName != null &&
-                    this.HrSamplerName.Equals(input.HrSamplerName))
-                ) && 
-                (
-                    this.HrPrompt == input.HrPrompt ||
-                    (this.HrPrompt != null &&
-                    this.HrPrompt.Equals(input.HrPrompt))
-                ) && 
-                (
-                    this.HrNegativePrompt == input.HrNegativePrompt ||
-                    (this.HrNegativePrompt != null &&
-                    this.HrNegativePrompt.Equals(input.HrNegativePrompt))
-                ) && 
-                (
-                    this.Prompt == input.Prompt ||
-                    (this.Prompt != null &&
-                    this.Prompt.Equals(input.Prompt))
-                ) && 
-                (
-                    this.Styles == input.Styles ||
-                    this.Styles != null &&
-                    input.Styles != null &&
-                    this.Styles.SequenceEqual(input.Styles)
-                ) && 
-                (
-                    this.Seed == input.Seed ||
-                    this.Seed.Equals(input.Seed)
-                ) && 
-                (
-                    this.Subseed == input.Subseed ||
-                    this.Subseed.Equals(input.Subseed)
-                ) && 
-                (
-                    this.SubseedStrength == input.SubseedStrength ||
-                    this.SubseedStrength.Equals(input.SubseedStrength)
-                ) && 
-                (
-                    this.SeedResizeFromH == input.SeedResizeFromH ||
-                    this.SeedResizeFromH.Equals(input.SeedResizeFromH)
-                ) && 
-                (
-                    this.SeedResizeFromW == input.SeedResizeFromW ||
-                    this.SeedResizeFromW.Equals(input.SeedResizeFromW)
-                ) && 
-                (
-                    this.SamplerName == input.SamplerName ||
-                    (this.SamplerName != null &&
-                    this.SamplerName.Equals(input.SamplerName))
-                ) && 
-                (
-                    this.BatchSize == input.BatchSize ||
-                    this.BatchSize.Equals(input.BatchSize)
-                ) && 
-                (
-                    this.NIter == input.NIter ||
-                    this.NIter.Equals(input.NIter)
-                ) && 
-                (
-                    this.Steps == input.Steps ||
-                    this.Steps.Equals(input.Steps)
-                ) && 
-                (
-                    this.CfgScale == input.CfgScale ||
-                    this.CfgScale.Equals(input.CfgScale)
-                ) && 
-                (
-                    this.Width == input.Width ||
-                    this.Width.Equals(input.Width)
-                ) && 
-                (
-                    this.Height == input.Height ||
-                    this.Height.Equals(input.Height)
-                ) && 
-                (
-                    this.RestoreFaces == input.RestoreFaces ||
-                    this.RestoreFaces.Equals(input.RestoreFaces)
-                ) && 
-                (
-                    this.Tiling == input.Tiling ||
-                    this.Tiling.Equals(input.Tiling)
-                ) && 
-                (
-                    this.DoNotSaveSamples == input.DoNotSaveSamples ||
-                    this.DoNotSaveSamples.Equals(input.DoNotSaveSamples)
-                ) && 
-                (
-                    this.DoNotSaveGrid == input.DoNotSaveGrid ||
-                    this.DoNotSaveGrid.Equals(input.DoNotSaveGrid)
-                ) && 
-                (
-                    this.NegativePrompt == input.NegativePrompt ||
-                    (this.NegativePrompt != null &&
-                    this.NegativePrompt.Equals(input.NegativePrompt))
-                ) && 
-                (
-                    this.Eta == input.Eta ||
-                    this.Eta.Equals(input.Eta)
-                ) && 
-                (
-                    this.SMinUncond == input.SMinUncond ||
-                    this.SMinUncond.Equals(input.SMinUncond)
-                ) && 
-                (
-                    this.SChurn == input.SChurn ||
-                    this.SChurn.Equals(input.SChurn)
-                ) && 
-                (
-                    this.STmax == input.STmax ||
-                    this.STmax.Equals(input.STmax)
-                ) && 
-                (
-                    this.STmin == input.STmin ||
-                    this.STmin.Equals(input.STmin)
-                ) && 
-                (
-                    this.SNoise == input.SNoise ||
-                    this.SNoise.Equals(input.SNoise)
-                ) && 
-                (
-                    this.OverrideSettings == input.OverrideSettings ||
-                    (this.OverrideSettings != null &&
-                    this.OverrideSettings.Equals(input.OverrideSettings))
-                ) && 
-                (
-                    this.OverrideSettingsRestoreAfterwards == input.OverrideSettingsRestoreAfterwards ||
-                    this.OverrideSettingsRestoreAfterwards.Equals(input.OverrideSettingsRestoreAfterwards)
-                ) && 
-                (
-                    this.ScriptArgs == input.ScriptArgs ||
-                    this.ScriptArgs != null &&
-                    input.ScriptArgs != null &&
-                    this.ScriptArgs.SequenceEqual(input.ScriptArgs)
-                ) && 
-                (
-                    this.SamplerIndex == input.SamplerIndex ||
-                    (this.SamplerIndex != null &&
-                    this.SamplerIndex.Equals(input.SamplerIndex))
-                ) && 
-                (
-                    this.ScriptName == input.ScriptName ||
-                    (this.ScriptName != null &&
-                    this.ScriptName.Equals(input.ScriptName))
-                ) && 
-                (
-                    this.SendImages == input.SendImages ||
-                    this.SendImages.Equals(input.SendImages)
-                ) && 
-                (
-                    this.SaveImages == input.SaveImages ||
-                    this.SaveImages.Equals(input.SaveImages)
-                ) && 
-                (
-                    this.AlwaysonScripts == input.AlwaysonScripts ||
-                    (this.AlwaysonScripts != null &&
-                    this.AlwaysonScripts.Equals(input.AlwaysonScripts))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                hashCode = (hashCode * 59) + this.EnableHr.GetHashCode();
-                hashCode = (hashCode * 59) + this.DenoisingStrength.GetHashCode();
-                hashCode = (hashCode * 59) + this.FirstphaseWidth.GetHashCode();
-                hashCode = (hashCode * 59) + this.FirstphaseHeight.GetHashCode();
-                hashCode = (hashCode * 59) + this.HrScale.GetHashCode();
-                if (this.HrUpscaler != null)
-                {
-                    hashCode = (hashCode * 59) + this.HrUpscaler.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.HrSecondPassSteps.GetHashCode();
-                hashCode = (hashCode * 59) + this.HrResizeX.GetHashCode();
-                hashCode = (hashCode * 59) + this.HrResizeY.GetHashCode();
-                if (this.HrSamplerName != null)
-                {
-                    hashCode = (hashCode * 59) + this.HrSamplerName.GetHashCode();
-                }
-                if (this.HrPrompt != null)
-                {
-                    hashCode = (hashCode * 59) + this.HrPrompt.GetHashCode();
-                }
-                if (this.HrNegativePrompt != null)
-                {
-                    hashCode = (hashCode * 59) + this.HrNegativePrompt.GetHashCode();
-                }
-                if (this.Prompt != null)
-                {
-                    hashCode = (hashCode * 59) + this.Prompt.GetHashCode();
-                }
-                if (this.Styles != null)
-                {
-                    hashCode = (hashCode * 59) + this.Styles.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.Seed.GetHashCode();
-                hashCode = (hashCode * 59) + this.Subseed.GetHashCode();
-                hashCode = (hashCode * 59) + this.SubseedStrength.GetHashCode();
-                hashCode = (hashCode * 59) + this.SeedResizeFromH.GetHashCode();
-                hashCode = (hashCode * 59) + this.SeedResizeFromW.GetHashCode();
-                if (this.SamplerName != null)
-                {
-                    hashCode = (hashCode * 59) + this.SamplerName.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.BatchSize.GetHashCode();
-                hashCode = (hashCode * 59) + this.NIter.GetHashCode();
-                hashCode = (hashCode * 59) + this.Steps.GetHashCode();
-                hashCode = (hashCode * 59) + this.CfgScale.GetHashCode();
-                hashCode = (hashCode * 59) + this.Width.GetHashCode();
-                hashCode = (hashCode * 59) + this.Height.GetHashCode();
-                hashCode = (hashCode * 59) + this.RestoreFaces.GetHashCode();
-                hashCode = (hashCode * 59) + this.Tiling.GetHashCode();
-                hashCode = (hashCode * 59) + this.DoNotSaveSamples.GetHashCode();
-                hashCode = (hashCode * 59) + this.DoNotSaveGrid.GetHashCode();
-                if (this.NegativePrompt != null)
-                {
-                    hashCode = (hashCode * 59) + this.NegativePrompt.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.Eta.GetHashCode();
-                hashCode = (hashCode * 59) + this.SMinUncond.GetHashCode();
-                hashCode = (hashCode * 59) + this.SChurn.GetHashCode();
-                hashCode = (hashCode * 59) + this.STmax.GetHashCode();
-                hashCode = (hashCode * 59) + this.STmin.GetHashCode();
-                hashCode = (hashCode * 59) + this.SNoise.GetHashCode();
-                if (this.OverrideSettings != null)
-                {
-                    hashCode = (hashCode * 59) + this.OverrideSettings.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.OverrideSettingsRestoreAfterwards.GetHashCode();
-                if (this.ScriptArgs != null)
-                {
-                    hashCode = (hashCode * 59) + this.ScriptArgs.GetHashCode();
-                }
-                if (this.SamplerIndex != null)
-                {
-                    hashCode = (hashCode * 59) + this.SamplerIndex.GetHashCode();
-                }
-                if (this.ScriptName != null)
-                {
-                    hashCode = (hashCode * 59) + this.ScriptName.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.SendImages.GetHashCode();
-                hashCode = (hashCode * 59) + this.SaveImages.GetHashCode();
-                if (this.AlwaysonScripts != null)
-                {
-                    hashCode = (hashCode * 59) + this.AlwaysonScripts.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

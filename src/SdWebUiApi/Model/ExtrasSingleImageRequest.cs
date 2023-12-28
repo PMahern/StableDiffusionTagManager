@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// ExtrasSingleImageRequest
     /// </summary>
     [DataContract(Name = "ExtrasSingleImageRequest")]
-    public partial class ExtrasSingleImageRequest : IEquatable<ExtrasSingleImageRequest>, IValidatableObject
+    public partial class ExtrasSingleImageRequest : IValidatableObject
     {
         /// <summary>
         /// Sets the resize mode: 0 to upscale by upscaling_resize amount, 1 to upscale up to upscaling_resize_h x upscaling_resize_w.
@@ -217,125 +217,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as ExtrasSingleImageRequest);
-        }
-
-        /// <summary>
-        /// Returns true if ExtrasSingleImageRequest instances are equal
-        /// </summary>
-        /// <param name="input">Instance of ExtrasSingleImageRequest to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(ExtrasSingleImageRequest input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.ResizeMode == input.ResizeMode ||
-                    this.ResizeMode.Equals(input.ResizeMode)
-                ) && 
-                (
-                    this.ShowExtrasResults == input.ShowExtrasResults ||
-                    this.ShowExtrasResults.Equals(input.ShowExtrasResults)
-                ) && 
-                (
-                    this.GfpganVisibility == input.GfpganVisibility ||
-                    this.GfpganVisibility.Equals(input.GfpganVisibility)
-                ) && 
-                (
-                    this.CodeformerVisibility == input.CodeformerVisibility ||
-                    this.CodeformerVisibility.Equals(input.CodeformerVisibility)
-                ) && 
-                (
-                    this.CodeformerWeight == input.CodeformerWeight ||
-                    this.CodeformerWeight.Equals(input.CodeformerWeight)
-                ) && 
-                (
-                    this.UpscalingResize == input.UpscalingResize ||
-                    this.UpscalingResize.Equals(input.UpscalingResize)
-                ) && 
-                (
-                    this.UpscalingResizeW == input.UpscalingResizeW ||
-                    this.UpscalingResizeW.Equals(input.UpscalingResizeW)
-                ) && 
-                (
-                    this.UpscalingResizeH == input.UpscalingResizeH ||
-                    this.UpscalingResizeH.Equals(input.UpscalingResizeH)
-                ) && 
-                (
-                    this.UpscalingCrop == input.UpscalingCrop ||
-                    this.UpscalingCrop.Equals(input.UpscalingCrop)
-                ) && 
-                (
-                    this.Upscaler1 == input.Upscaler1 ||
-                    (this.Upscaler1 != null &&
-                    this.Upscaler1.Equals(input.Upscaler1))
-                ) && 
-                (
-                    this.Upscaler2 == input.Upscaler2 ||
-                    (this.Upscaler2 != null &&
-                    this.Upscaler2.Equals(input.Upscaler2))
-                ) && 
-                (
-                    this.ExtrasUpscaler2Visibility == input.ExtrasUpscaler2Visibility ||
-                    this.ExtrasUpscaler2Visibility.Equals(input.ExtrasUpscaler2Visibility)
-                ) && 
-                (
-                    this.UpscaleFirst == input.UpscaleFirst ||
-                    this.UpscaleFirst.Equals(input.UpscaleFirst)
-                ) && 
-                (
-                    this.Image == input.Image ||
-                    (this.Image != null &&
-                    this.Image.Equals(input.Image))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                hashCode = (hashCode * 59) + this.ResizeMode.GetHashCode();
-                hashCode = (hashCode * 59) + this.ShowExtrasResults.GetHashCode();
-                hashCode = (hashCode * 59) + this.GfpganVisibility.GetHashCode();
-                hashCode = (hashCode * 59) + this.CodeformerVisibility.GetHashCode();
-                hashCode = (hashCode * 59) + this.CodeformerWeight.GetHashCode();
-                hashCode = (hashCode * 59) + this.UpscalingResize.GetHashCode();
-                hashCode = (hashCode * 59) + this.UpscalingResizeW.GetHashCode();
-                hashCode = (hashCode * 59) + this.UpscalingResizeH.GetHashCode();
-                hashCode = (hashCode * 59) + this.UpscalingCrop.GetHashCode();
-                if (this.Upscaler1 != null)
-                {
-                    hashCode = (hashCode * 59) + this.Upscaler1.GetHashCode();
-                }
-                if (this.Upscaler2 != null)
-                {
-                    hashCode = (hashCode * 59) + this.Upscaler2.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.ExtrasUpscaler2Visibility.GetHashCode();
-                hashCode = (hashCode * 59) + this.UpscaleFirst.GetHashCode();
-                if (this.Image != null)
-                {
-                    hashCode = (hashCode * 59) + this.Image.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

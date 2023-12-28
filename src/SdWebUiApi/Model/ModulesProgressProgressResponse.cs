@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// ModulesProgressProgressResponse
     /// </summary>
     [DataContract(Name = "modules__progress__ProgressResponse")]
-    public partial class ModulesProgressProgressResponse : IEquatable<ModulesProgressProgressResponse>, IValidatableObject
+    public partial class ModulesProgressProgressResponse : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ModulesProgressProgressResponse" /> class.
@@ -138,91 +138,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as ModulesProgressProgressResponse);
-        }
-
-        /// <summary>
-        /// Returns true if ModulesProgressProgressResponse instances are equal
-        /// </summary>
-        /// <param name="input">Instance of ModulesProgressProgressResponse to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(ModulesProgressProgressResponse input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Active == input.Active ||
-                    this.Active.Equals(input.Active)
-                ) && 
-                (
-                    this.Queued == input.Queued ||
-                    this.Queued.Equals(input.Queued)
-                ) && 
-                (
-                    this.Completed == input.Completed ||
-                    this.Completed.Equals(input.Completed)
-                ) && 
-                (
-                    this.Progress == input.Progress ||
-                    this.Progress.Equals(input.Progress)
-                ) && 
-                (
-                    this.Eta == input.Eta ||
-                    this.Eta.Equals(input.Eta)
-                ) && 
-                (
-                    this.LivePreview == input.LivePreview ||
-                    (this.LivePreview != null &&
-                    this.LivePreview.Equals(input.LivePreview))
-                ) && 
-                (
-                    this.IdLivePreview == input.IdLivePreview ||
-                    this.IdLivePreview.Equals(input.IdLivePreview)
-                ) && 
-                (
-                    this.Textinfo == input.Textinfo ||
-                    (this.Textinfo != null &&
-                    this.Textinfo.Equals(input.Textinfo))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                hashCode = (hashCode * 59) + this.Active.GetHashCode();
-                hashCode = (hashCode * 59) + this.Queued.GetHashCode();
-                hashCode = (hashCode * 59) + this.Completed.GetHashCode();
-                hashCode = (hashCode * 59) + this.Progress.GetHashCode();
-                hashCode = (hashCode * 59) + this.Eta.GetHashCode();
-                if (this.LivePreview != null)
-                {
-                    hashCode = (hashCode * 59) + this.LivePreview.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.IdLivePreview.GetHashCode();
-                if (this.Textinfo != null)
-                {
-                    hashCode = (hashCode * 59) + this.Textinfo.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

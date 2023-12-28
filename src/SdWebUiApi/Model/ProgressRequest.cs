@@ -21,25 +21,27 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// ProgressRequest
     /// </summary>
     [DataContract(Name = "ProgressRequest")]
-    public partial class ProgressRequest : IEquatable<ProgressRequest>, IValidatableObject
+    public partial class ProgressRequest : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ProgressRequest" /> class.
         /// </summary>
         /// <param name="idTask">id of the task to get progress for.</param>
         /// <param name="idLivePreview">id of last received last preview image (default to -1).</param>
-        public ProgressRequest(string idTask = default(string), int idLivePreview = -1)
+        /// <param name="livePreview">boolean flag indicating whether to include the live preview image (default to true).</param>
+        public ProgressRequest(string idTask = default(string), int idLivePreview = -1, bool livePreview = true)
         {
             this.IdTask = idTask;
             this.IdLivePreview = idLivePreview;
+            this.LivePreview = livePreview;
         }
 
         /// <summary>
@@ -57,6 +59,13 @@ namespace SdWebUpApi.Model
         public int IdLivePreview { get; set; }
 
         /// <summary>
+        /// boolean flag indicating whether to include the live preview image
+        /// </summary>
+        /// <value>boolean flag indicating whether to include the live preview image</value>
+        [DataMember(Name = "live_preview", EmitDefaultValue = true)]
+        public bool LivePreview { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -66,6 +75,7 @@ namespace SdWebUpApi.Model
             sb.Append("class ProgressRequest {\n");
             sb.Append("  IdTask: ").Append(IdTask).Append("\n");
             sb.Append("  IdLivePreview: ").Append(IdLivePreview).Append("\n");
+            sb.Append("  LivePreview: ").Append(LivePreview).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -77,57 +87,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as ProgressRequest);
-        }
-
-        /// <summary>
-        /// Returns true if ProgressRequest instances are equal
-        /// </summary>
-        /// <param name="input">Instance of ProgressRequest to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(ProgressRequest input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.IdTask == input.IdTask ||
-                    (this.IdTask != null &&
-                    this.IdTask.Equals(input.IdTask))
-                ) && 
-                (
-                    this.IdLivePreview == input.IdLivePreview ||
-                    this.IdLivePreview.Equals(input.IdLivePreview)
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.IdTask != null)
-                {
-                    hashCode = (hashCode * 59) + this.IdTask.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.IdLivePreview.GetHashCode();
-                return hashCode;
-            }
         }
 
         /// <summary>

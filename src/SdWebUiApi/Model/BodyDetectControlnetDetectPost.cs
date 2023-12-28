@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// BodyDetectControlnetDetectPost
     /// </summary>
     [DataContract(Name = "Body_detect_controlnet_detect_post")]
-    public partial class BodyDetectControlnetDetectPost : IEquatable<BodyDetectControlnetDetectPost>, IValidatableObject
+    public partial class BodyDetectControlnetDetectPost : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BodyDetectControlnetDetectPost" /> class.
@@ -103,77 +103,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as BodyDetectControlnetDetectPost);
-        }
-
-        /// <summary>
-        /// Returns true if BodyDetectControlnetDetectPost instances are equal
-        /// </summary>
-        /// <param name="input">Instance of BodyDetectControlnetDetectPost to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(BodyDetectControlnetDetectPost input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.ControlnetModule == input.ControlnetModule ||
-                    (this.ControlnetModule != null &&
-                    this.ControlnetModule.Equals(input.ControlnetModule))
-                ) && 
-                (
-                    this.ControlnetInputImages == input.ControlnetInputImages ||
-                    this.ControlnetInputImages != null &&
-                    input.ControlnetInputImages != null &&
-                    this.ControlnetInputImages.SequenceEqual(input.ControlnetInputImages)
-                ) && 
-                (
-                    this.ControlnetProcessorRes == input.ControlnetProcessorRes ||
-                    this.ControlnetProcessorRes.Equals(input.ControlnetProcessorRes)
-                ) && 
-                (
-                    this.ControlnetThresholdA == input.ControlnetThresholdA ||
-                    this.ControlnetThresholdA.Equals(input.ControlnetThresholdA)
-                ) && 
-                (
-                    this.ControlnetThresholdB == input.ControlnetThresholdB ||
-                    this.ControlnetThresholdB.Equals(input.ControlnetThresholdB)
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.ControlnetModule != null)
-                {
-                    hashCode = (hashCode * 59) + this.ControlnetModule.GetHashCode();
-                }
-                if (this.ControlnetInputImages != null)
-                {
-                    hashCode = (hashCode * 59) + this.ControlnetInputImages.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.ControlnetProcessorRes.GetHashCode();
-                hashCode = (hashCode * 59) + this.ControlnetThresholdA.GetHashCode();
-                hashCode = (hashCode * 59) + this.ControlnetThresholdB.GetHashCode();
-                return hashCode;
-            }
         }
 
         /// <summary>

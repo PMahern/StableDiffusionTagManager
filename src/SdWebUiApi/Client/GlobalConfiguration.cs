@@ -10,7 +10,7 @@
 
 using System.Collections.Generic;
 
-namespace SdWebUpApi.Client
+namespace SdWebUiApi.Client
 {
     /// <summary>
     /// <see cref="GlobalConfiguration"/> provides a compile-time extension point for globally configuring

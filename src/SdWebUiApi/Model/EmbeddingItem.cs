@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// EmbeddingItem
     /// </summary>
     [DataContract(Name = "EmbeddingItem")]
-    public partial class EmbeddingItem : IEquatable<EmbeddingItem>, IValidatableObject
+    public partial class EmbeddingItem : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EmbeddingItem" /> class.
@@ -112,76 +112,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as EmbeddingItem);
-        }
-
-        /// <summary>
-        /// Returns true if EmbeddingItem instances are equal
-        /// </summary>
-        /// <param name="input">Instance of EmbeddingItem to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(EmbeddingItem input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Step == input.Step ||
-                    this.Step.Equals(input.Step)
-                ) && 
-                (
-                    this.SdCheckpoint == input.SdCheckpoint ||
-                    (this.SdCheckpoint != null &&
-                    this.SdCheckpoint.Equals(input.SdCheckpoint))
-                ) && 
-                (
-                    this.SdCheckpointName == input.SdCheckpointName ||
-                    (this.SdCheckpointName != null &&
-                    this.SdCheckpointName.Equals(input.SdCheckpointName))
-                ) && 
-                (
-                    this.Shape == input.Shape ||
-                    this.Shape.Equals(input.Shape)
-                ) && 
-                (
-                    this.Vectors == input.Vectors ||
-                    this.Vectors.Equals(input.Vectors)
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                hashCode = (hashCode * 59) + this.Step.GetHashCode();
-                if (this.SdCheckpoint != null)
-                {
-                    hashCode = (hashCode * 59) + this.SdCheckpoint.GetHashCode();
-                }
-                if (this.SdCheckpointName != null)
-                {
-                    hashCode = (hashCode * 59) + this.SdCheckpointName.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.Shape.GetHashCode();
-                hashCode = (hashCode * 59) + this.Vectors.GetHashCode();
-                return hashCode;
-            }
         }
 
         /// <summary>

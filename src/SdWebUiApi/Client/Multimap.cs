@@ -12,7 +12,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SdWebUpApi.Client
+namespace SdWebUiApi.Client
 {
     /// <summary>
     /// A dictionary in which one key has many associated values.

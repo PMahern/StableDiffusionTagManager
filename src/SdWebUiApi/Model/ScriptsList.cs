@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// ScriptsList
     /// </summary>
     [DataContract(Name = "ScriptsList")]
-    public partial class ScriptsList : IEquatable<ScriptsList>, IValidatableObject
+    public partial class ScriptsList : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptsList" /> class.
@@ -77,63 +77,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as ScriptsList);
-        }
-
-        /// <summary>
-        /// Returns true if ScriptsList instances are equal
-        /// </summary>
-        /// <param name="input">Instance of ScriptsList to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(ScriptsList input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Txt2img == input.Txt2img ||
-                    this.Txt2img != null &&
-                    input.Txt2img != null &&
-                    this.Txt2img.SequenceEqual(input.Txt2img)
-                ) && 
-                (
-                    this.Img2img == input.Img2img ||
-                    this.Img2img != null &&
-                    input.Img2img != null &&
-                    this.Img2img.SequenceEqual(input.Img2img)
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.Txt2img != null)
-                {
-                    hashCode = (hashCode * 59) + this.Txt2img.GetHashCode();
-                }
-                if (this.Img2img != null)
-                {
-                    hashCode = (hashCode * 59) + this.Img2img.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

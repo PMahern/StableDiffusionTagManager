@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// Flags
     /// </summary>
     [DataContract(Name = "Flags")]
-    public partial class Flags : IEquatable<Flags>, IValidatableObject
+    public partial class Flags : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Flags" /> class.
@@ -42,8 +42,11 @@ namespace SdWebUpApi.Model
         /// <param name="reinstallTorch">launch.py argument: install the appropriate version of torch even if you have some version already installed (default to false).</param>
         /// <param name="updateCheck">launch.py argument: check for updates at startup (default to false).</param>
         /// <param name="testServer">launch.py argument: configure server for testing (default to false).</param>
+        /// <param name="logStartup">launch.py argument: print a detailed log of what&#39;s happening at startup (default to false).</param>
         /// <param name="skipPrepareEnvironment">launch.py argument: skip all environment preparation (default to false).</param>
         /// <param name="skipInstall">launch.py argument: skip installation of packages (default to false).</param>
+        /// <param name="dumpSysinfo">launch.py argument: dump limited sysinfo file (without information about extensions, options) to disk and quit (default to false).</param>
+        /// <param name="loglevel">log level; one of: CRITICAL, ERROR, WARNING, INFO, DEBUG.</param>
         /// <param name="doNotDownloadClip">do not download CLIP model even if it&#39;s not included in the checkpoint (default to false).</param>
         /// <param name="dataDir">base path where all user data is stored (default to &quot;C:\stable\stable-diffusion-webui&quot;).</param>
         /// <param name="config">path to config which constructs model (default to &quot;C:\stable\stable-diffusion-webui\configs\v1-inference.yaml&quot;).</param>
@@ -62,9 +65,10 @@ namespace SdWebUpApi.Model
         /// <param name="localizationsDir">localizations directory (default to &quot;C:\stable\stable-diffusion-webui\localizations&quot;).</param>
         /// <param name="allowCode">allow custom script execution from webui (default to false).</param>
         /// <param name="medvram">enable stable diffusion model optimizations for sacrificing a little speed for low VRM usage (default to false).</param>
+        /// <param name="medvramSdxl">enable - -medvram optimization just for SDXL models (default to false).</param>
         /// <param name="lowvram">enable stable diffusion model optimizations for sacrificing a lot of speed for very low VRM usage (default to false).</param>
         /// <param name="lowram">load stable diffusion checkpoint weights to VRAM instead of RAM (default to false).</param>
-        /// <param name="alwaysBatchCondUncond">disables cond/uncond batching that is enabled to save memory with - -medvram or - -lowvram (default to false).</param>
+        /// <param name="alwaysBatchCondUncond">does not do anything (default to false).</param>
         /// <param name="unloadGfpgan">does not do anything. (default to false).</param>
         /// <param name="precision">evaluate at this precision (default to &quot;autocast&quot;).</param>
         /// <param name="upcastSampling">upcast sampling. No effect with - -no-half. Usually produces similar results to - -no-half with better performance while using less memory. (default to false).</param>
@@ -95,6 +99,7 @@ namespace SdWebUpApi.Model
         /// <param name="disableOptSplitAttention">prefer no cross-attention layer optimization for automatic choice of optimization (default to false).</param>
         /// <param name="disableNanCheck">do not check if produced images/latent spaces have nans; useful for running without a checkpoint in CI (default to false).</param>
         /// <param name="useCpu">use CPU as torch device for specified modules.</param>
+        /// <param name="disableModelLoadingRamOptimization">disable an optimization that reduces RAM use when loading a model (default to false).</param>
         /// <param name="listen">launch gradio with 0.0.0.0 as server name, allowing to respond to network requests (default to false).</param>
         /// <param name="port">launch gradio with given server port, you need root/admin rights for ports &lt; 1024, defaults to 7860 if available.</param>
         /// <param name="showNegativePrompt">does not do anything (default to false).</param>
@@ -139,6 +144,12 @@ namespace SdWebUpApi.Model
         /// <param name="addStopRoute">add /_stop route to stop server (default to false).</param>
         /// <param name="apiServerStop">enable server stop/restart/kill via api (default to false).</param>
         /// <param name="timeoutKeepAlive">set timeout_keep_alive for uvicorn (default to 30).</param>
+        /// <param name="disableAllExtensions">prevent all extensions from running regardless of any other settings (default to false).</param>
+        /// <param name="disableExtraExtensions"> prevent all extensions except built-in from running regardless of any other settings (default to false).</param>
+        /// <param name="deforumApi">Enable the Deforum API.</param>
+        /// <param name="deforumSimpleApi">Enable the simplified version of Deforum API.</param>
+        /// <param name="deforumRunNow">Comma-delimited list of deforum settings files to run immediately on startup.</param>
+        /// <param name="deforumTerminateAfterRunNow">Whether to shut down the a1111 process immediately after completing the generations passed in to &#39;- -deforum-run-now&#39;..</param>
         /// <param name="addnetMaxModelCount">The maximum number of additional network model can be used. (default to 5).</param>
         /// <param name="controlnetDir">Path to directory with ControlNet models.</param>
         /// <param name="controlnetAnnotatorModelsPath">Path to directory with annotator model directories.</param>
@@ -150,7 +161,7 @@ namespace SdWebUpApi.Model
         /// <param name="lycoDirBackcompat">Path to directory with LyCORIS networks (for backawards compatibility; can also use - -lyco-dir). (default to &quot;C:\stable\stable-diffusion-webui\models\LyCORIS&quot;).</param>
         /// <param name="scunetModelsPath">Path to directory with ScuNET model file(s). (default to &quot;C:\stable\stable-diffusion-webui\models\ScuNET&quot;).</param>
         /// <param name="swinirModelsPath">Path to directory with SwinIR model file(s). (default to &quot;C:\stable\stable-diffusion-webui\models\SwinIR&quot;).</param>
-        public Flags(bool f = false, bool updateAllExtensions = false, bool skipPythonVersionCheck = false, bool skipTorchCudaTest = false, bool reinstallXformers = false, bool reinstallTorch = false, bool updateCheck = false, bool testServer = false, bool skipPrepareEnvironment = false, bool skipInstall = false, bool doNotDownloadClip = false, string dataDir = @"C:\stable\stable-diffusion-webui", string config = @"C:\stable\stable-diffusion-webui\configs\v1-inference.yaml", string ckpt = @"C:\stable\stable-diffusion-webui\model.ckpt", string ckptDir = default(string), string vaeDir = default(string), string gfpganDir = @"./GFPGAN", string gfpganModel = default(string), bool noHalf = false, bool noHalfVae = false, bool noProgressbarHiding = false, int maxBatchCount = 16, string embeddingsDir = @"C:\stable\stable-diffusion-webui\embeddings", string textualInversionTemplatesDir = @"C:\stable\stable-diffusion-webui\textual_inversion_templates", string hypernetworkDir = @"C:\stable\stable-diffusion-webui\models\hypernetworks", string localizationsDir = @"C:\stable\stable-diffusion-webui\localizations", bool allowCode = false, bool medvram = false, bool lowvram = false, bool lowram = false, bool alwaysBatchCondUncond = false, bool unloadGfpgan = false, string precision = @"autocast", bool upcastSampling = false, bool share = false, string ngrok = default(string), string ngrokRegion = @"", Object ngrokOptions = default(Object), bool enableInsecureExtensionAccess = false, string codeformerModelsPath = @"C:\stable\stable-diffusion-webui\models\Codeformer", string gfpganModelsPath = @"C:\stable\stable-diffusion-webui\models\GFPGAN", string esrganModelsPath = @"C:\stable\stable-diffusion-webui\models\ESRGAN", string bsrganModelsPath = @"C:\stable\stable-diffusion-webui\models\BSRGAN", string realesrganModelsPath = @"C:\stable\stable-diffusion-webui\models\RealESRGAN", string clipModelsPath = default(string), bool xformers = false, bool forceEnableXformers = false, bool xformersFlashAttention = false, bool deepdanbooru = false, bool optSplitAttention = false, bool optSubQuadAttention = false, int subQuadQChunkSize = 1024, string subQuadKvChunkSize = default(string), string subQuadChunkThreshold = default(string), bool optSplitAttentionInvokeai = false, bool optSplitAttentionV1 = false, bool optSdpAttention = false, bool optSdpNoMemAttention = false, bool disableOptSplitAttention = false, bool disableNanCheck = false, List<Object> useCpu = default(List<Object>), bool listen = false, string port = default(string), bool showNegativePrompt = false, string uiConfigFile = @"C:\stable\stable-diffusion-webui\ui-config.json", bool hideUiDirConfig = false, bool freezeSettings = false, string uiSettingsFile = @"C:\stable\stable-diffusion-webui\config.json", bool gradioDebug = false, string gradioAuth = default(string), string gradioAuthPath = default(string), string gradioImg2imgTool = default(string), string gradioInpaintTool = default(string), string gradioAllowedPath = default(string), bool optChannelslast = false, string stylesFile = @"C:\stable\stable-diffusion-webui\styles.csv", bool autolaunch = false, string theme = default(string), bool useTextboxSeed = false, bool disableConsoleProgressbars = false, bool enableConsolePrompts = false, string vaePath = default(string), bool disableSafeUnpickle = false, bool api = false, string apiAuth = default(string), bool apiLog = false, bool nowebui = false, bool uiDebugMode = false, string deviceId = default(string), bool administrator = false, string corsAllowOrigins = default(string), string corsAllowOriginsRegex = default(string), string tlsKeyfile = default(string), string tlsCertfile = default(string), string disableTlsVerify = default(string), string serverName = default(string), bool gradioQueue = true, bool noGradioQueue = false, bool skipVersionCheck = false, bool noHashing = false, bool noDownloadSdModel = false, string subpath = default(string), bool addStopRoute = false, bool apiServerStop = false, int timeoutKeepAlive = 30, int addnetMaxModelCount = 5, string controlnetDir = default(string), string controlnetAnnotatorModelsPath = default(string), string noHalfControlnet = default(string), int controlnetPreprocessorCacheSize = 16, string controlnetLoglevel = @"INFO", string ldsrModelsPath = @"C:\stable\stable-diffusion-webui\models\LDSR", string loraDir = @"C:\stable\stable-diffusion-webui\models\Lora", string lycoDirBackcompat = @"C:\stable\stable-diffusion-webui\models\LyCORIS", string scunetModelsPath = @"C:\stable\stable-diffusion-webui\models\ScuNET", string swinirModelsPath = @"C:\stable\stable-diffusion-webui\models\SwinIR")
+        public Flags(bool f = false, bool updateAllExtensions = false, bool skipPythonVersionCheck = false, bool skipTorchCudaTest = false, bool reinstallXformers = false, bool reinstallTorch = false, bool updateCheck = false, bool testServer = false, bool logStartup = false, bool skipPrepareEnvironment = false, bool skipInstall = false, bool dumpSysinfo = false, string loglevel = default(string), bool doNotDownloadClip = false, string dataDir = @"C:\stable\stable-diffusion-webui", string config = @"C:\stable\stable-diffusion-webui\configs\v1-inference.yaml", string ckpt = @"C:\stable\stable-diffusion-webui\model.ckpt", string ckptDir = default(string), string vaeDir = default(string), string gfpganDir = @"./GFPGAN", string gfpganModel = default(string), bool noHalf = false, bool noHalfVae = false, bool noProgressbarHiding = false, int maxBatchCount = 16, string embeddingsDir = @"C:\stable\stable-diffusion-webui\embeddings", string textualInversionTemplatesDir = @"C:\stable\stable-diffusion-webui\textual_inversion_templates", string hypernetworkDir = @"C:\stable\stable-diffusion-webui\models\hypernetworks", string localizationsDir = @"C:\stable\stable-diffusion-webui\localizations", bool allowCode = false, bool medvram = false, bool medvramSdxl = false, bool lowvram = false, bool lowram = false, bool alwaysBatchCondUncond = false, bool unloadGfpgan = false, string precision = @"autocast", bool upcastSampling = false, bool share = false, string ngrok = default(string), string ngrokRegion = @"", Object ngrokOptions = default(Object), bool enableInsecureExtensionAccess = false, string codeformerModelsPath = @"C:\stable\stable-diffusion-webui\models\Codeformer", string gfpganModelsPath = @"C:\stable\stable-diffusion-webui\models\GFPGAN", string esrganModelsPath = @"C:\stable\stable-diffusion-webui\models\ESRGAN", string bsrganModelsPath = @"C:\stable\stable-diffusion-webui\models\BSRGAN", string realesrganModelsPath = @"C:\stable\stable-diffusion-webui\models\RealESRGAN", string clipModelsPath = default(string), bool xformers = false, bool forceEnableXformers = false, bool xformersFlashAttention = false, bool deepdanbooru = false, bool optSplitAttention = false, bool optSubQuadAttention = false, int subQuadQChunkSize = 1024, string subQuadKvChunkSize = default(string), string subQuadChunkThreshold = default(string), bool optSplitAttentionInvokeai = false, bool optSplitAttentionV1 = false, bool optSdpAttention = false, bool optSdpNoMemAttention = false, bool disableOptSplitAttention = false, bool disableNanCheck = false, List<Object> useCpu = default(List<Object>), bool disableModelLoadingRamOptimization = false, bool listen = false, string port = default(string), bool showNegativePrompt = false, string uiConfigFile = @"C:\stable\stable-diffusion-webui\ui-config.json", bool hideUiDirConfig = false, bool freezeSettings = false, string uiSettingsFile = @"C:\stable\stable-diffusion-webui\config.json", bool gradioDebug = false, string gradioAuth = default(string), string gradioAuthPath = default(string), string gradioImg2imgTool = default(string), string gradioInpaintTool = default(string), List<Object> gradioAllowedPath = default(List<Object>), bool optChannelslast = false, string stylesFile = @"C:\stable\stable-diffusion-webui\styles.csv", bool autolaunch = false, string theme = default(string), bool useTextboxSeed = false, bool disableConsoleProgressbars = false, bool enableConsolePrompts = false, string vaePath = default(string), bool disableSafeUnpickle = false, bool api = false, string apiAuth = default(string), bool apiLog = false, bool nowebui = false, bool uiDebugMode = false, string deviceId = default(string), bool administrator = false, string corsAllowOrigins = default(string), string corsAllowOriginsRegex = default(string), string tlsKeyfile = default(string), string tlsCertfile = default(string), string disableTlsVerify = default(string), string serverName = default(string), bool gradioQueue = true, bool noGradioQueue = false, bool skipVersionCheck = false, bool noHashing = false, bool noDownloadSdModel = false, string subpath = default(string), bool addStopRoute = false, bool apiServerStop = false, int timeoutKeepAlive = 30, bool disableAllExtensions = false, bool disableExtraExtensions = false, string deforumApi = default(string), string deforumSimpleApi = default(string), string deforumRunNow = default(string), string deforumTerminateAfterRunNow = default(string), int addnetMaxModelCount = 5, string controlnetDir = default(string), string controlnetAnnotatorModelsPath = default(string), string noHalfControlnet = default(string), int controlnetPreprocessorCacheSize = 16, string controlnetLoglevel = @"INFO", string ldsrModelsPath = @"C:\stable\stable-diffusion-webui\models\LDSR", string loraDir = @"C:\stable\stable-diffusion-webui\models\Lora", string lycoDirBackcompat = @"C:\stable\stable-diffusion-webui\models\LyCORIS", string scunetModelsPath = @"C:\stable\stable-diffusion-webui\models\ScuNET", string swinirModelsPath = @"C:\stable\stable-diffusion-webui\models\SwinIR")
         {
             this.F = f;
             this.UpdateAllExtensions = updateAllExtensions;
@@ -160,8 +171,11 @@ namespace SdWebUpApi.Model
             this.ReinstallTorch = reinstallTorch;
             this.UpdateCheck = updateCheck;
             this.TestServer = testServer;
+            this.LogStartup = logStartup;
             this.SkipPrepareEnvironment = skipPrepareEnvironment;
             this.SkipInstall = skipInstall;
+            this.DumpSysinfo = dumpSysinfo;
+            this.Loglevel = loglevel;
             this.DoNotDownloadClip = doNotDownloadClip;
             // use default value if no "dataDir" provided
             this.DataDir = dataDir ?? @"C:\stable\stable-diffusion-webui";
@@ -188,6 +202,7 @@ namespace SdWebUpApi.Model
             this.LocalizationsDir = localizationsDir ?? @"C:\stable\stable-diffusion-webui\localizations";
             this.AllowCode = allowCode;
             this.Medvram = medvram;
+            this.MedvramSdxl = medvramSdxl;
             this.Lowvram = lowvram;
             this.Lowram = lowram;
             this.AlwaysBatchCondUncond = alwaysBatchCondUncond;
@@ -228,6 +243,7 @@ namespace SdWebUpApi.Model
             this.DisableOptSplitAttention = disableOptSplitAttention;
             this.DisableNanCheck = disableNanCheck;
             this.UseCpu = useCpu;
+            this.DisableModelLoadingRamOptimization = disableModelLoadingRamOptimization;
             this.Listen = listen;
             this.Port = port;
             this.ShowNegativePrompt = showNegativePrompt;
@@ -275,6 +291,12 @@ namespace SdWebUpApi.Model
             this.AddStopRoute = addStopRoute;
             this.ApiServerStop = apiServerStop;
             this.TimeoutKeepAlive = timeoutKeepAlive;
+            this.DisableAllExtensions = disableAllExtensions;
+            this.DisableExtraExtensions = disableExtraExtensions;
+            this.DeforumApi = deforumApi;
+            this.DeforumSimpleApi = deforumSimpleApi;
+            this.DeforumRunNow = deforumRunNow;
+            this.DeforumTerminateAfterRunNow = deforumTerminateAfterRunNow;
             this.AddnetMaxModelCount = addnetMaxModelCount;
             this.ControlnetDir = controlnetDir;
             this.ControlnetAnnotatorModelsPath = controlnetAnnotatorModelsPath;
@@ -351,6 +373,13 @@ namespace SdWebUpApi.Model
         public bool TestServer { get; set; }
 
         /// <summary>
+        /// launch.py argument: print a detailed log of what&#39;s happening at startup
+        /// </summary>
+        /// <value>launch.py argument: print a detailed log of what&#39;s happening at startup</value>
+        [DataMember(Name = "log_startup", EmitDefaultValue = true)]
+        public bool LogStartup { get; set; }
+
+        /// <summary>
         /// launch.py argument: skip all environment preparation
         /// </summary>
         /// <value>launch.py argument: skip all environment preparation</value>
@@ -363,6 +392,20 @@ namespace SdWebUpApi.Model
         /// <value>launch.py argument: skip installation of packages</value>
         [DataMember(Name = "skip_install", EmitDefaultValue = true)]
         public bool SkipInstall { get; set; }
+
+        /// <summary>
+        /// launch.py argument: dump limited sysinfo file (without information about extensions, options) to disk and quit
+        /// </summary>
+        /// <value>launch.py argument: dump limited sysinfo file (without information about extensions, options) to disk and quit</value>
+        [DataMember(Name = "dump_sysinfo", EmitDefaultValue = true)]
+        public bool DumpSysinfo { get; set; }
+
+        /// <summary>
+        /// log level; one of: CRITICAL, ERROR, WARNING, INFO, DEBUG
+        /// </summary>
+        /// <value>log level; one of: CRITICAL, ERROR, WARNING, INFO, DEBUG</value>
+        [DataMember(Name = "loglevel", EmitDefaultValue = false)]
+        public string Loglevel { get; set; }
 
         /// <summary>
         /// do not download CLIP model even if it&#39;s not included in the checkpoint
@@ -491,6 +534,13 @@ namespace SdWebUpApi.Model
         public bool Medvram { get; set; }
 
         /// <summary>
+        /// enable - -medvram optimization just for SDXL models
+        /// </summary>
+        /// <value>enable - -medvram optimization just for SDXL models</value>
+        [DataMember(Name = "medvram_sdxl", EmitDefaultValue = true)]
+        public bool MedvramSdxl { get; set; }
+
+        /// <summary>
         /// enable stable diffusion model optimizations for sacrificing a lot of speed for very low VRM usage
         /// </summary>
         /// <value>enable stable diffusion model optimizations for sacrificing a lot of speed for very low VRM usage</value>
@@ -505,9 +555,9 @@ namespace SdWebUpApi.Model
         public bool Lowram { get; set; }
 
         /// <summary>
-        /// disables cond/uncond batching that is enabled to save memory with - -medvram or - -lowvram
+        /// does not do anything
         /// </summary>
-        /// <value>disables cond/uncond batching that is enabled to save memory with - -medvram or - -lowvram</value>
+        /// <value>does not do anything</value>
         [DataMember(Name = "always_batch_cond_uncond", EmitDefaultValue = true)]
         public bool AlwaysBatchCondUncond { get; set; }
 
@@ -722,6 +772,13 @@ namespace SdWebUpApi.Model
         public List<Object> UseCpu { get; set; }
 
         /// <summary>
+        /// disable an optimization that reduces RAM use when loading a model
+        /// </summary>
+        /// <value>disable an optimization that reduces RAM use when loading a model</value>
+        [DataMember(Name = "disable_model_loading_ram_optimization", EmitDefaultValue = true)]
+        public bool DisableModelLoadingRamOptimization { get; set; }
+
+        /// <summary>
         /// launch gradio with 0.0.0.0 as server name, allowing to respond to network requests
         /// </summary>
         /// <value>launch gradio with 0.0.0.0 as server name, allowing to respond to network requests</value>
@@ -810,7 +867,7 @@ namespace SdWebUpApi.Model
         /// </summary>
         /// <value>add path to gradio&#39;s allowed_paths, make it possible to serve files from it</value>
         [DataMember(Name = "gradio_allowed_path", EmitDefaultValue = false)]
-        public string GradioAllowedPath { get; set; }
+        public List<Object> GradioAllowedPath { get; set; }
 
         /// <summary>
         /// change memory type for stable diffusion to channels last
@@ -1030,6 +1087,48 @@ namespace SdWebUpApi.Model
         public int TimeoutKeepAlive { get; set; }
 
         /// <summary>
+        /// prevent all extensions from running regardless of any other settings
+        /// </summary>
+        /// <value>prevent all extensions from running regardless of any other settings</value>
+        [DataMember(Name = "disable_all_extensions", EmitDefaultValue = true)]
+        public bool DisableAllExtensions { get; set; }
+
+        /// <summary>
+        ///  prevent all extensions except built-in from running regardless of any other settings
+        /// </summary>
+        /// <value> prevent all extensions except built-in from running regardless of any other settings</value>
+        [DataMember(Name = "disable_extra_extensions", EmitDefaultValue = true)]
+        public bool DisableExtraExtensions { get; set; }
+
+        /// <summary>
+        /// Enable the Deforum API
+        /// </summary>
+        /// <value>Enable the Deforum API</value>
+        [DataMember(Name = "deforum_api", EmitDefaultValue = false)]
+        public string DeforumApi { get; set; }
+
+        /// <summary>
+        /// Enable the simplified version of Deforum API
+        /// </summary>
+        /// <value>Enable the simplified version of Deforum API</value>
+        [DataMember(Name = "deforum_simple_api", EmitDefaultValue = false)]
+        public string DeforumSimpleApi { get; set; }
+
+        /// <summary>
+        /// Comma-delimited list of deforum settings files to run immediately on startup
+        /// </summary>
+        /// <value>Comma-delimited list of deforum settings files to run immediately on startup</value>
+        [DataMember(Name = "deforum_run_now", EmitDefaultValue = false)]
+        public string DeforumRunNow { get; set; }
+
+        /// <summary>
+        /// Whether to shut down the a1111 process immediately after completing the generations passed in to &#39;- -deforum-run-now&#39;.
+        /// </summary>
+        /// <value>Whether to shut down the a1111 process immediately after completing the generations passed in to &#39;- -deforum-run-now&#39;.</value>
+        [DataMember(Name = "deforum_terminate_after_run_now", EmitDefaultValue = false)]
+        public string DeforumTerminateAfterRunNow { get; set; }
+
+        /// <summary>
         /// The maximum number of additional network model can be used.
         /// </summary>
         /// <value>The maximum number of additional network model can be used.</value>
@@ -1122,8 +1221,11 @@ namespace SdWebUpApi.Model
             sb.Append("  ReinstallTorch: ").Append(ReinstallTorch).Append("\n");
             sb.Append("  UpdateCheck: ").Append(UpdateCheck).Append("\n");
             sb.Append("  TestServer: ").Append(TestServer).Append("\n");
+            sb.Append("  LogStartup: ").Append(LogStartup).Append("\n");
             sb.Append("  SkipPrepareEnvironment: ").Append(SkipPrepareEnvironment).Append("\n");
             sb.Append("  SkipInstall: ").Append(SkipInstall).Append("\n");
+            sb.Append("  DumpSysinfo: ").Append(DumpSysinfo).Append("\n");
+            sb.Append("  Loglevel: ").Append(Loglevel).Append("\n");
             sb.Append("  DoNotDownloadClip: ").Append(DoNotDownloadClip).Append("\n");
             sb.Append("  DataDir: ").Append(DataDir).Append("\n");
             sb.Append("  Config: ").Append(Config).Append("\n");
@@ -1142,6 +1244,7 @@ namespace SdWebUpApi.Model
             sb.Append("  LocalizationsDir: ").Append(LocalizationsDir).Append("\n");
             sb.Append("  AllowCode: ").Append(AllowCode).Append("\n");
             sb.Append("  Medvram: ").Append(Medvram).Append("\n");
+            sb.Append("  MedvramSdxl: ").Append(MedvramSdxl).Append("\n");
             sb.Append("  Lowvram: ").Append(Lowvram).Append("\n");
             sb.Append("  Lowram: ").Append(Lowram).Append("\n");
             sb.Append("  AlwaysBatchCondUncond: ").Append(AlwaysBatchCondUncond).Append("\n");
@@ -1175,6 +1278,7 @@ namespace SdWebUpApi.Model
             sb.Append("  DisableOptSplitAttention: ").Append(DisableOptSplitAttention).Append("\n");
             sb.Append("  DisableNanCheck: ").Append(DisableNanCheck).Append("\n");
             sb.Append("  UseCpu: ").Append(UseCpu).Append("\n");
+            sb.Append("  DisableModelLoadingRamOptimization: ").Append(DisableModelLoadingRamOptimization).Append("\n");
             sb.Append("  Listen: ").Append(Listen).Append("\n");
             sb.Append("  Port: ").Append(Port).Append("\n");
             sb.Append("  ShowNegativePrompt: ").Append(ShowNegativePrompt).Append("\n");
@@ -1219,6 +1323,12 @@ namespace SdWebUpApi.Model
             sb.Append("  AddStopRoute: ").Append(AddStopRoute).Append("\n");
             sb.Append("  ApiServerStop: ").Append(ApiServerStop).Append("\n");
             sb.Append("  TimeoutKeepAlive: ").Append(TimeoutKeepAlive).Append("\n");
+            sb.Append("  DisableAllExtensions: ").Append(DisableAllExtensions).Append("\n");
+            sb.Append("  DisableExtraExtensions: ").Append(DisableExtraExtensions).Append("\n");
+            sb.Append("  DeforumApi: ").Append(DeforumApi).Append("\n");
+            sb.Append("  DeforumSimpleApi: ").Append(DeforumSimpleApi).Append("\n");
+            sb.Append("  DeforumRunNow: ").Append(DeforumRunNow).Append("\n");
+            sb.Append("  DeforumTerminateAfterRunNow: ").Append(DeforumTerminateAfterRunNow).Append("\n");
             sb.Append("  AddnetMaxModelCount: ").Append(AddnetMaxModelCount).Append("\n");
             sb.Append("  ControlnetDir: ").Append(ControlnetDir).Append("\n");
             sb.Append("  ControlnetAnnotatorModelsPath: ").Append(ControlnetAnnotatorModelsPath).Append("\n");
@@ -1241,836 +1351,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as Flags);
-        }
-
-        /// <summary>
-        /// Returns true if Flags instances are equal
-        /// </summary>
-        /// <param name="input">Instance of Flags to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(Flags input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.F == input.F ||
-                    this.F.Equals(input.F)
-                ) && 
-                (
-                    this.UpdateAllExtensions == input.UpdateAllExtensions ||
-                    this.UpdateAllExtensions.Equals(input.UpdateAllExtensions)
-                ) && 
-                (
-                    this.SkipPythonVersionCheck == input.SkipPythonVersionCheck ||
-                    this.SkipPythonVersionCheck.Equals(input.SkipPythonVersionCheck)
-                ) && 
-                (
-                    this.SkipTorchCudaTest == input.SkipTorchCudaTest ||
-                    this.SkipTorchCudaTest.Equals(input.SkipTorchCudaTest)
-                ) && 
-                (
-                    this.ReinstallXformers == input.ReinstallXformers ||
-                    this.ReinstallXformers.Equals(input.ReinstallXformers)
-                ) && 
-                (
-                    this.ReinstallTorch == input.ReinstallTorch ||
-                    this.ReinstallTorch.Equals(input.ReinstallTorch)
-                ) && 
-                (
-                    this.UpdateCheck == input.UpdateCheck ||
-                    this.UpdateCheck.Equals(input.UpdateCheck)
-                ) && 
-                (
-                    this.TestServer == input.TestServer ||
-                    this.TestServer.Equals(input.TestServer)
-                ) && 
-                (
-                    this.SkipPrepareEnvironment == input.SkipPrepareEnvironment ||
-                    this.SkipPrepareEnvironment.Equals(input.SkipPrepareEnvironment)
-                ) && 
-                (
-                    this.SkipInstall == input.SkipInstall ||
-                    this.SkipInstall.Equals(input.SkipInstall)
-                ) && 
-                (
-                    this.DoNotDownloadClip == input.DoNotDownloadClip ||
-                    this.DoNotDownloadClip.Equals(input.DoNotDownloadClip)
-                ) && 
-                (
-                    this.DataDir == input.DataDir ||
-                    (this.DataDir != null &&
-                    this.DataDir.Equals(input.DataDir))
-                ) && 
-                (
-                    this.Config == input.Config ||
-                    (this.Config != null &&
-                    this.Config.Equals(input.Config))
-                ) && 
-                (
-                    this.Ckpt == input.Ckpt ||
-                    (this.Ckpt != null &&
-                    this.Ckpt.Equals(input.Ckpt))
-                ) && 
-                (
-                    this.CkptDir == input.CkptDir ||
-                    (this.CkptDir != null &&
-                    this.CkptDir.Equals(input.CkptDir))
-                ) && 
-                (
-                    this.VaeDir == input.VaeDir ||
-                    (this.VaeDir != null &&
-                    this.VaeDir.Equals(input.VaeDir))
-                ) && 
-                (
-                    this.GfpganDir == input.GfpganDir ||
-                    (this.GfpganDir != null &&
-                    this.GfpganDir.Equals(input.GfpganDir))
-                ) && 
-                (
-                    this.GfpganModel == input.GfpganModel ||
-                    (this.GfpganModel != null &&
-                    this.GfpganModel.Equals(input.GfpganModel))
-                ) && 
-                (
-                    this.NoHalf == input.NoHalf ||
-                    this.NoHalf.Equals(input.NoHalf)
-                ) && 
-                (
-                    this.NoHalfVae == input.NoHalfVae ||
-                    this.NoHalfVae.Equals(input.NoHalfVae)
-                ) && 
-                (
-                    this.NoProgressbarHiding == input.NoProgressbarHiding ||
-                    this.NoProgressbarHiding.Equals(input.NoProgressbarHiding)
-                ) && 
-                (
-                    this.MaxBatchCount == input.MaxBatchCount ||
-                    this.MaxBatchCount.Equals(input.MaxBatchCount)
-                ) && 
-                (
-                    this.EmbeddingsDir == input.EmbeddingsDir ||
-                    (this.EmbeddingsDir != null &&
-                    this.EmbeddingsDir.Equals(input.EmbeddingsDir))
-                ) && 
-                (
-                    this.TextualInversionTemplatesDir == input.TextualInversionTemplatesDir ||
-                    (this.TextualInversionTemplatesDir != null &&
-                    this.TextualInversionTemplatesDir.Equals(input.TextualInversionTemplatesDir))
-                ) && 
-                (
-                    this.HypernetworkDir == input.HypernetworkDir ||
-                    (this.HypernetworkDir != null &&
-                    this.HypernetworkDir.Equals(input.HypernetworkDir))
-                ) && 
-                (
-                    this.LocalizationsDir == input.LocalizationsDir ||
-                    (this.LocalizationsDir != null &&
-                    this.LocalizationsDir.Equals(input.LocalizationsDir))
-                ) && 
-                (
-                    this.AllowCode == input.AllowCode ||
-                    this.AllowCode.Equals(input.AllowCode)
-                ) && 
-                (
-                    this.Medvram == input.Medvram ||
-                    this.Medvram.Equals(input.Medvram)
-                ) && 
-                (
-                    this.Lowvram == input.Lowvram ||
-                    this.Lowvram.Equals(input.Lowvram)
-                ) && 
-                (
-                    this.Lowram == input.Lowram ||
-                    this.Lowram.Equals(input.Lowram)
-                ) && 
-                (
-                    this.AlwaysBatchCondUncond == input.AlwaysBatchCondUncond ||
-                    this.AlwaysBatchCondUncond.Equals(input.AlwaysBatchCondUncond)
-                ) && 
-                (
-                    this.UnloadGfpgan == input.UnloadGfpgan ||
-                    this.UnloadGfpgan.Equals(input.UnloadGfpgan)
-                ) && 
-                (
-                    this.Precision == input.Precision ||
-                    (this.Precision != null &&
-                    this.Precision.Equals(input.Precision))
-                ) && 
-                (
-                    this.UpcastSampling == input.UpcastSampling ||
-                    this.UpcastSampling.Equals(input.UpcastSampling)
-                ) && 
-                (
-                    this.Share == input.Share ||
-                    this.Share.Equals(input.Share)
-                ) && 
-                (
-                    this.Ngrok == input.Ngrok ||
-                    (this.Ngrok != null &&
-                    this.Ngrok.Equals(input.Ngrok))
-                ) && 
-                (
-                    this.NgrokRegion == input.NgrokRegion ||
-                    (this.NgrokRegion != null &&
-                    this.NgrokRegion.Equals(input.NgrokRegion))
-                ) && 
-                (
-                    this.NgrokOptions == input.NgrokOptions ||
-                    (this.NgrokOptions != null &&
-                    this.NgrokOptions.Equals(input.NgrokOptions))
-                ) && 
-                (
-                    this.EnableInsecureExtensionAccess == input.EnableInsecureExtensionAccess ||
-                    this.EnableInsecureExtensionAccess.Equals(input.EnableInsecureExtensionAccess)
-                ) && 
-                (
-                    this.CodeformerModelsPath == input.CodeformerModelsPath ||
-                    (this.CodeformerModelsPath != null &&
-                    this.CodeformerModelsPath.Equals(input.CodeformerModelsPath))
-                ) && 
-                (
-                    this.GfpganModelsPath == input.GfpganModelsPath ||
-                    (this.GfpganModelsPath != null &&
-                    this.GfpganModelsPath.Equals(input.GfpganModelsPath))
-                ) && 
-                (
-                    this.EsrganModelsPath == input.EsrganModelsPath ||
-                    (this.EsrganModelsPath != null &&
-                    this.EsrganModelsPath.Equals(input.EsrganModelsPath))
-                ) && 
-                (
-                    this.BsrganModelsPath == input.BsrganModelsPath ||
-                    (this.BsrganModelsPath != null &&
-                    this.BsrganModelsPath.Equals(input.BsrganModelsPath))
-                ) && 
-                (
-                    this.RealesrganModelsPath == input.RealesrganModelsPath ||
-                    (this.RealesrganModelsPath != null &&
-                    this.RealesrganModelsPath.Equals(input.RealesrganModelsPath))
-                ) && 
-                (
-                    this.ClipModelsPath == input.ClipModelsPath ||
-                    (this.ClipModelsPath != null &&
-                    this.ClipModelsPath.Equals(input.ClipModelsPath))
-                ) && 
-                (
-                    this.Xformers == input.Xformers ||
-                    this.Xformers.Equals(input.Xformers)
-                ) && 
-                (
-                    this.ForceEnableXformers == input.ForceEnableXformers ||
-                    this.ForceEnableXformers.Equals(input.ForceEnableXformers)
-                ) && 
-                (
-                    this.XformersFlashAttention == input.XformersFlashAttention ||
-                    this.XformersFlashAttention.Equals(input.XformersFlashAttention)
-                ) && 
-                (
-                    this.Deepdanbooru == input.Deepdanbooru ||
-                    this.Deepdanbooru.Equals(input.Deepdanbooru)
-                ) && 
-                (
-                    this.OptSplitAttention == input.OptSplitAttention ||
-                    this.OptSplitAttention.Equals(input.OptSplitAttention)
-                ) && 
-                (
-                    this.OptSubQuadAttention == input.OptSubQuadAttention ||
-                    this.OptSubQuadAttention.Equals(input.OptSubQuadAttention)
-                ) && 
-                (
-                    this.SubQuadQChunkSize == input.SubQuadQChunkSize ||
-                    this.SubQuadQChunkSize.Equals(input.SubQuadQChunkSize)
-                ) && 
-                (
-                    this.SubQuadKvChunkSize == input.SubQuadKvChunkSize ||
-                    (this.SubQuadKvChunkSize != null &&
-                    this.SubQuadKvChunkSize.Equals(input.SubQuadKvChunkSize))
-                ) && 
-                (
-                    this.SubQuadChunkThreshold == input.SubQuadChunkThreshold ||
-                    (this.SubQuadChunkThreshold != null &&
-                    this.SubQuadChunkThreshold.Equals(input.SubQuadChunkThreshold))
-                ) && 
-                (
-                    this.OptSplitAttentionInvokeai == input.OptSplitAttentionInvokeai ||
-                    this.OptSplitAttentionInvokeai.Equals(input.OptSplitAttentionInvokeai)
-                ) && 
-                (
-                    this.OptSplitAttentionV1 == input.OptSplitAttentionV1 ||
-                    this.OptSplitAttentionV1.Equals(input.OptSplitAttentionV1)
-                ) && 
-                (
-                    this.OptSdpAttention == input.OptSdpAttention ||
-                    this.OptSdpAttention.Equals(input.OptSdpAttention)
-                ) && 
-                (
-                    this.OptSdpNoMemAttention == input.OptSdpNoMemAttention ||
-                    this.OptSdpNoMemAttention.Equals(input.OptSdpNoMemAttention)
-                ) && 
-                (
-                    this.DisableOptSplitAttention == input.DisableOptSplitAttention ||
-                    this.DisableOptSplitAttention.Equals(input.DisableOptSplitAttention)
-                ) && 
-                (
-                    this.DisableNanCheck == input.DisableNanCheck ||
-                    this.DisableNanCheck.Equals(input.DisableNanCheck)
-                ) && 
-                (
-                    this.UseCpu == input.UseCpu ||
-                    this.UseCpu != null &&
-                    input.UseCpu != null &&
-                    this.UseCpu.SequenceEqual(input.UseCpu)
-                ) && 
-                (
-                    this.Listen == input.Listen ||
-                    this.Listen.Equals(input.Listen)
-                ) && 
-                (
-                    this.Port == input.Port ||
-                    (this.Port != null &&
-                    this.Port.Equals(input.Port))
-                ) && 
-                (
-                    this.ShowNegativePrompt == input.ShowNegativePrompt ||
-                    this.ShowNegativePrompt.Equals(input.ShowNegativePrompt)
-                ) && 
-                (
-                    this.UiConfigFile == input.UiConfigFile ||
-                    (this.UiConfigFile != null &&
-                    this.UiConfigFile.Equals(input.UiConfigFile))
-                ) && 
-                (
-                    this.HideUiDirConfig == input.HideUiDirConfig ||
-                    this.HideUiDirConfig.Equals(input.HideUiDirConfig)
-                ) && 
-                (
-                    this.FreezeSettings == input.FreezeSettings ||
-                    this.FreezeSettings.Equals(input.FreezeSettings)
-                ) && 
-                (
-                    this.UiSettingsFile == input.UiSettingsFile ||
-                    (this.UiSettingsFile != null &&
-                    this.UiSettingsFile.Equals(input.UiSettingsFile))
-                ) && 
-                (
-                    this.GradioDebug == input.GradioDebug ||
-                    this.GradioDebug.Equals(input.GradioDebug)
-                ) && 
-                (
-                    this.GradioAuth == input.GradioAuth ||
-                    (this.GradioAuth != null &&
-                    this.GradioAuth.Equals(input.GradioAuth))
-                ) && 
-                (
-                    this.GradioAuthPath == input.GradioAuthPath ||
-                    (this.GradioAuthPath != null &&
-                    this.GradioAuthPath.Equals(input.GradioAuthPath))
-                ) && 
-                (
-                    this.GradioImg2imgTool == input.GradioImg2imgTool ||
-                    (this.GradioImg2imgTool != null &&
-                    this.GradioImg2imgTool.Equals(input.GradioImg2imgTool))
-                ) && 
-                (
-                    this.GradioInpaintTool == input.GradioInpaintTool ||
-                    (this.GradioInpaintTool != null &&
-                    this.GradioInpaintTool.Equals(input.GradioInpaintTool))
-                ) && 
-                (
-                    this.GradioAllowedPath == input.GradioAllowedPath ||
-                    (this.GradioAllowedPath != null &&
-                    this.GradioAllowedPath.Equals(input.GradioAllowedPath))
-                ) && 
-                (
-                    this.OptChannelslast == input.OptChannelslast ||
-                    this.OptChannelslast.Equals(input.OptChannelslast)
-                ) && 
-                (
-                    this.StylesFile == input.StylesFile ||
-                    (this.StylesFile != null &&
-                    this.StylesFile.Equals(input.StylesFile))
-                ) && 
-                (
-                    this.Autolaunch == input.Autolaunch ||
-                    this.Autolaunch.Equals(input.Autolaunch)
-                ) && 
-                (
-                    this.Theme == input.Theme ||
-                    (this.Theme != null &&
-                    this.Theme.Equals(input.Theme))
-                ) && 
-                (
-                    this.UseTextboxSeed == input.UseTextboxSeed ||
-                    this.UseTextboxSeed.Equals(input.UseTextboxSeed)
-                ) && 
-                (
-                    this.DisableConsoleProgressbars == input.DisableConsoleProgressbars ||
-                    this.DisableConsoleProgressbars.Equals(input.DisableConsoleProgressbars)
-                ) && 
-                (
-                    this.EnableConsolePrompts == input.EnableConsolePrompts ||
-                    this.EnableConsolePrompts.Equals(input.EnableConsolePrompts)
-                ) && 
-                (
-                    this.VaePath == input.VaePath ||
-                    (this.VaePath != null &&
-                    this.VaePath.Equals(input.VaePath))
-                ) && 
-                (
-                    this.DisableSafeUnpickle == input.DisableSafeUnpickle ||
-                    this.DisableSafeUnpickle.Equals(input.DisableSafeUnpickle)
-                ) && 
-                (
-                    this.Api == input.Api ||
-                    this.Api.Equals(input.Api)
-                ) && 
-                (
-                    this.ApiAuth == input.ApiAuth ||
-                    (this.ApiAuth != null &&
-                    this.ApiAuth.Equals(input.ApiAuth))
-                ) && 
-                (
-                    this.ApiLog == input.ApiLog ||
-                    this.ApiLog.Equals(input.ApiLog)
-                ) && 
-                (
-                    this.Nowebui == input.Nowebui ||
-                    this.Nowebui.Equals(input.Nowebui)
-                ) && 
-                (
-                    this.UiDebugMode == input.UiDebugMode ||
-                    this.UiDebugMode.Equals(input.UiDebugMode)
-                ) && 
-                (
-                    this.DeviceId == input.DeviceId ||
-                    (this.DeviceId != null &&
-                    this.DeviceId.Equals(input.DeviceId))
-                ) && 
-                (
-                    this.Administrator == input.Administrator ||
-                    this.Administrator.Equals(input.Administrator)
-                ) && 
-                (
-                    this.CorsAllowOrigins == input.CorsAllowOrigins ||
-                    (this.CorsAllowOrigins != null &&
-                    this.CorsAllowOrigins.Equals(input.CorsAllowOrigins))
-                ) && 
-                (
-                    this.CorsAllowOriginsRegex == input.CorsAllowOriginsRegex ||
-                    (this.CorsAllowOriginsRegex != null &&
-                    this.CorsAllowOriginsRegex.Equals(input.CorsAllowOriginsRegex))
-                ) && 
-                (
-                    this.TlsKeyfile == input.TlsKeyfile ||
-                    (this.TlsKeyfile != null &&
-                    this.TlsKeyfile.Equals(input.TlsKeyfile))
-                ) && 
-                (
-                    this.TlsCertfile == input.TlsCertfile ||
-                    (this.TlsCertfile != null &&
-                    this.TlsCertfile.Equals(input.TlsCertfile))
-                ) && 
-                (
-                    this.DisableTlsVerify == input.DisableTlsVerify ||
-                    (this.DisableTlsVerify != null &&
-                    this.DisableTlsVerify.Equals(input.DisableTlsVerify))
-                ) && 
-                (
-                    this.ServerName == input.ServerName ||
-                    (this.ServerName != null &&
-                    this.ServerName.Equals(input.ServerName))
-                ) && 
-                (
-                    this.GradioQueue == input.GradioQueue ||
-                    this.GradioQueue.Equals(input.GradioQueue)
-                ) && 
-                (
-                    this.NoGradioQueue == input.NoGradioQueue ||
-                    this.NoGradioQueue.Equals(input.NoGradioQueue)
-                ) && 
-                (
-                    this.SkipVersionCheck == input.SkipVersionCheck ||
-                    this.SkipVersionCheck.Equals(input.SkipVersionCheck)
-                ) && 
-                (
-                    this.NoHashing == input.NoHashing ||
-                    this.NoHashing.Equals(input.NoHashing)
-                ) && 
-                (
-                    this.NoDownloadSdModel == input.NoDownloadSdModel ||
-                    this.NoDownloadSdModel.Equals(input.NoDownloadSdModel)
-                ) && 
-                (
-                    this.Subpath == input.Subpath ||
-                    (this.Subpath != null &&
-                    this.Subpath.Equals(input.Subpath))
-                ) && 
-                (
-                    this.AddStopRoute == input.AddStopRoute ||
-                    this.AddStopRoute.Equals(input.AddStopRoute)
-                ) && 
-                (
-                    this.ApiServerStop == input.ApiServerStop ||
-                    this.ApiServerStop.Equals(input.ApiServerStop)
-                ) && 
-                (
-                    this.TimeoutKeepAlive == input.TimeoutKeepAlive ||
-                    this.TimeoutKeepAlive.Equals(input.TimeoutKeepAlive)
-                ) && 
-                (
-                    this.AddnetMaxModelCount == input.AddnetMaxModelCount ||
-                    this.AddnetMaxModelCount.Equals(input.AddnetMaxModelCount)
-                ) && 
-                (
-                    this.ControlnetDir == input.ControlnetDir ||
-                    (this.ControlnetDir != null &&
-                    this.ControlnetDir.Equals(input.ControlnetDir))
-                ) && 
-                (
-                    this.ControlnetAnnotatorModelsPath == input.ControlnetAnnotatorModelsPath ||
-                    (this.ControlnetAnnotatorModelsPath != null &&
-                    this.ControlnetAnnotatorModelsPath.Equals(input.ControlnetAnnotatorModelsPath))
-                ) && 
-                (
-                    this.NoHalfControlnet == input.NoHalfControlnet ||
-                    (this.NoHalfControlnet != null &&
-                    this.NoHalfControlnet.Equals(input.NoHalfControlnet))
-                ) && 
-                (
-                    this.ControlnetPreprocessorCacheSize == input.ControlnetPreprocessorCacheSize ||
-                    this.ControlnetPreprocessorCacheSize.Equals(input.ControlnetPreprocessorCacheSize)
-                ) && 
-                (
-                    this.ControlnetLoglevel == input.ControlnetLoglevel ||
-                    (this.ControlnetLoglevel != null &&
-                    this.ControlnetLoglevel.Equals(input.ControlnetLoglevel))
-                ) && 
-                (
-                    this.LdsrModelsPath == input.LdsrModelsPath ||
-                    (this.LdsrModelsPath != null &&
-                    this.LdsrModelsPath.Equals(input.LdsrModelsPath))
-                ) && 
-                (
-                    this.LoraDir == input.LoraDir ||
-                    (this.LoraDir != null &&
-                    this.LoraDir.Equals(input.LoraDir))
-                ) && 
-                (
-                    this.LycoDirBackcompat == input.LycoDirBackcompat ||
-                    (this.LycoDirBackcompat != null &&
-                    this.LycoDirBackcompat.Equals(input.LycoDirBackcompat))
-                ) && 
-                (
-                    this.ScunetModelsPath == input.ScunetModelsPath ||
-                    (this.ScunetModelsPath != null &&
-                    this.ScunetModelsPath.Equals(input.ScunetModelsPath))
-                ) && 
-                (
-                    this.SwinirModelsPath == input.SwinirModelsPath ||
-                    (this.SwinirModelsPath != null &&
-                    this.SwinirModelsPath.Equals(input.SwinirModelsPath))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                hashCode = (hashCode * 59) + this.F.GetHashCode();
-                hashCode = (hashCode * 59) + this.UpdateAllExtensions.GetHashCode();
-                hashCode = (hashCode * 59) + this.SkipPythonVersionCheck.GetHashCode();
-                hashCode = (hashCode * 59) + this.SkipTorchCudaTest.GetHashCode();
-                hashCode = (hashCode * 59) + this.ReinstallXformers.GetHashCode();
-                hashCode = (hashCode * 59) + this.ReinstallTorch.GetHashCode();
-                hashCode = (hashCode * 59) + this.UpdateCheck.GetHashCode();
-                hashCode = (hashCode * 59) + this.TestServer.GetHashCode();
-                hashCode = (hashCode * 59) + this.SkipPrepareEnvironment.GetHashCode();
-                hashCode = (hashCode * 59) + this.SkipInstall.GetHashCode();
-                hashCode = (hashCode * 59) + this.DoNotDownloadClip.GetHashCode();
-                if (this.DataDir != null)
-                {
-                    hashCode = (hashCode * 59) + this.DataDir.GetHashCode();
-                }
-                if (this.Config != null)
-                {
-                    hashCode = (hashCode * 59) + this.Config.GetHashCode();
-                }
-                if (this.Ckpt != null)
-                {
-                    hashCode = (hashCode * 59) + this.Ckpt.GetHashCode();
-                }
-                if (this.CkptDir != null)
-                {
-                    hashCode = (hashCode * 59) + this.CkptDir.GetHashCode();
-                }
-                if (this.VaeDir != null)
-                {
-                    hashCode = (hashCode * 59) + this.VaeDir.GetHashCode();
-                }
-                if (this.GfpganDir != null)
-                {
-                    hashCode = (hashCode * 59) + this.GfpganDir.GetHashCode();
-                }
-                if (this.GfpganModel != null)
-                {
-                    hashCode = (hashCode * 59) + this.GfpganModel.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.NoHalf.GetHashCode();
-                hashCode = (hashCode * 59) + this.NoHalfVae.GetHashCode();
-                hashCode = (hashCode * 59) + this.NoProgressbarHiding.GetHashCode();
-                hashCode = (hashCode * 59) + this.MaxBatchCount.GetHashCode();
-                if (this.EmbeddingsDir != null)
-                {
-                    hashCode = (hashCode * 59) + this.EmbeddingsDir.GetHashCode();
-                }
-                if (this.TextualInversionTemplatesDir != null)
-                {
-                    hashCode = (hashCode * 59) + this.TextualInversionTemplatesDir.GetHashCode();
-                }
-                if (this.HypernetworkDir != null)
-                {
-                    hashCode = (hashCode * 59) + this.HypernetworkDir.GetHashCode();
-                }
-                if (this.LocalizationsDir != null)
-                {
-                    hashCode = (hashCode * 59) + this.LocalizationsDir.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.AllowCode.GetHashCode();
-                hashCode = (hashCode * 59) + this.Medvram.GetHashCode();
-                hashCode = (hashCode * 59) + this.Lowvram.GetHashCode();
-                hashCode = (hashCode * 59) + this.Lowram.GetHashCode();
-                hashCode = (hashCode * 59) + this.AlwaysBatchCondUncond.GetHashCode();
-                hashCode = (hashCode * 59) + this.UnloadGfpgan.GetHashCode();
-                if (this.Precision != null)
-                {
-                    hashCode = (hashCode * 59) + this.Precision.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.UpcastSampling.GetHashCode();
-                hashCode = (hashCode * 59) + this.Share.GetHashCode();
-                if (this.Ngrok != null)
-                {
-                    hashCode = (hashCode * 59) + this.Ngrok.GetHashCode();
-                }
-                if (this.NgrokRegion != null)
-                {
-                    hashCode = (hashCode * 59) + this.NgrokRegion.GetHashCode();
-                }
-                if (this.NgrokOptions != null)
-                {
-                    hashCode = (hashCode * 59) + this.NgrokOptions.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.EnableInsecureExtensionAccess.GetHashCode();
-                if (this.CodeformerModelsPath != null)
-                {
-                    hashCode = (hashCode * 59) + this.CodeformerModelsPath.GetHashCode();
-                }
-                if (this.GfpganModelsPath != null)
-                {
-                    hashCode = (hashCode * 59) + this.GfpganModelsPath.GetHashCode();
-                }
-                if (this.EsrganModelsPath != null)
-                {
-                    hashCode = (hashCode * 59) + this.EsrganModelsPath.GetHashCode();
-                }
-                if (this.BsrganModelsPath != null)
-                {
-                    hashCode = (hashCode * 59) + this.BsrganModelsPath.GetHashCode();
-                }
-                if (this.RealesrganModelsPath != null)
-                {
-                    hashCode = (hashCode * 59) + this.RealesrganModelsPath.GetHashCode();
-                }
-                if (this.ClipModelsPath != null)
-                {
-                    hashCode = (hashCode * 59) + this.ClipModelsPath.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.Xformers.GetHashCode();
-                hashCode = (hashCode * 59) + this.ForceEnableXformers.GetHashCode();
-                hashCode = (hashCode * 59) + this.XformersFlashAttention.GetHashCode();
-                hashCode = (hashCode * 59) + this.Deepdanbooru.GetHashCode();
-                hashCode = (hashCode * 59) + this.OptSplitAttention.GetHashCode();
-                hashCode = (hashCode * 59) + this.OptSubQuadAttention.GetHashCode();
-                hashCode = (hashCode * 59) + this.SubQuadQChunkSize.GetHashCode();
-                if (this.SubQuadKvChunkSize != null)
-                {
-                    hashCode = (hashCode * 59) + this.SubQuadKvChunkSize.GetHashCode();
-                }
-                if (this.SubQuadChunkThreshold != null)
-                {
-                    hashCode = (hashCode * 59) + this.SubQuadChunkThreshold.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.OptSplitAttentionInvokeai.GetHashCode();
-                hashCode = (hashCode * 59) + this.OptSplitAttentionV1.GetHashCode();
-                hashCode = (hashCode * 59) + this.OptSdpAttention.GetHashCode();
-                hashCode = (hashCode * 59) + this.OptSdpNoMemAttention.GetHashCode();
-                hashCode = (hashCode * 59) + this.DisableOptSplitAttention.GetHashCode();
-                hashCode = (hashCode * 59) + this.DisableNanCheck.GetHashCode();
-                if (this.UseCpu != null)
-                {
-                    hashCode = (hashCode * 59) + this.UseCpu.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.Listen.GetHashCode();
-                if (this.Port != null)
-                {
-                    hashCode = (hashCode * 59) + this.Port.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.ShowNegativePrompt.GetHashCode();
-                if (this.UiConfigFile != null)
-                {
-                    hashCode = (hashCode * 59) + this.UiConfigFile.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.HideUiDirConfig.GetHashCode();
-                hashCode = (hashCode * 59) + this.FreezeSettings.GetHashCode();
-                if (this.UiSettingsFile != null)
-                {
-                    hashCode = (hashCode * 59) + this.UiSettingsFile.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.GradioDebug.GetHashCode();
-                if (this.GradioAuth != null)
-                {
-                    hashCode = (hashCode * 59) + this.GradioAuth.GetHashCode();
-                }
-                if (this.GradioAuthPath != null)
-                {
-                    hashCode = (hashCode * 59) + this.GradioAuthPath.GetHashCode();
-                }
-                if (this.GradioImg2imgTool != null)
-                {
-                    hashCode = (hashCode * 59) + this.GradioImg2imgTool.GetHashCode();
-                }
-                if (this.GradioInpaintTool != null)
-                {
-                    hashCode = (hashCode * 59) + this.GradioInpaintTool.GetHashCode();
-                }
-                if (this.GradioAllowedPath != null)
-                {
-                    hashCode = (hashCode * 59) + this.GradioAllowedPath.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.OptChannelslast.GetHashCode();
-                if (this.StylesFile != null)
-                {
-                    hashCode = (hashCode * 59) + this.StylesFile.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.Autolaunch.GetHashCode();
-                if (this.Theme != null)
-                {
-                    hashCode = (hashCode * 59) + this.Theme.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.UseTextboxSeed.GetHashCode();
-                hashCode = (hashCode * 59) + this.DisableConsoleProgressbars.GetHashCode();
-                hashCode = (hashCode * 59) + this.EnableConsolePrompts.GetHashCode();
-                if (this.VaePath != null)
-                {
-                    hashCode = (hashCode * 59) + this.VaePath.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.DisableSafeUnpickle.GetHashCode();
-                hashCode = (hashCode * 59) + this.Api.GetHashCode();
-                if (this.ApiAuth != null)
-                {
-                    hashCode = (hashCode * 59) + this.ApiAuth.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.ApiLog.GetHashCode();
-                hashCode = (hashCode * 59) + this.Nowebui.GetHashCode();
-                hashCode = (hashCode * 59) + this.UiDebugMode.GetHashCode();
-                if (this.DeviceId != null)
-                {
-                    hashCode = (hashCode * 59) + this.DeviceId.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.Administrator.GetHashCode();
-                if (this.CorsAllowOrigins != null)
-                {
-                    hashCode = (hashCode * 59) + this.CorsAllowOrigins.GetHashCode();
-                }
-                if (this.CorsAllowOriginsRegex != null)
-                {
-                    hashCode = (hashCode * 59) + this.CorsAllowOriginsRegex.GetHashCode();
-                }
-                if (this.TlsKeyfile != null)
-                {
-                    hashCode = (hashCode * 59) + this.TlsKeyfile.GetHashCode();
-                }
-                if (this.TlsCertfile != null)
-                {
-                    hashCode = (hashCode * 59) + this.TlsCertfile.GetHashCode();
-                }
-                if (this.DisableTlsVerify != null)
-                {
-                    hashCode = (hashCode * 59) + this.DisableTlsVerify.GetHashCode();
-                }
-                if (this.ServerName != null)
-                {
-                    hashCode = (hashCode * 59) + this.ServerName.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.GradioQueue.GetHashCode();
-                hashCode = (hashCode * 59) + this.NoGradioQueue.GetHashCode();
-                hashCode = (hashCode * 59) + this.SkipVersionCheck.GetHashCode();
-                hashCode = (hashCode * 59) + this.NoHashing.GetHashCode();
-                hashCode = (hashCode * 59) + this.NoDownloadSdModel.GetHashCode();
-                if (this.Subpath != null)
-                {
-                    hashCode = (hashCode * 59) + this.Subpath.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.AddStopRoute.GetHashCode();
-                hashCode = (hashCode * 59) + this.ApiServerStop.GetHashCode();
-                hashCode = (hashCode * 59) + this.TimeoutKeepAlive.GetHashCode();
-                hashCode = (hashCode * 59) + this.AddnetMaxModelCount.GetHashCode();
-                if (this.ControlnetDir != null)
-                {
-                    hashCode = (hashCode * 59) + this.ControlnetDir.GetHashCode();
-                }
-                if (this.ControlnetAnnotatorModelsPath != null)
-                {
-                    hashCode = (hashCode * 59) + this.ControlnetAnnotatorModelsPath.GetHashCode();
-                }
-                if (this.NoHalfControlnet != null)
-                {
-                    hashCode = (hashCode * 59) + this.NoHalfControlnet.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.ControlnetPreprocessorCacheSize.GetHashCode();
-                if (this.ControlnetLoglevel != null)
-                {
-                    hashCode = (hashCode * 59) + this.ControlnetLoglevel.GetHashCode();
-                }
-                if (this.LdsrModelsPath != null)
-                {
-                    hashCode = (hashCode * 59) + this.LdsrModelsPath.GetHashCode();
-                }
-                if (this.LoraDir != null)
-                {
-                    hashCode = (hashCode * 59) + this.LoraDir.GetHashCode();
-                }
-                if (this.LycoDirBackcompat != null)
-                {
-                    hashCode = (hashCode * 59) + this.LycoDirBackcompat.GetHashCode();
-                }
-                if (this.ScunetModelsPath != null)
-                {
-                    hashCode = (hashCode * 59) + this.ScunetModelsPath.GetHashCode();
-                }
-                if (this.SwinirModelsPath != null)
-                {
-                    hashCode = (hashCode * 59) + this.SwinirModelsPath.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

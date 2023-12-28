@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
-using SdWebUpApi;
+using SdWebUiApi;
 using StableDiffusionTagManager.Models;
 
 namespace StableDiffusionTagManager.Views

@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// SamplerItem
     /// </summary>
     [DataContract(Name = "SamplerItem")]
-    public partial class SamplerItem : IEquatable<SamplerItem>, IValidatableObject
+    public partial class SamplerItem : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SamplerItem" /> class.
@@ -104,72 +104,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as SamplerItem);
-        }
-
-        /// <summary>
-        /// Returns true if SamplerItem instances are equal
-        /// </summary>
-        /// <param name="input">Instance of SamplerItem to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(SamplerItem input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Name == input.Name ||
-                    (this.Name != null &&
-                    this.Name.Equals(input.Name))
-                ) && 
-                (
-                    this.Aliases == input.Aliases ||
-                    this.Aliases != null &&
-                    input.Aliases != null &&
-                    this.Aliases.SequenceEqual(input.Aliases)
-                ) && 
-                (
-                    this.Options == input.Options ||
-                    this.Options != null &&
-                    input.Options != null &&
-                    this.Options.SequenceEqual(input.Options)
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.Name != null)
-                {
-                    hashCode = (hashCode * 59) + this.Name.GetHashCode();
-                }
-                if (this.Aliases != null)
-                {
-                    hashCode = (hashCode * 59) + this.Aliases.GetHashCode();
-                }
-                if (this.Options != null)
-                {
-                    hashCode = (hashCode * 59) + this.Options.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

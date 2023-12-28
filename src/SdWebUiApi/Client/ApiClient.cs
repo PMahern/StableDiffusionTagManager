@@ -30,7 +30,7 @@ using RestSharp.Serializers;
 using RestSharpMethod = RestSharp.Method;
 using Polly;
 
-namespace SdWebUpApi.Client
+namespace SdWebUiApi.Client
 {
     /// <summary>
     /// Allows RestSharp to Serialize/Deserialize JSON using our custom logic, but only when ContentType is JSON.
@@ -69,10 +69,10 @@ namespace SdWebUpApi.Client
         /// <returns>A JSON string.</returns>
         public string Serialize(object obj)
         {
-            if (obj != null && obj is SdWebUpApi.Model.AbstractOpenAPISchema)
+            if (obj != null && obj is SdWebUiApi.Model.AbstractOpenAPISchema)
             {
                 // the object to be serialized is an oneOf/anyOf schema
-                return ((SdWebUpApi.Model.AbstractOpenAPISchema)obj).ToJson();
+                return ((SdWebUiApi.Model.AbstractOpenAPISchema)obj).ToJson();
             }
             else
             {
@@ -203,7 +203,7 @@ namespace SdWebUpApi.Client
         /// </summary>
         public ApiClient()
         {
-            _baseUrl = SdWebUpApi.Client.GlobalConfiguration.Instance.BasePath;
+            _baseUrl = SdWebUiApi.Client.GlobalConfiguration.Instance.BasePath;
         }
 
         /// <summary>
@@ -475,7 +475,7 @@ namespace SdWebUpApi.Client
                 }
 
                 // if the response type is oneOf/anyOf, call FromJSON to deserialize the data
-                if (typeof(SdWebUpApi.Model.AbstractOpenAPISchema).IsAssignableFrom(typeof(T)))
+                if (typeof(SdWebUiApi.Model.AbstractOpenAPISchema).IsAssignableFrom(typeof(T)))
                 {
                     try
                     {
@@ -547,7 +547,8 @@ namespace SdWebUpApi.Client
                 MaxTimeout = configuration.Timeout,
                 Proxy = configuration.Proxy,
                 UserAgent = configuration.UserAgent,
-                UseDefaultCredentials = configuration.UseDefaultCredentials
+                UseDefaultCredentials = configuration.UseDefaultCredentials,
+                RemoteCertificateValidationCallback = configuration.RemoteCertificateValidationCallback
             };
 
             using (RestClient client = new RestClient(clientOptions,
@@ -571,7 +572,7 @@ namespace SdWebUpApi.Client
                 }
 
                 // if the response type is oneOf/anyOf, call FromJSON to deserialize the data
-                if (typeof(SdWebUpApi.Model.AbstractOpenAPISchema).IsAssignableFrom(typeof(T)))
+                if (typeof(SdWebUiApi.Model.AbstractOpenAPISchema).IsAssignableFrom(typeof(T)))
                 {
                     response.Data = (T) typeof(T).GetMethod("FromJson").Invoke(null, new object[] { response.Content });
                 }

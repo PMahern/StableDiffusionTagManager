@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// SDModelItem
     /// </summary>
     [DataContract(Name = "SDModelItem")]
-    public partial class SDModelItem : IEquatable<SDModelItem>, IValidatableObject
+    public partial class SDModelItem : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SDModelItem" /> class.
@@ -131,97 +131,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as SDModelItem);
-        }
-
-        /// <summary>
-        /// Returns true if SDModelItem instances are equal
-        /// </summary>
-        /// <param name="input">Instance of SDModelItem to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(SDModelItem input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Title == input.Title ||
-                    (this.Title != null &&
-                    this.Title.Equals(input.Title))
-                ) && 
-                (
-                    this.ModelName == input.ModelName ||
-                    (this.ModelName != null &&
-                    this.ModelName.Equals(input.ModelName))
-                ) && 
-                (
-                    this.Hash == input.Hash ||
-                    (this.Hash != null &&
-                    this.Hash.Equals(input.Hash))
-                ) && 
-                (
-                    this.Sha256 == input.Sha256 ||
-                    (this.Sha256 != null &&
-                    this.Sha256.Equals(input.Sha256))
-                ) && 
-                (
-                    this.Filename == input.Filename ||
-                    (this.Filename != null &&
-                    this.Filename.Equals(input.Filename))
-                ) && 
-                (
-                    this.Config == input.Config ||
-                    (this.Config != null &&
-                    this.Config.Equals(input.Config))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.Title != null)
-                {
-                    hashCode = (hashCode * 59) + this.Title.GetHashCode();
-                }
-                if (this.ModelName != null)
-                {
-                    hashCode = (hashCode * 59) + this.ModelName.GetHashCode();
-                }
-                if (this.Hash != null)
-                {
-                    hashCode = (hashCode * 59) + this.Hash.GetHashCode();
-                }
-                if (this.Sha256 != null)
-                {
-                    hashCode = (hashCode * 59) + this.Sha256.GetHashCode();
-                }
-                if (this.Filename != null)
-                {
-                    hashCode = (hashCode * 59) + this.Filename.GetHashCode();
-                }
-                if (this.Config != null)
-                {
-                    hashCode = (hashCode * 59) + this.Config.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

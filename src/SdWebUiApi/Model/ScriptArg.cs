@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// ScriptArg
     /// </summary>
     [DataContract(Name = "ScriptArg")]
-    public partial class ScriptArg : IEquatable<ScriptArg>, IValidatableObject
+    public partial class ScriptArg : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptArg" /> class.
@@ -117,98 +117,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as ScriptArg);
-        }
-
-        /// <summary>
-        /// Returns true if ScriptArg instances are equal
-        /// </summary>
-        /// <param name="input">Instance of ScriptArg to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(ScriptArg input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Label == input.Label ||
-                    (this.Label != null &&
-                    this.Label.Equals(input.Label))
-                ) && 
-                (
-                    this.Value == input.Value ||
-                    (this.Value != null &&
-                    this.Value.Equals(input.Value))
-                ) && 
-                (
-                    this.Minimum == input.Minimum ||
-                    (this.Minimum != null &&
-                    this.Minimum.Equals(input.Minimum))
-                ) && 
-                (
-                    this.Maximum == input.Maximum ||
-                    (this.Maximum != null &&
-                    this.Maximum.Equals(input.Maximum))
-                ) && 
-                (
-                    this.Step == input.Step ||
-                    (this.Step != null &&
-                    this.Step.Equals(input.Step))
-                ) && 
-                (
-                    this.Choices == input.Choices ||
-                    this.Choices != null &&
-                    input.Choices != null &&
-                    this.Choices.SequenceEqual(input.Choices)
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.Label != null)
-                {
-                    hashCode = (hashCode * 59) + this.Label.GetHashCode();
-                }
-                if (this.Value != null)
-                {
-                    hashCode = (hashCode * 59) + this.Value.GetHashCode();
-                }
-                if (this.Minimum != null)
-                {
-                    hashCode = (hashCode * 59) + this.Minimum.GetHashCode();
-                }
-                if (this.Maximum != null)
-                {
-                    hashCode = (hashCode * 59) + this.Maximum.GetHashCode();
-                }
-                if (this.Step != null)
-                {
-                    hashCode = (hashCode * 59) + this.Step.GetHashCode();
-                }
-                if (this.Choices != null)
-                {
-                    hashCode = (hashCode * 59) + this.Choices.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

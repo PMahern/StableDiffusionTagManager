@@ -11,7 +11,7 @@ using StableDiffusionTagManager.Models;
 using System.Collections.Generic;
 using StableDiffusionTagManager.Views;
 using Avalonia.Controls;
-using SdWebUpApi.Api;
+using SdWebUiApi.Api;
 using Newtonsoft.Json.Linq;
 using StableDiffusionTagManager.Extensions;
 using Avalonia.Media;
@@ -1003,7 +1003,7 @@ namespace StableDiffusionTagManager.ViewModels
 
             var model = "deepdanbooru";
 
-            if (OpenProject != null && OpenProject.InterrogateMethod == SdWebUpApi.InterrogateMethod.Clip)
+            if (OpenProject != null && OpenProject.InterrogateMethod == SdWebUiApi.InterrogateMethod.Clip)
             {
                 model = "clip";
             }
@@ -1013,7 +1013,7 @@ namespace StableDiffusionTagManager.ViewModels
 
             try
             {
-                var result = await api.InterrogateapiSdapiV1InterrogatePostAsync(new SdWebUpApi.Model.InterrogateRequest
+                var result = await api.InterrogateapiSdapiV1InterrogatePostAsync(new SdWebUiApi.Model.InterrogateRequest
                 {
                     Image = imagebase64,
                     Model = model

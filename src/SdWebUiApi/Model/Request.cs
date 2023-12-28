@@ -21,17 +21,17 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 using System.Reflection;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// Request
     /// </summary>
     [JsonConverter(typeof(RequestJsonConverter))]
     [DataContract(Name = "Request")]
-    public partial class Request : AbstractOpenAPISchema, IEquatable<Request>, IValidatableObject
+    public partial class Request : AbstractOpenAPISchema, IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Request" /> class
@@ -168,44 +168,6 @@ namespace SdWebUpApi.Model
 
             // no match found, throw an exception
             throw new InvalidDataException("The JSON string `" + jsonString + "` cannot be deserialized into any schema defined.");
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as Request);
-        }
-
-        /// <summary>
-        /// Returns true if Request instances are equal
-        /// </summary>
-        /// <param name="input">Instance of Request to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(Request input)
-        {
-            if (input == null)
-                return false;
-
-            return this.ActualInstance.Equals(input.ActualInstance);
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.ActualInstance != null)
-                    hashCode = hashCode * 59 + this.ActualInstance.GetHashCode();
-                return hashCode;
-            }
         }
 
         /// <summary>

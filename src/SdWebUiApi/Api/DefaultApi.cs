@@ -10,10 +10,14 @@
 
 using System;
 using System.Collections.Generic;
-using SdWebUpApi.Client;
-using SdWebUpApi.Model;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net;
+using System.Net.Mime;
+using SdWebUiApi.Client;
+using SdWebUiApi.Model;
 
-namespace SdWebUpApi.Api
+namespace SdWebUiApi.Api
 {
 
     /// <summary>
@@ -25,7 +29,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Api Info
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -37,7 +41,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -45,7 +49,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Api Info
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -57,15 +61,51 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> ApiInfoInfoGet_0WithHttpInfo(bool? serialize = default(bool?), int operationIndex = 0);
         /// <summary>
+        /// Api Refresh Embeddings
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>Object</returns>
+        Object ApiRefreshEmbeddingsTacapiV1RefreshEmbeddingsPost(int operationIndex = 0);
+
+        /// <summary>
+        /// Api Refresh Embeddings
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object</returns>
+        ApiResponse<Object> ApiRefreshEmbeddingsTacapiV1RefreshEmbeddingsPostWithHttpInfo(int operationIndex = 0);
+        /// <summary>
+        /// Api Refresh Temp Files
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>Object</returns>
+        Object ApiRefreshTempFilesTacapiV1RefreshTempFilesPost(int operationIndex = 0);
+
+        /// <summary>
+        /// Api Refresh Temp Files
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object</returns>
+        ApiResponse<Object> ApiRefreshTempFilesTacapiV1RefreshTempFilesPostWithHttpInfo(int operationIndex = 0);
+        /// <summary>
         /// App Id
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object AppIdAppIdGet(int operationIndex = 0);
@@ -76,14 +116,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> AppIdAppIdGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// App Id
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object AppIdAppIdGet_0(int operationIndex = 0);
@@ -94,14 +134,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> AppIdAppIdGet_0WithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Build Resource
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -113,7 +153,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -121,7 +161,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Control Types
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object ControlTypesControlnetControlTypesGet(int operationIndex = 0);
@@ -132,14 +172,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> ControlTypesControlnetControlTypesGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Create Embedding
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>CreateResponse</returns>
@@ -151,7 +191,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of CreateResponse</returns>
@@ -159,7 +199,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Create Hypernetwork
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>CreateResponse</returns>
@@ -171,7 +211,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of CreateResponse</returns>
@@ -179,7 +219,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Detect
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="bodyDetectControlnetDetectPost"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -191,7 +231,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="bodyDetectControlnetDetectPost"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -199,7 +239,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Download Sysinfo
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="attachment"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -211,7 +251,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="attachment"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -219,7 +259,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Extras Batch Images Api
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasBatchImagesRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ExtrasBatchImagesResponse</returns>
@@ -231,7 +271,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasBatchImagesRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of ExtrasBatchImagesResponse</returns>
@@ -239,7 +279,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Extras Single Image Api
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasSingleImageRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ExtrasSingleImageResponse</returns>
@@ -251,7 +291,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasSingleImageRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of ExtrasSingleImageResponse</returns>
@@ -259,7 +299,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Favicon
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object FaviconFaviconIcoGet(int operationIndex = 0);
@@ -270,14 +310,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> FaviconFaviconIcoGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Fetch File
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -289,7 +329,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -297,7 +337,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// File Deprecated
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -309,7 +349,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -317,7 +357,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// File
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -329,7 +369,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -337,7 +377,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// File
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -349,7 +389,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -357,7 +397,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Cmd Flags
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Flags</returns>
         Flags GetCmdFlagsSdapiV1CmdFlagsGet(int operationIndex = 0);
@@ -368,14 +408,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Flags</returns>
         ApiResponse<Flags> GetCmdFlagsSdapiV1CmdFlagsGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Config
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object GetConfigConfigGet(int operationIndex = 0);
@@ -386,14 +426,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> GetConfigConfigGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Config
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object GetConfigConfigGet_0(int operationIndex = 0);
@@ -404,14 +444,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> GetConfigConfigGet_0WithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Config
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Options</returns>
         Options GetConfigSdapiV1OptionsGet(int operationIndex = 0);
@@ -422,14 +462,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Options</returns>
         ApiResponse<Options> GetConfigSdapiV1OptionsGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Current User
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>string</returns>
         string GetCurrentUserUserGet(int operationIndex = 0);
@@ -440,14 +480,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of string</returns>
         ApiResponse<string> GetCurrentUserUserGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Current User
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>string</returns>
         string GetCurrentUserUserGet_0(int operationIndex = 0);
@@ -458,14 +498,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of string</returns>
         ApiResponse<string> GetCurrentUserUserGet_0WithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Embeddings
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>EmbeddingsResponse</returns>
         EmbeddingsResponse GetEmbeddingsSdapiV1EmbeddingsGet(int operationIndex = 0);
@@ -476,14 +516,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of EmbeddingsResponse</returns>
         ApiResponse<EmbeddingsResponse> GetEmbeddingsSdapiV1EmbeddingsGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Face Restorers
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;FaceRestorerItem&gt;</returns>
         List<FaceRestorerItem> GetFaceRestorersSdapiV1FaceRestorersGet(int operationIndex = 0);
@@ -494,14 +534,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;FaceRestorerItem&gt;</returns>
         ApiResponse<List<FaceRestorerItem>> GetFaceRestorersSdapiV1FaceRestorersGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Hypernetworks
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;HypernetworkItem&gt;</returns>
         List<HypernetworkItem> GetHypernetworksSdapiV1HypernetworksGet(int operationIndex = 0);
@@ -512,14 +552,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;HypernetworkItem&gt;</returns>
         ApiResponse<List<HypernetworkItem>> GetHypernetworksSdapiV1HypernetworksGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Latent Upscale Modes
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;LatentUpscalerModeItem&gt;</returns>
         List<LatentUpscalerModeItem> GetLatentUpscaleModesSdapiV1LatentUpscaleModesGet(int operationIndex = 0);
@@ -530,14 +570,34 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;LatentUpscalerModeItem&gt;</returns>
         ApiResponse<List<LatentUpscalerModeItem>> GetLatentUpscaleModesSdapiV1LatentUpscaleModesGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
+        /// Get Lora Cached Hash
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="loraName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>Object</returns>
+        Object GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGet(string loraName, int operationIndex = 0);
+
+        /// <summary>
+        /// Get Lora Cached Hash
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="loraName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object</returns>
+        ApiResponse<Object> GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGetWithHttpInfo(string loraName, int operationIndex = 0);
+        /// <summary>
         /// Get Lora Info
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="loraName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -549,7 +609,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="loraName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -557,7 +617,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Loras
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object GetLorasSdapiV1LorasGet(int operationIndex = 0);
@@ -568,14 +628,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> GetLorasSdapiV1LorasGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Lyco Info
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="lycoName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -587,7 +647,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="lycoName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -595,7 +655,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Memory
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>MemoryResponse</returns>
         MemoryResponse GetMemorySdapiV1MemoryGet(int operationIndex = 0);
@@ -606,14 +666,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of MemoryResponse</returns>
         ApiResponse<MemoryResponse> GetMemorySdapiV1MemoryGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Metadata
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="item"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -626,7 +686,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="item"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -635,7 +695,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Prompt Styles
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;PromptStyleItem&gt;</returns>
         List<PromptStyleItem> GetPromptStylesSdapiV1PromptStylesGet(int operationIndex = 0);
@@ -646,14 +706,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;PromptStyleItem&gt;</returns>
         ApiResponse<List<PromptStyleItem>> GetPromptStylesSdapiV1PromptStylesGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Queue Status
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Estimation</returns>
         Estimation GetQueueStatusQueueStatusGet(int operationIndex = 0);
@@ -664,14 +724,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Estimation</returns>
         ApiResponse<Estimation> GetQueueStatusQueueStatusGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Realesrgan Models
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;RealesrganItem&gt;</returns>
         List<RealesrganItem> GetRealesrganModelsSdapiV1RealesrganModelsGet(int operationIndex = 0);
@@ -682,14 +742,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;RealesrganItem&gt;</returns>
         ApiResponse<List<RealesrganItem>> GetRealesrganModelsSdapiV1RealesrganModelsGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Samplers
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;SamplerItem&gt;</returns>
         List<SamplerItem> GetSamplersSdapiV1SamplersGet(int operationIndex = 0);
@@ -700,14 +760,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;SamplerItem&gt;</returns>
         ApiResponse<List<SamplerItem>> GetSamplersSdapiV1SamplersGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Script Info
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;ScriptInfo&gt;</returns>
         List<ScriptInfo> GetScriptInfoSdapiV1ScriptInfoGet(int operationIndex = 0);
@@ -718,14 +778,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;ScriptInfo&gt;</returns>
         ApiResponse<List<ScriptInfo>> GetScriptInfoSdapiV1ScriptInfoGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Scripts List
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ScriptsList</returns>
         ScriptsList GetScriptsListSdapiV1ScriptsGet(int operationIndex = 0);
@@ -736,14 +796,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of ScriptsList</returns>
         ApiResponse<ScriptsList> GetScriptsListSdapiV1ScriptsGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Sd Models
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;SDModelItem&gt;</returns>
         List<SDModelItem> GetSdModelsSdapiV1SdModelsGet(int operationIndex = 0);
@@ -754,14 +814,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;SDModelItem&gt;</returns>
         ApiResponse<List<SDModelItem>> GetSdModelsSdapiV1SdModelsGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Sd Vaes
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;SDVaeItem&gt;</returns>
         List<SDVaeItem> GetSdVaesSdapiV1SdVaeGet(int operationIndex = 0);
@@ -772,14 +832,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;SDVaeItem&gt;</returns>
         ApiResponse<List<SDVaeItem>> GetSdVaesSdapiV1SdVaeGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Single Card
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="tabname"> (optional, default to &quot;&quot;)</param>
         /// <param name="name"> (optional, default to &quot;&quot;)</param>
@@ -793,7 +853,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="tabname"> (optional, default to &quot;&quot;)</param>
         /// <param name="name"> (optional, default to &quot;&quot;)</param>
@@ -803,7 +863,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Thumb Preview Blob
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -816,7 +876,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -825,7 +885,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Thumb Preview
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -838,7 +898,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -847,7 +907,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Token
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object GetTokenTokenGet(int operationIndex = 0);
@@ -858,14 +918,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> GetTokenTokenGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Token
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object GetTokenTokenGet_0(int operationIndex = 0);
@@ -876,14 +936,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> GetTokenTokenGet_0WithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Get Upscalers
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;UpscalerItem&gt;</returns>
         List<UpscalerItem> GetUpscalersSdapiV1UpscalersGet(int operationIndex = 0);
@@ -894,14 +954,36 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;UpscalerItem&gt;</returns>
         ApiResponse<List<UpscalerItem>> GetUpscalersSdapiV1UpscalersGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
+        /// Get Wildcard Contents
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="basepath"></param>
+        /// <param name="filename"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>Object</returns>
+        Object GetWildcardContentsTacapiV1WildcardContentsGet(string basepath, string filename, int operationIndex = 0);
+
+        /// <summary>
+        /// Get Wildcard Contents
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="basepath"></param>
+        /// <param name="filename"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object</returns>
+        ApiResponse<Object> GetWildcardContentsTacapiV1WildcardContentsGetWithHttpInfo(string basepath, string filename, int operationIndex = 0);
+        /// <summary>
         /// Img2Imgapi
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingImg2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ImageToImageResponse</returns>
@@ -913,7 +995,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingImg2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of ImageToImageResponse</returns>
@@ -921,7 +1003,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Interrogateapi
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="interrogateRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -933,7 +1015,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="interrogateRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -941,7 +1023,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Interruptapi
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object InterruptapiSdapiV1InterruptPost(int operationIndex = 0);
@@ -952,14 +1034,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> InterruptapiSdapiV1InterruptPostWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// &lt;Lambda&gt;
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object LambdaInternalPingGet(int operationIndex = 0);
@@ -970,14 +1052,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> LambdaInternalPingGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// &lt;Lambda&gt;
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object LambdaInternalProfileStartupGet(int operationIndex = 0);
@@ -988,14 +1070,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> LambdaInternalProfileStartupGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// &lt;Lambda&gt;
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object LambdaInternalSysinfoDownloadGet(int operationIndex = 0);
@@ -1006,14 +1088,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> LambdaInternalSysinfoDownloadGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Login Check
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object LoginCheckLoginCheckGet(int operationIndex = 0);
@@ -1024,14 +1106,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> LoginCheckLoginCheckGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Login Check
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object LoginCheckLoginCheckGet_0(int operationIndex = 0);
@@ -1042,14 +1124,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> LoginCheckLoginCheckGet_0WithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Login
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -1066,7 +1148,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -1079,7 +1161,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Login
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -1096,7 +1178,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -1109,7 +1191,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Main
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>string</returns>
         string MainGet(int operationIndex = 0);
@@ -1120,14 +1202,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of string</returns>
         ApiResponse<string> MainGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Main
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>string</returns>
         string MainHead(int operationIndex = 0);
@@ -1138,14 +1220,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of string</returns>
         ApiResponse<string> MainHeadWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Model List
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="update"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -1157,7 +1239,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="update"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -1165,7 +1247,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Module List
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="aliasNames"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -1177,7 +1259,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="aliasNames"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -1185,7 +1267,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Pnginfoapi
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pNGInfoRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>PNGInfoResponse</returns>
@@ -1197,7 +1279,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pNGInfoRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of PNGInfoResponse</returns>
@@ -1205,7 +1287,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Predict
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -1218,7 +1300,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -1227,7 +1309,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Predict
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -1240,7 +1322,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -1249,7 +1331,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Predict
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -1262,7 +1344,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -1271,7 +1353,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Predict
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -1284,7 +1366,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -1293,7 +1375,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Preprocess
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>PreprocessResponse</returns>
@@ -1305,7 +1387,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of PreprocessResponse</returns>
@@ -1313,7 +1395,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Progressapi
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="progressRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ModulesProgressProgressResponse</returns>
@@ -1325,7 +1407,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="progressRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of ModulesProgressProgressResponse</returns>
@@ -1333,7 +1415,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Progressapi
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skipCurrentImage"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ModulesApiModelsProgressResponse</returns>
@@ -1345,7 +1427,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skipCurrentImage"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of ModulesApiModelsProgressResponse</returns>
@@ -1353,7 +1435,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Quicksettings Hint
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;QuicksettingsHint&gt;</returns>
         List<QuicksettingsHint> QuicksettingsHintInternalQuicksettingsHintGet(int operationIndex = 0);
@@ -1364,14 +1446,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;QuicksettingsHint&gt;</returns>
         ApiResponse<List<QuicksettingsHint>> QuicksettingsHintInternalQuicksettingsHintGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Refresh Checkpoints
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object RefreshCheckpointsSdapiV1RefreshCheckpointsPost(int operationIndex = 0);
@@ -1382,14 +1464,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> RefreshCheckpointsSdapiV1RefreshCheckpointsPostWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Refresh Loras
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object RefreshLorasSdapiV1RefreshLorasPost(int operationIndex = 0);
@@ -1400,14 +1482,32 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> RefreshLorasSdapiV1RefreshLorasPostWithHttpInfo(int operationIndex = 0);
         /// <summary>
+        /// Refresh Vae
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>Object</returns>
+        Object RefreshVaeSdapiV1RefreshVaePost(int operationIndex = 0);
+
+        /// <summary>
+        /// Refresh Vae
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object</returns>
+        ApiResponse<Object> RefreshVaeSdapiV1RefreshVaePostWithHttpInfo(int operationIndex = 0);
+        /// <summary>
         /// Reloadapi
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object ReloadapiSdapiV1ReloadCheckpointPost(int operationIndex = 0);
@@ -1418,14 +1518,54 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> ReloadapiSdapiV1ReloadCheckpointPostWithHttpInfo(int operationIndex = 0);
         /// <summary>
+        /// Rembg Remove
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="bodyRembgRemoveRembgPost"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>Object</returns>
+        Object RembgRemoveRembgPost(BodyRembgRemoveRembgPost? bodyRembgRemoveRembgPost = default(BodyRembgRemoveRembgPost?), int operationIndex = 0);
+
+        /// <summary>
+        /// Rembg Remove
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="bodyRembgRemoveRembgPost"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object</returns>
+        ApiResponse<Object> RembgRemoveRembgPostWithHttpInfo(BodyRembgRemoveRembgPost? bodyRembgRemoveRembgPost = default(BodyRembgRemoveRembgPost?), int operationIndex = 0);
+        /// <summary>
+        /// Render Openpose Json
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="poseData"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>Object</returns>
+        Object RenderOpenposeJsonControlnetRenderOpenposeJsonPost(List<PoseData>? poseData = default(List<PoseData>?), int operationIndex = 0);
+
+        /// <summary>
+        /// Render Openpose Json
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="poseData"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object</returns>
+        ApiResponse<Object> RenderOpenposeJsonControlnetRenderOpenposeJsonPostWithHttpInfo(List<PoseData>? poseData = default(List<PoseData>?), int operationIndex = 0);
+        /// <summary>
         /// Reset Iterator
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="resetBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -1437,7 +1577,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="resetBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -1445,7 +1585,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Reset Iterator
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="resetBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -1457,7 +1597,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="resetBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -1465,7 +1605,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Reverse Proxy
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -1477,7 +1617,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -1485,7 +1625,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Reverse Proxy
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -1497,7 +1637,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -1505,7 +1645,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Robots Txt
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>string</returns>
         string RobotsTxtRobotsTxtGet(int operationIndex = 0);
@@ -1516,14 +1656,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of string</returns>
         ApiResponse<string> RobotsTxtRobotsTxtGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Set Config
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -1535,7 +1675,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -1543,7 +1683,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Settings
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object SettingsControlnetSettingsGet(int operationIndex = 0);
@@ -1554,14 +1694,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> SettingsControlnetSettingsGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Skip
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object SkipSdapiV1SkipPost(int operationIndex = 0);
@@ -1572,14 +1712,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> SkipSdapiV1SkipPostWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Startup Events
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object StartupEventsStartupEventsGet(int operationIndex = 0);
@@ -1590,14 +1730,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> StartupEventsStartupEventsGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Static Resource
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -1609,113 +1749,39 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> StaticResourceStaticPathGetWithHttpInfo(string path, int operationIndex = 0);
         /// <summary>
-        /// T2V Api Version
+        /// Stream
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sessionHash"></param>
+        /// <param name="run"></param>
+        /// <param name="componentId"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
-        Object T2vApiVersionT2vApiVersionGet(int operationIndex = 0);
+        Object StreamStreamSessionHashRunComponentIdGet(string sessionHash, int run, int componentId, int operationIndex = 0);
 
         /// <summary>
-        /// T2V Api Version
+        /// Stream
         /// </summary>
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sessionHash"></param>
+        /// <param name="run"></param>
+        /// <param name="componentId"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        ApiResponse<Object> T2vApiVersionT2vApiVersionGetWithHttpInfo(int operationIndex = 0);
-        /// <summary>
-        /// T2V Run
-        /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="prompt"></param>
-        /// <param name="nPrompt"> (optional)</param>
-        /// <param name="model"> (optional)</param>
-        /// <param name="sampler"> (optional)</param>
-        /// <param name="steps"> (optional)</param>
-        /// <param name="frames"> (optional)</param>
-        /// <param name="seed"> (optional)</param>
-        /// <param name="cfgScale"> (optional)</param>
-        /// <param name="width"> (optional)</param>
-        /// <param name="height"> (optional)</param>
-        /// <param name="eta"> (optional)</param>
-        /// <param name="batchCount"> (optional)</param>
-        /// <param name="doVid2vid"> (optional, default to false)</param>
-        /// <param name="strength"> (optional)</param>
-        /// <param name="vid2vidStartFrame"> (optional)</param>
-        /// <param name="inpaintingFrames"> (optional)</param>
-        /// <param name="inpaintingWeights"> (optional)</param>
-        /// <param name="fps"> (optional)</param>
-        /// <param name="addSoundtrack"> (optional)</param>
-        /// <param name="soundtrackPath"> (optional)</param>
-        /// <param name="vid2vidInput"> (optional)</param>
-        /// <param name="inpaintingImage"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>Object</returns>
-        Object T2vRunT2vRunPost(string prompt, string? nPrompt = default(string?), string? model = default(string?), string? sampler = default(string?), int? steps = default(int?), int? frames = default(int?), int? seed = default(int?), int? cfgScale = default(int?), int? width = default(int?), int? height = default(int?), decimal? eta = default(decimal?), int? batchCount = default(int?), bool? doVid2vid = default(bool?), decimal? strength = default(decimal?), int? vid2vidStartFrame = default(int?), int? inpaintingFrames = default(int?), string? inpaintingWeights = default(string?), int? fps = default(int?), string? addSoundtrack = default(string?), string? soundtrackPath = default(string?), System.IO.Stream? vid2vidInput = default(System.IO.Stream?), System.IO.Stream? inpaintingImage = default(System.IO.Stream?), int operationIndex = 0);
-
-        /// <summary>
-        /// T2V Run
-        /// </summary>
-        /// <remarks>
-        /// 
-        /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="prompt"></param>
-        /// <param name="nPrompt"> (optional)</param>
-        /// <param name="model"> (optional)</param>
-        /// <param name="sampler"> (optional)</param>
-        /// <param name="steps"> (optional)</param>
-        /// <param name="frames"> (optional)</param>
-        /// <param name="seed"> (optional)</param>
-        /// <param name="cfgScale"> (optional)</param>
-        /// <param name="width"> (optional)</param>
-        /// <param name="height"> (optional)</param>
-        /// <param name="eta"> (optional)</param>
-        /// <param name="batchCount"> (optional)</param>
-        /// <param name="doVid2vid"> (optional, default to false)</param>
-        /// <param name="strength"> (optional)</param>
-        /// <param name="vid2vidStartFrame"> (optional)</param>
-        /// <param name="inpaintingFrames"> (optional)</param>
-        /// <param name="inpaintingWeights"> (optional)</param>
-        /// <param name="fps"> (optional)</param>
-        /// <param name="addSoundtrack"> (optional)</param>
-        /// <param name="soundtrackPath"> (optional)</param>
-        /// <param name="vid2vidInput"> (optional)</param>
-        /// <param name="inpaintingImage"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of Object</returns>
-        ApiResponse<Object> T2vRunT2vRunPostWithHttpInfo(string prompt, string? nPrompt = default(string?), string? model = default(string?), string? sampler = default(string?), int? steps = default(int?), int? frames = default(int?), int? seed = default(int?), int? cfgScale = default(int?), int? width = default(int?), int? height = default(int?), decimal? eta = default(decimal?), int? batchCount = default(int?), bool? doVid2vid = default(bool?), decimal? strength = default(decimal?), int? vid2vidStartFrame = default(int?), int? inpaintingFrames = default(int?), string? inpaintingWeights = default(string?), int? fps = default(int?), string? addSoundtrack = default(string?), string? soundtrackPath = default(string?), System.IO.Stream? vid2vidInput = default(System.IO.Stream?), System.IO.Stream? inpaintingImage = default(System.IO.Stream?), int operationIndex = 0);
-        /// <summary>
-        /// T2V Version
-        /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>Object</returns>
-        Object T2vVersionT2vVersionGet(int operationIndex = 0);
-
-        /// <summary>
-        /// T2V Version
-        /// </summary>
-        /// <remarks>
-        /// 
-        /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of Object</returns>
-        ApiResponse<Object> T2vVersionT2vVersionGetWithHttpInfo(int operationIndex = 0);
+        ApiResponse<Object> StreamStreamSessionHashRunComponentIdGetWithHttpInfo(string sessionHash, int run, int componentId, int operationIndex = 0);
         /// <summary>
         /// Text2Imgapi
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingTxt2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>TextToImageResponse</returns>
@@ -1727,7 +1793,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingTxt2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of TextToImageResponse</returns>
@@ -1735,7 +1801,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Theme Css
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>string</returns>
         string ThemeCssThemeCssGet(int operationIndex = 0);
@@ -1746,14 +1812,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of string</returns>
         ApiResponse<string> ThemeCssThemeCssGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Train Embedding
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>TrainResponse</returns>
@@ -1765,7 +1831,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of TrainResponse</returns>
@@ -1773,7 +1839,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Train Hypernetwork
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>TrainResponse</returns>
@@ -1785,7 +1851,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of TrainResponse</returns>
@@ -1793,7 +1859,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Unloadapi
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object UnloadapiSdapiV1UnloadCheckpointPost(int operationIndex = 0);
@@ -1804,14 +1870,14 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> UnloadapiSdapiV1UnloadCheckpointPostWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Upload File
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="files"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
@@ -1823,7 +1889,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="files"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
@@ -1831,7 +1897,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Version
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         Object VersionControlnetVersionGet(int operationIndex = 0);
@@ -1842,7 +1908,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
         ApiResponse<Object> VersionControlnetVersionGetWithHttpInfo(int operationIndex = 0);
@@ -1861,7 +1927,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -1874,7 +1940,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -1886,7 +1952,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -1899,19 +1965,65 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
         System.Threading.Tasks.Task<ApiResponse<Object>> ApiInfoInfoGet_0WithHttpInfoAsync(bool? serialize = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
+        /// Api Refresh Embeddings
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of Object</returns>
+        System.Threading.Tasks.Task<Object> ApiRefreshEmbeddingsTacapiV1RefreshEmbeddingsPostAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// Api Refresh Embeddings
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (Object)</returns>
+        System.Threading.Tasks.Task<ApiResponse<Object>> ApiRefreshEmbeddingsTacapiV1RefreshEmbeddingsPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
+        /// Api Refresh Temp Files
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of Object</returns>
+        System.Threading.Tasks.Task<Object> ApiRefreshTempFilesTacapiV1RefreshTempFilesPostAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// Api Refresh Temp Files
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (Object)</returns>
+        System.Threading.Tasks.Task<ApiResponse<Object>> ApiRefreshTempFilesTacapiV1RefreshTempFilesPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
         /// App Id
         /// </summary>
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -1923,7 +2035,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -1934,7 +2046,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -1946,7 +2058,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -1957,7 +2069,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -1970,7 +2082,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -1982,7 +2094,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -1994,7 +2106,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -2005,7 +2117,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2018,7 +2130,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2030,7 +2142,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2043,7 +2155,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2055,7 +2167,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="bodyDetectControlnetDetectPost"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2068,7 +2180,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="bodyDetectControlnetDetectPost"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2080,7 +2192,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="attachment"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2093,7 +2205,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="attachment"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2105,7 +2217,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasBatchImagesRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2118,7 +2230,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasBatchImagesRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2130,7 +2242,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasSingleImageRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2143,7 +2255,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasSingleImageRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2155,7 +2267,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -2167,7 +2279,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -2178,7 +2290,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2191,7 +2303,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2203,7 +2315,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2216,7 +2328,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2228,7 +2340,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2241,7 +2353,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2253,7 +2365,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2266,7 +2378,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2278,7 +2390,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Flags</returns>
@@ -2290,7 +2402,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Flags)</returns>
@@ -2301,7 +2413,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -2313,7 +2425,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -2324,7 +2436,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -2336,7 +2448,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -2347,7 +2459,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Options</returns>
@@ -2359,7 +2471,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Options)</returns>
@@ -2370,7 +2482,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of string</returns>
@@ -2382,7 +2494,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (string)</returns>
@@ -2393,7 +2505,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of string</returns>
@@ -2405,7 +2517,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (string)</returns>
@@ -2416,7 +2528,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of EmbeddingsResponse</returns>
@@ -2428,7 +2540,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (EmbeddingsResponse)</returns>
@@ -2439,7 +2551,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;FaceRestorerItem&gt;</returns>
@@ -2451,7 +2563,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;FaceRestorerItem&gt;)</returns>
@@ -2462,7 +2574,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;HypernetworkItem&gt;</returns>
@@ -2474,7 +2586,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;HypernetworkItem&gt;)</returns>
@@ -2485,7 +2597,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;LatentUpscalerModeItem&gt;</returns>
@@ -2497,18 +2609,43 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;LatentUpscalerModeItem&gt;)</returns>
         System.Threading.Tasks.Task<ApiResponse<List<LatentUpscalerModeItem>>> GetLatentUpscaleModesSdapiV1LatentUpscaleModesGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
+        /// Get Lora Cached Hash
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="loraName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of Object</returns>
+        System.Threading.Tasks.Task<Object> GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGetAsync(string loraName, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// Get Lora Cached Hash
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="loraName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (Object)</returns>
+        System.Threading.Tasks.Task<ApiResponse<Object>> GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGetWithHttpInfoAsync(string loraName, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Get Lora Info
         /// </summary>
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="loraName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2521,7 +2658,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="loraName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2533,7 +2670,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -2545,7 +2682,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -2556,7 +2693,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="lycoName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2569,7 +2706,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="lycoName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2581,7 +2718,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of MemoryResponse</returns>
@@ -2593,7 +2730,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (MemoryResponse)</returns>
@@ -2604,7 +2741,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="item"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -2618,7 +2755,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="item"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -2631,7 +2768,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;PromptStyleItem&gt;</returns>
@@ -2643,7 +2780,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;PromptStyleItem&gt;)</returns>
@@ -2654,7 +2791,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Estimation</returns>
@@ -2666,7 +2803,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Estimation)</returns>
@@ -2677,7 +2814,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;RealesrganItem&gt;</returns>
@@ -2689,7 +2826,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;RealesrganItem&gt;)</returns>
@@ -2700,7 +2837,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;SamplerItem&gt;</returns>
@@ -2712,7 +2849,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;SamplerItem&gt;)</returns>
@@ -2723,7 +2860,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;ScriptInfo&gt;</returns>
@@ -2735,7 +2872,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;ScriptInfo&gt;)</returns>
@@ -2746,7 +2883,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ScriptsList</returns>
@@ -2758,7 +2895,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ScriptsList)</returns>
@@ -2769,7 +2906,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;SDModelItem&gt;</returns>
@@ -2781,7 +2918,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;SDModelItem&gt;)</returns>
@@ -2792,7 +2929,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;SDVaeItem&gt;</returns>
@@ -2804,7 +2941,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;SDVaeItem&gt;)</returns>
@@ -2815,7 +2952,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="tabname"> (optional, default to &quot;&quot;)</param>
         /// <param name="name"> (optional, default to &quot;&quot;)</param>
@@ -2830,7 +2967,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="tabname"> (optional, default to &quot;&quot;)</param>
         /// <param name="name"> (optional, default to &quot;&quot;)</param>
@@ -2844,7 +2981,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -2858,7 +2995,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -2871,7 +3008,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -2885,7 +3022,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -2898,7 +3035,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -2910,7 +3047,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -2921,7 +3058,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -2933,7 +3070,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -2944,7 +3081,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;UpscalerItem&gt;</returns>
@@ -2956,18 +3093,45 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;UpscalerItem&gt;)</returns>
         System.Threading.Tasks.Task<ApiResponse<List<UpscalerItem>>> GetUpscalersSdapiV1UpscalersGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
+        /// Get Wildcard Contents
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="basepath"></param>
+        /// <param name="filename"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of Object</returns>
+        System.Threading.Tasks.Task<Object> GetWildcardContentsTacapiV1WildcardContentsGetAsync(string basepath, string filename, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// Get Wildcard Contents
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="basepath"></param>
+        /// <param name="filename"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (Object)</returns>
+        System.Threading.Tasks.Task<ApiResponse<Object>> GetWildcardContentsTacapiV1WildcardContentsGetWithHttpInfoAsync(string basepath, string filename, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Img2Imgapi
         /// </summary>
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingImg2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2980,7 +3144,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingImg2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -2992,7 +3156,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="interrogateRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3005,7 +3169,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="interrogateRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3017,7 +3181,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -3029,7 +3193,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -3040,7 +3204,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -3052,7 +3216,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -3063,7 +3227,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -3075,7 +3239,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -3086,7 +3250,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -3098,7 +3262,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -3109,7 +3273,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -3121,7 +3285,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -3132,7 +3296,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -3144,7 +3308,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -3155,7 +3319,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -3173,7 +3337,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -3190,7 +3354,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -3208,7 +3372,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -3225,7 +3389,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of string</returns>
@@ -3237,7 +3401,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (string)</returns>
@@ -3248,7 +3412,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of string</returns>
@@ -3260,7 +3424,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (string)</returns>
@@ -3271,7 +3435,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="update"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3284,7 +3448,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="update"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3296,7 +3460,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="aliasNames"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3309,7 +3473,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="aliasNames"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3321,7 +3485,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pNGInfoRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3334,7 +3498,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pNGInfoRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3346,7 +3510,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -3360,7 +3524,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -3373,7 +3537,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -3387,7 +3551,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -3400,7 +3564,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -3414,7 +3578,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -3427,7 +3591,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -3441,7 +3605,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -3454,7 +3618,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3467,7 +3631,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3479,7 +3643,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="progressRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3492,7 +3656,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="progressRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3504,7 +3668,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skipCurrentImage"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3517,7 +3681,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skipCurrentImage"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3529,7 +3693,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;QuicksettingsHint&gt;</returns>
@@ -3541,7 +3705,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;QuicksettingsHint&gt;)</returns>
@@ -3552,7 +3716,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -3564,7 +3728,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -3575,7 +3739,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -3587,18 +3751,41 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
         System.Threading.Tasks.Task<ApiResponse<Object>> RefreshLorasSdapiV1RefreshLorasPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
+        /// Refresh Vae
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of Object</returns>
+        System.Threading.Tasks.Task<Object> RefreshVaeSdapiV1RefreshVaePostAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// Refresh Vae
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (Object)</returns>
+        System.Threading.Tasks.Task<ApiResponse<Object>> RefreshVaeSdapiV1RefreshVaePostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Reloadapi
         /// </summary>
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -3610,18 +3797,68 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
         System.Threading.Tasks.Task<ApiResponse<Object>> ReloadapiSdapiV1ReloadCheckpointPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
+        /// Rembg Remove
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="bodyRembgRemoveRembgPost"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of Object</returns>
+        System.Threading.Tasks.Task<Object> RembgRemoveRembgPostAsync(BodyRembgRemoveRembgPost? bodyRembgRemoveRembgPost = default(BodyRembgRemoveRembgPost?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// Rembg Remove
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="bodyRembgRemoveRembgPost"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (Object)</returns>
+        System.Threading.Tasks.Task<ApiResponse<Object>> RembgRemoveRembgPostWithHttpInfoAsync(BodyRembgRemoveRembgPost? bodyRembgRemoveRembgPost = default(BodyRembgRemoveRembgPost?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
+        /// Render Openpose Json
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="poseData"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of Object</returns>
+        System.Threading.Tasks.Task<Object> RenderOpenposeJsonControlnetRenderOpenposeJsonPostAsync(List<PoseData>? poseData = default(List<PoseData>?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// Render Openpose Json
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="poseData"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (Object)</returns>
+        System.Threading.Tasks.Task<ApiResponse<Object>> RenderOpenposeJsonControlnetRenderOpenposeJsonPostWithHttpInfoAsync(List<PoseData>? poseData = default(List<PoseData>?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Reset Iterator
         /// </summary>
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="resetBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3634,7 +3871,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="resetBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3646,7 +3883,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="resetBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3659,7 +3896,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="resetBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3671,7 +3908,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3684,7 +3921,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3696,7 +3933,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3709,7 +3946,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3721,7 +3958,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of string</returns>
@@ -3733,7 +3970,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (string)</returns>
@@ -3744,7 +3981,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3757,7 +3994,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3769,7 +4006,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -3781,7 +4018,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -3792,7 +4029,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -3804,7 +4041,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -3815,7 +4052,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -3827,7 +4064,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -3838,7 +4075,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3851,132 +4088,48 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
         System.Threading.Tasks.Task<ApiResponse<Object>> StaticResourceStaticPathGetWithHttpInfoAsync(string path, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
-        /// T2V Api Version
+        /// Stream
         /// </summary>
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sessionHash"></param>
+        /// <param name="run"></param>
+        /// <param name="componentId"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
-        System.Threading.Tasks.Task<Object> T2vApiVersionT2vApiVersionGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<Object> StreamStreamSessionHashRunComponentIdGetAsync(string sessionHash, int run, int componentId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
-        /// T2V Api Version
+        /// Stream
         /// </summary>
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sessionHash"></param>
+        /// <param name="run"></param>
+        /// <param name="componentId"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> T2vApiVersionT2vApiVersionGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-        /// <summary>
-        /// T2V Run
-        /// </summary>
-        /// <remarks>
-        /// 
-        /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="prompt"></param>
-        /// <param name="nPrompt"> (optional)</param>
-        /// <param name="model"> (optional)</param>
-        /// <param name="sampler"> (optional)</param>
-        /// <param name="steps"> (optional)</param>
-        /// <param name="frames"> (optional)</param>
-        /// <param name="seed"> (optional)</param>
-        /// <param name="cfgScale"> (optional)</param>
-        /// <param name="width"> (optional)</param>
-        /// <param name="height"> (optional)</param>
-        /// <param name="eta"> (optional)</param>
-        /// <param name="batchCount"> (optional)</param>
-        /// <param name="doVid2vid"> (optional, default to false)</param>
-        /// <param name="strength"> (optional)</param>
-        /// <param name="vid2vidStartFrame"> (optional)</param>
-        /// <param name="inpaintingFrames"> (optional)</param>
-        /// <param name="inpaintingWeights"> (optional)</param>
-        /// <param name="fps"> (optional)</param>
-        /// <param name="addSoundtrack"> (optional)</param>
-        /// <param name="soundtrackPath"> (optional)</param>
-        /// <param name="vid2vidInput"> (optional)</param>
-        /// <param name="inpaintingImage"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of Object</returns>
-        System.Threading.Tasks.Task<Object> T2vRunT2vRunPostAsync(string prompt, string? nPrompt = default(string?), string? model = default(string?), string? sampler = default(string?), int? steps = default(int?), int? frames = default(int?), int? seed = default(int?), int? cfgScale = default(int?), int? width = default(int?), int? height = default(int?), decimal? eta = default(decimal?), int? batchCount = default(int?), bool? doVid2vid = default(bool?), decimal? strength = default(decimal?), int? vid2vidStartFrame = default(int?), int? inpaintingFrames = default(int?), string? inpaintingWeights = default(string?), int? fps = default(int?), string? addSoundtrack = default(string?), string? soundtrackPath = default(string?), System.IO.Stream? vid2vidInput = default(System.IO.Stream?), System.IO.Stream? inpaintingImage = default(System.IO.Stream?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-
-        /// <summary>
-        /// T2V Run
-        /// </summary>
-        /// <remarks>
-        /// 
-        /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="prompt"></param>
-        /// <param name="nPrompt"> (optional)</param>
-        /// <param name="model"> (optional)</param>
-        /// <param name="sampler"> (optional)</param>
-        /// <param name="steps"> (optional)</param>
-        /// <param name="frames"> (optional)</param>
-        /// <param name="seed"> (optional)</param>
-        /// <param name="cfgScale"> (optional)</param>
-        /// <param name="width"> (optional)</param>
-        /// <param name="height"> (optional)</param>
-        /// <param name="eta"> (optional)</param>
-        /// <param name="batchCount"> (optional)</param>
-        /// <param name="doVid2vid"> (optional, default to false)</param>
-        /// <param name="strength"> (optional)</param>
-        /// <param name="vid2vidStartFrame"> (optional)</param>
-        /// <param name="inpaintingFrames"> (optional)</param>
-        /// <param name="inpaintingWeights"> (optional)</param>
-        /// <param name="fps"> (optional)</param>
-        /// <param name="addSoundtrack"> (optional)</param>
-        /// <param name="soundtrackPath"> (optional)</param>
-        /// <param name="vid2vidInput"> (optional)</param>
-        /// <param name="inpaintingImage"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (Object)</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> T2vRunT2vRunPostWithHttpInfoAsync(string prompt, string? nPrompt = default(string?), string? model = default(string?), string? sampler = default(string?), int? steps = default(int?), int? frames = default(int?), int? seed = default(int?), int? cfgScale = default(int?), int? width = default(int?), int? height = default(int?), decimal? eta = default(decimal?), int? batchCount = default(int?), bool? doVid2vid = default(bool?), decimal? strength = default(decimal?), int? vid2vidStartFrame = default(int?), int? inpaintingFrames = default(int?), string? inpaintingWeights = default(string?), int? fps = default(int?), string? addSoundtrack = default(string?), string? soundtrackPath = default(string?), System.IO.Stream? vid2vidInput = default(System.IO.Stream?), System.IO.Stream? inpaintingImage = default(System.IO.Stream?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-        /// <summary>
-        /// T2V Version
-        /// </summary>
-        /// <remarks>
-        /// 
-        /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of Object</returns>
-        System.Threading.Tasks.Task<Object> T2vVersionT2vVersionGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-
-        /// <summary>
-        /// T2V Version
-        /// </summary>
-        /// <remarks>
-        /// 
-        /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (Object)</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> T2vVersionT2vVersionGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<Object>> StreamStreamSessionHashRunComponentIdGetWithHttpInfoAsync(string sessionHash, int run, int componentId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Text2Imgapi
         /// </summary>
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingTxt2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -3989,7 +4142,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingTxt2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -4001,7 +4154,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of string</returns>
@@ -4013,7 +4166,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (string)</returns>
@@ -4024,7 +4177,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -4037,7 +4190,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -4049,7 +4202,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -4062,7 +4215,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -4074,7 +4227,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -4086,7 +4239,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -4097,7 +4250,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="files"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -4110,7 +4263,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="files"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
@@ -4122,7 +4275,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
@@ -4134,7 +4287,7 @@ namespace SdWebUpApi.Api
         /// <remarks>
         /// 
         /// </remarks>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
@@ -4155,7 +4308,7 @@ namespace SdWebUpApi.Api
     /// </summary>
     public partial class DefaultApi : IDefaultApi
     {
-        private SdWebUpApi.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
+        private SdWebUiApi.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultApi"/> class.
@@ -4171,13 +4324,13 @@ namespace SdWebUpApi.Api
         /// <returns></returns>
         public DefaultApi(string basePath)
         {
-            this.Configuration = SdWebUpApi.Client.Configuration.MergeConfigurations(
-                SdWebUpApi.Client.GlobalConfiguration.Instance,
-                new SdWebUpApi.Client.Configuration { BasePath = basePath }
+            this.Configuration = SdWebUiApi.Client.Configuration.MergeConfigurations(
+                SdWebUiApi.Client.GlobalConfiguration.Instance,
+                new SdWebUiApi.Client.Configuration { BasePath = basePath }
             );
-            this.Client = new SdWebUpApi.Client.ApiClient(this.Configuration.BasePath);
-            this.AsynchronousClient = new SdWebUpApi.Client.ApiClient(this.Configuration.BasePath);
-            this.ExceptionFactory = SdWebUpApi.Client.Configuration.DefaultExceptionFactory;
+            this.Client = new SdWebUiApi.Client.ApiClient(this.Configuration.BasePath);
+            this.AsynchronousClient = new SdWebUiApi.Client.ApiClient(this.Configuration.BasePath);
+            this.ExceptionFactory = SdWebUiApi.Client.Configuration.DefaultExceptionFactory;
         }
 
         /// <summary>
@@ -4186,17 +4339,17 @@ namespace SdWebUpApi.Api
         /// </summary>
         /// <param name="configuration">An instance of Configuration</param>
         /// <returns></returns>
-        public DefaultApi(SdWebUpApi.Client.Configuration configuration)
+        public DefaultApi(SdWebUiApi.Client.Configuration configuration)
         {
             if (configuration == null) throw new ArgumentNullException("configuration");
 
-            this.Configuration = SdWebUpApi.Client.Configuration.MergeConfigurations(
-                SdWebUpApi.Client.GlobalConfiguration.Instance,
+            this.Configuration = SdWebUiApi.Client.Configuration.MergeConfigurations(
+                SdWebUiApi.Client.GlobalConfiguration.Instance,
                 configuration
             );
-            this.Client = new SdWebUpApi.Client.ApiClient(this.Configuration.BasePath);
-            this.AsynchronousClient = new SdWebUpApi.Client.ApiClient(this.Configuration.BasePath);
-            ExceptionFactory = SdWebUpApi.Client.Configuration.DefaultExceptionFactory;
+            this.Client = new SdWebUiApi.Client.ApiClient(this.Configuration.BasePath);
+            this.AsynchronousClient = new SdWebUiApi.Client.ApiClient(this.Configuration.BasePath);
+            ExceptionFactory = SdWebUiApi.Client.Configuration.DefaultExceptionFactory;
         }
 
         /// <summary>
@@ -4206,7 +4359,7 @@ namespace SdWebUpApi.Api
         /// <param name="client">The client interface for synchronous API access.</param>
         /// <param name="asyncClient">The client interface for asynchronous API access.</param>
         /// <param name="configuration">The configuration object.</param>
-        public DefaultApi(SdWebUpApi.Client.ISynchronousClient client, SdWebUpApi.Client.IAsynchronousClient asyncClient, SdWebUpApi.Client.IReadableConfiguration configuration)
+        public DefaultApi(SdWebUiApi.Client.ISynchronousClient client, SdWebUiApi.Client.IAsynchronousClient asyncClient, SdWebUiApi.Client.IReadableConfiguration configuration)
         {
             if (client == null) throw new ArgumentNullException("client");
             if (asyncClient == null) throw new ArgumentNullException("asyncClient");
@@ -4215,18 +4368,18 @@ namespace SdWebUpApi.Api
             this.Client = client;
             this.AsynchronousClient = asyncClient;
             this.Configuration = configuration;
-            this.ExceptionFactory = SdWebUpApi.Client.Configuration.DefaultExceptionFactory;
+            this.ExceptionFactory = SdWebUiApi.Client.Configuration.DefaultExceptionFactory;
         }
 
         /// <summary>
         /// The client for accessing this underlying API asynchronously.
         /// </summary>
-        public SdWebUpApi.Client.IAsynchronousClient AsynchronousClient { get; set; }
+        public SdWebUiApi.Client.IAsynchronousClient AsynchronousClient { get; set; }
 
         /// <summary>
         /// The client for accessing this underlying API synchronously.
         /// </summary>
-        public SdWebUpApi.Client.ISynchronousClient Client { get; set; }
+        public SdWebUiApi.Client.ISynchronousClient Client { get; set; }
 
         /// <summary>
         /// Gets the base path of the API client.
@@ -4241,12 +4394,12 @@ namespace SdWebUpApi.Api
         /// Gets or sets the configuration object
         /// </summary>
         /// <value>An instance of the Configuration</value>
-        public SdWebUpApi.Client.IReadableConfiguration Configuration { get; set; }
+        public SdWebUiApi.Client.IReadableConfiguration Configuration { get; set; }
 
         /// <summary>
         /// Provides a factory method hook for the creation of exceptions.
         /// </summary>
-        public SdWebUpApi.Client.ExceptionFactory ExceptionFactory
+        public SdWebUiApi.Client.ExceptionFactory ExceptionFactory
         {
             get
             {
@@ -4262,26 +4415,26 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Api Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object ApiInfoInfoGet(bool? serialize = default(bool?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = ApiInfoInfoGetWithHttpInfo(serialize);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = ApiInfoInfoGetWithHttpInfo(serialize);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Api Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> ApiInfoInfoGetWithHttpInfo(bool? serialize = default(bool?), int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> ApiInfoInfoGetWithHttpInfo(bool? serialize = default(bool?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -4291,13 +4444,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -4305,7 +4458,7 @@ namespace SdWebUpApi.Api
 
             if (serialize != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "serialize", serialize));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "serialize", serialize));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.ApiInfoInfoGet";
@@ -4329,29 +4482,29 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Api Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> ApiInfoInfoGetAsync(bool? serialize = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await ApiInfoInfoGetWithHttpInfoAsync(serialize, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await ApiInfoInfoGetWithHttpInfoAsync(serialize, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Api Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> ApiInfoInfoGetWithHttpInfoAsync(bool? serialize = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> ApiInfoInfoGetWithHttpInfoAsync(bool? serialize = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -4361,13 +4514,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -4375,7 +4528,7 @@ namespace SdWebUpApi.Api
 
             if (serialize != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "serialize", serialize));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "serialize", serialize));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.ApiInfoInfoGet";
@@ -4400,26 +4553,26 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Api Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object ApiInfoInfoGet_0(bool? serialize = default(bool?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = ApiInfoInfoGet_0WithHttpInfo(serialize);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = ApiInfoInfoGet_0WithHttpInfo(serialize);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Api Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> ApiInfoInfoGet_0WithHttpInfo(bool? serialize = default(bool?), int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> ApiInfoInfoGet_0WithHttpInfo(bool? serialize = default(bool?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -4429,13 +4582,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -4443,7 +4596,7 @@ namespace SdWebUpApi.Api
 
             if (serialize != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "serialize", serialize));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "serialize", serialize));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.ApiInfoInfoGet_0";
@@ -4467,29 +4620,29 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Api Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> ApiInfoInfoGet_0Async(bool? serialize = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await ApiInfoInfoGet_0WithHttpInfoAsync(serialize, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await ApiInfoInfoGet_0WithHttpInfoAsync(serialize, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Api Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="serialize"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> ApiInfoInfoGet_0WithHttpInfoAsync(bool? serialize = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> ApiInfoInfoGet_0WithHttpInfoAsync(bool? serialize = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -4499,13 +4652,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -4513,7 +4666,7 @@ namespace SdWebUpApi.Api
 
             if (serialize != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "serialize", serialize));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "serialize", serialize));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.ApiInfoInfoGet_0";
@@ -4536,26 +4689,26 @@ namespace SdWebUpApi.Api
         }
 
         /// <summary>
-        /// App Id 
+        /// Api Refresh Embeddings 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
-        public Object AppIdAppIdGet(int operationIndex = 0)
+        public Object ApiRefreshEmbeddingsTacapiV1RefreshEmbeddingsPost(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = AppIdAppIdGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = ApiRefreshEmbeddingsTacapiV1RefreshEmbeddingsPostWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
-        /// App Id 
+        /// Api Refresh Embeddings 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> AppIdAppIdGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> ApiRefreshEmbeddingsTacapiV1RefreshEmbeddingsPostWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -4565,13 +4718,265 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+
+            localVarRequestOptions.Operation = "DefaultApi.ApiRefreshEmbeddingsTacapiV1RefreshEmbeddingsPost";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Post<Object>("/tacapi/v1/refresh-embeddings", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("ApiRefreshEmbeddingsTacapiV1RefreshEmbeddingsPost", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Api Refresh Embeddings 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of Object</returns>
+        public async System.Threading.Tasks.Task<Object> ApiRefreshEmbeddingsTacapiV1RefreshEmbeddingsPostAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await ApiRefreshEmbeddingsTacapiV1RefreshEmbeddingsPostWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Api Refresh Embeddings 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (Object)</returns>
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> ApiRefreshEmbeddingsTacapiV1RefreshEmbeddingsPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+
+            localVarRequestOptions.Operation = "DefaultApi.ApiRefreshEmbeddingsTacapiV1RefreshEmbeddingsPost";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/tacapi/v1/refresh-embeddings", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("ApiRefreshEmbeddingsTacapiV1RefreshEmbeddingsPost", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Api Refresh Temp Files 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>Object</returns>
+        public Object ApiRefreshTempFilesTacapiV1RefreshTempFilesPost(int operationIndex = 0)
+        {
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = ApiRefreshTempFilesTacapiV1RefreshTempFilesPostWithHttpInfo();
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Api Refresh Temp Files 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object</returns>
+        public SdWebUiApi.Client.ApiResponse<Object> ApiRefreshTempFilesTacapiV1RefreshTempFilesPostWithHttpInfo(int operationIndex = 0)
+        {
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+
+            localVarRequestOptions.Operation = "DefaultApi.ApiRefreshTempFilesTacapiV1RefreshTempFilesPost";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Post<Object>("/tacapi/v1/refresh-temp-files", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("ApiRefreshTempFilesTacapiV1RefreshTempFilesPost", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Api Refresh Temp Files 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of Object</returns>
+        public async System.Threading.Tasks.Task<Object> ApiRefreshTempFilesTacapiV1RefreshTempFilesPostAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await ApiRefreshTempFilesTacapiV1RefreshTempFilesPostWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Api Refresh Temp Files 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (Object)</returns>
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> ApiRefreshTempFilesTacapiV1RefreshTempFilesPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+
+            localVarRequestOptions.Operation = "DefaultApi.ApiRefreshTempFilesTacapiV1RefreshTempFilesPost";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/tacapi/v1/refresh-temp-files", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("ApiRefreshTempFilesTacapiV1RefreshTempFilesPost", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// App Id 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>Object</returns>
+        public Object AppIdAppIdGet(int operationIndex = 0)
+        {
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = AppIdAppIdGetWithHttpInfo();
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// App Id 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object</returns>
+        public SdWebUiApi.Client.ApiResponse<Object> AppIdAppIdGetWithHttpInfo(int operationIndex = 0)
+        {
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -4599,27 +5004,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// App Id 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> AppIdAppIdGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await AppIdAppIdGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await AppIdAppIdGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// App Id 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> AppIdAppIdGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> AppIdAppIdGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -4629,13 +5034,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -4664,24 +5069,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// App Id 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object AppIdAppIdGet_0(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = AppIdAppIdGet_0WithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = AppIdAppIdGet_0WithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// App Id 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> AppIdAppIdGet_0WithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> AppIdAppIdGet_0WithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -4691,13 +5096,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -4725,27 +5130,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// App Id 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> AppIdAppIdGet_0Async(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await AppIdAppIdGet_0WithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await AppIdAppIdGet_0WithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// App Id 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> AppIdAppIdGet_0WithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> AppIdAppIdGet_0WithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -4755,13 +5160,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -4790,32 +5195,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Build Resource 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object BuildResourceAssetsPathGet(string path, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = BuildResourceAssetsPathGetWithHttpInfo(path);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = BuildResourceAssetsPathGetWithHttpInfo(path);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Build Resource 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> BuildResourceAssetsPathGetWithHttpInfo(string path, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> BuildResourceAssetsPathGetWithHttpInfo(string path, int operationIndex = 0)
         {
             // verify the required parameter 'path' is set
             if (path == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'path' when calling DefaultApi->BuildResourceAssetsPathGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'path' when calling DefaultApi->BuildResourceAssetsPathGet");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -4825,19 +5230,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("path", SdWebUpApi.Client.ClientUtils.ParameterToString(path)); // path parameter
+            localVarRequestOptions.PathParameters.Add("path", SdWebUiApi.Client.ClientUtils.ParameterToString(path)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.BuildResourceAssetsPathGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -4860,35 +5265,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Build Resource 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> BuildResourceAssetsPathGetAsync(string path, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await BuildResourceAssetsPathGetWithHttpInfoAsync(path, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await BuildResourceAssetsPathGetWithHttpInfoAsync(path, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Build Resource 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> BuildResourceAssetsPathGetWithHttpInfoAsync(string path, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> BuildResourceAssetsPathGetWithHttpInfoAsync(string path, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'path' is set
             if (path == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'path' when calling DefaultApi->BuildResourceAssetsPathGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'path' when calling DefaultApi->BuildResourceAssetsPathGet");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -4898,19 +5303,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("path", SdWebUpApi.Client.ClientUtils.ParameterToString(path)); // path parameter
+            localVarRequestOptions.PathParameters.Add("path", SdWebUiApi.Client.ClientUtils.ParameterToString(path)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.BuildResourceAssetsPathGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -4934,24 +5339,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Control Types 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object ControlTypesControlnetControlTypesGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = ControlTypesControlnetControlTypesGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = ControlTypesControlnetControlTypesGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Control Types 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> ControlTypesControlnetControlTypesGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> ControlTypesControlnetControlTypesGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -4961,13 +5366,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -4995,27 +5400,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Control Types 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> ControlTypesControlnetControlTypesGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await ControlTypesControlnetControlTypesGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await ControlTypesControlnetControlTypesGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Control Types 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> ControlTypesControlnetControlTypesGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> ControlTypesControlnetControlTypesGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -5025,13 +5430,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -5060,32 +5465,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Create Embedding 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>CreateResponse</returns>
         public CreateResponse CreateEmbeddingSdapiV1CreateEmbeddingPost(Object body, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<CreateResponse> localVarResponse = CreateEmbeddingSdapiV1CreateEmbeddingPostWithHttpInfo(body);
+            SdWebUiApi.Client.ApiResponse<CreateResponse> localVarResponse = CreateEmbeddingSdapiV1CreateEmbeddingPostWithHttpInfo(body);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Create Embedding 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of CreateResponse</returns>
-        public SdWebUpApi.Client.ApiResponse<CreateResponse> CreateEmbeddingSdapiV1CreateEmbeddingPostWithHttpInfo(Object body, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<CreateResponse> CreateEmbeddingSdapiV1CreateEmbeddingPostWithHttpInfo(Object body, int operationIndex = 0)
         {
             // verify the required parameter 'body' is set
             if (body == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->CreateEmbeddingSdapiV1CreateEmbeddingPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->CreateEmbeddingSdapiV1CreateEmbeddingPost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -5096,13 +5501,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -5131,35 +5536,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Create Embedding 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of CreateResponse</returns>
         public async System.Threading.Tasks.Task<CreateResponse> CreateEmbeddingSdapiV1CreateEmbeddingPostAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<CreateResponse> localVarResponse = await CreateEmbeddingSdapiV1CreateEmbeddingPostWithHttpInfoAsync(body, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<CreateResponse> localVarResponse = await CreateEmbeddingSdapiV1CreateEmbeddingPostWithHttpInfoAsync(body, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Create Embedding 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (CreateResponse)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<CreateResponse>> CreateEmbeddingSdapiV1CreateEmbeddingPostWithHttpInfoAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<CreateResponse>> CreateEmbeddingSdapiV1CreateEmbeddingPostWithHttpInfoAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'body' is set
             if (body == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->CreateEmbeddingSdapiV1CreateEmbeddingPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->CreateEmbeddingSdapiV1CreateEmbeddingPost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -5170,13 +5575,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -5206,32 +5611,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Create Hypernetwork 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>CreateResponse</returns>
         public CreateResponse CreateHypernetworkSdapiV1CreateHypernetworkPost(Object body, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<CreateResponse> localVarResponse = CreateHypernetworkSdapiV1CreateHypernetworkPostWithHttpInfo(body);
+            SdWebUiApi.Client.ApiResponse<CreateResponse> localVarResponse = CreateHypernetworkSdapiV1CreateHypernetworkPostWithHttpInfo(body);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Create Hypernetwork 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of CreateResponse</returns>
-        public SdWebUpApi.Client.ApiResponse<CreateResponse> CreateHypernetworkSdapiV1CreateHypernetworkPostWithHttpInfo(Object body, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<CreateResponse> CreateHypernetworkSdapiV1CreateHypernetworkPostWithHttpInfo(Object body, int operationIndex = 0)
         {
             // verify the required parameter 'body' is set
             if (body == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->CreateHypernetworkSdapiV1CreateHypernetworkPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->CreateHypernetworkSdapiV1CreateHypernetworkPost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -5242,13 +5647,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -5277,35 +5682,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Create Hypernetwork 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of CreateResponse</returns>
         public async System.Threading.Tasks.Task<CreateResponse> CreateHypernetworkSdapiV1CreateHypernetworkPostAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<CreateResponse> localVarResponse = await CreateHypernetworkSdapiV1CreateHypernetworkPostWithHttpInfoAsync(body, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<CreateResponse> localVarResponse = await CreateHypernetworkSdapiV1CreateHypernetworkPostWithHttpInfoAsync(body, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Create Hypernetwork 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (CreateResponse)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<CreateResponse>> CreateHypernetworkSdapiV1CreateHypernetworkPostWithHttpInfoAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<CreateResponse>> CreateHypernetworkSdapiV1CreateHypernetworkPostWithHttpInfoAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'body' is set
             if (body == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->CreateHypernetworkSdapiV1CreateHypernetworkPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->CreateHypernetworkSdapiV1CreateHypernetworkPost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -5316,13 +5721,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -5352,26 +5757,26 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Detect 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="bodyDetectControlnetDetectPost"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object DetectControlnetDetectPost(BodyDetectControlnetDetectPost? bodyDetectControlnetDetectPost = default(BodyDetectControlnetDetectPost?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = DetectControlnetDetectPostWithHttpInfo(bodyDetectControlnetDetectPost);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = DetectControlnetDetectPostWithHttpInfo(bodyDetectControlnetDetectPost);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Detect 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="bodyDetectControlnetDetectPost"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> DetectControlnetDetectPostWithHttpInfo(BodyDetectControlnetDetectPost? bodyDetectControlnetDetectPost = default(BodyDetectControlnetDetectPost?), int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> DetectControlnetDetectPostWithHttpInfo(BodyDetectControlnetDetectPost? bodyDetectControlnetDetectPost = default(BodyDetectControlnetDetectPost?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -5382,13 +5787,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -5417,29 +5822,29 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Detect 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="bodyDetectControlnetDetectPost"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> DetectControlnetDetectPostAsync(BodyDetectControlnetDetectPost? bodyDetectControlnetDetectPost = default(BodyDetectControlnetDetectPost?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await DetectControlnetDetectPostWithHttpInfoAsync(bodyDetectControlnetDetectPost, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await DetectControlnetDetectPostWithHttpInfoAsync(bodyDetectControlnetDetectPost, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Detect 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="bodyDetectControlnetDetectPost"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> DetectControlnetDetectPostWithHttpInfoAsync(BodyDetectControlnetDetectPost? bodyDetectControlnetDetectPost = default(BodyDetectControlnetDetectPost?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> DetectControlnetDetectPostWithHttpInfoAsync(BodyDetectControlnetDetectPost? bodyDetectControlnetDetectPost = default(BodyDetectControlnetDetectPost?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -5450,13 +5855,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -5486,26 +5891,26 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Download Sysinfo 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="attachment"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object DownloadSysinfoInternalSysinfoGet(Object? attachment = default(Object?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = DownloadSysinfoInternalSysinfoGetWithHttpInfo(attachment);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = DownloadSysinfoInternalSysinfoGetWithHttpInfo(attachment);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Download Sysinfo 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="attachment"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> DownloadSysinfoInternalSysinfoGetWithHttpInfo(Object? attachment = default(Object?), int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> DownloadSysinfoInternalSysinfoGetWithHttpInfo(Object? attachment = default(Object?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -5515,13 +5920,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -5529,7 +5934,7 @@ namespace SdWebUpApi.Api
 
             if (attachment != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "attachment", attachment));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "attachment", attachment));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.DownloadSysinfoInternalSysinfoGet";
@@ -5553,29 +5958,29 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Download Sysinfo 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="attachment"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> DownloadSysinfoInternalSysinfoGetAsync(Object? attachment = default(Object?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await DownloadSysinfoInternalSysinfoGetWithHttpInfoAsync(attachment, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await DownloadSysinfoInternalSysinfoGetWithHttpInfoAsync(attachment, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Download Sysinfo 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="attachment"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> DownloadSysinfoInternalSysinfoGetWithHttpInfoAsync(Object? attachment = default(Object?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> DownloadSysinfoInternalSysinfoGetWithHttpInfoAsync(Object? attachment = default(Object?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -5585,13 +5990,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -5599,7 +6004,7 @@ namespace SdWebUpApi.Api
 
             if (attachment != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "attachment", attachment));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "attachment", attachment));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.DownloadSysinfoInternalSysinfoGet";
@@ -5624,32 +6029,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Extras Batch Images Api 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasBatchImagesRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ExtrasBatchImagesResponse</returns>
         public ExtrasBatchImagesResponse ExtrasBatchImagesApiSdapiV1ExtraBatchImagesPost(ExtrasBatchImagesRequest extrasBatchImagesRequest, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<ExtrasBatchImagesResponse> localVarResponse = ExtrasBatchImagesApiSdapiV1ExtraBatchImagesPostWithHttpInfo(extrasBatchImagesRequest);
+            SdWebUiApi.Client.ApiResponse<ExtrasBatchImagesResponse> localVarResponse = ExtrasBatchImagesApiSdapiV1ExtraBatchImagesPostWithHttpInfo(extrasBatchImagesRequest);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Extras Batch Images Api 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasBatchImagesRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of ExtrasBatchImagesResponse</returns>
-        public SdWebUpApi.Client.ApiResponse<ExtrasBatchImagesResponse> ExtrasBatchImagesApiSdapiV1ExtraBatchImagesPostWithHttpInfo(ExtrasBatchImagesRequest extrasBatchImagesRequest, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<ExtrasBatchImagesResponse> ExtrasBatchImagesApiSdapiV1ExtraBatchImagesPostWithHttpInfo(ExtrasBatchImagesRequest extrasBatchImagesRequest, int operationIndex = 0)
         {
             // verify the required parameter 'extrasBatchImagesRequest' is set
             if (extrasBatchImagesRequest == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'extrasBatchImagesRequest' when calling DefaultApi->ExtrasBatchImagesApiSdapiV1ExtraBatchImagesPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'extrasBatchImagesRequest' when calling DefaultApi->ExtrasBatchImagesApiSdapiV1ExtraBatchImagesPost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -5660,13 +6065,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -5695,35 +6100,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Extras Batch Images Api 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasBatchImagesRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ExtrasBatchImagesResponse</returns>
         public async System.Threading.Tasks.Task<ExtrasBatchImagesResponse> ExtrasBatchImagesApiSdapiV1ExtraBatchImagesPostAsync(ExtrasBatchImagesRequest extrasBatchImagesRequest, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<ExtrasBatchImagesResponse> localVarResponse = await ExtrasBatchImagesApiSdapiV1ExtraBatchImagesPostWithHttpInfoAsync(extrasBatchImagesRequest, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<ExtrasBatchImagesResponse> localVarResponse = await ExtrasBatchImagesApiSdapiV1ExtraBatchImagesPostWithHttpInfoAsync(extrasBatchImagesRequest, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Extras Batch Images Api 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasBatchImagesRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ExtrasBatchImagesResponse)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<ExtrasBatchImagesResponse>> ExtrasBatchImagesApiSdapiV1ExtraBatchImagesPostWithHttpInfoAsync(ExtrasBatchImagesRequest extrasBatchImagesRequest, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<ExtrasBatchImagesResponse>> ExtrasBatchImagesApiSdapiV1ExtraBatchImagesPostWithHttpInfoAsync(ExtrasBatchImagesRequest extrasBatchImagesRequest, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'extrasBatchImagesRequest' is set
             if (extrasBatchImagesRequest == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'extrasBatchImagesRequest' when calling DefaultApi->ExtrasBatchImagesApiSdapiV1ExtraBatchImagesPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'extrasBatchImagesRequest' when calling DefaultApi->ExtrasBatchImagesApiSdapiV1ExtraBatchImagesPost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -5734,13 +6139,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -5770,32 +6175,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Extras Single Image Api 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasSingleImageRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ExtrasSingleImageResponse</returns>
         public ExtrasSingleImageResponse ExtrasSingleImageApiSdapiV1ExtraSingleImagePost(ExtrasSingleImageRequest extrasSingleImageRequest, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<ExtrasSingleImageResponse> localVarResponse = ExtrasSingleImageApiSdapiV1ExtraSingleImagePostWithHttpInfo(extrasSingleImageRequest);
+            SdWebUiApi.Client.ApiResponse<ExtrasSingleImageResponse> localVarResponse = ExtrasSingleImageApiSdapiV1ExtraSingleImagePostWithHttpInfo(extrasSingleImageRequest);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Extras Single Image Api 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasSingleImageRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of ExtrasSingleImageResponse</returns>
-        public SdWebUpApi.Client.ApiResponse<ExtrasSingleImageResponse> ExtrasSingleImageApiSdapiV1ExtraSingleImagePostWithHttpInfo(ExtrasSingleImageRequest extrasSingleImageRequest, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<ExtrasSingleImageResponse> ExtrasSingleImageApiSdapiV1ExtraSingleImagePostWithHttpInfo(ExtrasSingleImageRequest extrasSingleImageRequest, int operationIndex = 0)
         {
             // verify the required parameter 'extrasSingleImageRequest' is set
             if (extrasSingleImageRequest == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'extrasSingleImageRequest' when calling DefaultApi->ExtrasSingleImageApiSdapiV1ExtraSingleImagePost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'extrasSingleImageRequest' when calling DefaultApi->ExtrasSingleImageApiSdapiV1ExtraSingleImagePost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -5806,13 +6211,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -5841,35 +6246,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Extras Single Image Api 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasSingleImageRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ExtrasSingleImageResponse</returns>
         public async System.Threading.Tasks.Task<ExtrasSingleImageResponse> ExtrasSingleImageApiSdapiV1ExtraSingleImagePostAsync(ExtrasSingleImageRequest extrasSingleImageRequest, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<ExtrasSingleImageResponse> localVarResponse = await ExtrasSingleImageApiSdapiV1ExtraSingleImagePostWithHttpInfoAsync(extrasSingleImageRequest, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<ExtrasSingleImageResponse> localVarResponse = await ExtrasSingleImageApiSdapiV1ExtraSingleImagePostWithHttpInfoAsync(extrasSingleImageRequest, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Extras Single Image Api 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="extrasSingleImageRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ExtrasSingleImageResponse)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<ExtrasSingleImageResponse>> ExtrasSingleImageApiSdapiV1ExtraSingleImagePostWithHttpInfoAsync(ExtrasSingleImageRequest extrasSingleImageRequest, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<ExtrasSingleImageResponse>> ExtrasSingleImageApiSdapiV1ExtraSingleImagePostWithHttpInfoAsync(ExtrasSingleImageRequest extrasSingleImageRequest, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'extrasSingleImageRequest' is set
             if (extrasSingleImageRequest == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'extrasSingleImageRequest' when calling DefaultApi->ExtrasSingleImageApiSdapiV1ExtraSingleImagePost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'extrasSingleImageRequest' when calling DefaultApi->ExtrasSingleImageApiSdapiV1ExtraSingleImagePost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -5880,13 +6285,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -5916,24 +6321,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Favicon 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object FaviconFaviconIcoGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = FaviconFaviconIcoGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = FaviconFaviconIcoGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Favicon 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> FaviconFaviconIcoGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> FaviconFaviconIcoGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -5943,13 +6348,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -5977,27 +6382,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Favicon 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> FaviconFaviconIcoGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await FaviconFaviconIcoGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await FaviconFaviconIcoGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Favicon 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> FaviconFaviconIcoGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> FaviconFaviconIcoGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -6007,13 +6412,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -6042,26 +6447,26 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Fetch File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object FetchFileSdExtraNetworksThumbGet(string? filename = default(string?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = FetchFileSdExtraNetworksThumbGetWithHttpInfo(filename);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = FetchFileSdExtraNetworksThumbGetWithHttpInfo(filename);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Fetch File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> FetchFileSdExtraNetworksThumbGetWithHttpInfo(string? filename = default(string?), int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> FetchFileSdExtraNetworksThumbGetWithHttpInfo(string? filename = default(string?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -6071,13 +6476,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -6085,7 +6490,7 @@ namespace SdWebUpApi.Api
 
             if (filename != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "filename", filename));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "filename", filename));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.FetchFileSdExtraNetworksThumbGet";
@@ -6109,29 +6514,29 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Fetch File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> FetchFileSdExtraNetworksThumbGetAsync(string? filename = default(string?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await FetchFileSdExtraNetworksThumbGetWithHttpInfoAsync(filename, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await FetchFileSdExtraNetworksThumbGetWithHttpInfoAsync(filename, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Fetch File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> FetchFileSdExtraNetworksThumbGetWithHttpInfoAsync(string? filename = default(string?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> FetchFileSdExtraNetworksThumbGetWithHttpInfoAsync(string? filename = default(string?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -6141,13 +6546,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -6155,7 +6560,7 @@ namespace SdWebUpApi.Api
 
             if (filename != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "filename", filename));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "filename", filename));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.FetchFileSdExtraNetworksThumbGet";
@@ -6180,32 +6585,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// File Deprecated 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object FileDeprecatedFilePathGet(string path, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = FileDeprecatedFilePathGetWithHttpInfo(path);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = FileDeprecatedFilePathGetWithHttpInfo(path);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// File Deprecated 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> FileDeprecatedFilePathGetWithHttpInfo(string path, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> FileDeprecatedFilePathGetWithHttpInfo(string path, int operationIndex = 0)
         {
             // verify the required parameter 'path' is set
             if (path == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'path' when calling DefaultApi->FileDeprecatedFilePathGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'path' when calling DefaultApi->FileDeprecatedFilePathGet");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -6215,19 +6620,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("path", SdWebUpApi.Client.ClientUtils.ParameterToString(path)); // path parameter
+            localVarRequestOptions.PathParameters.Add("path", SdWebUiApi.Client.ClientUtils.ParameterToString(path)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.FileDeprecatedFilePathGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -6250,35 +6655,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// File Deprecated 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> FileDeprecatedFilePathGetAsync(string path, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await FileDeprecatedFilePathGetWithHttpInfoAsync(path, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await FileDeprecatedFilePathGetWithHttpInfoAsync(path, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// File Deprecated 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> FileDeprecatedFilePathGetWithHttpInfoAsync(string path, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> FileDeprecatedFilePathGetWithHttpInfoAsync(string path, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'path' is set
             if (path == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'path' when calling DefaultApi->FileDeprecatedFilePathGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'path' when calling DefaultApi->FileDeprecatedFilePathGet");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -6288,19 +6693,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("path", SdWebUpApi.Client.ClientUtils.ParameterToString(path)); // path parameter
+            localVarRequestOptions.PathParameters.Add("path", SdWebUiApi.Client.ClientUtils.ParameterToString(path)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.FileDeprecatedFilePathGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -6324,32 +6729,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object FileFilePathOrUrlGet(string pathOrUrl, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = FileFilePathOrUrlGetWithHttpInfo(pathOrUrl);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = FileFilePathOrUrlGetWithHttpInfo(pathOrUrl);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> FileFilePathOrUrlGetWithHttpInfo(string pathOrUrl, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> FileFilePathOrUrlGetWithHttpInfo(string pathOrUrl, int operationIndex = 0)
         {
             // verify the required parameter 'pathOrUrl' is set
             if (pathOrUrl == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'pathOrUrl' when calling DefaultApi->FileFilePathOrUrlGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'pathOrUrl' when calling DefaultApi->FileFilePathOrUrlGet");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -6359,19 +6764,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("path_or_url", SdWebUpApi.Client.ClientUtils.ParameterToString(pathOrUrl)); // path parameter
+            localVarRequestOptions.PathParameters.Add("path_or_url", SdWebUiApi.Client.ClientUtils.ParameterToString(pathOrUrl)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.FileFilePathOrUrlGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -6394,35 +6799,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> FileFilePathOrUrlGetAsync(string pathOrUrl, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await FileFilePathOrUrlGetWithHttpInfoAsync(pathOrUrl, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await FileFilePathOrUrlGetWithHttpInfoAsync(pathOrUrl, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> FileFilePathOrUrlGetWithHttpInfoAsync(string pathOrUrl, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> FileFilePathOrUrlGetWithHttpInfoAsync(string pathOrUrl, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'pathOrUrl' is set
             if (pathOrUrl == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'pathOrUrl' when calling DefaultApi->FileFilePathOrUrlGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'pathOrUrl' when calling DefaultApi->FileFilePathOrUrlGet");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -6432,19 +6837,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("path_or_url", SdWebUpApi.Client.ClientUtils.ParameterToString(pathOrUrl)); // path parameter
+            localVarRequestOptions.PathParameters.Add("path_or_url", SdWebUiApi.Client.ClientUtils.ParameterToString(pathOrUrl)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.FileFilePathOrUrlGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -6468,32 +6873,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object FileFilePathOrUrlHead(string pathOrUrl, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = FileFilePathOrUrlHeadWithHttpInfo(pathOrUrl);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = FileFilePathOrUrlHeadWithHttpInfo(pathOrUrl);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> FileFilePathOrUrlHeadWithHttpInfo(string pathOrUrl, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> FileFilePathOrUrlHeadWithHttpInfo(string pathOrUrl, int operationIndex = 0)
         {
             // verify the required parameter 'pathOrUrl' is set
             if (pathOrUrl == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'pathOrUrl' when calling DefaultApi->FileFilePathOrUrlHead");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'pathOrUrl' when calling DefaultApi->FileFilePathOrUrlHead");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -6503,19 +6908,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("path_or_url", SdWebUpApi.Client.ClientUtils.ParameterToString(pathOrUrl)); // path parameter
+            localVarRequestOptions.PathParameters.Add("path_or_url", SdWebUiApi.Client.ClientUtils.ParameterToString(pathOrUrl)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.FileFilePathOrUrlHead";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -6538,35 +6943,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> FileFilePathOrUrlHeadAsync(string pathOrUrl, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await FileFilePathOrUrlHeadWithHttpInfoAsync(pathOrUrl, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await FileFilePathOrUrlHeadWithHttpInfoAsync(pathOrUrl, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pathOrUrl"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> FileFilePathOrUrlHeadWithHttpInfoAsync(string pathOrUrl, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> FileFilePathOrUrlHeadWithHttpInfoAsync(string pathOrUrl, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'pathOrUrl' is set
             if (pathOrUrl == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'pathOrUrl' when calling DefaultApi->FileFilePathOrUrlHead");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'pathOrUrl' when calling DefaultApi->FileFilePathOrUrlHead");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -6576,19 +6981,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("path_or_url", SdWebUpApi.Client.ClientUtils.ParameterToString(pathOrUrl)); // path parameter
+            localVarRequestOptions.PathParameters.Add("path_or_url", SdWebUiApi.Client.ClientUtils.ParameterToString(pathOrUrl)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.FileFilePathOrUrlHead";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -6612,24 +7017,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Cmd Flags 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Flags</returns>
         public Flags GetCmdFlagsSdapiV1CmdFlagsGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Flags> localVarResponse = GetCmdFlagsSdapiV1CmdFlagsGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Flags> localVarResponse = GetCmdFlagsSdapiV1CmdFlagsGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Cmd Flags 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Flags</returns>
-        public SdWebUpApi.Client.ApiResponse<Flags> GetCmdFlagsSdapiV1CmdFlagsGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Flags> GetCmdFlagsSdapiV1CmdFlagsGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -6639,13 +7044,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -6673,27 +7078,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Cmd Flags 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Flags</returns>
         public async System.Threading.Tasks.Task<Flags> GetCmdFlagsSdapiV1CmdFlagsGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Flags> localVarResponse = await GetCmdFlagsSdapiV1CmdFlagsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Flags> localVarResponse = await GetCmdFlagsSdapiV1CmdFlagsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Cmd Flags 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Flags)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Flags>> GetCmdFlagsSdapiV1CmdFlagsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Flags>> GetCmdFlagsSdapiV1CmdFlagsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -6703,13 +7108,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -6738,24 +7143,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object GetConfigConfigGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = GetConfigConfigGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = GetConfigConfigGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> GetConfigConfigGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> GetConfigConfigGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -6765,13 +7170,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -6799,27 +7204,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> GetConfigConfigGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await GetConfigConfigGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await GetConfigConfigGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> GetConfigConfigGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> GetConfigConfigGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -6829,13 +7234,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -6864,24 +7269,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object GetConfigConfigGet_0(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = GetConfigConfigGet_0WithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = GetConfigConfigGet_0WithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> GetConfigConfigGet_0WithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> GetConfigConfigGet_0WithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -6891,13 +7296,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -6925,27 +7330,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> GetConfigConfigGet_0Async(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await GetConfigConfigGet_0WithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await GetConfigConfigGet_0WithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> GetConfigConfigGet_0WithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> GetConfigConfigGet_0WithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -6955,13 +7360,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -6990,24 +7395,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Options</returns>
         public Options GetConfigSdapiV1OptionsGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Options> localVarResponse = GetConfigSdapiV1OptionsGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Options> localVarResponse = GetConfigSdapiV1OptionsGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Options</returns>
-        public SdWebUpApi.Client.ApiResponse<Options> GetConfigSdapiV1OptionsGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Options> GetConfigSdapiV1OptionsGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7017,13 +7422,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -7051,27 +7456,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Options</returns>
         public async System.Threading.Tasks.Task<Options> GetConfigSdapiV1OptionsGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Options> localVarResponse = await GetConfigSdapiV1OptionsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Options> localVarResponse = await GetConfigSdapiV1OptionsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Options)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Options>> GetConfigSdapiV1OptionsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Options>> GetConfigSdapiV1OptionsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7081,13 +7486,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -7116,24 +7521,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Current User 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>string</returns>
         public string GetCurrentUserUserGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<string> localVarResponse = GetCurrentUserUserGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<string> localVarResponse = GetCurrentUserUserGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Current User 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of string</returns>
-        public SdWebUpApi.Client.ApiResponse<string> GetCurrentUserUserGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<string> GetCurrentUserUserGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7143,13 +7548,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -7177,27 +7582,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Current User 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of string</returns>
         public async System.Threading.Tasks.Task<string> GetCurrentUserUserGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<string> localVarResponse = await GetCurrentUserUserGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<string> localVarResponse = await GetCurrentUserUserGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Current User 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (string)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<string>> GetCurrentUserUserGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<string>> GetCurrentUserUserGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7207,13 +7612,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -7242,24 +7647,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Current User 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>string</returns>
         public string GetCurrentUserUserGet_0(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<string> localVarResponse = GetCurrentUserUserGet_0WithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<string> localVarResponse = GetCurrentUserUserGet_0WithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Current User 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of string</returns>
-        public SdWebUpApi.Client.ApiResponse<string> GetCurrentUserUserGet_0WithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<string> GetCurrentUserUserGet_0WithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7269,13 +7674,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -7303,27 +7708,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Current User 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of string</returns>
         public async System.Threading.Tasks.Task<string> GetCurrentUserUserGet_0Async(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<string> localVarResponse = await GetCurrentUserUserGet_0WithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<string> localVarResponse = await GetCurrentUserUserGet_0WithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Current User 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (string)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<string>> GetCurrentUserUserGet_0WithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<string>> GetCurrentUserUserGet_0WithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7333,13 +7738,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -7368,24 +7773,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Embeddings 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>EmbeddingsResponse</returns>
         public EmbeddingsResponse GetEmbeddingsSdapiV1EmbeddingsGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<EmbeddingsResponse> localVarResponse = GetEmbeddingsSdapiV1EmbeddingsGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<EmbeddingsResponse> localVarResponse = GetEmbeddingsSdapiV1EmbeddingsGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Embeddings 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of EmbeddingsResponse</returns>
-        public SdWebUpApi.Client.ApiResponse<EmbeddingsResponse> GetEmbeddingsSdapiV1EmbeddingsGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<EmbeddingsResponse> GetEmbeddingsSdapiV1EmbeddingsGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7395,13 +7800,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -7429,27 +7834,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Embeddings 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of EmbeddingsResponse</returns>
         public async System.Threading.Tasks.Task<EmbeddingsResponse> GetEmbeddingsSdapiV1EmbeddingsGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<EmbeddingsResponse> localVarResponse = await GetEmbeddingsSdapiV1EmbeddingsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<EmbeddingsResponse> localVarResponse = await GetEmbeddingsSdapiV1EmbeddingsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Embeddings 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (EmbeddingsResponse)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<EmbeddingsResponse>> GetEmbeddingsSdapiV1EmbeddingsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<EmbeddingsResponse>> GetEmbeddingsSdapiV1EmbeddingsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7459,13 +7864,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -7494,24 +7899,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Face Restorers 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;FaceRestorerItem&gt;</returns>
         public List<FaceRestorerItem> GetFaceRestorersSdapiV1FaceRestorersGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<List<FaceRestorerItem>> localVarResponse = GetFaceRestorersSdapiV1FaceRestorersGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<List<FaceRestorerItem>> localVarResponse = GetFaceRestorersSdapiV1FaceRestorersGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Face Restorers 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;FaceRestorerItem&gt;</returns>
-        public SdWebUpApi.Client.ApiResponse<List<FaceRestorerItem>> GetFaceRestorersSdapiV1FaceRestorersGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<List<FaceRestorerItem>> GetFaceRestorersSdapiV1FaceRestorersGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7521,13 +7926,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -7555,27 +7960,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Face Restorers 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;FaceRestorerItem&gt;</returns>
         public async System.Threading.Tasks.Task<List<FaceRestorerItem>> GetFaceRestorersSdapiV1FaceRestorersGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<List<FaceRestorerItem>> localVarResponse = await GetFaceRestorersSdapiV1FaceRestorersGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<List<FaceRestorerItem>> localVarResponse = await GetFaceRestorersSdapiV1FaceRestorersGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Face Restorers 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;FaceRestorerItem&gt;)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<List<FaceRestorerItem>>> GetFaceRestorersSdapiV1FaceRestorersGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<List<FaceRestorerItem>>> GetFaceRestorersSdapiV1FaceRestorersGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7585,13 +7990,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -7620,24 +8025,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Hypernetworks 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;HypernetworkItem&gt;</returns>
         public List<HypernetworkItem> GetHypernetworksSdapiV1HypernetworksGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<List<HypernetworkItem>> localVarResponse = GetHypernetworksSdapiV1HypernetworksGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<List<HypernetworkItem>> localVarResponse = GetHypernetworksSdapiV1HypernetworksGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Hypernetworks 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;HypernetworkItem&gt;</returns>
-        public SdWebUpApi.Client.ApiResponse<List<HypernetworkItem>> GetHypernetworksSdapiV1HypernetworksGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<List<HypernetworkItem>> GetHypernetworksSdapiV1HypernetworksGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7647,13 +8052,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -7681,27 +8086,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Hypernetworks 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;HypernetworkItem&gt;</returns>
         public async System.Threading.Tasks.Task<List<HypernetworkItem>> GetHypernetworksSdapiV1HypernetworksGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<List<HypernetworkItem>> localVarResponse = await GetHypernetworksSdapiV1HypernetworksGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<List<HypernetworkItem>> localVarResponse = await GetHypernetworksSdapiV1HypernetworksGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Hypernetworks 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;HypernetworkItem&gt;)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<List<HypernetworkItem>>> GetHypernetworksSdapiV1HypernetworksGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<List<HypernetworkItem>>> GetHypernetworksSdapiV1HypernetworksGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7711,13 +8116,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -7746,24 +8151,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Latent Upscale Modes 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;LatentUpscalerModeItem&gt;</returns>
         public List<LatentUpscalerModeItem> GetLatentUpscaleModesSdapiV1LatentUpscaleModesGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<List<LatentUpscalerModeItem>> localVarResponse = GetLatentUpscaleModesSdapiV1LatentUpscaleModesGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<List<LatentUpscalerModeItem>> localVarResponse = GetLatentUpscaleModesSdapiV1LatentUpscaleModesGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Latent Upscale Modes 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;LatentUpscalerModeItem&gt;</returns>
-        public SdWebUpApi.Client.ApiResponse<List<LatentUpscalerModeItem>> GetLatentUpscaleModesSdapiV1LatentUpscaleModesGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<List<LatentUpscalerModeItem>> GetLatentUpscaleModesSdapiV1LatentUpscaleModesGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7773,13 +8178,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -7807,27 +8212,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Latent Upscale Modes 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;LatentUpscalerModeItem&gt;</returns>
         public async System.Threading.Tasks.Task<List<LatentUpscalerModeItem>> GetLatentUpscaleModesSdapiV1LatentUpscaleModesGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<List<LatentUpscalerModeItem>> localVarResponse = await GetLatentUpscaleModesSdapiV1LatentUpscaleModesGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<List<LatentUpscalerModeItem>> localVarResponse = await GetLatentUpscaleModesSdapiV1LatentUpscaleModesGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Latent Upscale Modes 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;LatentUpscalerModeItem&gt;)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<List<LatentUpscalerModeItem>>> GetLatentUpscaleModesSdapiV1LatentUpscaleModesGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<List<LatentUpscalerModeItem>>> GetLatentUpscaleModesSdapiV1LatentUpscaleModesGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7837,13 +8242,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -7870,34 +8275,34 @@ namespace SdWebUpApi.Api
         }
 
         /// <summary>
-        /// Get Lora Info 
+        /// Get Lora Cached Hash 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="loraName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
-        public Object GetLoraInfoTacapiV1LoraInfoLoraNameGet(Object loraName, int operationIndex = 0)
+        public Object GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGet(string loraName, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = GetLoraInfoTacapiV1LoraInfoLoraNameGetWithHttpInfo(loraName);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGetWithHttpInfo(loraName);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        /// Get Lora Info 
+        /// Get Lora Cached Hash 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="loraName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> GetLoraInfoTacapiV1LoraInfoLoraNameGetWithHttpInfo(Object loraName, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGetWithHttpInfo(string loraName, int operationIndex = 0)
         {
             // verify the required parameter 'loraName' is set
             if (loraName == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'loraName' when calling DefaultApi->GetLoraInfoTacapiV1LoraInfoLoraNameGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'loraName' when calling DefaultApi->GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGet");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7907,19 +8312,163 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("lora_name", SdWebUpApi.Client.ClientUtils.ParameterToString(loraName)); // path parameter
+            localVarRequestOptions.PathParameters.Add("lora_name", SdWebUiApi.Client.ClientUtils.ParameterToString(loraName)); // path parameter
+
+            localVarRequestOptions.Operation = "DefaultApi.GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGet";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Get<Object>("/tacapi/v1/lora-cached-hash/{lora_name}", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGet", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Get Lora Cached Hash 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="loraName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of Object</returns>
+        public async System.Threading.Tasks.Task<Object> GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGetAsync(string loraName, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGetWithHttpInfoAsync(loraName, operationIndex, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Get Lora Cached Hash 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="loraName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (Object)</returns>
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGetWithHttpInfoAsync(string loraName, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            // verify the required parameter 'loraName' is set
+            if (loraName == null)
+            {
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'loraName' when calling DefaultApi->GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGet");
+            }
+
+
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.PathParameters.Add("lora_name", SdWebUiApi.Client.ClientUtils.ParameterToString(loraName)); // path parameter
+
+            localVarRequestOptions.Operation = "DefaultApi.GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGet";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = await this.AsynchronousClient.GetAsync<Object>("/tacapi/v1/lora-cached-hash/{lora_name}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("GetLoraCachedHashTacapiV1LoraCachedHashLoraNameGet", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Get Lora Info 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="loraName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>Object</returns>
+        public Object GetLoraInfoTacapiV1LoraInfoLoraNameGet(Object loraName, int operationIndex = 0)
+        {
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = GetLoraInfoTacapiV1LoraInfoLoraNameGetWithHttpInfo(loraName);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Get Lora Info 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="loraName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object</returns>
+        public SdWebUiApi.Client.ApiResponse<Object> GetLoraInfoTacapiV1LoraInfoLoraNameGetWithHttpInfo(Object loraName, int operationIndex = 0)
+        {
+            // verify the required parameter 'loraName' is set
+            if (loraName == null)
+            {
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'loraName' when calling DefaultApi->GetLoraInfoTacapiV1LoraInfoLoraNameGet");
+            }
+
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.PathParameters.Add("lora_name", SdWebUiApi.Client.ClientUtils.ParameterToString(loraName)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.GetLoraInfoTacapiV1LoraInfoLoraNameGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -7942,35 +8491,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Lora Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="loraName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> GetLoraInfoTacapiV1LoraInfoLoraNameGetAsync(Object loraName, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await GetLoraInfoTacapiV1LoraInfoLoraNameGetWithHttpInfoAsync(loraName, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await GetLoraInfoTacapiV1LoraInfoLoraNameGetWithHttpInfoAsync(loraName, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Lora Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="loraName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> GetLoraInfoTacapiV1LoraInfoLoraNameGetWithHttpInfoAsync(Object loraName, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> GetLoraInfoTacapiV1LoraInfoLoraNameGetWithHttpInfoAsync(Object loraName, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'loraName' is set
             if (loraName == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'loraName' when calling DefaultApi->GetLoraInfoTacapiV1LoraInfoLoraNameGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'loraName' when calling DefaultApi->GetLoraInfoTacapiV1LoraInfoLoraNameGet");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -7980,19 +8529,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("lora_name", SdWebUpApi.Client.ClientUtils.ParameterToString(loraName)); // path parameter
+            localVarRequestOptions.PathParameters.Add("lora_name", SdWebUiApi.Client.ClientUtils.ParameterToString(loraName)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.GetLoraInfoTacapiV1LoraInfoLoraNameGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -8016,24 +8565,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Loras 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object GetLorasSdapiV1LorasGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = GetLorasSdapiV1LorasGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = GetLorasSdapiV1LorasGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Loras 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> GetLorasSdapiV1LorasGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> GetLorasSdapiV1LorasGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -8043,13 +8592,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -8077,27 +8626,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Loras 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> GetLorasSdapiV1LorasGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await GetLorasSdapiV1LorasGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await GetLorasSdapiV1LorasGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Loras 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> GetLorasSdapiV1LorasGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> GetLorasSdapiV1LorasGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -8107,13 +8656,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -8142,32 +8691,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Lyco Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="lycoName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object GetLycoInfoTacapiV1LycoInfoLycoNameGet(Object lycoName, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = GetLycoInfoTacapiV1LycoInfoLycoNameGetWithHttpInfo(lycoName);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = GetLycoInfoTacapiV1LycoInfoLycoNameGetWithHttpInfo(lycoName);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Lyco Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="lycoName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> GetLycoInfoTacapiV1LycoInfoLycoNameGetWithHttpInfo(Object lycoName, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> GetLycoInfoTacapiV1LycoInfoLycoNameGetWithHttpInfo(Object lycoName, int operationIndex = 0)
         {
             // verify the required parameter 'lycoName' is set
             if (lycoName == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'lycoName' when calling DefaultApi->GetLycoInfoTacapiV1LycoInfoLycoNameGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'lycoName' when calling DefaultApi->GetLycoInfoTacapiV1LycoInfoLycoNameGet");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -8177,19 +8726,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("lyco_name", SdWebUpApi.Client.ClientUtils.ParameterToString(lycoName)); // path parameter
+            localVarRequestOptions.PathParameters.Add("lyco_name", SdWebUiApi.Client.ClientUtils.ParameterToString(lycoName)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.GetLycoInfoTacapiV1LycoInfoLycoNameGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -8212,35 +8761,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Lyco Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="lycoName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> GetLycoInfoTacapiV1LycoInfoLycoNameGetAsync(Object lycoName, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await GetLycoInfoTacapiV1LycoInfoLycoNameGetWithHttpInfoAsync(lycoName, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await GetLycoInfoTacapiV1LycoInfoLycoNameGetWithHttpInfoAsync(lycoName, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Lyco Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="lycoName"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> GetLycoInfoTacapiV1LycoInfoLycoNameGetWithHttpInfoAsync(Object lycoName, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> GetLycoInfoTacapiV1LycoInfoLycoNameGetWithHttpInfoAsync(Object lycoName, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'lycoName' is set
             if (lycoName == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'lycoName' when calling DefaultApi->GetLycoInfoTacapiV1LycoInfoLycoNameGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'lycoName' when calling DefaultApi->GetLycoInfoTacapiV1LycoInfoLycoNameGet");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -8250,19 +8799,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("lyco_name", SdWebUpApi.Client.ClientUtils.ParameterToString(lycoName)); // path parameter
+            localVarRequestOptions.PathParameters.Add("lyco_name", SdWebUiApi.Client.ClientUtils.ParameterToString(lycoName)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.GetLycoInfoTacapiV1LycoInfoLycoNameGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -8286,24 +8835,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Memory 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>MemoryResponse</returns>
         public MemoryResponse GetMemorySdapiV1MemoryGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<MemoryResponse> localVarResponse = GetMemorySdapiV1MemoryGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<MemoryResponse> localVarResponse = GetMemorySdapiV1MemoryGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Memory 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of MemoryResponse</returns>
-        public SdWebUpApi.Client.ApiResponse<MemoryResponse> GetMemorySdapiV1MemoryGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<MemoryResponse> GetMemorySdapiV1MemoryGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -8313,13 +8862,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -8347,27 +8896,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Memory 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of MemoryResponse</returns>
         public async System.Threading.Tasks.Task<MemoryResponse> GetMemorySdapiV1MemoryGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<MemoryResponse> localVarResponse = await GetMemorySdapiV1MemoryGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<MemoryResponse> localVarResponse = await GetMemorySdapiV1MemoryGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Memory 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (MemoryResponse)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<MemoryResponse>> GetMemorySdapiV1MemoryGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<MemoryResponse>> GetMemorySdapiV1MemoryGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -8377,13 +8926,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -8412,28 +8961,28 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Metadata 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="item"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object GetMetadataSdExtraNetworksMetadataGet(string? page = default(string?), string? item = default(string?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = GetMetadataSdExtraNetworksMetadataGetWithHttpInfo(page, item);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = GetMetadataSdExtraNetworksMetadataGetWithHttpInfo(page, item);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Metadata 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="item"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> GetMetadataSdExtraNetworksMetadataGetWithHttpInfo(string? page = default(string?), string? item = default(string?), int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> GetMetadataSdExtraNetworksMetadataGetWithHttpInfo(string? page = default(string?), string? item = default(string?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -8443,13 +8992,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -8457,11 +9006,11 @@ namespace SdWebUpApi.Api
 
             if (page != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "page", page));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "page", page));
             }
             if (item != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "item", item));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "item", item));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.GetMetadataSdExtraNetworksMetadataGet";
@@ -8485,7 +9034,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Metadata 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="item"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -8493,23 +9042,23 @@ namespace SdWebUpApi.Api
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> GetMetadataSdExtraNetworksMetadataGetAsync(string? page = default(string?), string? item = default(string?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await GetMetadataSdExtraNetworksMetadataGetWithHttpInfoAsync(page, item, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await GetMetadataSdExtraNetworksMetadataGetWithHttpInfoAsync(page, item, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Metadata 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="item"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> GetMetadataSdExtraNetworksMetadataGetWithHttpInfoAsync(string? page = default(string?), string? item = default(string?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> GetMetadataSdExtraNetworksMetadataGetWithHttpInfoAsync(string? page = default(string?), string? item = default(string?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -8519,13 +9068,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -8533,11 +9082,11 @@ namespace SdWebUpApi.Api
 
             if (page != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "page", page));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "page", page));
             }
             if (item != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "item", item));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "item", item));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.GetMetadataSdExtraNetworksMetadataGet";
@@ -8562,24 +9111,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Prompt Styles 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;PromptStyleItem&gt;</returns>
         public List<PromptStyleItem> GetPromptStylesSdapiV1PromptStylesGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<List<PromptStyleItem>> localVarResponse = GetPromptStylesSdapiV1PromptStylesGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<List<PromptStyleItem>> localVarResponse = GetPromptStylesSdapiV1PromptStylesGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Prompt Styles 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;PromptStyleItem&gt;</returns>
-        public SdWebUpApi.Client.ApiResponse<List<PromptStyleItem>> GetPromptStylesSdapiV1PromptStylesGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<List<PromptStyleItem>> GetPromptStylesSdapiV1PromptStylesGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -8589,13 +9138,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -8623,27 +9172,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Prompt Styles 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;PromptStyleItem&gt;</returns>
         public async System.Threading.Tasks.Task<List<PromptStyleItem>> GetPromptStylesSdapiV1PromptStylesGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<List<PromptStyleItem>> localVarResponse = await GetPromptStylesSdapiV1PromptStylesGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<List<PromptStyleItem>> localVarResponse = await GetPromptStylesSdapiV1PromptStylesGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Prompt Styles 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;PromptStyleItem&gt;)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<List<PromptStyleItem>>> GetPromptStylesSdapiV1PromptStylesGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<List<PromptStyleItem>>> GetPromptStylesSdapiV1PromptStylesGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -8653,13 +9202,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -8688,24 +9237,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Queue Status 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Estimation</returns>
         public Estimation GetQueueStatusQueueStatusGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Estimation> localVarResponse = GetQueueStatusQueueStatusGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Estimation> localVarResponse = GetQueueStatusQueueStatusGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Queue Status 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Estimation</returns>
-        public SdWebUpApi.Client.ApiResponse<Estimation> GetQueueStatusQueueStatusGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Estimation> GetQueueStatusQueueStatusGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -8715,13 +9264,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -8749,27 +9298,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Queue Status 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Estimation</returns>
         public async System.Threading.Tasks.Task<Estimation> GetQueueStatusQueueStatusGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Estimation> localVarResponse = await GetQueueStatusQueueStatusGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Estimation> localVarResponse = await GetQueueStatusQueueStatusGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Queue Status 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Estimation)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Estimation>> GetQueueStatusQueueStatusGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Estimation>> GetQueueStatusQueueStatusGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -8779,13 +9328,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -8814,24 +9363,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Realesrgan Models 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;RealesrganItem&gt;</returns>
         public List<RealesrganItem> GetRealesrganModelsSdapiV1RealesrganModelsGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<List<RealesrganItem>> localVarResponse = GetRealesrganModelsSdapiV1RealesrganModelsGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<List<RealesrganItem>> localVarResponse = GetRealesrganModelsSdapiV1RealesrganModelsGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Realesrgan Models 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;RealesrganItem&gt;</returns>
-        public SdWebUpApi.Client.ApiResponse<List<RealesrganItem>> GetRealesrganModelsSdapiV1RealesrganModelsGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<List<RealesrganItem>> GetRealesrganModelsSdapiV1RealesrganModelsGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -8841,13 +9390,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -8875,27 +9424,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Realesrgan Models 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;RealesrganItem&gt;</returns>
         public async System.Threading.Tasks.Task<List<RealesrganItem>> GetRealesrganModelsSdapiV1RealesrganModelsGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<List<RealesrganItem>> localVarResponse = await GetRealesrganModelsSdapiV1RealesrganModelsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<List<RealesrganItem>> localVarResponse = await GetRealesrganModelsSdapiV1RealesrganModelsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Realesrgan Models 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;RealesrganItem&gt;)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<List<RealesrganItem>>> GetRealesrganModelsSdapiV1RealesrganModelsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<List<RealesrganItem>>> GetRealesrganModelsSdapiV1RealesrganModelsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -8905,13 +9454,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -8940,24 +9489,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Samplers 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;SamplerItem&gt;</returns>
         public List<SamplerItem> GetSamplersSdapiV1SamplersGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<List<SamplerItem>> localVarResponse = GetSamplersSdapiV1SamplersGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<List<SamplerItem>> localVarResponse = GetSamplersSdapiV1SamplersGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Samplers 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;SamplerItem&gt;</returns>
-        public SdWebUpApi.Client.ApiResponse<List<SamplerItem>> GetSamplersSdapiV1SamplersGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<List<SamplerItem>> GetSamplersSdapiV1SamplersGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -8967,13 +9516,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -9001,27 +9550,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Samplers 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;SamplerItem&gt;</returns>
         public async System.Threading.Tasks.Task<List<SamplerItem>> GetSamplersSdapiV1SamplersGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<List<SamplerItem>> localVarResponse = await GetSamplersSdapiV1SamplersGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<List<SamplerItem>> localVarResponse = await GetSamplersSdapiV1SamplersGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Samplers 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;SamplerItem&gt;)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<List<SamplerItem>>> GetSamplersSdapiV1SamplersGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<List<SamplerItem>>> GetSamplersSdapiV1SamplersGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -9031,13 +9580,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -9066,24 +9615,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Script Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;ScriptInfo&gt;</returns>
         public List<ScriptInfo> GetScriptInfoSdapiV1ScriptInfoGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<List<ScriptInfo>> localVarResponse = GetScriptInfoSdapiV1ScriptInfoGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<List<ScriptInfo>> localVarResponse = GetScriptInfoSdapiV1ScriptInfoGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Script Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;ScriptInfo&gt;</returns>
-        public SdWebUpApi.Client.ApiResponse<List<ScriptInfo>> GetScriptInfoSdapiV1ScriptInfoGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<List<ScriptInfo>> GetScriptInfoSdapiV1ScriptInfoGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -9093,13 +9642,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -9127,27 +9676,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Script Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;ScriptInfo&gt;</returns>
         public async System.Threading.Tasks.Task<List<ScriptInfo>> GetScriptInfoSdapiV1ScriptInfoGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<List<ScriptInfo>> localVarResponse = await GetScriptInfoSdapiV1ScriptInfoGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<List<ScriptInfo>> localVarResponse = await GetScriptInfoSdapiV1ScriptInfoGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Script Info 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;ScriptInfo&gt;)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<List<ScriptInfo>>> GetScriptInfoSdapiV1ScriptInfoGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<List<ScriptInfo>>> GetScriptInfoSdapiV1ScriptInfoGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -9157,13 +9706,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -9192,24 +9741,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Scripts List 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ScriptsList</returns>
         public ScriptsList GetScriptsListSdapiV1ScriptsGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<ScriptsList> localVarResponse = GetScriptsListSdapiV1ScriptsGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<ScriptsList> localVarResponse = GetScriptsListSdapiV1ScriptsGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Scripts List 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of ScriptsList</returns>
-        public SdWebUpApi.Client.ApiResponse<ScriptsList> GetScriptsListSdapiV1ScriptsGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<ScriptsList> GetScriptsListSdapiV1ScriptsGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -9219,13 +9768,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -9253,27 +9802,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Scripts List 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ScriptsList</returns>
         public async System.Threading.Tasks.Task<ScriptsList> GetScriptsListSdapiV1ScriptsGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<ScriptsList> localVarResponse = await GetScriptsListSdapiV1ScriptsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<ScriptsList> localVarResponse = await GetScriptsListSdapiV1ScriptsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Scripts List 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ScriptsList)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<ScriptsList>> GetScriptsListSdapiV1ScriptsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<ScriptsList>> GetScriptsListSdapiV1ScriptsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -9283,13 +9832,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -9318,24 +9867,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Sd Models 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;SDModelItem&gt;</returns>
         public List<SDModelItem> GetSdModelsSdapiV1SdModelsGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<List<SDModelItem>> localVarResponse = GetSdModelsSdapiV1SdModelsGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<List<SDModelItem>> localVarResponse = GetSdModelsSdapiV1SdModelsGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Sd Models 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;SDModelItem&gt;</returns>
-        public SdWebUpApi.Client.ApiResponse<List<SDModelItem>> GetSdModelsSdapiV1SdModelsGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<List<SDModelItem>> GetSdModelsSdapiV1SdModelsGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -9345,13 +9894,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -9379,27 +9928,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Sd Models 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;SDModelItem&gt;</returns>
         public async System.Threading.Tasks.Task<List<SDModelItem>> GetSdModelsSdapiV1SdModelsGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<List<SDModelItem>> localVarResponse = await GetSdModelsSdapiV1SdModelsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<List<SDModelItem>> localVarResponse = await GetSdModelsSdapiV1SdModelsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Sd Models 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;SDModelItem&gt;)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<List<SDModelItem>>> GetSdModelsSdapiV1SdModelsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<List<SDModelItem>>> GetSdModelsSdapiV1SdModelsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -9409,13 +9958,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -9444,24 +9993,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Sd Vaes 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;SDVaeItem&gt;</returns>
         public List<SDVaeItem> GetSdVaesSdapiV1SdVaeGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<List<SDVaeItem>> localVarResponse = GetSdVaesSdapiV1SdVaeGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<List<SDVaeItem>> localVarResponse = GetSdVaesSdapiV1SdVaeGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Sd Vaes 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;SDVaeItem&gt;</returns>
-        public SdWebUpApi.Client.ApiResponse<List<SDVaeItem>> GetSdVaesSdapiV1SdVaeGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<List<SDVaeItem>> GetSdVaesSdapiV1SdVaeGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -9471,13 +10020,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -9505,27 +10054,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Sd Vaes 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;SDVaeItem&gt;</returns>
         public async System.Threading.Tasks.Task<List<SDVaeItem>> GetSdVaesSdapiV1SdVaeGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<List<SDVaeItem>> localVarResponse = await GetSdVaesSdapiV1SdVaeGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<List<SDVaeItem>> localVarResponse = await GetSdVaesSdapiV1SdVaeGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Sd Vaes 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;SDVaeItem&gt;)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<List<SDVaeItem>>> GetSdVaesSdapiV1SdVaeGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<List<SDVaeItem>>> GetSdVaesSdapiV1SdVaeGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -9535,13 +10084,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -9570,7 +10119,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Single Card 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="tabname"> (optional, default to &quot;&quot;)</param>
         /// <param name="name"> (optional, default to &quot;&quot;)</param>
@@ -9578,22 +10127,22 @@ namespace SdWebUpApi.Api
         /// <returns>Object</returns>
         public Object GetSingleCardSdExtraNetworksGetSingleCardGet(string? page = default(string?), string? tabname = default(string?), string? name = default(string?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = GetSingleCardSdExtraNetworksGetSingleCardGetWithHttpInfo(page, tabname, name);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = GetSingleCardSdExtraNetworksGetSingleCardGetWithHttpInfo(page, tabname, name);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Single Card 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="tabname"> (optional, default to &quot;&quot;)</param>
         /// <param name="name"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> GetSingleCardSdExtraNetworksGetSingleCardGetWithHttpInfo(string? page = default(string?), string? tabname = default(string?), string? name = default(string?), int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> GetSingleCardSdExtraNetworksGetSingleCardGetWithHttpInfo(string? page = default(string?), string? tabname = default(string?), string? name = default(string?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -9603,13 +10152,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -9617,15 +10166,15 @@ namespace SdWebUpApi.Api
 
             if (page != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "page", page));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "page", page));
             }
             if (tabname != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "tabname", tabname));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "tabname", tabname));
             }
             if (name != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "name", name));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "name", name));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.GetSingleCardSdExtraNetworksGetSingleCardGet";
@@ -9649,7 +10198,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Single Card 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="tabname"> (optional, default to &quot;&quot;)</param>
         /// <param name="name"> (optional, default to &quot;&quot;)</param>
@@ -9658,24 +10207,24 @@ namespace SdWebUpApi.Api
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> GetSingleCardSdExtraNetworksGetSingleCardGetAsync(string? page = default(string?), string? tabname = default(string?), string? name = default(string?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await GetSingleCardSdExtraNetworksGetSingleCardGetWithHttpInfoAsync(page, tabname, name, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await GetSingleCardSdExtraNetworksGetSingleCardGetWithHttpInfoAsync(page, tabname, name, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Single Card 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="page"> (optional, default to &quot;&quot;)</param>
         /// <param name="tabname"> (optional, default to &quot;&quot;)</param>
         /// <param name="name"> (optional, default to &quot;&quot;)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> GetSingleCardSdExtraNetworksGetSingleCardGetWithHttpInfoAsync(string? page = default(string?), string? tabname = default(string?), string? name = default(string?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> GetSingleCardSdExtraNetworksGetSingleCardGetWithHttpInfoAsync(string? page = default(string?), string? tabname = default(string?), string? name = default(string?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -9685,13 +10234,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -9699,15 +10248,15 @@ namespace SdWebUpApi.Api
 
             if (page != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "page", page));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "page", page));
             }
             if (tabname != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "tabname", tabname));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "tabname", tabname));
             }
             if (name != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "name", name));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "name", name));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.GetSingleCardSdExtraNetworksGetSingleCardGet";
@@ -9732,40 +10281,40 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Thumb Preview Blob 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGet(Object filename, Object type, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGetWithHttpInfo(filename, type);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGetWithHttpInfo(filename, type);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Thumb Preview Blob 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGetWithHttpInfo(Object filename, Object type, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGetWithHttpInfo(Object filename, Object type, int operationIndex = 0)
         {
             // verify the required parameter 'filename' is set
             if (filename == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'filename' when calling DefaultApi->GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'filename' when calling DefaultApi->GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGet");
             }
 
             // verify the required parameter 'type' is set
             if (type == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'type' when calling DefaultApi->GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'type' when calling DefaultApi->GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGet");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -9775,20 +10324,20 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("filename", SdWebUpApi.Client.ClientUtils.ParameterToString(filename)); // path parameter
-            localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "type", type));
+            localVarRequestOptions.PathParameters.Add("filename", SdWebUiApi.Client.ClientUtils.ParameterToString(filename)); // path parameter
+            localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "type", type));
 
             localVarRequestOptions.Operation = "DefaultApi.GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -9811,7 +10360,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Thumb Preview Blob 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -9819,35 +10368,35 @@ namespace SdWebUpApi.Api
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGetAsync(Object filename, Object type, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGetWithHttpInfoAsync(filename, type, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGetWithHttpInfoAsync(filename, type, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Thumb Preview Blob 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGetWithHttpInfoAsync(Object filename, Object type, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGetWithHttpInfoAsync(Object filename, Object type, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'filename' is set
             if (filename == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'filename' when calling DefaultApi->GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'filename' when calling DefaultApi->GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGet");
             }
 
             // verify the required parameter 'type' is set
             if (type == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'type' when calling DefaultApi->GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'type' when calling DefaultApi->GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGet");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -9857,20 +10406,20 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("filename", SdWebUpApi.Client.ClientUtils.ParameterToString(filename)); // path parameter
-            localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "type", type));
+            localVarRequestOptions.PathParameters.Add("filename", SdWebUiApi.Client.ClientUtils.ParameterToString(filename)); // path parameter
+            localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "type", type));
 
             localVarRequestOptions.Operation = "DefaultApi.GetThumbPreviewBlobTacapiV1ThumbPreviewBlobFilenameGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -9894,40 +10443,40 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Thumb Preview 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object GetThumbPreviewTacapiV1ThumbPreviewFilenameGet(Object filename, Object type, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = GetThumbPreviewTacapiV1ThumbPreviewFilenameGetWithHttpInfo(filename, type);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = GetThumbPreviewTacapiV1ThumbPreviewFilenameGetWithHttpInfo(filename, type);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Thumb Preview 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> GetThumbPreviewTacapiV1ThumbPreviewFilenameGetWithHttpInfo(Object filename, Object type, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> GetThumbPreviewTacapiV1ThumbPreviewFilenameGetWithHttpInfo(Object filename, Object type, int operationIndex = 0)
         {
             // verify the required parameter 'filename' is set
             if (filename == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'filename' when calling DefaultApi->GetThumbPreviewTacapiV1ThumbPreviewFilenameGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'filename' when calling DefaultApi->GetThumbPreviewTacapiV1ThumbPreviewFilenameGet");
             }
 
             // verify the required parameter 'type' is set
             if (type == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'type' when calling DefaultApi->GetThumbPreviewTacapiV1ThumbPreviewFilenameGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'type' when calling DefaultApi->GetThumbPreviewTacapiV1ThumbPreviewFilenameGet");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -9937,20 +10486,20 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("filename", SdWebUpApi.Client.ClientUtils.ParameterToString(filename)); // path parameter
-            localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "type", type));
+            localVarRequestOptions.PathParameters.Add("filename", SdWebUiApi.Client.ClientUtils.ParameterToString(filename)); // path parameter
+            localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "type", type));
 
             localVarRequestOptions.Operation = "DefaultApi.GetThumbPreviewTacapiV1ThumbPreviewFilenameGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -9973,7 +10522,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Thumb Preview 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -9981,35 +10530,35 @@ namespace SdWebUpApi.Api
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> GetThumbPreviewTacapiV1ThumbPreviewFilenameGetAsync(Object filename, Object type, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await GetThumbPreviewTacapiV1ThumbPreviewFilenameGetWithHttpInfoAsync(filename, type, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await GetThumbPreviewTacapiV1ThumbPreviewFilenameGetWithHttpInfoAsync(filename, type, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Thumb Preview 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="filename"></param>
         /// <param name="type"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> GetThumbPreviewTacapiV1ThumbPreviewFilenameGetWithHttpInfoAsync(Object filename, Object type, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> GetThumbPreviewTacapiV1ThumbPreviewFilenameGetWithHttpInfoAsync(Object filename, Object type, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'filename' is set
             if (filename == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'filename' when calling DefaultApi->GetThumbPreviewTacapiV1ThumbPreviewFilenameGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'filename' when calling DefaultApi->GetThumbPreviewTacapiV1ThumbPreviewFilenameGet");
             }
 
             // verify the required parameter 'type' is set
             if (type == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'type' when calling DefaultApi->GetThumbPreviewTacapiV1ThumbPreviewFilenameGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'type' when calling DefaultApi->GetThumbPreviewTacapiV1ThumbPreviewFilenameGet");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -10019,20 +10568,20 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("filename", SdWebUpApi.Client.ClientUtils.ParameterToString(filename)); // path parameter
-            localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "type", type));
+            localVarRequestOptions.PathParameters.Add("filename", SdWebUiApi.Client.ClientUtils.ParameterToString(filename)); // path parameter
+            localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "type", type));
 
             localVarRequestOptions.Operation = "DefaultApi.GetThumbPreviewTacapiV1ThumbPreviewFilenameGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -10056,24 +10605,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Token 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object GetTokenTokenGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = GetTokenTokenGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = GetTokenTokenGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Token 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> GetTokenTokenGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> GetTokenTokenGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -10083,13 +10632,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -10117,27 +10666,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Token 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> GetTokenTokenGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await GetTokenTokenGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await GetTokenTokenGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Token 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> GetTokenTokenGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> GetTokenTokenGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -10147,13 +10696,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -10182,24 +10731,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Token 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object GetTokenTokenGet_0(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = GetTokenTokenGet_0WithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = GetTokenTokenGet_0WithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Token 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> GetTokenTokenGet_0WithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> GetTokenTokenGet_0WithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -10209,13 +10758,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -10243,27 +10792,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Token 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> GetTokenTokenGet_0Async(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await GetTokenTokenGet_0WithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await GetTokenTokenGet_0WithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Token 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> GetTokenTokenGet_0WithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> GetTokenTokenGet_0WithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -10273,13 +10822,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -10308,24 +10857,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Upscalers 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;UpscalerItem&gt;</returns>
         public List<UpscalerItem> GetUpscalersSdapiV1UpscalersGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<List<UpscalerItem>> localVarResponse = GetUpscalersSdapiV1UpscalersGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<List<UpscalerItem>> localVarResponse = GetUpscalersSdapiV1UpscalersGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Upscalers 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;UpscalerItem&gt;</returns>
-        public SdWebUpApi.Client.ApiResponse<List<UpscalerItem>> GetUpscalersSdapiV1UpscalersGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<List<UpscalerItem>> GetUpscalersSdapiV1UpscalersGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -10335,13 +10884,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -10369,27 +10918,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Get Upscalers 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;UpscalerItem&gt;</returns>
         public async System.Threading.Tasks.Task<List<UpscalerItem>> GetUpscalersSdapiV1UpscalersGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<List<UpscalerItem>> localVarResponse = await GetUpscalersSdapiV1UpscalersGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<List<UpscalerItem>> localVarResponse = await GetUpscalersSdapiV1UpscalersGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Get Upscalers 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;UpscalerItem&gt;)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<List<UpscalerItem>>> GetUpscalersSdapiV1UpscalersGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<List<UpscalerItem>>> GetUpscalersSdapiV1UpscalersGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -10399,13 +10948,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -10432,34 +10981,196 @@ namespace SdWebUpApi.Api
         }
 
         /// <summary>
+        /// Get Wildcard Contents 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="basepath"></param>
+        /// <param name="filename"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>Object</returns>
+        public Object GetWildcardContentsTacapiV1WildcardContentsGet(string basepath, string filename, int operationIndex = 0)
+        {
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = GetWildcardContentsTacapiV1WildcardContentsGetWithHttpInfo(basepath, filename);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Get Wildcard Contents 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="basepath"></param>
+        /// <param name="filename"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object</returns>
+        public SdWebUiApi.Client.ApiResponse<Object> GetWildcardContentsTacapiV1WildcardContentsGetWithHttpInfo(string basepath, string filename, int operationIndex = 0)
+        {
+            // verify the required parameter 'basepath' is set
+            if (basepath == null)
+            {
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'basepath' when calling DefaultApi->GetWildcardContentsTacapiV1WildcardContentsGet");
+            }
+
+            // verify the required parameter 'filename' is set
+            if (filename == null)
+            {
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'filename' when calling DefaultApi->GetWildcardContentsTacapiV1WildcardContentsGet");
+            }
+
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "basepath", basepath));
+            localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "filename", filename));
+
+            localVarRequestOptions.Operation = "DefaultApi.GetWildcardContentsTacapiV1WildcardContentsGet";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Get<Object>("/tacapi/v1/wildcard-contents", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("GetWildcardContentsTacapiV1WildcardContentsGet", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Get Wildcard Contents 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="basepath"></param>
+        /// <param name="filename"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of Object</returns>
+        public async System.Threading.Tasks.Task<Object> GetWildcardContentsTacapiV1WildcardContentsGetAsync(string basepath, string filename, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await GetWildcardContentsTacapiV1WildcardContentsGetWithHttpInfoAsync(basepath, filename, operationIndex, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Get Wildcard Contents 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="basepath"></param>
+        /// <param name="filename"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (Object)</returns>
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> GetWildcardContentsTacapiV1WildcardContentsGetWithHttpInfoAsync(string basepath, string filename, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            // verify the required parameter 'basepath' is set
+            if (basepath == null)
+            {
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'basepath' when calling DefaultApi->GetWildcardContentsTacapiV1WildcardContentsGet");
+            }
+
+            // verify the required parameter 'filename' is set
+            if (filename == null)
+            {
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'filename' when calling DefaultApi->GetWildcardContentsTacapiV1WildcardContentsGet");
+            }
+
+
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "basepath", basepath));
+            localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "filename", filename));
+
+            localVarRequestOptions.Operation = "DefaultApi.GetWildcardContentsTacapiV1WildcardContentsGet";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = await this.AsynchronousClient.GetAsync<Object>("/tacapi/v1/wildcard-contents", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("GetWildcardContentsTacapiV1WildcardContentsGet", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
         /// Img2Imgapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingImg2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ImageToImageResponse</returns>
         public ImageToImageResponse Img2imgapiSdapiV1Img2imgPost(StableDiffusionProcessingImg2Img stableDiffusionProcessingImg2Img, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<ImageToImageResponse> localVarResponse = Img2imgapiSdapiV1Img2imgPostWithHttpInfo(stableDiffusionProcessingImg2Img);
+            SdWebUiApi.Client.ApiResponse<ImageToImageResponse> localVarResponse = Img2imgapiSdapiV1Img2imgPostWithHttpInfo(stableDiffusionProcessingImg2Img);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Img2Imgapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingImg2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of ImageToImageResponse</returns>
-        public SdWebUpApi.Client.ApiResponse<ImageToImageResponse> Img2imgapiSdapiV1Img2imgPostWithHttpInfo(StableDiffusionProcessingImg2Img stableDiffusionProcessingImg2Img, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<ImageToImageResponse> Img2imgapiSdapiV1Img2imgPostWithHttpInfo(StableDiffusionProcessingImg2Img stableDiffusionProcessingImg2Img, int operationIndex = 0)
         {
             // verify the required parameter 'stableDiffusionProcessingImg2Img' is set
             if (stableDiffusionProcessingImg2Img == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'stableDiffusionProcessingImg2Img' when calling DefaultApi->Img2imgapiSdapiV1Img2imgPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'stableDiffusionProcessingImg2Img' when calling DefaultApi->Img2imgapiSdapiV1Img2imgPost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -10470,13 +11181,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -10505,35 +11216,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Img2Imgapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingImg2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ImageToImageResponse</returns>
         public async System.Threading.Tasks.Task<ImageToImageResponse> Img2imgapiSdapiV1Img2imgPostAsync(StableDiffusionProcessingImg2Img stableDiffusionProcessingImg2Img, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<ImageToImageResponse> localVarResponse = await Img2imgapiSdapiV1Img2imgPostWithHttpInfoAsync(stableDiffusionProcessingImg2Img, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<ImageToImageResponse> localVarResponse = await Img2imgapiSdapiV1Img2imgPostWithHttpInfoAsync(stableDiffusionProcessingImg2Img, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Img2Imgapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingImg2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ImageToImageResponse)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<ImageToImageResponse>> Img2imgapiSdapiV1Img2imgPostWithHttpInfoAsync(StableDiffusionProcessingImg2Img stableDiffusionProcessingImg2Img, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<ImageToImageResponse>> Img2imgapiSdapiV1Img2imgPostWithHttpInfoAsync(StableDiffusionProcessingImg2Img stableDiffusionProcessingImg2Img, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'stableDiffusionProcessingImg2Img' is set
             if (stableDiffusionProcessingImg2Img == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'stableDiffusionProcessingImg2Img' when calling DefaultApi->Img2imgapiSdapiV1Img2imgPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'stableDiffusionProcessingImg2Img' when calling DefaultApi->Img2imgapiSdapiV1Img2imgPost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -10544,13 +11255,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -10580,32 +11291,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Interrogateapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="interrogateRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object InterrogateapiSdapiV1InterrogatePost(InterrogateRequest interrogateRequest, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = InterrogateapiSdapiV1InterrogatePostWithHttpInfo(interrogateRequest);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = InterrogateapiSdapiV1InterrogatePostWithHttpInfo(interrogateRequest);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Interrogateapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="interrogateRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> InterrogateapiSdapiV1InterrogatePostWithHttpInfo(InterrogateRequest interrogateRequest, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> InterrogateapiSdapiV1InterrogatePostWithHttpInfo(InterrogateRequest interrogateRequest, int operationIndex = 0)
         {
             // verify the required parameter 'interrogateRequest' is set
             if (interrogateRequest == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'interrogateRequest' when calling DefaultApi->InterrogateapiSdapiV1InterrogatePost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'interrogateRequest' when calling DefaultApi->InterrogateapiSdapiV1InterrogatePost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -10616,13 +11327,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -10651,35 +11362,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Interrogateapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="interrogateRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> InterrogateapiSdapiV1InterrogatePostAsync(InterrogateRequest interrogateRequest, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await InterrogateapiSdapiV1InterrogatePostWithHttpInfoAsync(interrogateRequest, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await InterrogateapiSdapiV1InterrogatePostWithHttpInfoAsync(interrogateRequest, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Interrogateapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="interrogateRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> InterrogateapiSdapiV1InterrogatePostWithHttpInfoAsync(InterrogateRequest interrogateRequest, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> InterrogateapiSdapiV1InterrogatePostWithHttpInfoAsync(InterrogateRequest interrogateRequest, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'interrogateRequest' is set
             if (interrogateRequest == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'interrogateRequest' when calling DefaultApi->InterrogateapiSdapiV1InterrogatePost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'interrogateRequest' when calling DefaultApi->InterrogateapiSdapiV1InterrogatePost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -10690,13 +11401,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -10726,24 +11437,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Interruptapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object InterruptapiSdapiV1InterruptPost(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = InterruptapiSdapiV1InterruptPostWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = InterruptapiSdapiV1InterruptPostWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Interruptapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> InterruptapiSdapiV1InterruptPostWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> InterruptapiSdapiV1InterruptPostWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -10753,13 +11464,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -10787,27 +11498,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Interruptapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> InterruptapiSdapiV1InterruptPostAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await InterruptapiSdapiV1InterruptPostWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await InterruptapiSdapiV1InterruptPostWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Interruptapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> InterruptapiSdapiV1InterruptPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> InterruptapiSdapiV1InterruptPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -10817,13 +11528,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -10852,24 +11563,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// &lt;Lambda&gt; 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object LambdaInternalPingGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = LambdaInternalPingGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = LambdaInternalPingGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// &lt;Lambda&gt; 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> LambdaInternalPingGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> LambdaInternalPingGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -10879,13 +11590,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -10913,27 +11624,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// &lt;Lambda&gt; 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> LambdaInternalPingGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await LambdaInternalPingGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await LambdaInternalPingGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// &lt;Lambda&gt; 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> LambdaInternalPingGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> LambdaInternalPingGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -10943,13 +11654,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -10978,24 +11689,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// &lt;Lambda&gt; 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object LambdaInternalProfileStartupGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = LambdaInternalProfileStartupGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = LambdaInternalProfileStartupGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// &lt;Lambda&gt; 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> LambdaInternalProfileStartupGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> LambdaInternalProfileStartupGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -11005,13 +11716,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -11039,27 +11750,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// &lt;Lambda&gt; 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> LambdaInternalProfileStartupGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await LambdaInternalProfileStartupGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await LambdaInternalProfileStartupGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// &lt;Lambda&gt; 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> LambdaInternalProfileStartupGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> LambdaInternalProfileStartupGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -11069,13 +11780,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -11104,24 +11815,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// &lt;Lambda&gt; 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object LambdaInternalSysinfoDownloadGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = LambdaInternalSysinfoDownloadGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = LambdaInternalSysinfoDownloadGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// &lt;Lambda&gt; 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> LambdaInternalSysinfoDownloadGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> LambdaInternalSysinfoDownloadGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -11131,13 +11842,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -11165,27 +11876,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// &lt;Lambda&gt; 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> LambdaInternalSysinfoDownloadGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await LambdaInternalSysinfoDownloadGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await LambdaInternalSysinfoDownloadGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// &lt;Lambda&gt; 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> LambdaInternalSysinfoDownloadGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> LambdaInternalSysinfoDownloadGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -11195,13 +11906,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -11230,24 +11941,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Login Check 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object LoginCheckLoginCheckGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = LoginCheckLoginCheckGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = LoginCheckLoginCheckGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Login Check 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> LoginCheckLoginCheckGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> LoginCheckLoginCheckGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -11257,13 +11968,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -11291,27 +12002,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Login Check 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> LoginCheckLoginCheckGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await LoginCheckLoginCheckGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await LoginCheckLoginCheckGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Login Check 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> LoginCheckLoginCheckGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> LoginCheckLoginCheckGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -11321,13 +12032,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -11356,24 +12067,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Login Check 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object LoginCheckLoginCheckGet_0(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = LoginCheckLoginCheckGet_0WithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = LoginCheckLoginCheckGet_0WithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Login Check 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> LoginCheckLoginCheckGet_0WithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> LoginCheckLoginCheckGet_0WithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -11383,13 +12094,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -11417,27 +12128,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Login Check 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> LoginCheckLoginCheckGet_0Async(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await LoginCheckLoginCheckGet_0WithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await LoginCheckLoginCheckGet_0WithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Login Check 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> LoginCheckLoginCheckGet_0WithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> LoginCheckLoginCheckGet_0WithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -11447,13 +12158,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -11482,7 +12193,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Login 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -11493,14 +12204,14 @@ namespace SdWebUpApi.Api
         /// <returns>Object</returns>
         public Object LoginLoginPost(string username, string password, string? grantType = default(string?), string? scope = default(string?), string? clientId = default(string?), string? clientSecret = default(string?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = LoginLoginPostWithHttpInfo(username, password, grantType, scope, clientId, clientSecret);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = LoginLoginPostWithHttpInfo(username, password, grantType, scope, clientId, clientSecret);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Login 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -11509,21 +12220,21 @@ namespace SdWebUpApi.Api
         /// <param name="clientSecret"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> LoginLoginPostWithHttpInfo(string username, string password, string? grantType = default(string?), string? scope = default(string?), string? clientId = default(string?), string? clientSecret = default(string?), int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> LoginLoginPostWithHttpInfo(string username, string password, string? grantType = default(string?), string? scope = default(string?), string? clientId = default(string?), string? clientSecret = default(string?), int operationIndex = 0)
         {
             // verify the required parameter 'username' is set
             if (username == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'username' when calling DefaultApi->LoginLoginPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'username' when calling DefaultApi->LoginLoginPost");
             }
 
             // verify the required parameter 'password' is set
             if (password == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'password' when calling DefaultApi->LoginLoginPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'password' when calling DefaultApi->LoginLoginPost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/x-www-form-urlencoded"
@@ -11534,13 +12245,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -11548,21 +12259,21 @@ namespace SdWebUpApi.Api
 
             if (grantType != null)
             {
-                localVarRequestOptions.FormParameters.Add("grant_type", SdWebUpApi.Client.ClientUtils.ParameterToString(grantType)); // form parameter
+                localVarRequestOptions.FormParameters.Add("grant_type", SdWebUiApi.Client.ClientUtils.ParameterToString(grantType)); // form parameter
             }
-            localVarRequestOptions.FormParameters.Add("username", SdWebUpApi.Client.ClientUtils.ParameterToString(username)); // form parameter
-            localVarRequestOptions.FormParameters.Add("password", SdWebUpApi.Client.ClientUtils.ParameterToString(password)); // form parameter
+            localVarRequestOptions.FormParameters.Add("username", SdWebUiApi.Client.ClientUtils.ParameterToString(username)); // form parameter
+            localVarRequestOptions.FormParameters.Add("password", SdWebUiApi.Client.ClientUtils.ParameterToString(password)); // form parameter
             if (scope != null)
             {
-                localVarRequestOptions.FormParameters.Add("scope", SdWebUpApi.Client.ClientUtils.ParameterToString(scope)); // form parameter
+                localVarRequestOptions.FormParameters.Add("scope", SdWebUiApi.Client.ClientUtils.ParameterToString(scope)); // form parameter
             }
             if (clientId != null)
             {
-                localVarRequestOptions.FormParameters.Add("client_id", SdWebUpApi.Client.ClientUtils.ParameterToString(clientId)); // form parameter
+                localVarRequestOptions.FormParameters.Add("client_id", SdWebUiApi.Client.ClientUtils.ParameterToString(clientId)); // form parameter
             }
             if (clientSecret != null)
             {
-                localVarRequestOptions.FormParameters.Add("client_secret", SdWebUpApi.Client.ClientUtils.ParameterToString(clientSecret)); // form parameter
+                localVarRequestOptions.FormParameters.Add("client_secret", SdWebUiApi.Client.ClientUtils.ParameterToString(clientSecret)); // form parameter
             }
 
             localVarRequestOptions.Operation = "DefaultApi.LoginLoginPost";
@@ -11586,7 +12297,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Login 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -11598,14 +12309,14 @@ namespace SdWebUpApi.Api
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> LoginLoginPostAsync(string username, string password, string? grantType = default(string?), string? scope = default(string?), string? clientId = default(string?), string? clientSecret = default(string?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await LoginLoginPostWithHttpInfoAsync(username, password, grantType, scope, clientId, clientSecret, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await LoginLoginPostWithHttpInfoAsync(username, password, grantType, scope, clientId, clientSecret, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Login 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -11615,22 +12326,22 @@ namespace SdWebUpApi.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> LoginLoginPostWithHttpInfoAsync(string username, string password, string? grantType = default(string?), string? scope = default(string?), string? clientId = default(string?), string? clientSecret = default(string?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> LoginLoginPostWithHttpInfoAsync(string username, string password, string? grantType = default(string?), string? scope = default(string?), string? clientId = default(string?), string? clientSecret = default(string?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'username' is set
             if (username == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'username' when calling DefaultApi->LoginLoginPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'username' when calling DefaultApi->LoginLoginPost");
             }
 
             // verify the required parameter 'password' is set
             if (password == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'password' when calling DefaultApi->LoginLoginPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'password' when calling DefaultApi->LoginLoginPost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/x-www-form-urlencoded"
@@ -11641,13 +12352,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -11655,21 +12366,21 @@ namespace SdWebUpApi.Api
 
             if (grantType != null)
             {
-                localVarRequestOptions.FormParameters.Add("grant_type", SdWebUpApi.Client.ClientUtils.ParameterToString(grantType)); // form parameter
+                localVarRequestOptions.FormParameters.Add("grant_type", SdWebUiApi.Client.ClientUtils.ParameterToString(grantType)); // form parameter
             }
-            localVarRequestOptions.FormParameters.Add("username", SdWebUpApi.Client.ClientUtils.ParameterToString(username)); // form parameter
-            localVarRequestOptions.FormParameters.Add("password", SdWebUpApi.Client.ClientUtils.ParameterToString(password)); // form parameter
+            localVarRequestOptions.FormParameters.Add("username", SdWebUiApi.Client.ClientUtils.ParameterToString(username)); // form parameter
+            localVarRequestOptions.FormParameters.Add("password", SdWebUiApi.Client.ClientUtils.ParameterToString(password)); // form parameter
             if (scope != null)
             {
-                localVarRequestOptions.FormParameters.Add("scope", SdWebUpApi.Client.ClientUtils.ParameterToString(scope)); // form parameter
+                localVarRequestOptions.FormParameters.Add("scope", SdWebUiApi.Client.ClientUtils.ParameterToString(scope)); // form parameter
             }
             if (clientId != null)
             {
-                localVarRequestOptions.FormParameters.Add("client_id", SdWebUpApi.Client.ClientUtils.ParameterToString(clientId)); // form parameter
+                localVarRequestOptions.FormParameters.Add("client_id", SdWebUiApi.Client.ClientUtils.ParameterToString(clientId)); // form parameter
             }
             if (clientSecret != null)
             {
-                localVarRequestOptions.FormParameters.Add("client_secret", SdWebUpApi.Client.ClientUtils.ParameterToString(clientSecret)); // form parameter
+                localVarRequestOptions.FormParameters.Add("client_secret", SdWebUiApi.Client.ClientUtils.ParameterToString(clientSecret)); // form parameter
             }
 
             localVarRequestOptions.Operation = "DefaultApi.LoginLoginPost";
@@ -11694,7 +12405,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Login 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -11705,14 +12416,14 @@ namespace SdWebUpApi.Api
         /// <returns>Object</returns>
         public Object LoginLoginPost_0(string username, string password, string? grantType = default(string?), string? scope = default(string?), string? clientId = default(string?), string? clientSecret = default(string?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = LoginLoginPost_0WithHttpInfo(username, password, grantType, scope, clientId, clientSecret);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = LoginLoginPost_0WithHttpInfo(username, password, grantType, scope, clientId, clientSecret);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Login 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -11721,21 +12432,21 @@ namespace SdWebUpApi.Api
         /// <param name="clientSecret"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> LoginLoginPost_0WithHttpInfo(string username, string password, string? grantType = default(string?), string? scope = default(string?), string? clientId = default(string?), string? clientSecret = default(string?), int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> LoginLoginPost_0WithHttpInfo(string username, string password, string? grantType = default(string?), string? scope = default(string?), string? clientId = default(string?), string? clientSecret = default(string?), int operationIndex = 0)
         {
             // verify the required parameter 'username' is set
             if (username == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'username' when calling DefaultApi->LoginLoginPost_0");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'username' when calling DefaultApi->LoginLoginPost_0");
             }
 
             // verify the required parameter 'password' is set
             if (password == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'password' when calling DefaultApi->LoginLoginPost_0");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'password' when calling DefaultApi->LoginLoginPost_0");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/x-www-form-urlencoded"
@@ -11746,13 +12457,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -11760,21 +12471,21 @@ namespace SdWebUpApi.Api
 
             if (grantType != null)
             {
-                localVarRequestOptions.FormParameters.Add("grant_type", SdWebUpApi.Client.ClientUtils.ParameterToString(grantType)); // form parameter
+                localVarRequestOptions.FormParameters.Add("grant_type", SdWebUiApi.Client.ClientUtils.ParameterToString(grantType)); // form parameter
             }
-            localVarRequestOptions.FormParameters.Add("username", SdWebUpApi.Client.ClientUtils.ParameterToString(username)); // form parameter
-            localVarRequestOptions.FormParameters.Add("password", SdWebUpApi.Client.ClientUtils.ParameterToString(password)); // form parameter
+            localVarRequestOptions.FormParameters.Add("username", SdWebUiApi.Client.ClientUtils.ParameterToString(username)); // form parameter
+            localVarRequestOptions.FormParameters.Add("password", SdWebUiApi.Client.ClientUtils.ParameterToString(password)); // form parameter
             if (scope != null)
             {
-                localVarRequestOptions.FormParameters.Add("scope", SdWebUpApi.Client.ClientUtils.ParameterToString(scope)); // form parameter
+                localVarRequestOptions.FormParameters.Add("scope", SdWebUiApi.Client.ClientUtils.ParameterToString(scope)); // form parameter
             }
             if (clientId != null)
             {
-                localVarRequestOptions.FormParameters.Add("client_id", SdWebUpApi.Client.ClientUtils.ParameterToString(clientId)); // form parameter
+                localVarRequestOptions.FormParameters.Add("client_id", SdWebUiApi.Client.ClientUtils.ParameterToString(clientId)); // form parameter
             }
             if (clientSecret != null)
             {
-                localVarRequestOptions.FormParameters.Add("client_secret", SdWebUpApi.Client.ClientUtils.ParameterToString(clientSecret)); // form parameter
+                localVarRequestOptions.FormParameters.Add("client_secret", SdWebUiApi.Client.ClientUtils.ParameterToString(clientSecret)); // form parameter
             }
 
             localVarRequestOptions.Operation = "DefaultApi.LoginLoginPost_0";
@@ -11798,7 +12509,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Login 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -11810,14 +12521,14 @@ namespace SdWebUpApi.Api
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> LoginLoginPost_0Async(string username, string password, string? grantType = default(string?), string? scope = default(string?), string? clientId = default(string?), string? clientSecret = default(string?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await LoginLoginPost_0WithHttpInfoAsync(username, password, grantType, scope, clientId, clientSecret, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await LoginLoginPost_0WithHttpInfoAsync(username, password, grantType, scope, clientId, clientSecret, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Login 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="grantType"> (optional)</param>
@@ -11827,22 +12538,22 @@ namespace SdWebUpApi.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> LoginLoginPost_0WithHttpInfoAsync(string username, string password, string? grantType = default(string?), string? scope = default(string?), string? clientId = default(string?), string? clientSecret = default(string?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> LoginLoginPost_0WithHttpInfoAsync(string username, string password, string? grantType = default(string?), string? scope = default(string?), string? clientId = default(string?), string? clientSecret = default(string?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'username' is set
             if (username == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'username' when calling DefaultApi->LoginLoginPost_0");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'username' when calling DefaultApi->LoginLoginPost_0");
             }
 
             // verify the required parameter 'password' is set
             if (password == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'password' when calling DefaultApi->LoginLoginPost_0");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'password' when calling DefaultApi->LoginLoginPost_0");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/x-www-form-urlencoded"
@@ -11853,13 +12564,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -11867,21 +12578,21 @@ namespace SdWebUpApi.Api
 
             if (grantType != null)
             {
-                localVarRequestOptions.FormParameters.Add("grant_type", SdWebUpApi.Client.ClientUtils.ParameterToString(grantType)); // form parameter
+                localVarRequestOptions.FormParameters.Add("grant_type", SdWebUiApi.Client.ClientUtils.ParameterToString(grantType)); // form parameter
             }
-            localVarRequestOptions.FormParameters.Add("username", SdWebUpApi.Client.ClientUtils.ParameterToString(username)); // form parameter
-            localVarRequestOptions.FormParameters.Add("password", SdWebUpApi.Client.ClientUtils.ParameterToString(password)); // form parameter
+            localVarRequestOptions.FormParameters.Add("username", SdWebUiApi.Client.ClientUtils.ParameterToString(username)); // form parameter
+            localVarRequestOptions.FormParameters.Add("password", SdWebUiApi.Client.ClientUtils.ParameterToString(password)); // form parameter
             if (scope != null)
             {
-                localVarRequestOptions.FormParameters.Add("scope", SdWebUpApi.Client.ClientUtils.ParameterToString(scope)); // form parameter
+                localVarRequestOptions.FormParameters.Add("scope", SdWebUiApi.Client.ClientUtils.ParameterToString(scope)); // form parameter
             }
             if (clientId != null)
             {
-                localVarRequestOptions.FormParameters.Add("client_id", SdWebUpApi.Client.ClientUtils.ParameterToString(clientId)); // form parameter
+                localVarRequestOptions.FormParameters.Add("client_id", SdWebUiApi.Client.ClientUtils.ParameterToString(clientId)); // form parameter
             }
             if (clientSecret != null)
             {
-                localVarRequestOptions.FormParameters.Add("client_secret", SdWebUpApi.Client.ClientUtils.ParameterToString(clientSecret)); // form parameter
+                localVarRequestOptions.FormParameters.Add("client_secret", SdWebUiApi.Client.ClientUtils.ParameterToString(clientSecret)); // form parameter
             }
 
             localVarRequestOptions.Operation = "DefaultApi.LoginLoginPost_0";
@@ -11906,24 +12617,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Main 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>string</returns>
         public string MainGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<string> localVarResponse = MainGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<string> localVarResponse = MainGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Main 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of string</returns>
-        public SdWebUpApi.Client.ApiResponse<string> MainGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<string> MainGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -11933,13 +12644,13 @@ namespace SdWebUpApi.Api
                 "text/html"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -11967,27 +12678,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Main 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of string</returns>
         public async System.Threading.Tasks.Task<string> MainGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<string> localVarResponse = await MainGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<string> localVarResponse = await MainGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Main 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (string)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<string>> MainGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<string>> MainGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -11997,13 +12708,13 @@ namespace SdWebUpApi.Api
                 "text/html"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -12032,24 +12743,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Main 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>string</returns>
         public string MainHead(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<string> localVarResponse = MainHeadWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<string> localVarResponse = MainHeadWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Main 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of string</returns>
-        public SdWebUpApi.Client.ApiResponse<string> MainHeadWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<string> MainHeadWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -12059,13 +12770,13 @@ namespace SdWebUpApi.Api
                 "text/html"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -12093,27 +12804,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Main 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of string</returns>
         public async System.Threading.Tasks.Task<string> MainHeadAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<string> localVarResponse = await MainHeadWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<string> localVarResponse = await MainHeadWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Main 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (string)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<string>> MainHeadWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<string>> MainHeadWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -12123,13 +12834,13 @@ namespace SdWebUpApi.Api
                 "text/html"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -12158,26 +12869,26 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Model List 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="update"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object ModelListControlnetModelListGet(bool? update = default(bool?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = ModelListControlnetModelListGetWithHttpInfo(update);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = ModelListControlnetModelListGetWithHttpInfo(update);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Model List 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="update"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> ModelListControlnetModelListGetWithHttpInfo(bool? update = default(bool?), int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> ModelListControlnetModelListGetWithHttpInfo(bool? update = default(bool?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -12187,13 +12898,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -12201,7 +12912,7 @@ namespace SdWebUpApi.Api
 
             if (update != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "update", update));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "update", update));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.ModelListControlnetModelListGet";
@@ -12225,29 +12936,29 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Model List 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="update"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> ModelListControlnetModelListGetAsync(bool? update = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await ModelListControlnetModelListGetWithHttpInfoAsync(update, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await ModelListControlnetModelListGetWithHttpInfoAsync(update, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Model List 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="update"> (optional, default to true)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> ModelListControlnetModelListGetWithHttpInfoAsync(bool? update = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> ModelListControlnetModelListGetWithHttpInfoAsync(bool? update = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -12257,13 +12968,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -12271,7 +12982,7 @@ namespace SdWebUpApi.Api
 
             if (update != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "update", update));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "update", update));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.ModelListControlnetModelListGet";
@@ -12296,26 +13007,26 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Module List 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="aliasNames"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object ModuleListControlnetModuleListGet(bool? aliasNames = default(bool?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = ModuleListControlnetModuleListGetWithHttpInfo(aliasNames);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = ModuleListControlnetModuleListGetWithHttpInfo(aliasNames);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Module List 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="aliasNames"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> ModuleListControlnetModuleListGetWithHttpInfo(bool? aliasNames = default(bool?), int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> ModuleListControlnetModuleListGetWithHttpInfo(bool? aliasNames = default(bool?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -12325,13 +13036,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -12339,7 +13050,7 @@ namespace SdWebUpApi.Api
 
             if (aliasNames != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "alias_names", aliasNames));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "alias_names", aliasNames));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.ModuleListControlnetModuleListGet";
@@ -12363,29 +13074,29 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Module List 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="aliasNames"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> ModuleListControlnetModuleListGetAsync(bool? aliasNames = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await ModuleListControlnetModuleListGetWithHttpInfoAsync(aliasNames, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await ModuleListControlnetModuleListGetWithHttpInfoAsync(aliasNames, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Module List 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="aliasNames"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> ModuleListControlnetModuleListGetWithHttpInfoAsync(bool? aliasNames = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> ModuleListControlnetModuleListGetWithHttpInfoAsync(bool? aliasNames = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -12395,13 +13106,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -12409,7 +13120,7 @@ namespace SdWebUpApi.Api
 
             if (aliasNames != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "alias_names", aliasNames));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "alias_names", aliasNames));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.ModuleListControlnetModuleListGet";
@@ -12434,32 +13145,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Pnginfoapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pNGInfoRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>PNGInfoResponse</returns>
         public PNGInfoResponse PnginfoapiSdapiV1PngInfoPost(PNGInfoRequest pNGInfoRequest, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<PNGInfoResponse> localVarResponse = PnginfoapiSdapiV1PngInfoPostWithHttpInfo(pNGInfoRequest);
+            SdWebUiApi.Client.ApiResponse<PNGInfoResponse> localVarResponse = PnginfoapiSdapiV1PngInfoPostWithHttpInfo(pNGInfoRequest);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Pnginfoapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pNGInfoRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of PNGInfoResponse</returns>
-        public SdWebUpApi.Client.ApiResponse<PNGInfoResponse> PnginfoapiSdapiV1PngInfoPostWithHttpInfo(PNGInfoRequest pNGInfoRequest, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<PNGInfoResponse> PnginfoapiSdapiV1PngInfoPostWithHttpInfo(PNGInfoRequest pNGInfoRequest, int operationIndex = 0)
         {
             // verify the required parameter 'pNGInfoRequest' is set
             if (pNGInfoRequest == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'pNGInfoRequest' when calling DefaultApi->PnginfoapiSdapiV1PngInfoPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'pNGInfoRequest' when calling DefaultApi->PnginfoapiSdapiV1PngInfoPost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -12470,13 +13181,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -12505,35 +13216,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Pnginfoapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pNGInfoRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of PNGInfoResponse</returns>
         public async System.Threading.Tasks.Task<PNGInfoResponse> PnginfoapiSdapiV1PngInfoPostAsync(PNGInfoRequest pNGInfoRequest, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<PNGInfoResponse> localVarResponse = await PnginfoapiSdapiV1PngInfoPostWithHttpInfoAsync(pNGInfoRequest, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<PNGInfoResponse> localVarResponse = await PnginfoapiSdapiV1PngInfoPostWithHttpInfoAsync(pNGInfoRequest, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Pnginfoapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="pNGInfoRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (PNGInfoResponse)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<PNGInfoResponse>> PnginfoapiSdapiV1PngInfoPostWithHttpInfoAsync(PNGInfoRequest pNGInfoRequest, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<PNGInfoResponse>> PnginfoapiSdapiV1PngInfoPostWithHttpInfoAsync(PNGInfoRequest pNGInfoRequest, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'pNGInfoRequest' is set
             if (pNGInfoRequest == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'pNGInfoRequest' when calling DefaultApi->PnginfoapiSdapiV1PngInfoPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'pNGInfoRequest' when calling DefaultApi->PnginfoapiSdapiV1PngInfoPost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -12544,13 +13255,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -12580,40 +13291,40 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object PredictApiApiNamePost(string apiName, PredictBody predictBody, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = PredictApiApiNamePostWithHttpInfo(apiName, predictBody);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = PredictApiApiNamePostWithHttpInfo(apiName, predictBody);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> PredictApiApiNamePostWithHttpInfo(string apiName, PredictBody predictBody, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> PredictApiApiNamePostWithHttpInfo(string apiName, PredictBody predictBody, int operationIndex = 0)
         {
             // verify the required parameter 'apiName' is set
             if (apiName == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictApiApiNamePost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictApiApiNamePost");
             }
 
             // verify the required parameter 'predictBody' is set
             if (predictBody == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictApiApiNamePost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictApiApiNamePost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -12624,19 +13335,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("api_name", SdWebUpApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
+            localVarRequestOptions.PathParameters.Add("api_name", SdWebUiApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
             localVarRequestOptions.Data = predictBody;
 
             localVarRequestOptions.Operation = "DefaultApi.PredictApiApiNamePost";
@@ -12660,7 +13371,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -12668,35 +13379,35 @@ namespace SdWebUpApi.Api
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> PredictApiApiNamePostAsync(string apiName, PredictBody predictBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await PredictApiApiNamePostWithHttpInfoAsync(apiName, predictBody, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await PredictApiApiNamePostWithHttpInfoAsync(apiName, predictBody, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> PredictApiApiNamePostWithHttpInfoAsync(string apiName, PredictBody predictBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> PredictApiApiNamePostWithHttpInfoAsync(string apiName, PredictBody predictBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'apiName' is set
             if (apiName == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictApiApiNamePost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictApiApiNamePost");
             }
 
             // verify the required parameter 'predictBody' is set
             if (predictBody == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictApiApiNamePost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictApiApiNamePost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -12707,19 +13418,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("api_name", SdWebUpApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
+            localVarRequestOptions.PathParameters.Add("api_name", SdWebUiApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
             localVarRequestOptions.Data = predictBody;
 
             localVarRequestOptions.Operation = "DefaultApi.PredictApiApiNamePost";
@@ -12744,40 +13455,40 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object PredictApiApiNamePost_0(string apiName, PredictBody predictBody, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = PredictApiApiNamePost_0WithHttpInfo(apiName, predictBody);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = PredictApiApiNamePost_0WithHttpInfo(apiName, predictBody);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> PredictApiApiNamePost_0WithHttpInfo(string apiName, PredictBody predictBody, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> PredictApiApiNamePost_0WithHttpInfo(string apiName, PredictBody predictBody, int operationIndex = 0)
         {
             // verify the required parameter 'apiName' is set
             if (apiName == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictApiApiNamePost_0");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictApiApiNamePost_0");
             }
 
             // verify the required parameter 'predictBody' is set
             if (predictBody == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictApiApiNamePost_0");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictApiApiNamePost_0");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -12788,19 +13499,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("api_name", SdWebUpApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
+            localVarRequestOptions.PathParameters.Add("api_name", SdWebUiApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
             localVarRequestOptions.Data = predictBody;
 
             localVarRequestOptions.Operation = "DefaultApi.PredictApiApiNamePost_0";
@@ -12824,7 +13535,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -12832,35 +13543,35 @@ namespace SdWebUpApi.Api
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> PredictApiApiNamePost_0Async(string apiName, PredictBody predictBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await PredictApiApiNamePost_0WithHttpInfoAsync(apiName, predictBody, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await PredictApiApiNamePost_0WithHttpInfoAsync(apiName, predictBody, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> PredictApiApiNamePost_0WithHttpInfoAsync(string apiName, PredictBody predictBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> PredictApiApiNamePost_0WithHttpInfoAsync(string apiName, PredictBody predictBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'apiName' is set
             if (apiName == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictApiApiNamePost_0");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictApiApiNamePost_0");
             }
 
             // verify the required parameter 'predictBody' is set
             if (predictBody == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictApiApiNamePost_0");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictApiApiNamePost_0");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -12871,19 +13582,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("api_name", SdWebUpApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
+            localVarRequestOptions.PathParameters.Add("api_name", SdWebUiApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
             localVarRequestOptions.Data = predictBody;
 
             localVarRequestOptions.Operation = "DefaultApi.PredictApiApiNamePost_0";
@@ -12908,40 +13619,40 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object PredictRunApiNamePost(string apiName, PredictBody predictBody, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = PredictRunApiNamePostWithHttpInfo(apiName, predictBody);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = PredictRunApiNamePostWithHttpInfo(apiName, predictBody);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> PredictRunApiNamePostWithHttpInfo(string apiName, PredictBody predictBody, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> PredictRunApiNamePostWithHttpInfo(string apiName, PredictBody predictBody, int operationIndex = 0)
         {
             // verify the required parameter 'apiName' is set
             if (apiName == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictRunApiNamePost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictRunApiNamePost");
             }
 
             // verify the required parameter 'predictBody' is set
             if (predictBody == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictRunApiNamePost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictRunApiNamePost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -12952,19 +13663,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("api_name", SdWebUpApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
+            localVarRequestOptions.PathParameters.Add("api_name", SdWebUiApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
             localVarRequestOptions.Data = predictBody;
 
             localVarRequestOptions.Operation = "DefaultApi.PredictRunApiNamePost";
@@ -12988,7 +13699,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -12996,35 +13707,35 @@ namespace SdWebUpApi.Api
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> PredictRunApiNamePostAsync(string apiName, PredictBody predictBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await PredictRunApiNamePostWithHttpInfoAsync(apiName, predictBody, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await PredictRunApiNamePostWithHttpInfoAsync(apiName, predictBody, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> PredictRunApiNamePostWithHttpInfoAsync(string apiName, PredictBody predictBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> PredictRunApiNamePostWithHttpInfoAsync(string apiName, PredictBody predictBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'apiName' is set
             if (apiName == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictRunApiNamePost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictRunApiNamePost");
             }
 
             // verify the required parameter 'predictBody' is set
             if (predictBody == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictRunApiNamePost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictRunApiNamePost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -13035,19 +13746,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("api_name", SdWebUpApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
+            localVarRequestOptions.PathParameters.Add("api_name", SdWebUiApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
             localVarRequestOptions.Data = predictBody;
 
             localVarRequestOptions.Operation = "DefaultApi.PredictRunApiNamePost";
@@ -13072,40 +13783,40 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object PredictRunApiNamePost_0(string apiName, PredictBody predictBody, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = PredictRunApiNamePost_0WithHttpInfo(apiName, predictBody);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = PredictRunApiNamePost_0WithHttpInfo(apiName, predictBody);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> PredictRunApiNamePost_0WithHttpInfo(string apiName, PredictBody predictBody, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> PredictRunApiNamePost_0WithHttpInfo(string apiName, PredictBody predictBody, int operationIndex = 0)
         {
             // verify the required parameter 'apiName' is set
             if (apiName == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictRunApiNamePost_0");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictRunApiNamePost_0");
             }
 
             // verify the required parameter 'predictBody' is set
             if (predictBody == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictRunApiNamePost_0");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictRunApiNamePost_0");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -13116,19 +13827,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("api_name", SdWebUpApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
+            localVarRequestOptions.PathParameters.Add("api_name", SdWebUiApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
             localVarRequestOptions.Data = predictBody;
 
             localVarRequestOptions.Operation = "DefaultApi.PredictRunApiNamePost_0";
@@ -13152,7 +13863,7 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
@@ -13160,35 +13871,35 @@ namespace SdWebUpApi.Api
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> PredictRunApiNamePost_0Async(string apiName, PredictBody predictBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await PredictRunApiNamePost_0WithHttpInfoAsync(apiName, predictBody, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await PredictRunApiNamePost_0WithHttpInfoAsync(apiName, predictBody, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Predict 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="apiName"></param>
         /// <param name="predictBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> PredictRunApiNamePost_0WithHttpInfoAsync(string apiName, PredictBody predictBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> PredictRunApiNamePost_0WithHttpInfoAsync(string apiName, PredictBody predictBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'apiName' is set
             if (apiName == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictRunApiNamePost_0");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'apiName' when calling DefaultApi->PredictRunApiNamePost_0");
             }
 
             // verify the required parameter 'predictBody' is set
             if (predictBody == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictRunApiNamePost_0");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'predictBody' when calling DefaultApi->PredictRunApiNamePost_0");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -13199,19 +13910,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("api_name", SdWebUpApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
+            localVarRequestOptions.PathParameters.Add("api_name", SdWebUiApi.Client.ClientUtils.ParameterToString(apiName)); // path parameter
             localVarRequestOptions.Data = predictBody;
 
             localVarRequestOptions.Operation = "DefaultApi.PredictRunApiNamePost_0";
@@ -13236,32 +13947,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Preprocess 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>PreprocessResponse</returns>
         public PreprocessResponse PreprocessSdapiV1PreprocessPost(Object body, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<PreprocessResponse> localVarResponse = PreprocessSdapiV1PreprocessPostWithHttpInfo(body);
+            SdWebUiApi.Client.ApiResponse<PreprocessResponse> localVarResponse = PreprocessSdapiV1PreprocessPostWithHttpInfo(body);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Preprocess 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of PreprocessResponse</returns>
-        public SdWebUpApi.Client.ApiResponse<PreprocessResponse> PreprocessSdapiV1PreprocessPostWithHttpInfo(Object body, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<PreprocessResponse> PreprocessSdapiV1PreprocessPostWithHttpInfo(Object body, int operationIndex = 0)
         {
             // verify the required parameter 'body' is set
             if (body == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->PreprocessSdapiV1PreprocessPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->PreprocessSdapiV1PreprocessPost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -13272,13 +13983,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -13307,35 +14018,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Preprocess 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of PreprocessResponse</returns>
         public async System.Threading.Tasks.Task<PreprocessResponse> PreprocessSdapiV1PreprocessPostAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<PreprocessResponse> localVarResponse = await PreprocessSdapiV1PreprocessPostWithHttpInfoAsync(body, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<PreprocessResponse> localVarResponse = await PreprocessSdapiV1PreprocessPostWithHttpInfoAsync(body, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Preprocess 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (PreprocessResponse)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<PreprocessResponse>> PreprocessSdapiV1PreprocessPostWithHttpInfoAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<PreprocessResponse>> PreprocessSdapiV1PreprocessPostWithHttpInfoAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'body' is set
             if (body == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->PreprocessSdapiV1PreprocessPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->PreprocessSdapiV1PreprocessPost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -13346,13 +14057,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -13382,32 +14093,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Progressapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="progressRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ModulesProgressProgressResponse</returns>
         public ModulesProgressProgressResponse ProgressapiInternalProgressPost(ProgressRequest progressRequest, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<ModulesProgressProgressResponse> localVarResponse = ProgressapiInternalProgressPostWithHttpInfo(progressRequest);
+            SdWebUiApi.Client.ApiResponse<ModulesProgressProgressResponse> localVarResponse = ProgressapiInternalProgressPostWithHttpInfo(progressRequest);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Progressapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="progressRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of ModulesProgressProgressResponse</returns>
-        public SdWebUpApi.Client.ApiResponse<ModulesProgressProgressResponse> ProgressapiInternalProgressPostWithHttpInfo(ProgressRequest progressRequest, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<ModulesProgressProgressResponse> ProgressapiInternalProgressPostWithHttpInfo(ProgressRequest progressRequest, int operationIndex = 0)
         {
             // verify the required parameter 'progressRequest' is set
             if (progressRequest == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'progressRequest' when calling DefaultApi->ProgressapiInternalProgressPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'progressRequest' when calling DefaultApi->ProgressapiInternalProgressPost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -13418,13 +14129,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -13453,35 +14164,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Progressapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="progressRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ModulesProgressProgressResponse</returns>
         public async System.Threading.Tasks.Task<ModulesProgressProgressResponse> ProgressapiInternalProgressPostAsync(ProgressRequest progressRequest, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<ModulesProgressProgressResponse> localVarResponse = await ProgressapiInternalProgressPostWithHttpInfoAsync(progressRequest, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<ModulesProgressProgressResponse> localVarResponse = await ProgressapiInternalProgressPostWithHttpInfoAsync(progressRequest, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Progressapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="progressRequest"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ModulesProgressProgressResponse)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<ModulesProgressProgressResponse>> ProgressapiInternalProgressPostWithHttpInfoAsync(ProgressRequest progressRequest, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<ModulesProgressProgressResponse>> ProgressapiInternalProgressPostWithHttpInfoAsync(ProgressRequest progressRequest, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'progressRequest' is set
             if (progressRequest == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'progressRequest' when calling DefaultApi->ProgressapiInternalProgressPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'progressRequest' when calling DefaultApi->ProgressapiInternalProgressPost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -13492,13 +14203,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -13528,26 +14239,26 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Progressapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skipCurrentImage"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ModulesApiModelsProgressResponse</returns>
         public ModulesApiModelsProgressResponse ProgressapiSdapiV1ProgressGet(bool? skipCurrentImage = default(bool?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<ModulesApiModelsProgressResponse> localVarResponse = ProgressapiSdapiV1ProgressGetWithHttpInfo(skipCurrentImage);
+            SdWebUiApi.Client.ApiResponse<ModulesApiModelsProgressResponse> localVarResponse = ProgressapiSdapiV1ProgressGetWithHttpInfo(skipCurrentImage);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Progressapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skipCurrentImage"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of ModulesApiModelsProgressResponse</returns>
-        public SdWebUpApi.Client.ApiResponse<ModulesApiModelsProgressResponse> ProgressapiSdapiV1ProgressGetWithHttpInfo(bool? skipCurrentImage = default(bool?), int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<ModulesApiModelsProgressResponse> ProgressapiSdapiV1ProgressGetWithHttpInfo(bool? skipCurrentImage = default(bool?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -13557,13 +14268,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -13571,7 +14282,7 @@ namespace SdWebUpApi.Api
 
             if (skipCurrentImage != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "skip_current_image", skipCurrentImage));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "skip_current_image", skipCurrentImage));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.ProgressapiSdapiV1ProgressGet";
@@ -13595,29 +14306,29 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Progressapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skipCurrentImage"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ModulesApiModelsProgressResponse</returns>
         public async System.Threading.Tasks.Task<ModulesApiModelsProgressResponse> ProgressapiSdapiV1ProgressGetAsync(bool? skipCurrentImage = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<ModulesApiModelsProgressResponse> localVarResponse = await ProgressapiSdapiV1ProgressGetWithHttpInfoAsync(skipCurrentImage, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<ModulesApiModelsProgressResponse> localVarResponse = await ProgressapiSdapiV1ProgressGetWithHttpInfoAsync(skipCurrentImage, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Progressapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skipCurrentImage"> (optional, default to false)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ModulesApiModelsProgressResponse)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<ModulesApiModelsProgressResponse>> ProgressapiSdapiV1ProgressGetWithHttpInfoAsync(bool? skipCurrentImage = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<ModulesApiModelsProgressResponse>> ProgressapiSdapiV1ProgressGetWithHttpInfoAsync(bool? skipCurrentImage = default(bool?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -13627,13 +14338,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -13641,7 +14352,7 @@ namespace SdWebUpApi.Api
 
             if (skipCurrentImage != null)
             {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "skip_current_image", skipCurrentImage));
+                localVarRequestOptions.QueryParameters.Add(SdWebUiApi.Client.ClientUtils.ParameterToMultiMap("", "skip_current_image", skipCurrentImage));
             }
 
             localVarRequestOptions.Operation = "DefaultApi.ProgressapiSdapiV1ProgressGet";
@@ -13666,24 +14377,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Quicksettings Hint 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;QuicksettingsHint&gt;</returns>
         public List<QuicksettingsHint> QuicksettingsHintInternalQuicksettingsHintGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<List<QuicksettingsHint>> localVarResponse = QuicksettingsHintInternalQuicksettingsHintGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<List<QuicksettingsHint>> localVarResponse = QuicksettingsHintInternalQuicksettingsHintGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Quicksettings Hint 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;QuicksettingsHint&gt;</returns>
-        public SdWebUpApi.Client.ApiResponse<List<QuicksettingsHint>> QuicksettingsHintInternalQuicksettingsHintGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<List<QuicksettingsHint>> QuicksettingsHintInternalQuicksettingsHintGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -13693,13 +14404,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -13727,27 +14438,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Quicksettings Hint 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;QuicksettingsHint&gt;</returns>
         public async System.Threading.Tasks.Task<List<QuicksettingsHint>> QuicksettingsHintInternalQuicksettingsHintGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<List<QuicksettingsHint>> localVarResponse = await QuicksettingsHintInternalQuicksettingsHintGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<List<QuicksettingsHint>> localVarResponse = await QuicksettingsHintInternalQuicksettingsHintGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Quicksettings Hint 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;QuicksettingsHint&gt;)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<List<QuicksettingsHint>>> QuicksettingsHintInternalQuicksettingsHintGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<List<QuicksettingsHint>>> QuicksettingsHintInternalQuicksettingsHintGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -13757,13 +14468,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -13792,24 +14503,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Refresh Checkpoints 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object RefreshCheckpointsSdapiV1RefreshCheckpointsPost(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = RefreshCheckpointsSdapiV1RefreshCheckpointsPostWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = RefreshCheckpointsSdapiV1RefreshCheckpointsPostWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Refresh Checkpoints 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> RefreshCheckpointsSdapiV1RefreshCheckpointsPostWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> RefreshCheckpointsSdapiV1RefreshCheckpointsPostWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -13819,13 +14530,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -13853,27 +14564,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Refresh Checkpoints 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> RefreshCheckpointsSdapiV1RefreshCheckpointsPostAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await RefreshCheckpointsSdapiV1RefreshCheckpointsPostWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await RefreshCheckpointsSdapiV1RefreshCheckpointsPostWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Refresh Checkpoints 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> RefreshCheckpointsSdapiV1RefreshCheckpointsPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> RefreshCheckpointsSdapiV1RefreshCheckpointsPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -13883,13 +14594,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -13918,24 +14629,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Refresh Loras 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object RefreshLorasSdapiV1RefreshLorasPost(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = RefreshLorasSdapiV1RefreshLorasPostWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = RefreshLorasSdapiV1RefreshLorasPostWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Refresh Loras 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> RefreshLorasSdapiV1RefreshLorasPostWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> RefreshLorasSdapiV1RefreshLorasPostWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -13945,13 +14656,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -13979,27 +14690,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Refresh Loras 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> RefreshLorasSdapiV1RefreshLorasPostAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await RefreshLorasSdapiV1RefreshLorasPostWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await RefreshLorasSdapiV1RefreshLorasPostWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Refresh Loras 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> RefreshLorasSdapiV1RefreshLorasPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> RefreshLorasSdapiV1RefreshLorasPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -14009,13 +14720,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -14042,26 +14753,26 @@ namespace SdWebUpApi.Api
         }
 
         /// <summary>
-        /// Reloadapi 
+        /// Refresh Vae 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
-        public Object ReloadapiSdapiV1ReloadCheckpointPost(int operationIndex = 0)
+        public Object RefreshVaeSdapiV1RefreshVaePost(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = ReloadapiSdapiV1ReloadCheckpointPostWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = RefreshVaeSdapiV1RefreshVaePostWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
-        /// Reloadapi 
+        /// Refresh Vae 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> ReloadapiSdapiV1ReloadCheckpointPostWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> RefreshVaeSdapiV1RefreshVaePostWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -14071,13 +14782,139 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+
+            localVarRequestOptions.Operation = "DefaultApi.RefreshVaeSdapiV1RefreshVaePost";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Post<Object>("/sdapi/v1/refresh-vae", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("RefreshVaeSdapiV1RefreshVaePost", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Refresh Vae 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of Object</returns>
+        public async System.Threading.Tasks.Task<Object> RefreshVaeSdapiV1RefreshVaePostAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await RefreshVaeSdapiV1RefreshVaePostWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Refresh Vae 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (Object)</returns>
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> RefreshVaeSdapiV1RefreshVaePostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+
+            localVarRequestOptions.Operation = "DefaultApi.RefreshVaeSdapiV1RefreshVaePost";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/sdapi/v1/refresh-vae", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("RefreshVaeSdapiV1RefreshVaePost", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Reloadapi 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>Object</returns>
+        public Object ReloadapiSdapiV1ReloadCheckpointPost(int operationIndex = 0)
+        {
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = ReloadapiSdapiV1ReloadCheckpointPostWithHttpInfo();
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Reloadapi 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object</returns>
+        public SdWebUiApi.Client.ApiResponse<Object> ReloadapiSdapiV1ReloadCheckpointPostWithHttpInfo(int operationIndex = 0)
+        {
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -14105,27 +14942,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Reloadapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> ReloadapiSdapiV1ReloadCheckpointPostAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await ReloadapiSdapiV1ReloadCheckpointPostWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await ReloadapiSdapiV1ReloadCheckpointPostWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Reloadapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> ReloadapiSdapiV1ReloadCheckpointPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> ReloadapiSdapiV1ReloadCheckpointPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -14135,13 +14972,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -14168,34 +15005,28 @@ namespace SdWebUpApi.Api
         }
 
         /// <summary>
-        /// Reset Iterator 
+        /// Rembg Remove 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="resetBody"></param>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="bodyRembgRemoveRembgPost"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
-        public Object ResetIteratorResetPost(ResetBody resetBody, int operationIndex = 0)
+        public Object RembgRemoveRembgPost(BodyRembgRemoveRembgPost? bodyRembgRemoveRembgPost = default(BodyRembgRemoveRembgPost?), int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = ResetIteratorResetPostWithHttpInfo(resetBody);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = RembgRemoveRembgPostWithHttpInfo(bodyRembgRemoveRembgPost);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        /// Reset Iterator 
+        /// Rembg Remove 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="resetBody"></param>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="bodyRembgRemoveRembgPost"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> ResetIteratorResetPostWithHttpInfo(ResetBody resetBody, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> RembgRemoveRembgPostWithHttpInfo(BodyRembgRemoveRembgPost? bodyRembgRemoveRembgPost = default(BodyRembgRemoveRembgPost?), int operationIndex = 0)
         {
-            // verify the required parameter 'resetBody' is set
-            if (resetBody == null)
-            {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'resetBody' when calling DefaultApi->ResetIteratorResetPost");
-            }
-
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -14206,13 +15037,287 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.Data = bodyRembgRemoveRembgPost;
+
+            localVarRequestOptions.Operation = "DefaultApi.RembgRemoveRembgPost";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Post<Object>("/rembg", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("RembgRemoveRembgPost", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Rembg Remove 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="bodyRembgRemoveRembgPost"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of Object</returns>
+        public async System.Threading.Tasks.Task<Object> RembgRemoveRembgPostAsync(BodyRembgRemoveRembgPost? bodyRembgRemoveRembgPost = default(BodyRembgRemoveRembgPost?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await RembgRemoveRembgPostWithHttpInfoAsync(bodyRembgRemoveRembgPost, operationIndex, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Rembg Remove 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="bodyRembgRemoveRembgPost"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (Object)</returns>
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> RembgRemoveRembgPostWithHttpInfoAsync(BodyRembgRemoveRembgPost? bodyRembgRemoveRembgPost = default(BodyRembgRemoveRembgPost?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json"
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.Data = bodyRembgRemoveRembgPost;
+
+            localVarRequestOptions.Operation = "DefaultApi.RembgRemoveRembgPost";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/rembg", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("RembgRemoveRembgPost", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Render Openpose Json 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="poseData"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>Object</returns>
+        public Object RenderOpenposeJsonControlnetRenderOpenposeJsonPost(List<PoseData>? poseData = default(List<PoseData>?), int operationIndex = 0)
+        {
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = RenderOpenposeJsonControlnetRenderOpenposeJsonPostWithHttpInfo(poseData);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Render Openpose Json 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="poseData"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object</returns>
+        public SdWebUiApi.Client.ApiResponse<Object> RenderOpenposeJsonControlnetRenderOpenposeJsonPostWithHttpInfo(List<PoseData>? poseData = default(List<PoseData>?), int operationIndex = 0)
+        {
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json"
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.Data = poseData;
+
+            localVarRequestOptions.Operation = "DefaultApi.RenderOpenposeJsonControlnetRenderOpenposeJsonPost";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Post<Object>("/controlnet/render_openpose_json", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("RenderOpenposeJsonControlnetRenderOpenposeJsonPost", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Render Openpose Json 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="poseData"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of Object</returns>
+        public async System.Threading.Tasks.Task<Object> RenderOpenposeJsonControlnetRenderOpenposeJsonPostAsync(List<PoseData>? poseData = default(List<PoseData>?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await RenderOpenposeJsonControlnetRenderOpenposeJsonPostWithHttpInfoAsync(poseData, operationIndex, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Render Openpose Json 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="poseData"> (optional)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (Object)</returns>
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> RenderOpenposeJsonControlnetRenderOpenposeJsonPostWithHttpInfoAsync(List<PoseData>? poseData = default(List<PoseData>?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json"
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.Data = poseData;
+
+            localVarRequestOptions.Operation = "DefaultApi.RenderOpenposeJsonControlnetRenderOpenposeJsonPost";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/controlnet/render_openpose_json", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("RenderOpenposeJsonControlnetRenderOpenposeJsonPost", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Reset Iterator 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="resetBody"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>Object</returns>
+        public Object ResetIteratorResetPost(ResetBody resetBody, int operationIndex = 0)
+        {
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = ResetIteratorResetPostWithHttpInfo(resetBody);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Reset Iterator 
+        /// </summary>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="resetBody"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object</returns>
+        public SdWebUiApi.Client.ApiResponse<Object> ResetIteratorResetPostWithHttpInfo(ResetBody resetBody, int operationIndex = 0)
+        {
+            // verify the required parameter 'resetBody' is set
+            if (resetBody == null)
+            {
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'resetBody' when calling DefaultApi->ResetIteratorResetPost");
+            }
+
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+                "application/json"
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -14241,35 +15346,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Reset Iterator 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="resetBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> ResetIteratorResetPostAsync(ResetBody resetBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await ResetIteratorResetPostWithHttpInfoAsync(resetBody, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await ResetIteratorResetPostWithHttpInfoAsync(resetBody, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Reset Iterator 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="resetBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> ResetIteratorResetPostWithHttpInfoAsync(ResetBody resetBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> ResetIteratorResetPostWithHttpInfoAsync(ResetBody resetBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'resetBody' is set
             if (resetBody == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'resetBody' when calling DefaultApi->ResetIteratorResetPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'resetBody' when calling DefaultApi->ResetIteratorResetPost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -14280,13 +15385,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -14316,32 +15421,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Reset Iterator 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="resetBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object ResetIteratorResetPost_0(ResetBody resetBody, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = ResetIteratorResetPost_0WithHttpInfo(resetBody);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = ResetIteratorResetPost_0WithHttpInfo(resetBody);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Reset Iterator 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="resetBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> ResetIteratorResetPost_0WithHttpInfo(ResetBody resetBody, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> ResetIteratorResetPost_0WithHttpInfo(ResetBody resetBody, int operationIndex = 0)
         {
             // verify the required parameter 'resetBody' is set
             if (resetBody == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'resetBody' when calling DefaultApi->ResetIteratorResetPost_0");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'resetBody' when calling DefaultApi->ResetIteratorResetPost_0");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -14352,13 +15457,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -14387,35 +15492,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Reset Iterator 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="resetBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> ResetIteratorResetPost_0Async(ResetBody resetBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await ResetIteratorResetPost_0WithHttpInfoAsync(resetBody, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await ResetIteratorResetPost_0WithHttpInfoAsync(resetBody, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Reset Iterator 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="resetBody"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> ResetIteratorResetPost_0WithHttpInfoAsync(ResetBody resetBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> ResetIteratorResetPost_0WithHttpInfoAsync(ResetBody resetBody, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'resetBody' is set
             if (resetBody == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'resetBody' when calling DefaultApi->ResetIteratorResetPost_0");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'resetBody' when calling DefaultApi->ResetIteratorResetPost_0");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -14426,13 +15531,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -14462,32 +15567,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Reverse Proxy 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object ReverseProxyProxyUrlPathGet(string urlPath, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = ReverseProxyProxyUrlPathGetWithHttpInfo(urlPath);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = ReverseProxyProxyUrlPathGetWithHttpInfo(urlPath);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Reverse Proxy 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> ReverseProxyProxyUrlPathGetWithHttpInfo(string urlPath, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> ReverseProxyProxyUrlPathGetWithHttpInfo(string urlPath, int operationIndex = 0)
         {
             // verify the required parameter 'urlPath' is set
             if (urlPath == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'urlPath' when calling DefaultApi->ReverseProxyProxyUrlPathGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'urlPath' when calling DefaultApi->ReverseProxyProxyUrlPathGet");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -14497,19 +15602,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("url_path", SdWebUpApi.Client.ClientUtils.ParameterToString(urlPath)); // path parameter
+            localVarRequestOptions.PathParameters.Add("url_path", SdWebUiApi.Client.ClientUtils.ParameterToString(urlPath)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.ReverseProxyProxyUrlPathGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -14532,35 +15637,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Reverse Proxy 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> ReverseProxyProxyUrlPathGetAsync(string urlPath, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await ReverseProxyProxyUrlPathGetWithHttpInfoAsync(urlPath, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await ReverseProxyProxyUrlPathGetWithHttpInfoAsync(urlPath, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Reverse Proxy 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> ReverseProxyProxyUrlPathGetWithHttpInfoAsync(string urlPath, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> ReverseProxyProxyUrlPathGetWithHttpInfoAsync(string urlPath, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'urlPath' is set
             if (urlPath == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'urlPath' when calling DefaultApi->ReverseProxyProxyUrlPathGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'urlPath' when calling DefaultApi->ReverseProxyProxyUrlPathGet");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -14570,19 +15675,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("url_path", SdWebUpApi.Client.ClientUtils.ParameterToString(urlPath)); // path parameter
+            localVarRequestOptions.PathParameters.Add("url_path", SdWebUiApi.Client.ClientUtils.ParameterToString(urlPath)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.ReverseProxyProxyUrlPathGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -14606,32 +15711,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Reverse Proxy 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object ReverseProxyProxyUrlPathHead(string urlPath, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = ReverseProxyProxyUrlPathHeadWithHttpInfo(urlPath);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = ReverseProxyProxyUrlPathHeadWithHttpInfo(urlPath);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Reverse Proxy 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> ReverseProxyProxyUrlPathHeadWithHttpInfo(string urlPath, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> ReverseProxyProxyUrlPathHeadWithHttpInfo(string urlPath, int operationIndex = 0)
         {
             // verify the required parameter 'urlPath' is set
             if (urlPath == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'urlPath' when calling DefaultApi->ReverseProxyProxyUrlPathHead");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'urlPath' when calling DefaultApi->ReverseProxyProxyUrlPathHead");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -14641,19 +15746,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("url_path", SdWebUpApi.Client.ClientUtils.ParameterToString(urlPath)); // path parameter
+            localVarRequestOptions.PathParameters.Add("url_path", SdWebUiApi.Client.ClientUtils.ParameterToString(urlPath)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.ReverseProxyProxyUrlPathHead";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -14676,35 +15781,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Reverse Proxy 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> ReverseProxyProxyUrlPathHeadAsync(string urlPath, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await ReverseProxyProxyUrlPathHeadWithHttpInfoAsync(urlPath, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await ReverseProxyProxyUrlPathHeadWithHttpInfoAsync(urlPath, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Reverse Proxy 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="urlPath"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> ReverseProxyProxyUrlPathHeadWithHttpInfoAsync(string urlPath, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> ReverseProxyProxyUrlPathHeadWithHttpInfoAsync(string urlPath, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'urlPath' is set
             if (urlPath == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'urlPath' when calling DefaultApi->ReverseProxyProxyUrlPathHead");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'urlPath' when calling DefaultApi->ReverseProxyProxyUrlPathHead");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -14714,19 +15819,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("url_path", SdWebUpApi.Client.ClientUtils.ParameterToString(urlPath)); // path parameter
+            localVarRequestOptions.PathParameters.Add("url_path", SdWebUiApi.Client.ClientUtils.ParameterToString(urlPath)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.ReverseProxyProxyUrlPathHead";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -14750,24 +15855,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Robots Txt 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>string</returns>
         public string RobotsTxtRobotsTxtGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<string> localVarResponse = RobotsTxtRobotsTxtGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<string> localVarResponse = RobotsTxtRobotsTxtGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Robots Txt 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of string</returns>
-        public SdWebUpApi.Client.ApiResponse<string> RobotsTxtRobotsTxtGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<string> RobotsTxtRobotsTxtGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -14777,13 +15882,13 @@ namespace SdWebUpApi.Api
                 "text/plain"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -14811,27 +15916,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Robots Txt 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of string</returns>
         public async System.Threading.Tasks.Task<string> RobotsTxtRobotsTxtGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<string> localVarResponse = await RobotsTxtRobotsTxtGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<string> localVarResponse = await RobotsTxtRobotsTxtGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Robots Txt 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (string)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<string>> RobotsTxtRobotsTxtGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<string>> RobotsTxtRobotsTxtGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -14841,13 +15946,13 @@ namespace SdWebUpApi.Api
                 "text/plain"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -14876,32 +15981,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Set Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object SetConfigSdapiV1OptionsPost(Object body, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = SetConfigSdapiV1OptionsPostWithHttpInfo(body);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = SetConfigSdapiV1OptionsPostWithHttpInfo(body);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Set Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> SetConfigSdapiV1OptionsPostWithHttpInfo(Object body, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> SetConfigSdapiV1OptionsPostWithHttpInfo(Object body, int operationIndex = 0)
         {
             // verify the required parameter 'body' is set
             if (body == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->SetConfigSdapiV1OptionsPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->SetConfigSdapiV1OptionsPost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -14912,13 +16017,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -14947,35 +16052,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Set Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> SetConfigSdapiV1OptionsPostAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await SetConfigSdapiV1OptionsPostWithHttpInfoAsync(body, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await SetConfigSdapiV1OptionsPostWithHttpInfoAsync(body, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Set Config 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> SetConfigSdapiV1OptionsPostWithHttpInfoAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> SetConfigSdapiV1OptionsPostWithHttpInfoAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'body' is set
             if (body == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->SetConfigSdapiV1OptionsPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->SetConfigSdapiV1OptionsPost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -14986,13 +16091,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -15022,24 +16127,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Settings 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object SettingsControlnetSettingsGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = SettingsControlnetSettingsGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = SettingsControlnetSettingsGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Settings 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> SettingsControlnetSettingsGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> SettingsControlnetSettingsGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -15049,13 +16154,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -15083,27 +16188,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Settings 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> SettingsControlnetSettingsGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await SettingsControlnetSettingsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await SettingsControlnetSettingsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Settings 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> SettingsControlnetSettingsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> SettingsControlnetSettingsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -15113,13 +16218,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -15148,24 +16253,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Skip 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object SkipSdapiV1SkipPost(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = SkipSdapiV1SkipPostWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = SkipSdapiV1SkipPostWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Skip 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> SkipSdapiV1SkipPostWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> SkipSdapiV1SkipPostWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -15175,13 +16280,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -15209,27 +16314,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Skip 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> SkipSdapiV1SkipPostAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await SkipSdapiV1SkipPostWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await SkipSdapiV1SkipPostWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Skip 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> SkipSdapiV1SkipPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> SkipSdapiV1SkipPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -15239,13 +16344,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -15274,24 +16379,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Startup Events 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object StartupEventsStartupEventsGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = StartupEventsStartupEventsGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = StartupEventsStartupEventsGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Startup Events 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> StartupEventsStartupEventsGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> StartupEventsStartupEventsGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -15301,13 +16406,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -15335,27 +16440,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Startup Events 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> StartupEventsStartupEventsGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await StartupEventsStartupEventsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await StartupEventsStartupEventsGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Startup Events 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> StartupEventsStartupEventsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> StartupEventsStartupEventsGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -15365,13 +16470,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -15400,32 +16505,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Static Resource 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object StaticResourceStaticPathGet(string path, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = StaticResourceStaticPathGetWithHttpInfo(path);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = StaticResourceStaticPathGetWithHttpInfo(path);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Static Resource 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> StaticResourceStaticPathGetWithHttpInfo(string path, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> StaticResourceStaticPathGetWithHttpInfo(string path, int operationIndex = 0)
         {
             // verify the required parameter 'path' is set
             if (path == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'path' when calling DefaultApi->StaticResourceStaticPathGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'path' when calling DefaultApi->StaticResourceStaticPathGet");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -15435,19 +16540,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("path", SdWebUpApi.Client.ClientUtils.ParameterToString(path)); // path parameter
+            localVarRequestOptions.PathParameters.Add("path", SdWebUiApi.Client.ClientUtils.ParameterToString(path)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.StaticResourceStaticPathGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -15470,35 +16575,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Static Resource 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> StaticResourceStaticPathGetAsync(string path, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await StaticResourceStaticPathGetWithHttpInfoAsync(path, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await StaticResourceStaticPathGetWithHttpInfoAsync(path, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Static Resource 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="path"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> StaticResourceStaticPathGetWithHttpInfoAsync(string path, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> StaticResourceStaticPathGetWithHttpInfoAsync(string path, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'path' is set
             if (path == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'path' when calling DefaultApi->StaticResourceStaticPathGet");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'path' when calling DefaultApi->StaticResourceStaticPathGet");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -15508,19 +16613,19 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
-            localVarRequestOptions.PathParameters.Add("path", SdWebUpApi.Client.ClientUtils.ParameterToString(path)); // path parameter
+            localVarRequestOptions.PathParameters.Add("path", SdWebUiApi.Client.ClientUtils.ParameterToString(path)); // path parameter
 
             localVarRequestOptions.Operation = "DefaultApi.StaticResourceStaticPathGet";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -15542,26 +16647,38 @@ namespace SdWebUpApi.Api
         }
 
         /// <summary>
-        /// T2V Api Version 
+        /// Stream 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sessionHash"></param>
+        /// <param name="run"></param>
+        /// <param name="componentId"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
-        public Object T2vApiVersionT2vApiVersionGet(int operationIndex = 0)
+        public Object StreamStreamSessionHashRunComponentIdGet(string sessionHash, int run, int componentId, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = T2vApiVersionT2vApiVersionGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = StreamStreamSessionHashRunComponentIdGetWithHttpInfo(sessionHash, run, componentId);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        /// T2V Api Version 
+        /// Stream 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sessionHash"></param>
+        /// <param name="run"></param>
+        /// <param name="componentId"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> T2vApiVersionT2vApiVersionGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> StreamStreamSessionHashRunComponentIdGetWithHttpInfo(string sessionHash, int run, int componentId, int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            // verify the required parameter 'sessionHash' is set
+            if (sessionHash == null)
+            {
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'sessionHash' when calling DefaultApi->StreamStreamSessionHashRunComponentIdGet");
+            }
+
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -15571,28 +16688,31 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
+            localVarRequestOptions.PathParameters.Add("session_hash", SdWebUiApi.Client.ClientUtils.ParameterToString(sessionHash)); // path parameter
+            localVarRequestOptions.PathParameters.Add("run", SdWebUiApi.Client.ClientUtils.ParameterToString(run)); // path parameter
+            localVarRequestOptions.PathParameters.Add("component_id", SdWebUiApi.Client.ClientUtils.ParameterToString(componentId)); // path parameter
 
-            localVarRequestOptions.Operation = "DefaultApi.T2vApiVersionT2vApiVersionGet";
+            localVarRequestOptions.Operation = "DefaultApi.StreamStreamSessionHashRunComponentIdGet";
             localVarRequestOptions.OperationIndex = operationIndex;
 
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<Object>("/t2v/api_version", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<Object>("/stream/{session_hash}/{run}/{component_id}", localVarRequestOptions, this.Configuration);
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("T2vApiVersionT2vApiVersionGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("StreamStreamSessionHashRunComponentIdGet", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;
@@ -15603,29 +16723,41 @@ namespace SdWebUpApi.Api
         }
 
         /// <summary>
-        /// T2V Api Version 
+        /// Stream 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sessionHash"></param>
+        /// <param name="run"></param>
+        /// <param name="componentId"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
-        public async System.Threading.Tasks.Task<Object> T2vApiVersionT2vApiVersionGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<Object> StreamStreamSessionHashRunComponentIdGetAsync(string sessionHash, int run, int componentId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await T2vApiVersionT2vApiVersionGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await StreamStreamSessionHashRunComponentIdGetWithHttpInfoAsync(sessionHash, run, componentId, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        /// T2V Api Version 
+        /// Stream 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sessionHash"></param>
+        /// <param name="run"></param>
+        /// <param name="componentId"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> T2vApiVersionT2vApiVersionGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> StreamStreamSessionHashRunComponentIdGetWithHttpInfoAsync(string sessionHash, int run, int componentId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
+            // verify the required parameter 'sessionHash' is set
+            if (sessionHash == null)
+            {
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'sessionHash' when calling DefaultApi->StreamStreamSessionHashRunComponentIdGet");
+            }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -15635,553 +16767,32 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
+            localVarRequestOptions.PathParameters.Add("session_hash", SdWebUiApi.Client.ClientUtils.ParameterToString(sessionHash)); // path parameter
+            localVarRequestOptions.PathParameters.Add("run", SdWebUiApi.Client.ClientUtils.ParameterToString(run)); // path parameter
+            localVarRequestOptions.PathParameters.Add("component_id", SdWebUiApi.Client.ClientUtils.ParameterToString(componentId)); // path parameter
 
-            localVarRequestOptions.Operation = "DefaultApi.T2vApiVersionT2vApiVersionGet";
+            localVarRequestOptions.Operation = "DefaultApi.StreamStreamSessionHashRunComponentIdGet";
             localVarRequestOptions.OperationIndex = operationIndex;
 
 
             // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.GetAsync<Object>("/t2v/api_version", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<Object>("/stream/{session_hash}/{run}/{component_id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("T2vApiVersionT2vApiVersionGet", localVarResponse);
-                if (_exception != null)
-                {
-                    throw _exception;
-                }
-            }
-
-            return localVarResponse;
-        }
-
-        /// <summary>
-        /// T2V Run 
-        /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="prompt"></param>
-        /// <param name="nPrompt"> (optional)</param>
-        /// <param name="model"> (optional)</param>
-        /// <param name="sampler"> (optional)</param>
-        /// <param name="steps"> (optional)</param>
-        /// <param name="frames"> (optional)</param>
-        /// <param name="seed"> (optional)</param>
-        /// <param name="cfgScale"> (optional)</param>
-        /// <param name="width"> (optional)</param>
-        /// <param name="height"> (optional)</param>
-        /// <param name="eta"> (optional)</param>
-        /// <param name="batchCount"> (optional)</param>
-        /// <param name="doVid2vid"> (optional, default to false)</param>
-        /// <param name="strength"> (optional)</param>
-        /// <param name="vid2vidStartFrame"> (optional)</param>
-        /// <param name="inpaintingFrames"> (optional)</param>
-        /// <param name="inpaintingWeights"> (optional)</param>
-        /// <param name="fps"> (optional)</param>
-        /// <param name="addSoundtrack"> (optional)</param>
-        /// <param name="soundtrackPath"> (optional)</param>
-        /// <param name="vid2vidInput"> (optional)</param>
-        /// <param name="inpaintingImage"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>Object</returns>
-        public Object T2vRunT2vRunPost(string prompt, string? nPrompt = default(string?), string? model = default(string?), string? sampler = default(string?), int? steps = default(int?), int? frames = default(int?), int? seed = default(int?), int? cfgScale = default(int?), int? width = default(int?), int? height = default(int?), decimal? eta = default(decimal?), int? batchCount = default(int?), bool? doVid2vid = default(bool?), decimal? strength = default(decimal?), int? vid2vidStartFrame = default(int?), int? inpaintingFrames = default(int?), string? inpaintingWeights = default(string?), int? fps = default(int?), string? addSoundtrack = default(string?), string? soundtrackPath = default(string?), System.IO.Stream? vid2vidInput = default(System.IO.Stream?), System.IO.Stream? inpaintingImage = default(System.IO.Stream?), int operationIndex = 0)
-        {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = T2vRunT2vRunPostWithHttpInfo(prompt, nPrompt, model, sampler, steps, frames, seed, cfgScale, width, height, eta, batchCount, doVid2vid, strength, vid2vidStartFrame, inpaintingFrames, inpaintingWeights, fps, addSoundtrack, soundtrackPath, vid2vidInput, inpaintingImage);
-            return localVarResponse.Data;
-        }
-
-        /// <summary>
-        /// T2V Run 
-        /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="prompt"></param>
-        /// <param name="nPrompt"> (optional)</param>
-        /// <param name="model"> (optional)</param>
-        /// <param name="sampler"> (optional)</param>
-        /// <param name="steps"> (optional)</param>
-        /// <param name="frames"> (optional)</param>
-        /// <param name="seed"> (optional)</param>
-        /// <param name="cfgScale"> (optional)</param>
-        /// <param name="width"> (optional)</param>
-        /// <param name="height"> (optional)</param>
-        /// <param name="eta"> (optional)</param>
-        /// <param name="batchCount"> (optional)</param>
-        /// <param name="doVid2vid"> (optional, default to false)</param>
-        /// <param name="strength"> (optional)</param>
-        /// <param name="vid2vidStartFrame"> (optional)</param>
-        /// <param name="inpaintingFrames"> (optional)</param>
-        /// <param name="inpaintingWeights"> (optional)</param>
-        /// <param name="fps"> (optional)</param>
-        /// <param name="addSoundtrack"> (optional)</param>
-        /// <param name="soundtrackPath"> (optional)</param>
-        /// <param name="vid2vidInput"> (optional)</param>
-        /// <param name="inpaintingImage"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> T2vRunT2vRunPostWithHttpInfo(string prompt, string? nPrompt = default(string?), string? model = default(string?), string? sampler = default(string?), int? steps = default(int?), int? frames = default(int?), int? seed = default(int?), int? cfgScale = default(int?), int? width = default(int?), int? height = default(int?), decimal? eta = default(decimal?), int? batchCount = default(int?), bool? doVid2vid = default(bool?), decimal? strength = default(decimal?), int? vid2vidStartFrame = default(int?), int? inpaintingFrames = default(int?), string? inpaintingWeights = default(string?), int? fps = default(int?), string? addSoundtrack = default(string?), string? soundtrackPath = default(string?), System.IO.Stream? vid2vidInput = default(System.IO.Stream?), System.IO.Stream? inpaintingImage = default(System.IO.Stream?), int operationIndex = 0)
-        {
-            // verify the required parameter 'prompt' is set
-            if (prompt == null)
-            {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'prompt' when calling DefaultApi->T2vRunT2vRunPost");
-            }
-
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
-
-            string[] _contentTypes = new string[] {
-                "multipart/form-data"
-            };
-
-            // to determine the Accept header
-            string[] _accepts = new string[] {
-                "application/json"
-            };
-
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
-            if (localVarContentType != null)
-            {
-                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
-            }
-
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
-            if (localVarAccept != null)
-            {
-                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
-            }
-
-            localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "prompt", prompt));
-            if (nPrompt != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "n_prompt", nPrompt));
-            }
-            if (model != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "model", model));
-            }
-            if (sampler != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "sampler", sampler));
-            }
-            if (steps != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "steps", steps));
-            }
-            if (frames != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "frames", frames));
-            }
-            if (seed != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "seed", seed));
-            }
-            if (cfgScale != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "cfg_scale", cfgScale));
-            }
-            if (width != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "width", width));
-            }
-            if (height != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "height", height));
-            }
-            if (eta != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "eta", eta));
-            }
-            if (batchCount != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "batch_count", batchCount));
-            }
-            if (doVid2vid != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "do_vid2vid", doVid2vid));
-            }
-            if (strength != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "strength", strength));
-            }
-            if (vid2vidStartFrame != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "vid2vid_startFrame", vid2vidStartFrame));
-            }
-            if (inpaintingFrames != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "inpainting_frames", inpaintingFrames));
-            }
-            if (inpaintingWeights != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "inpainting_weights", inpaintingWeights));
-            }
-            if (fps != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "fps", fps));
-            }
-            if (addSoundtrack != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "add_soundtrack", addSoundtrack));
-            }
-            if (soundtrackPath != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "soundtrack_path", soundtrackPath));
-            }
-            if (vid2vidInput != null)
-            {
-                localVarRequestOptions.FileParameters.Add("vid2vid_input", vid2vidInput);
-            }
-            if (inpaintingImage != null)
-            {
-                localVarRequestOptions.FileParameters.Add("inpainting_image", inpaintingImage);
-            }
-
-            localVarRequestOptions.Operation = "DefaultApi.T2vRunT2vRunPost";
-            localVarRequestOptions.OperationIndex = operationIndex;
-
-
-            // make the HTTP request
-            var localVarResponse = this.Client.Post<Object>("/t2v/run", localVarRequestOptions, this.Configuration);
-            if (this.ExceptionFactory != null)
-            {
-                Exception _exception = this.ExceptionFactory("T2vRunT2vRunPost", localVarResponse);
-                if (_exception != null)
-                {
-                    throw _exception;
-                }
-            }
-
-            return localVarResponse;
-        }
-
-        /// <summary>
-        /// T2V Run 
-        /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="prompt"></param>
-        /// <param name="nPrompt"> (optional)</param>
-        /// <param name="model"> (optional)</param>
-        /// <param name="sampler"> (optional)</param>
-        /// <param name="steps"> (optional)</param>
-        /// <param name="frames"> (optional)</param>
-        /// <param name="seed"> (optional)</param>
-        /// <param name="cfgScale"> (optional)</param>
-        /// <param name="width"> (optional)</param>
-        /// <param name="height"> (optional)</param>
-        /// <param name="eta"> (optional)</param>
-        /// <param name="batchCount"> (optional)</param>
-        /// <param name="doVid2vid"> (optional, default to false)</param>
-        /// <param name="strength"> (optional)</param>
-        /// <param name="vid2vidStartFrame"> (optional)</param>
-        /// <param name="inpaintingFrames"> (optional)</param>
-        /// <param name="inpaintingWeights"> (optional)</param>
-        /// <param name="fps"> (optional)</param>
-        /// <param name="addSoundtrack"> (optional)</param>
-        /// <param name="soundtrackPath"> (optional)</param>
-        /// <param name="vid2vidInput"> (optional)</param>
-        /// <param name="inpaintingImage"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of Object</returns>
-        public async System.Threading.Tasks.Task<Object> T2vRunT2vRunPostAsync(string prompt, string? nPrompt = default(string?), string? model = default(string?), string? sampler = default(string?), int? steps = default(int?), int? frames = default(int?), int? seed = default(int?), int? cfgScale = default(int?), int? width = default(int?), int? height = default(int?), decimal? eta = default(decimal?), int? batchCount = default(int?), bool? doVid2vid = default(bool?), decimal? strength = default(decimal?), int? vid2vidStartFrame = default(int?), int? inpaintingFrames = default(int?), string? inpaintingWeights = default(string?), int? fps = default(int?), string? addSoundtrack = default(string?), string? soundtrackPath = default(string?), System.IO.Stream? vid2vidInput = default(System.IO.Stream?), System.IO.Stream? inpaintingImage = default(System.IO.Stream?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-        {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await T2vRunT2vRunPostWithHttpInfoAsync(prompt, nPrompt, model, sampler, steps, frames, seed, cfgScale, width, height, eta, batchCount, doVid2vid, strength, vid2vidStartFrame, inpaintingFrames, inpaintingWeights, fps, addSoundtrack, soundtrackPath, vid2vidInput, inpaintingImage, operationIndex, cancellationToken).ConfigureAwait(false);
-            return localVarResponse.Data;
-        }
-
-        /// <summary>
-        /// T2V Run 
-        /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="prompt"></param>
-        /// <param name="nPrompt"> (optional)</param>
-        /// <param name="model"> (optional)</param>
-        /// <param name="sampler"> (optional)</param>
-        /// <param name="steps"> (optional)</param>
-        /// <param name="frames"> (optional)</param>
-        /// <param name="seed"> (optional)</param>
-        /// <param name="cfgScale"> (optional)</param>
-        /// <param name="width"> (optional)</param>
-        /// <param name="height"> (optional)</param>
-        /// <param name="eta"> (optional)</param>
-        /// <param name="batchCount"> (optional)</param>
-        /// <param name="doVid2vid"> (optional, default to false)</param>
-        /// <param name="strength"> (optional)</param>
-        /// <param name="vid2vidStartFrame"> (optional)</param>
-        /// <param name="inpaintingFrames"> (optional)</param>
-        /// <param name="inpaintingWeights"> (optional)</param>
-        /// <param name="fps"> (optional)</param>
-        /// <param name="addSoundtrack"> (optional)</param>
-        /// <param name="soundtrackPath"> (optional)</param>
-        /// <param name="vid2vidInput"> (optional)</param>
-        /// <param name="inpaintingImage"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> T2vRunT2vRunPostWithHttpInfoAsync(string prompt, string? nPrompt = default(string?), string? model = default(string?), string? sampler = default(string?), int? steps = default(int?), int? frames = default(int?), int? seed = default(int?), int? cfgScale = default(int?), int? width = default(int?), int? height = default(int?), decimal? eta = default(decimal?), int? batchCount = default(int?), bool? doVid2vid = default(bool?), decimal? strength = default(decimal?), int? vid2vidStartFrame = default(int?), int? inpaintingFrames = default(int?), string? inpaintingWeights = default(string?), int? fps = default(int?), string? addSoundtrack = default(string?), string? soundtrackPath = default(string?), System.IO.Stream? vid2vidInput = default(System.IO.Stream?), System.IO.Stream? inpaintingImage = default(System.IO.Stream?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-        {
-            // verify the required parameter 'prompt' is set
-            if (prompt == null)
-            {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'prompt' when calling DefaultApi->T2vRunT2vRunPost");
-            }
-
-
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
-
-            string[] _contentTypes = new string[] {
-                "multipart/form-data"
-            };
-
-            // to determine the Accept header
-            string[] _accepts = new string[] {
-                "application/json"
-            };
-
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
-            if (localVarContentType != null)
-            {
-                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
-            }
-
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
-            if (localVarAccept != null)
-            {
-                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
-            }
-
-            localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "prompt", prompt));
-            if (nPrompt != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "n_prompt", nPrompt));
-            }
-            if (model != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "model", model));
-            }
-            if (sampler != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "sampler", sampler));
-            }
-            if (steps != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "steps", steps));
-            }
-            if (frames != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "frames", frames));
-            }
-            if (seed != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "seed", seed));
-            }
-            if (cfgScale != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "cfg_scale", cfgScale));
-            }
-            if (width != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "width", width));
-            }
-            if (height != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "height", height));
-            }
-            if (eta != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "eta", eta));
-            }
-            if (batchCount != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "batch_count", batchCount));
-            }
-            if (doVid2vid != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "do_vid2vid", doVid2vid));
-            }
-            if (strength != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "strength", strength));
-            }
-            if (vid2vidStartFrame != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "vid2vid_startFrame", vid2vidStartFrame));
-            }
-            if (inpaintingFrames != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "inpainting_frames", inpaintingFrames));
-            }
-            if (inpaintingWeights != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "inpainting_weights", inpaintingWeights));
-            }
-            if (fps != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "fps", fps));
-            }
-            if (addSoundtrack != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "add_soundtrack", addSoundtrack));
-            }
-            if (soundtrackPath != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(SdWebUpApi.Client.ClientUtils.ParameterToMultiMap("", "soundtrack_path", soundtrackPath));
-            }
-            if (vid2vidInput != null)
-            {
-                localVarRequestOptions.FileParameters.Add("vid2vid_input", vid2vidInput);
-            }
-            if (inpaintingImage != null)
-            {
-                localVarRequestOptions.FileParameters.Add("inpainting_image", inpaintingImage);
-            }
-
-            localVarRequestOptions.Operation = "DefaultApi.T2vRunT2vRunPost";
-            localVarRequestOptions.OperationIndex = operationIndex;
-
-
-            // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/t2v/run", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
-
-            if (this.ExceptionFactory != null)
-            {
-                Exception _exception = this.ExceptionFactory("T2vRunT2vRunPost", localVarResponse);
-                if (_exception != null)
-                {
-                    throw _exception;
-                }
-            }
-
-            return localVarResponse;
-        }
-
-        /// <summary>
-        /// T2V Version 
-        /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>Object</returns>
-        public Object T2vVersionT2vVersionGet(int operationIndex = 0)
-        {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = T2vVersionT2vVersionGetWithHttpInfo();
-            return localVarResponse.Data;
-        }
-
-        /// <summary>
-        /// T2V Version 
-        /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> T2vVersionT2vVersionGetWithHttpInfo(int operationIndex = 0)
-        {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
-
-            string[] _contentTypes = new string[] {
-            };
-
-            // to determine the Accept header
-            string[] _accepts = new string[] {
-                "application/json"
-            };
-
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
-            if (localVarContentType != null)
-            {
-                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
-            }
-
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
-            if (localVarAccept != null)
-            {
-                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
-            }
-
-
-            localVarRequestOptions.Operation = "DefaultApi.T2vVersionT2vVersionGet";
-            localVarRequestOptions.OperationIndex = operationIndex;
-
-
-            // make the HTTP request
-            var localVarResponse = this.Client.Get<Object>("/t2v/version", localVarRequestOptions, this.Configuration);
-            if (this.ExceptionFactory != null)
-            {
-                Exception _exception = this.ExceptionFactory("T2vVersionT2vVersionGet", localVarResponse);
-                if (_exception != null)
-                {
-                    throw _exception;
-                }
-            }
-
-            return localVarResponse;
-        }
-
-        /// <summary>
-        /// T2V Version 
-        /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of Object</returns>
-        public async System.Threading.Tasks.Task<Object> T2vVersionT2vVersionGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-        {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await T2vVersionT2vVersionGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
-            return localVarResponse.Data;
-        }
-
-        /// <summary>
-        /// T2V Version 
-        /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> T2vVersionT2vVersionGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-        {
-
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
-
-            string[] _contentTypes = new string[] {
-            };
-
-            // to determine the Accept header
-            string[] _accepts = new string[] {
-                "application/json"
-            };
-
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
-            if (localVarContentType != null)
-            {
-                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
-            }
-
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
-            if (localVarAccept != null)
-            {
-                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
-            }
-
-
-            localVarRequestOptions.Operation = "DefaultApi.T2vVersionT2vVersionGet";
-            localVarRequestOptions.OperationIndex = operationIndex;
-
-
-            // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.GetAsync<Object>("/t2v/version", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
-
-            if (this.ExceptionFactory != null)
-            {
-                Exception _exception = this.ExceptionFactory("T2vVersionT2vVersionGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("StreamStreamSessionHashRunComponentIdGet", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;
@@ -16194,32 +16805,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Text2Imgapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingTxt2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>TextToImageResponse</returns>
         public TextToImageResponse Text2imgapiSdapiV1Txt2imgPost(StableDiffusionProcessingTxt2Img stableDiffusionProcessingTxt2Img, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<TextToImageResponse> localVarResponse = Text2imgapiSdapiV1Txt2imgPostWithHttpInfo(stableDiffusionProcessingTxt2Img);
+            SdWebUiApi.Client.ApiResponse<TextToImageResponse> localVarResponse = Text2imgapiSdapiV1Txt2imgPostWithHttpInfo(stableDiffusionProcessingTxt2Img);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Text2Imgapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingTxt2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of TextToImageResponse</returns>
-        public SdWebUpApi.Client.ApiResponse<TextToImageResponse> Text2imgapiSdapiV1Txt2imgPostWithHttpInfo(StableDiffusionProcessingTxt2Img stableDiffusionProcessingTxt2Img, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<TextToImageResponse> Text2imgapiSdapiV1Txt2imgPostWithHttpInfo(StableDiffusionProcessingTxt2Img stableDiffusionProcessingTxt2Img, int operationIndex = 0)
         {
             // verify the required parameter 'stableDiffusionProcessingTxt2Img' is set
             if (stableDiffusionProcessingTxt2Img == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'stableDiffusionProcessingTxt2Img' when calling DefaultApi->Text2imgapiSdapiV1Txt2imgPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'stableDiffusionProcessingTxt2Img' when calling DefaultApi->Text2imgapiSdapiV1Txt2imgPost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -16230,13 +16841,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -16265,35 +16876,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Text2Imgapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingTxt2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of TextToImageResponse</returns>
         public async System.Threading.Tasks.Task<TextToImageResponse> Text2imgapiSdapiV1Txt2imgPostAsync(StableDiffusionProcessingTxt2Img stableDiffusionProcessingTxt2Img, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<TextToImageResponse> localVarResponse = await Text2imgapiSdapiV1Txt2imgPostWithHttpInfoAsync(stableDiffusionProcessingTxt2Img, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<TextToImageResponse> localVarResponse = await Text2imgapiSdapiV1Txt2imgPostWithHttpInfoAsync(stableDiffusionProcessingTxt2Img, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Text2Imgapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="stableDiffusionProcessingTxt2Img"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (TextToImageResponse)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<TextToImageResponse>> Text2imgapiSdapiV1Txt2imgPostWithHttpInfoAsync(StableDiffusionProcessingTxt2Img stableDiffusionProcessingTxt2Img, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<TextToImageResponse>> Text2imgapiSdapiV1Txt2imgPostWithHttpInfoAsync(StableDiffusionProcessingTxt2Img stableDiffusionProcessingTxt2Img, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'stableDiffusionProcessingTxt2Img' is set
             if (stableDiffusionProcessingTxt2Img == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'stableDiffusionProcessingTxt2Img' when calling DefaultApi->Text2imgapiSdapiV1Txt2imgPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'stableDiffusionProcessingTxt2Img' when calling DefaultApi->Text2imgapiSdapiV1Txt2imgPost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -16304,13 +16915,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -16340,24 +16951,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Theme Css 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>string</returns>
         public string ThemeCssThemeCssGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<string> localVarResponse = ThemeCssThemeCssGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<string> localVarResponse = ThemeCssThemeCssGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Theme Css 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of string</returns>
-        public SdWebUpApi.Client.ApiResponse<string> ThemeCssThemeCssGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<string> ThemeCssThemeCssGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -16367,13 +16978,13 @@ namespace SdWebUpApi.Api
                 "text/plain"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -16401,27 +17012,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Theme Css 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of string</returns>
         public async System.Threading.Tasks.Task<string> ThemeCssThemeCssGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<string> localVarResponse = await ThemeCssThemeCssGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<string> localVarResponse = await ThemeCssThemeCssGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Theme Css 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (string)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<string>> ThemeCssThemeCssGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<string>> ThemeCssThemeCssGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -16431,13 +17042,13 @@ namespace SdWebUpApi.Api
                 "text/plain"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -16466,32 +17077,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Train Embedding 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>TrainResponse</returns>
         public TrainResponse TrainEmbeddingSdapiV1TrainEmbeddingPost(Object body, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<TrainResponse> localVarResponse = TrainEmbeddingSdapiV1TrainEmbeddingPostWithHttpInfo(body);
+            SdWebUiApi.Client.ApiResponse<TrainResponse> localVarResponse = TrainEmbeddingSdapiV1TrainEmbeddingPostWithHttpInfo(body);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Train Embedding 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of TrainResponse</returns>
-        public SdWebUpApi.Client.ApiResponse<TrainResponse> TrainEmbeddingSdapiV1TrainEmbeddingPostWithHttpInfo(Object body, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<TrainResponse> TrainEmbeddingSdapiV1TrainEmbeddingPostWithHttpInfo(Object body, int operationIndex = 0)
         {
             // verify the required parameter 'body' is set
             if (body == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->TrainEmbeddingSdapiV1TrainEmbeddingPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->TrainEmbeddingSdapiV1TrainEmbeddingPost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -16502,13 +17113,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -16537,35 +17148,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Train Embedding 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of TrainResponse</returns>
         public async System.Threading.Tasks.Task<TrainResponse> TrainEmbeddingSdapiV1TrainEmbeddingPostAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<TrainResponse> localVarResponse = await TrainEmbeddingSdapiV1TrainEmbeddingPostWithHttpInfoAsync(body, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<TrainResponse> localVarResponse = await TrainEmbeddingSdapiV1TrainEmbeddingPostWithHttpInfoAsync(body, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Train Embedding 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (TrainResponse)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<TrainResponse>> TrainEmbeddingSdapiV1TrainEmbeddingPostWithHttpInfoAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<TrainResponse>> TrainEmbeddingSdapiV1TrainEmbeddingPostWithHttpInfoAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'body' is set
             if (body == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->TrainEmbeddingSdapiV1TrainEmbeddingPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->TrainEmbeddingSdapiV1TrainEmbeddingPost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -16576,13 +17187,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -16612,32 +17223,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Train Hypernetwork 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>TrainResponse</returns>
         public TrainResponse TrainHypernetworkSdapiV1TrainHypernetworkPost(Object body, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<TrainResponse> localVarResponse = TrainHypernetworkSdapiV1TrainHypernetworkPostWithHttpInfo(body);
+            SdWebUiApi.Client.ApiResponse<TrainResponse> localVarResponse = TrainHypernetworkSdapiV1TrainHypernetworkPostWithHttpInfo(body);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Train Hypernetwork 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of TrainResponse</returns>
-        public SdWebUpApi.Client.ApiResponse<TrainResponse> TrainHypernetworkSdapiV1TrainHypernetworkPostWithHttpInfo(Object body, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<TrainResponse> TrainHypernetworkSdapiV1TrainHypernetworkPostWithHttpInfo(Object body, int operationIndex = 0)
         {
             // verify the required parameter 'body' is set
             if (body == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->TrainHypernetworkSdapiV1TrainHypernetworkPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->TrainHypernetworkSdapiV1TrainHypernetworkPost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -16648,13 +17259,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -16683,35 +17294,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Train Hypernetwork 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of TrainResponse</returns>
         public async System.Threading.Tasks.Task<TrainResponse> TrainHypernetworkSdapiV1TrainHypernetworkPostAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<TrainResponse> localVarResponse = await TrainHypernetworkSdapiV1TrainHypernetworkPostWithHttpInfoAsync(body, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<TrainResponse> localVarResponse = await TrainHypernetworkSdapiV1TrainHypernetworkPostWithHttpInfoAsync(body, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Train Hypernetwork 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="body"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (TrainResponse)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<TrainResponse>> TrainHypernetworkSdapiV1TrainHypernetworkPostWithHttpInfoAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<TrainResponse>> TrainHypernetworkSdapiV1TrainHypernetworkPostWithHttpInfoAsync(Object body, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'body' is set
             if (body == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->TrainHypernetworkSdapiV1TrainHypernetworkPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'body' when calling DefaultApi->TrainHypernetworkSdapiV1TrainHypernetworkPost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "application/json"
@@ -16722,13 +17333,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -16758,24 +17369,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Unloadapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object UnloadapiSdapiV1UnloadCheckpointPost(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = UnloadapiSdapiV1UnloadCheckpointPostWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = UnloadapiSdapiV1UnloadCheckpointPostWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Unloadapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> UnloadapiSdapiV1UnloadCheckpointPostWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> UnloadapiSdapiV1UnloadCheckpointPostWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -16785,13 +17396,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -16819,27 +17430,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Unloadapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> UnloadapiSdapiV1UnloadCheckpointPostAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await UnloadapiSdapiV1UnloadCheckpointPostWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await UnloadapiSdapiV1UnloadCheckpointPostWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Unloadapi 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> UnloadapiSdapiV1UnloadCheckpointPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> UnloadapiSdapiV1UnloadCheckpointPostWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -16849,13 +17460,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -16884,32 +17495,32 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Upload File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="files"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object UploadFileUploadPost(List<System.IO.Stream> files, int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = UploadFileUploadPostWithHttpInfo(files);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = UploadFileUploadPostWithHttpInfo(files);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Upload File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="files"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> UploadFileUploadPostWithHttpInfo(List<System.IO.Stream> files, int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> UploadFileUploadPostWithHttpInfo(List<System.IO.Stream> files, int operationIndex = 0)
         {
             // verify the required parameter 'files' is set
             if (files == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'files' when calling DefaultApi->UploadFileUploadPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'files' when calling DefaultApi->UploadFileUploadPost");
             }
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "multipart/form-data"
@@ -16920,13 +17531,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -16958,35 +17569,35 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Upload File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="files"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> UploadFileUploadPostAsync(List<System.IO.Stream> files, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await UploadFileUploadPostWithHttpInfoAsync(files, operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await UploadFileUploadPostWithHttpInfoAsync(files, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Upload File 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="files"></param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> UploadFileUploadPostWithHttpInfoAsync(List<System.IO.Stream> files, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> UploadFileUploadPostWithHttpInfoAsync(List<System.IO.Stream> files, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'files' is set
             if (files == null)
             {
-                throw new SdWebUpApi.Client.ApiException(400, "Missing required parameter 'files' when calling DefaultApi->UploadFileUploadPost");
+                throw new SdWebUiApi.Client.ApiException(400, "Missing required parameter 'files' when calling DefaultApi->UploadFileUploadPost");
             }
 
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
                 "multipart/form-data"
@@ -16997,13 +17608,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -17036,24 +17647,24 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Version 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>Object</returns>
         public Object VersionControlnetVersionGet(int operationIndex = 0)
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = VersionControlnetVersionGetWithHttpInfo();
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = VersionControlnetVersionGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Version 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object</returns>
-        public SdWebUpApi.Client.ApiResponse<Object> VersionControlnetVersionGetWithHttpInfo(int operationIndex = 0)
+        public SdWebUiApi.Client.ApiResponse<Object> VersionControlnetVersionGetWithHttpInfo(int operationIndex = 0)
         {
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -17063,13 +17674,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
@@ -17097,27 +17708,27 @@ namespace SdWebUpApi.Api
         /// <summary>
         /// Version 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of Object</returns>
         public async System.Threading.Tasks.Task<Object> VersionControlnetVersionGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            SdWebUpApi.Client.ApiResponse<Object> localVarResponse = await VersionControlnetVersionGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            SdWebUiApi.Client.ApiResponse<Object> localVarResponse = await VersionControlnetVersionGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
         /// Version 
         /// </summary>
-        /// <exception cref="SdWebUpApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <exception cref="SdWebUiApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (Object)</returns>
-        public async System.Threading.Tasks.Task<SdWebUpApi.Client.ApiResponse<Object>> VersionControlnetVersionGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<SdWebUiApi.Client.ApiResponse<Object>> VersionControlnetVersionGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
-            SdWebUpApi.Client.RequestOptions localVarRequestOptions = new SdWebUpApi.Client.RequestOptions();
+            SdWebUiApi.Client.RequestOptions localVarRequestOptions = new SdWebUiApi.Client.RequestOptions();
 
             string[] _contentTypes = new string[] {
             };
@@ -17127,13 +17738,13 @@ namespace SdWebUpApi.Api
                 "application/json"
             };
 
-            var localVarContentType = SdWebUpApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarContentType = SdWebUiApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
             }
 
-            var localVarAccept = SdWebUpApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            var localVarAccept = SdWebUiApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);

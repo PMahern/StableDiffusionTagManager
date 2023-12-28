@@ -10,7 +10,7 @@
 
 using System;
 
-namespace SdWebUpApi.Client
+namespace SdWebUiApi.Client
 {
     /// <summary>
     /// A delegate to ExceptionFactory method

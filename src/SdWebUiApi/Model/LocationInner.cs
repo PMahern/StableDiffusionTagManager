@@ -21,17 +21,17 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 using System.Reflection;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// LocationInner
     /// </summary>
     [JsonConverter(typeof(LocationInnerJsonConverter))]
     [DataContract(Name = "Location_inner")]
-    public partial class LocationInner : AbstractOpenAPISchema, IEquatable<LocationInner>, IValidatableObject
+    public partial class LocationInner : AbstractOpenAPISchema, IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LocationInner" /> class
@@ -168,44 +168,6 @@ namespace SdWebUpApi.Model
 
             // no match found, throw an exception
             throw new InvalidDataException("The JSON string `" + jsonString + "` cannot be deserialized into any schema defined.");
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as LocationInner);
-        }
-
-        /// <summary>
-        /// Returns true if LocationInner instances are equal
-        /// </summary>
-        /// <param name="input">Instance of LocationInner to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(LocationInner input)
-        {
-            if (input == null)
-                return false;
-
-            return this.ActualInstance.Equals(input.ActualInstance);
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.ActualInstance != null)
-                    hashCode = hashCode * 59 + this.ActualInstance.GetHashCode();
-                return hashCode;
-            }
         }
 
         /// <summary>

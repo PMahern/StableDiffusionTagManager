@@ -8,7 +8,7 @@
       Width="400"
       xmlns:controls="using:StableDiffusionTagManager.Controls"
       xmlns:conv="using:StableDiffusionTagManager.Converters"
-      xmlns:api="using:SdWebUpApi"
+      xmlns:api="using:SdWebUiApi"
       CanResize="False"
       ExtendClientAreaChromeHints="NoChrome"
       ExtendClientAreaTitleBarHeightHint="4"

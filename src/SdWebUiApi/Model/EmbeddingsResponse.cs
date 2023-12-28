@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// EmbeddingsResponse
     /// </summary>
     [DataContract(Name = "EmbeddingsResponse")]
-    public partial class EmbeddingsResponse : IEquatable<EmbeddingsResponse>, IValidatableObject
+    public partial class EmbeddingsResponse : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EmbeddingsResponse" /> class.
@@ -92,63 +92,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as EmbeddingsResponse);
-        }
-
-        /// <summary>
-        /// Returns true if EmbeddingsResponse instances are equal
-        /// </summary>
-        /// <param name="input">Instance of EmbeddingsResponse to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(EmbeddingsResponse input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Loaded == input.Loaded ||
-                    this.Loaded != null &&
-                    input.Loaded != null &&
-                    this.Loaded.SequenceEqual(input.Loaded)
-                ) && 
-                (
-                    this.Skipped == input.Skipped ||
-                    this.Skipped != null &&
-                    input.Skipped != null &&
-                    this.Skipped.SequenceEqual(input.Skipped)
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.Loaded != null)
-                {
-                    hashCode = (hashCode * 59) + this.Loaded.GetHashCode();
-                }
-                if (this.Skipped != null)
-                {
-                    hashCode = (hashCode * 59) + this.Skipped.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

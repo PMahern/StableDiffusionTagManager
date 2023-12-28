@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// PNGInfoResponse
     /// </summary>
     [DataContract(Name = "PNGInfoResponse")]
-    public partial class PNGInfoResponse : IEquatable<PNGInfoResponse>, IValidatableObject
+    public partial class PNGInfoResponse : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PNGInfoResponse" /> class.
@@ -92,61 +92,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as PNGInfoResponse);
-        }
-
-        /// <summary>
-        /// Returns true if PNGInfoResponse instances are equal
-        /// </summary>
-        /// <param name="input">Instance of PNGInfoResponse to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(PNGInfoResponse input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Info == input.Info ||
-                    (this.Info != null &&
-                    this.Info.Equals(input.Info))
-                ) && 
-                (
-                    this.Items == input.Items ||
-                    (this.Items != null &&
-                    this.Items.Equals(input.Items))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.Info != null)
-                {
-                    hashCode = (hashCode * 59) + this.Info.GetHashCode();
-                }
-                if (this.Items != null)
-                {
-                    hashCode = (hashCode * 59) + this.Items.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

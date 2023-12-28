@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// ExtrasSingleImageResponse
     /// </summary>
     [DataContract(Name = "ExtrasSingleImageResponse")]
-    public partial class ExtrasSingleImageResponse : IEquatable<ExtrasSingleImageResponse>, IValidatableObject
+    public partial class ExtrasSingleImageResponse : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtrasSingleImageResponse" /> class.
@@ -87,61 +87,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as ExtrasSingleImageResponse);
-        }
-
-        /// <summary>
-        /// Returns true if ExtrasSingleImageResponse instances are equal
-        /// </summary>
-        /// <param name="input">Instance of ExtrasSingleImageResponse to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(ExtrasSingleImageResponse input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.HtmlInfo == input.HtmlInfo ||
-                    (this.HtmlInfo != null &&
-                    this.HtmlInfo.Equals(input.HtmlInfo))
-                ) && 
-                (
-                    this.Image == input.Image ||
-                    (this.Image != null &&
-                    this.Image.Equals(input.Image))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.HtmlInfo != null)
-                {
-                    hashCode = (hashCode * 59) + this.HtmlInfo.GetHashCode();
-                }
-                if (this.Image != null)
-                {
-                    hashCode = (hashCode * 59) + this.Image.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

@@ -8,7 +8,7 @@
  */
 
 
-namespace SdWebUpApi.Client
+namespace SdWebUiApi.Client
 {
     /// <summary>
     /// Http methods supported by swagger

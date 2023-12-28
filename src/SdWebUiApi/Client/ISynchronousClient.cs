@@ -11,7 +11,7 @@
 using System;
 using System.IO;
 
-namespace SdWebUpApi.Client
+namespace SdWebUiApi.Client
 {
     /// <summary>
     /// Contract for Synchronous RESTful API interactions.

@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// HTTPValidationError
     /// </summary>
     [DataContract(Name = "HTTPValidationError")]
-    public partial class HTTPValidationError : IEquatable<HTTPValidationError>, IValidatableObject
+    public partial class HTTPValidationError : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="HTTPValidationError" /> class.
@@ -66,53 +66,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as HTTPValidationError);
-        }
-
-        /// <summary>
-        /// Returns true if HTTPValidationError instances are equal
-        /// </summary>
-        /// <param name="input">Instance of HTTPValidationError to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(HTTPValidationError input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Detail == input.Detail ||
-                    this.Detail != null &&
-                    input.Detail != null &&
-                    this.Detail.SequenceEqual(input.Detail)
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.Detail != null)
-                {
-                    hashCode = (hashCode * 59) + this.Detail.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// PredictBody
     /// </summary>
     [DataContract(Name = "PredictBody")]
-    public partial class PredictBody : IEquatable<PredictBody>, IValidatableObject
+    public partial class PredictBody : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PredictBody" /> class.
@@ -130,99 +130,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as PredictBody);
-        }
-
-        /// <summary>
-        /// Returns true if PredictBody instances are equal
-        /// </summary>
-        /// <param name="input">Instance of PredictBody to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(PredictBody input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.SessionHash == input.SessionHash ||
-                    (this.SessionHash != null &&
-                    this.SessionHash.Equals(input.SessionHash))
-                ) && 
-                (
-                    this.EventId == input.EventId ||
-                    (this.EventId != null &&
-                    this.EventId.Equals(input.EventId))
-                ) && 
-                (
-                    this.Data == input.Data ||
-                    this.Data != null &&
-                    input.Data != null &&
-                    this.Data.SequenceEqual(input.Data)
-                ) && 
-                (
-                    this.EventData == input.EventData ||
-                    (this.EventData != null &&
-                    this.EventData.Equals(input.EventData))
-                ) && 
-                (
-                    this.FnIndex == input.FnIndex ||
-                    this.FnIndex.Equals(input.FnIndex)
-                ) && 
-                (
-                    this.Batched == input.Batched ||
-                    this.Batched.Equals(input.Batched)
-                ) && 
-                (
-                    this.Request == input.Request ||
-                    (this.Request != null &&
-                    this.Request.Equals(input.Request))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.SessionHash != null)
-                {
-                    hashCode = (hashCode * 59) + this.SessionHash.GetHashCode();
-                }
-                if (this.EventId != null)
-                {
-                    hashCode = (hashCode * 59) + this.EventId.GetHashCode();
-                }
-                if (this.Data != null)
-                {
-                    hashCode = (hashCode * 59) + this.Data.GetHashCode();
-                }
-                if (this.EventData != null)
-                {
-                    hashCode = (hashCode * 59) + this.EventData.GetHashCode();
-                }
-                hashCode = (hashCode * 59) + this.FnIndex.GetHashCode();
-                hashCode = (hashCode * 59) + this.Batched.GetHashCode();
-                if (this.Request != null)
-                {
-                    hashCode = (hashCode * 59) + this.Request.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

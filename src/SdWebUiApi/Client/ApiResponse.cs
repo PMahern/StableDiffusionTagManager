@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 
-namespace SdWebUpApi.Client
+namespace SdWebUiApi.Client
 {
     /// <summary>
     /// Provides a non-generic contract for the ApiResponse wrapper.

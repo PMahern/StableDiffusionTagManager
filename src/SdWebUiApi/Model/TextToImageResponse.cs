@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// TextToImageResponse
     /// </summary>
     [DataContract(Name = "TextToImageResponse")]
-    public partial class TextToImageResponse : IEquatable<TextToImageResponse>, IValidatableObject
+    public partial class TextToImageResponse : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TextToImageResponse" /> class.
@@ -100,71 +100,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as TextToImageResponse);
-        }
-
-        /// <summary>
-        /// Returns true if TextToImageResponse instances are equal
-        /// </summary>
-        /// <param name="input">Instance of TextToImageResponse to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(TextToImageResponse input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Images == input.Images ||
-                    this.Images != null &&
-                    input.Images != null &&
-                    this.Images.SequenceEqual(input.Images)
-                ) && 
-                (
-                    this.Parameters == input.Parameters ||
-                    (this.Parameters != null &&
-                    this.Parameters.Equals(input.Parameters))
-                ) && 
-                (
-                    this.Info == input.Info ||
-                    (this.Info != null &&
-                    this.Info.Equals(input.Info))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.Images != null)
-                {
-                    hashCode = (hashCode * 59) + this.Images.GetHashCode();
-                }
-                if (this.Parameters != null)
-                {
-                    hashCode = (hashCode * 59) + this.Parameters.GetHashCode();
-                }
-                if (this.Info != null)
-                {
-                    hashCode = (hashCode * 59) + this.Info.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>

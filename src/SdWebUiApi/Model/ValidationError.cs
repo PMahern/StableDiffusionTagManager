@@ -21,15 +21,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenAPIDateConverter = SdWebUpApi.Client.OpenAPIDateConverter;
+using OpenAPIDateConverter = SdWebUiApi.Client.OpenAPIDateConverter;
 
-namespace SdWebUpApi.Model
+namespace SdWebUiApi.Model
 {
     /// <summary>
     /// ValidationError
     /// </summary>
     [DataContract(Name = "ValidationError")]
-    public partial class ValidationError : IEquatable<ValidationError>, IValidatableObject
+    public partial class ValidationError : IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidationError" /> class.
@@ -104,71 +104,6 @@ namespace SdWebUpApi.Model
         public virtual string ToJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Returns true if objects are equal
-        /// </summary>
-        /// <param name="input">Object to be compared</param>
-        /// <returns>Boolean</returns>
-        public override bool Equals(object input)
-        {
-            return this.Equals(input as ValidationError);
-        }
-
-        /// <summary>
-        /// Returns true if ValidationError instances are equal
-        /// </summary>
-        /// <param name="input">Instance of ValidationError to be compared</param>
-        /// <returns>Boolean</returns>
-        public bool Equals(ValidationError input)
-        {
-            if (input == null)
-            {
-                return false;
-            }
-            return 
-                (
-                    this.Loc == input.Loc ||
-                    this.Loc != null &&
-                    input.Loc != null &&
-                    this.Loc.SequenceEqual(input.Loc)
-                ) && 
-                (
-                    this.Msg == input.Msg ||
-                    (this.Msg != null &&
-                    this.Msg.Equals(input.Msg))
-                ) && 
-                (
-                    this.Type == input.Type ||
-                    (this.Type != null &&
-                    this.Type.Equals(input.Type))
-                );
-        }
-
-        /// <summary>
-        /// Gets the hash code
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hashCode = 41;
-                if (this.Loc != null)
-                {
-                    hashCode = (hashCode * 59) + this.Loc.GetHashCode();
-                }
-                if (this.Msg != null)
-                {
-                    hashCode = (hashCode * 59) + this.Msg.GetHashCode();
-                }
-                if (this.Type != null)
-                {
-                    hashCode = (hashCode * 59) + this.Type.GetHashCode();
-                }
-                return hashCode;
-            }
         }
 
         /// <summary>
