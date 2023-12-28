@@ -154,7 +154,9 @@
                               <StackPanel Orientation="Horizontal" PointerPressed="TagDragStart" >
                                 <PathIcon Data="{StaticResource drag_regular}"/>
                                 <controls:TagAutoCompleteBox Text="{Binding Tag, Mode=TwoWay}" AttachedToVisualTree="AutoCompleteAttached" />
-                                <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.SelectedImage.RemoveTagCommand}" CommandParameter="{Binding}">x</Button>
+                                <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.SelectedImage.RemoveTagCommand}" CommandParameter="{Binding}">
+                                  <mi:MaterialIcon Kind="Remove"/>
+                                </Button>
                               </StackPanel>
                             </Border>
                           </StackPanel>
@@ -172,26 +174,74 @@
                   <ColumnDefinition Width="3*" MinWidth="100"/>
                 </Grid.ColumnDefinitions>
                 <controls:HeaderControl Grid.Column="0" Title="Tag Collections" Padding="0">
-                  <Grid RowDefinitions="Auto, *">
-                    <StackPanel Orientation="Horizontal" Classes="toolbar" Grid.Column="0">
+                  <Grid RowDefinitions="Auto, *" ColumnDefinitions="*, *">
+                    <StackPanel Orientation="Horizontal" Classes="toolbar">
                       <Button Command="{Binding AddTagCollectionCommand}" ToolTip.Tip="Add New Tag Collection">
                         <mi:MaterialIcon Kind="Add"/>
                       </Button>
                     </StackPanel>
                     <ScrollViewer Grid.Row="1"
-                                  VerticalScrollBarVisibility="Visible"
-                                  HorizontalScrollBarVisibility="Disabled"
-                                  HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Stretch">
-                      <ItemsControl Grid.Column="0"  ItemsSource="{Binding TagCollections}">
+                                VerticalScrollBarVisibility="Visible"
+                                HorizontalScrollBarVisibility="Disabled"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch">
+                      <ItemsControl ItemsSource="{Binding TagCollections}">
+                        <ItemsControl.Resources>
+                          <conv:TagCollectionBackgroundConverter x:Key="tagCollectionBackgroundConverter" />
+                        </ItemsControl.Resources>
                         <ItemsControl.ItemsPanel>
                           <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal" Margin="5"/>
+                            <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Margin="5"/>
                           </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                           <DataTemplate>
-                            <Button Content="{Binding Name}" Command="{Binding AddTags}"></Button>
+                            <Border Padding="0,5,5,5"  HorizontalAlignment="Stretch" Background="{Binding IsSelected, Converter={StaticResource ResourceKey=tagCollectionBackgroundConverter}}">
+                              <Border Classes="tag" HorizontalAlignment="Left">
+                                <StackPanel Orientation="Horizontal">
+                                  <Button Command="{Binding AddTagsCommand}" ToolTip.Tip="Add Tag Collection To Current Image">
+                                    <mi:MaterialIcon Kind="PlaylistAdd"/>
+                                  </Button>
+                                  <Button Command="{Binding EditTagsCommand}" ToolTip.Tip="Edit Tag Collection">
+                                    <mi:MaterialIcon Kind="PlaylistEdit"/>
+                                  </Button>
+                                  <TextBox Text="{Binding Name}" Width="100"/>
+                                  <Button Command="{Binding RemoveTagCollectionCommand}" ToolTip.Tip="Remove Tag Collection">
+                                    <mi:MaterialIcon Kind="Remove"/>
+                                  </Button>
+                                </StackPanel>
+                              </Border>
+                            </Border>
+                          </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                      </ItemsControl>
+                    </ScrollViewer>
+                    <StackPanel Orientation="Horizontal" Classes="toolbar" Grid.Column="1">
+                      <Button Command="{Binding AddTagToCollectionCommand}" ToolTip.Tip="Add New Tag to Collection">
+                        <mi:MaterialIcon Kind="AddCircle"/>
+                      </Button>
+                    </StackPanel>
+                    <ScrollViewer Grid.Row="1" Grid.Column="1"
+                                VerticalScrollBarVisibility="Visible"
+                                HorizontalScrollBarVisibility="Disabled"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch">
+                      <ItemsControl ItemsSource="{Binding EditTagCollectionTarget.Tags}">
+                        <ItemsControl.ItemsPanel>
+                          <ItemsPanelTemplate>
+                            <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Margin="5"/>
+                          </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                          <DataTemplate>
+                            <Border Classes="tag" HorizontalAlignment="Left">
+                              <StackPanel Orientation="Horizontal">
+                                <TextBox HorizontalAlignment="Left" Text="{Binding Tag, Mode=TwoWay}" Width="100"/>
+                                <Button Command="{Binding RemoveTagFromCollectionCommand}">
+                                  <mi:MaterialIcon Kind="Remove"/>
+                                </Button>
+                              </StackPanel>
+                            </Border>
                           </DataTemplate>
                         </ItemsControl.ItemTemplate>
                       </ItemsControl>
@@ -212,7 +262,7 @@
                       </ItemsControl.ItemsPanel>
                       <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                          <Border>
+                          <Border Classes="tag">
                             <StackPanel Orientation="Horizontal">
                               <Button Command="{Binding AddTagCommand}">
                                 <StackPanel Orientation="Horizontal">
@@ -220,10 +270,10 @@
                                   <TextBlock Margin="5,0,0,0" Text="{Binding Count}"/>
                                 </StackPanel>
                               </Button>
-                              <Button Command="{Binding ReplaceTagInAllImagesCommand}">
+                              <Button Command="{Binding ReplaceTagInAllImagesCommand}" ToolTip.Tip="Replace all instances of tag">
                                 <mi:MaterialIcon Kind="Update"/>
                               </Button>
-                              <Button Command="{Binding RemoveTagFromAllImagesCommand}">
+                              <Button Command="{Binding RemoveTagFromAllImagesCommand}" ToolTip.Tip="Remove all instances of tag">
                                 <mi:MaterialIcon Kind="Delete"/>
                               </Button>
                             </StackPanel>

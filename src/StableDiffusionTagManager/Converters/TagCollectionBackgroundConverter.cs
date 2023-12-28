@@ -1,24 +1,21 @@
 ﻿using Avalonia.Data.Converters;
-using Avalonia.Media.Imaging;
+using Avalonia.Media;
+using StableDiffusionTagManager.ViewModels;
 using System;
 using System.Globalization;
 
-
 namespace StableDiffusionTagManager.Converters
 {
-    public class BitmapPixelSizeConverter : IValueConverter
+    public class TagCollectionBackgroundConverter : IValueConverter
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            var bitmap = value as Bitmap;
-            var pixelSize = bitmap?.PixelSize;
-
-            if (pixelSize != null)
+            var isSelected = value as bool?;
+            if (isSelected.HasValue && isSelected.Value)
             {
-                return $"{pixelSize.Value.Width}w x {pixelSize.Value.Height}h";
+                return new SolidColorBrush(new Color(255, 75, 75, 75));
             }
-
-            return "";
+            return null;
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

@@ -43,7 +43,8 @@ namespace StableDiffusionTagManager.ViewModels
         private List<string>? CopiedTags
         {
             get => _CopiedTags;
-            set  {
+            set
+            {
                 _CopiedTags = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasCopiedTags));
@@ -125,9 +126,6 @@ namespace StableDiffusionTagManager.ViewModels
             return false;
         }
 
-        #region Tag Collections+
-        private ObservableCollection<TagCollectionViewModel>? tagCollections;
-        public ObservableCollection<TagCollectionViewModel>? TagCollections { get => tagCollections; set { tagCollections = value; OnPropertyChanged(); } }
 
         List<string>? tagCache;
 
@@ -184,16 +182,74 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
-        [RelayCommand(CanExecute = nameof(IsProject))]
-        public void AddTagCollection()
-        {
+        #region Tag Collections
+        private TagCollectionViewModel? editTagCollectionTarget;
 
+        public TagCollectionViewModel? EditTagCollectionTarget
+        {
+            get => editTagCollectionTarget;
+            set
+            {
+                var old = editTagCollectionTarget;
+                if (SetProperty(ref editTagCollectionTarget, value))
+                {
+                    if (old != null)
+                    {
+                        old.IsSelected = false;
+                    }
+                    if (value != null)
+                    {
+                        value.IsSelected = true;
+                    }
+                    AddTagToCollectionCommand.NotifyCanExecuteChanged();
+                }
+            }
         }
+
+        public void RemoveTagCollection(TagCollectionViewModel collection)
+        {
+            if(this.TagCollections != null)
+            {
+                this.TagCollections.Remove(collection);
+                if (this.EditTagCollectionTarget == collection)
+                {
+                    this.EditTagCollectionTarget = null;
+                }
+            }
+        }
+
+        public bool IsEditingTagCollection { get => EditTagCollectionTarget != null; }
+        [ObservableProperty]
+        private ObservableCollection<TagCollectionViewModel>? tagCollections;
+
+        [RelayCommand(CanExecute = nameof(IsProject))]
+        public async Task AddTagCollection()
+        {
+            if (OpenProject != null)
+            {
+                if (this.TagCollections == null)
+                {
+                    this.TagCollections = new ObservableCollection<TagCollectionViewModel>();
+                }
+                this.TagCollections.Add(new TagCollectionViewModel(this, ""));
+            }
+        }
+
+        [RelayCommand(CanExecute = nameof(IsEditingTagCollection))]
+        public void AddTagToCollection()
+        {
+            if (EditTagCollectionTarget != null)
+            {
+                EditTagCollectionTarget.AddEmptyTag();
+            }
+        }
+
+        #endregion
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(AddTagCollectionCommand))]
-        #endregion
-        private Project? openProject = null;        
+        [NotifyPropertyChangedFor(nameof(IsProject))]
+        private Project? openProject = null;
 
         public bool IsProject { get => OpenProject != null; }
 
@@ -212,6 +268,7 @@ namespace StableDiffusionTagManager.ViewModels
         public Func<Bitmap, bool, Bitmap>? GetModifiedImageDataCallback { get; set; }
         #endregion
 
+        #region Dialog Handling
         private Task<TResult> ShowDialog<TResult>(IMsBox<TResult> mbox) where TResult : struct
         {
             if (ShowDialogHandler != null)
@@ -247,6 +304,8 @@ namespace StableDiffusionTagManager.ViewModels
             }
             return Task.CompletedTask;
         }
+
+        #endregion
 
         public async Task CheckForAndConvertUnspportedImageFormats(string folder)
         {
@@ -361,14 +420,11 @@ namespace StableDiffusionTagManager.ViewModels
                             }
                         }
 
-
-
                         var FolderTagSets = new FolderTagSets(pickedFolderPath);
 
                         ImagesWithTags = new(FolderTagSets.TagsSets.Select(tagSet => new ImageWithTagsViewModel(tagSet.ImageFile, tagSet.TagSet, ImageDirtyHandler))
                                         .OrderBy(iwt => iwt.FirstNumberedChunk)
                                         .ThenBy(iwt => iwt.SecondNumberedChunk));
-
 
                         if (projFolder)
                         {
@@ -383,7 +439,6 @@ namespace StableDiffusionTagManager.ViewModels
                         }
 
                         openFolder = pickedFolderPath;
-
                         UpdateTagCounts();
                     }
                 }
@@ -414,11 +469,29 @@ namespace StableDiffusionTagManager.ViewModels
 
                     image.ClearTagsDirty();
 
-                    if(image.IsImageDirty() && GetModifiedImageDataCallback != null)
+                    if (image.IsImageDirty() && GetModifiedImageDataCallback != null)
                     {
                         var newImageData = GetModifiedImageDataCallback(image.ImageSource, true);
                         SaveUpdatedImage(image, newImageData);
                     }
+                }
+
+                if (OpenProject != null)
+                {
+                    if(TagCollections != null)
+                    {
+                        OpenProject.TagCollections = TagCollections.Select(tc => new TagCollection()
+                        {
+                            Name = tc.Name,
+                            Tags = tc.Tags.Select(t => t.Tag).ToList()
+                        }).ToList();
+                    }
+                    else
+                    {
+                        OpenProject.TagCollections.Clear();
+                    }
+                    
+                    OpenProject.Save();
                 }
             }
         }
@@ -1175,7 +1248,7 @@ namespace StableDiffusionTagManager.ViewModels
                 dialog.TagPrioritySets = tagPrioritySets.ToList();
 
                 var result = await ShowDialog<TagPrioritySetButtonViewModel?>(dialog);
-                if(result != null)
+                if (result != null)
                 {
                     foreach (var image in ImagesWithTags)
                     {
@@ -1227,7 +1300,7 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 var dialog = new ColorPickerDialog();
                 await ShowDialog<Color?>(dialog);
-                if(dialog.Success)
+                if (dialog.Success)
                 {
                     ShowProgressIndicator = true;
                     ProgressIndicatorMax = ImagesWithTags.Count();
@@ -1250,7 +1323,7 @@ namespace StableDiffusionTagManager.ViewModels
                     }
 
                     ShowProgressIndicator = false;
-                }   
+                }
             }
         }
 
