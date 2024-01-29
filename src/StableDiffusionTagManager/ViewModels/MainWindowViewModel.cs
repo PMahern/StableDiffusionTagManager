@@ -81,6 +81,7 @@ namespace StableDiffusionTagManager.ViewModels
                 AddTagToEndOfAllImagesCommand.NotifyCanExecuteChanged();
                 AddTagToStartOfAllImagesCommand.NotifyCanExecuteChanged();
                 RemoveTagFromAllImagesCommand.NotifyCanExecuteChanged();
+                RemoveMetaTagsCommand.NotifyCanExecuteChanged();
             }
         }
 
@@ -1111,7 +1112,21 @@ namespace StableDiffusionTagManager.ViewModels
                     ++ProgressIndicatorProgress;
                 }
 
+                UpdateTagCounts();
+
                 ShowProgressIndicator = false;
+            }
+        }
+
+        [RelayCommand(CanExecute = nameof(ImagesLoaded))]
+        public async Task RemoveMetaTags()
+        {
+            if (ImagesWithTags != null && ImagesWithTags.Count > 0)
+            {
+                foreach(var tag in MetaTags.Tags)
+                {
+                    RemoveTagFromAllImages(tag);
+                }
             }
         }
 

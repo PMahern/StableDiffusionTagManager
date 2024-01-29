@@ -74,9 +74,6 @@ namespace StableDiffusionTagManager.Views
         public static readonly StyledProperty<Bitmap?> ImagePropery =
             AvaloniaProperty.Register<ImageTouchupDialog, Bitmap?>(nameof(Image));
 
-        /// <summary>
-        /// Gets or sets the image to be displayed
-        /// </summary>
         public Bitmap? Image
         {
             get => GetValue(ImagePropery);
@@ -86,9 +83,6 @@ namespace StableDiffusionTagManager.Views
         public static readonly StyledProperty<string> PromptProperty =
             AvaloniaProperty.Register<ImageTouchupDialog, string>(nameof(Prompt));
 
-        /// <summary>
-        /// Gets or sets if control can render the image
-        /// </summary>
         public string Prompt
         {
             get => GetValue(PromptProperty);
@@ -98,9 +92,6 @@ namespace StableDiffusionTagManager.Views
         public static readonly StyledProperty<string> NegativePromptProperty =
             AvaloniaProperty.Register<ImageTouchupDialog, string>(nameof(NegativePrompt));
 
-        /// <summary>
-        /// Gets or sets if control can render the image
-        /// </summary>
         public string NegativePrompt
         {
             get => GetValue(NegativePromptProperty);
@@ -110,9 +101,6 @@ namespace StableDiffusionTagManager.Views
         public static readonly StyledProperty<int> MaskBlurProperty =
             AvaloniaProperty.Register<ImageTouchupDialog, int>(nameof(MaskBlur), 4);
 
-        /// <summary>
-        /// Gets or sets if control can render the image
-        /// </summary>
         public int MaskBlur
         {
             get => GetValue(MaskBlurProperty);
@@ -122,9 +110,6 @@ namespace StableDiffusionTagManager.Views
         public static readonly StyledProperty<bool> InpaintOnlyMaskedProperty =
             AvaloniaProperty.Register<ImageTouchupDialog, bool>(nameof(InpaintOnlyMasked), true);
 
-        /// <summary>
-        /// Gets or sets if control can render the image
-        /// </summary>
         public bool InpaintOnlyMasked
         {
             get => GetValue(InpaintOnlyMaskedProperty);
@@ -134,9 +119,6 @@ namespace StableDiffusionTagManager.Views
         public static readonly StyledProperty<decimal> DenoiseStrengthProperty =
             AvaloniaProperty.Register<ImageTouchupDialog, decimal>(nameof(DenoiseStrength), 0.5M);
 
-        /// <summary>
-        /// Gets or sets if control can render the image
-        /// </summary>
         public decimal DenoiseStrength
         {
             get => GetValue(DenoiseStrengthProperty);
@@ -146,9 +128,6 @@ namespace StableDiffusionTagManager.Views
         public static readonly StyledProperty<int> OnlyMaskedPaddingProperty =
             AvaloniaProperty.Register<ImageTouchupDialog, int>(nameof(OnlyMaskedPadding), 64);
 
-        /// <summary>
-        /// Gets or sets if control can render the image
-        /// </summary>
         public int OnlyMaskedPadding
         {
             get => GetValue(OnlyMaskedPaddingProperty);
@@ -158,9 +137,6 @@ namespace StableDiffusionTagManager.Views
         public static readonly StyledProperty<int> SamplingStepsProperty =
             AvaloniaProperty.Register<ImageTouchupDialog, int>(nameof(SamplingSteps), 20);
 
-        /// <summary>
-        /// Gets or sets if control can render the image
-        /// </summary>
         public int SamplingSteps
         {
             get => GetValue(SamplingStepsProperty);
@@ -170,9 +146,6 @@ namespace StableDiffusionTagManager.Views
         public static readonly StyledProperty<string?> SelectedSamplerProperty =
             AvaloniaProperty.Register<ImageTouchupDialog, string?>(nameof(SelectedSampler), null);
 
-        /// <summary>
-        /// Gets or sets if control can render the image
-        /// </summary>
         public string? SelectedSampler
         {
             get => GetValue(SelectedSamplerProperty);
@@ -182,9 +155,6 @@ namespace StableDiffusionTagManager.Views
         public static readonly StyledProperty<ObservableCollection<string>> SamplersProperty =
             AvaloniaProperty.Register<ImageTouchupDialog, ObservableCollection<string>>(nameof(Samplers), new ObservableCollection<string>());
 
-        /// <summary>
-        /// Gets or sets if control can render the image
-        /// </summary>
         public ObservableCollection<string> Samplers
         {
             get => GetValue(SamplersProperty);
@@ -198,9 +168,6 @@ namespace StableDiffusionTagManager.Views
         public static readonly StyledProperty<MaskedContent> SelectedMaskedContentProperty =
             AvaloniaProperty.Register<ImageTouchupDialog, MaskedContent>(nameof(SelectedMaskedContent), MaskedContent.Original);
 
-        /// <summary>
-        /// Gets or sets if control can render the image
-        /// </summary>
         public MaskedContent SelectedMaskedContent
         {
             get => GetValue(SelectedMaskedContentProperty);
@@ -210,9 +177,6 @@ namespace StableDiffusionTagManager.Views
         public static readonly StyledProperty<int> BatchSizeProperty =
             AvaloniaProperty.Register<ImageTouchupDialog, int>(nameof(BatchSize), 1);
 
-        /// <summary>
-        /// Gets or sets if control can render the image
-        /// </summary>
         public int BatchSize
         {
             get => GetValue(BatchSizeProperty);
@@ -222,13 +186,28 @@ namespace StableDiffusionTagManager.Views
         public static readonly StyledProperty<bool> IsLoadingProperty =
             AvaloniaProperty.Register<ImageTouchupDialog, bool>(nameof(IsLoading), false);
 
-        /// <summary>
-        /// Gets or sets if control can render the image
-        /// </summary>
         public bool IsLoading
         {
             get => GetValue(IsLoadingProperty);
             set => SetValue(IsLoadingProperty, value);
+        }
+
+        public static readonly StyledProperty<int> ImageWidthProperty =
+            AvaloniaProperty.Register<ImageTouchupDialog, int>(nameof(ImageWidth), 512);
+
+        public int ImageWidth
+        {
+            get => GetValue(ImageWidthProperty);
+            set => SetValue(ImageWidthProperty, value);
+        }
+
+        public static readonly StyledProperty<int> ImageHeightProperty =
+            AvaloniaProperty.Register<ImageTouchupDialog, int>(nameof(ImageHeight), 512);
+
+        public int ImageHeight
+        {
+            get => GetValue(ImageHeightProperty);
+            set => SetValue(ImageHeightProperty, value);
         }
 
         public List<string> Tags { get; set; } = new List<string>();
@@ -286,6 +265,8 @@ namespace StableDiffusionTagManager.Views
                             NegativePrompt = NegativePrompt,
                             InitImages = new List<object> { imagebase64 },
                             InpaintFullRes = InpaintOnlyMasked,
+                            Width = ImageWidth,
+                            Height = ImageHeight,
                             Mask = maskbase64,
                             InpaintFullResPadding = OnlyMaskedPadding,
                             DenoisingStrength = DenoiseStrength,

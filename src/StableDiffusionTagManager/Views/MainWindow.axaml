@@ -55,6 +55,7 @@
           <MenuItem Header="_Apply Tag Priority Set to All Images..." Command="{Binding ApplyTagPrioritySetToAllImagesCommand}"/>
           <MenuItem Header="_Convert all image alpha channels to another color..." Command="{Binding ConvertAllImageAlphasToColorCommand}"/>
           <MenuItem Header="_Interrogate All Images" Command="{Binding InterrogateAllImagesCommand}"/>
+          <MenuItem Header="_Remove Metatags" Command="{Binding RemoveMetaTagsCommand}"/>
         </MenuItem>
       </Menu>
       <Grid>

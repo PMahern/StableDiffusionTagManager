@@ -122,7 +122,7 @@ namespace StableDiffusionTagManager.Views
                 {
                     e.Handled = true;
                     FocusNextTag();
-                }
+                } 
                 if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.Left)
                 {
                     e.Handled = true;

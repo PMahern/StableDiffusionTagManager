@@ -261,8 +261,11 @@ namespace StableDiffusionTagManager.ViewModels
 
         internal void AddTag(TagViewModel newTag)
         {
-            newTag.TagChanged += TagChangedHandler;
-            tags.Add(newTag);
+            if (!Tags.Any(t => t.Tag == newTag.Tag))
+            {
+                newTag.TagChanged += TagChangedHandler;
+                tags.Add(newTag);
+            }
         }
 
         internal void RemoveTagAt(int index)

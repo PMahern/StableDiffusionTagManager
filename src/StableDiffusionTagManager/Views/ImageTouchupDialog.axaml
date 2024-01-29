@@ -29,6 +29,15 @@
             <controls:HeaderControl Title="Negative Prompt" >
               <TextBox Height="150" Text="{Binding NegativePrompt, Mode=TwoWay}" TextWrapping="Wrap"/>
             </controls:HeaderControl>
+            <controls:HeaderControl Title="Image Options">
+              <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*, Auto, *, Auto">
+                <Label>Image Width</Label>
+                <NumericUpDown Grid.Column="1" Value="{Binding ImageWidth}"  Increment="10" Minimum="1" Maximum="2048"/>
+
+                <Label Grid.Column="2">Image Height</Label>
+                <NumericUpDown Grid.Column="3" Value="{Binding ImageHeight}"  Increment="10" Minimum="1" Maximum="2048"/>
+                </Grid>
+              </controls:HeaderControl>
             <controls:HeaderControl Title="Sampler Options" >
               <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*, Auto, *, Auto">
                 <Label>Sampler</Label>
