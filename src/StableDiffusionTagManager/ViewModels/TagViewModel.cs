@@ -5,6 +5,8 @@ namespace StableDiffusionTagManager.ViewModels
 {
     public class TagViewModel : ObservableObject
     {
+        private string _tagWhenGainedFocus = null;
+
         public TagViewModel(string tag)
         {
             Tag = tag;
@@ -17,7 +19,10 @@ namespace StableDiffusionTagManager.ViewModels
             set {
                 var temp = tag;
                 tag = value;
-                TagChanged?.Invoke(temp, value);
+                if(!isFocused)
+                {
+                    TagChanged?.Invoke(temp, value);
+                }
                 OnPropertyChanged(); 
             }
         }
@@ -32,6 +37,30 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 isBeingDragged = value;
                 OnPropertyChanged();
+            }
+        }
+
+        private bool isFocused = false;
+        public bool IsFocused
+        {
+            get { return isFocused; }
+            set
+            {
+                if(value != isFocused)
+                {
+                    if (value)
+                    {
+                        _tagWhenGainedFocus = tag;
+                    }
+                    else if (_tagWhenGainedFocus != tag)
+                    {
+                        TagChanged?.Invoke(_tagWhenGainedFocus, tag);
+                    }
+
+                    isFocused = value;
+                    OnPropertyChanged();
+                }
+                
             }
         }
 

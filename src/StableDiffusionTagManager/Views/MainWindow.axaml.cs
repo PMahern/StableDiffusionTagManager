@@ -88,51 +88,46 @@ namespace StableDiffusionTagManager.Views
             var viewModel = this.DataContext as MainWindowViewModel;
             if (viewModel != null)
             {
-                if ((e.KeyModifiers & KeyModifiers.Alt) > 0 && e.Key == Key.Right)
+                if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.OemPeriod)
                 {
                     e.Handled = true;
                     viewModel.NextImage();
                 }
 
-                if ((e.KeyModifiers & KeyModifiers.Alt) > 0 && e.Key == Key.Left)
+                if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.OemComma)
                 {
                     e.Handled = true;
                     viewModel.PreviousImage();
                 }
 
-                if ((e.KeyModifiers & KeyModifiers.Alt) > 0 && e.Key == Key.Enter)
+                if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.Down)
                 {
                     e.Handled = true;
                     viewModel.AddTagToEnd();
+                }
+
+                if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.Up)
+                {
+                    e.Handled = true;
+                    viewModel.AddTagToFront();
                 }
 
                 if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.Enter)
                 {
                     e.Handled = true;
                     AddTagInFrontOfCurrentFocusedTag();
-                }
-
-                if ((e.KeyModifiers & KeyModifiers.Control) > 0 && e.Key == Key.Enter)
-                {
-                    e.Handled = true;
-                    viewModel.AddTagToFront();
-                }
+                }                
 
                 if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.Right)
                 {
                     e.Handled = true;
                     FocusNextTag();
                 } 
+
                 if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.Left)
                 {
                     e.Handled = true;
                     FocusPreviousTag();
-                }
-
-                if ((e.KeyModifiers & KeyModifiers.Alt) > 0 && e.Key == Key.Delete)
-                {
-                    e.Handled = true;
-                    await viewModel.ArchiveSelectedImage();
                 }
 
                 if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.Delete)
@@ -141,11 +136,18 @@ namespace StableDiffusionTagManager.Views
                     DeleteFocusedTag();
                 }
 
+                if ((e.KeyModifiers & KeyModifiers.Control) > 0 && e.Key == Key.Delete)
+                {
+                    e.Handled = true;
+                    await viewModel.ArchiveSelectedImage();
+                }
+
                 if ((e.KeyModifiers & KeyModifiers.Control) > 0 && e.Key == Key.Right)
                 {
                     e.Handled = true;
                     MoveTagRight();
                 }
+
                 if ((e.KeyModifiers & KeyModifiers.Control) > 0 && e.Key == Key.Left)
                 {
                     e.Handled = true;
@@ -191,6 +193,10 @@ namespace StableDiffusionTagManager.Views
         public void AutoCompleteAttached(object sender, VisualTreeAttachmentEventArgs args)
         {
             var ac = sender as TagAutoCompleteBox;
+            //Doesn't seem like bindings to IsFocused works, this is a workaround
+            ac.GotFocus += (sender, e) => { (ac.DataContext as TagViewModel).IsFocused = true; };
+            ac.LostFocus += (sender, e) => { (ac.DataContext as TagViewModel).IsFocused = false; };
+
             if (focusTag != null && focusTag == (ac.DataContext as TagViewModel))
             {
                 Dispatcher.UIThread.Post(() => ac?.Focus());
@@ -326,6 +332,11 @@ namespace StableDiffusionTagManager.Views
                     viewModel.DeleteTagFromCurrentImage(tagModel);
                 }
             }
+        }
+
+        public void TagEntryLostFocus(object sender, EventArgs e)
+        {
+
         }
     }
 }

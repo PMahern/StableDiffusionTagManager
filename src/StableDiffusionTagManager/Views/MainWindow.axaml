@@ -25,7 +25,7 @@
   </Design.DataContext>
   <Grid>
     <DockPanel>
-      <Menu DockPanel.Dock="Top">
+      <Menu DockPanel.Dock="Top" Name="MainMenu">
         <MenuItem  Header="_File">
           <MenuItem  Header="_Application Settings..." Command="{Binding ApplicationSettingsCommand}" />
           <MenuItem Header="_Load Folder..." Command="{Binding LoadFolderCommand}"/>
@@ -154,7 +154,7 @@
                             <Border Classes="tag" DragDrop.AllowDrop="True">
                               <StackPanel Orientation="Horizontal" PointerPressed="TagDragStart" >
                                 <PathIcon Data="{StaticResource drag_regular}"/>
-                                <controls:TagAutoCompleteBox Text="{Binding Tag, Mode=TwoWay}" AttachedToVisualTree="AutoCompleteAttached" />
+                                <controls:TagAutoCompleteBox Text="{Binding Tag, Mode=TwoWay}" AttachedToVisualTree="AutoCompleteAttached"/>
                                 <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.SelectedImage.RemoveTagCommand}" CommandParameter="{Binding}">
                                   <mi:MaterialIcon Kind="Remove"/>
                                 </Button>
@@ -172,7 +172,9 @@
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="1*" MinWidth="100"/>
                   <ColumnDefinition Width="2"/>
-                  <ColumnDefinition Width="3*" MinWidth="100"/>
+                  <ColumnDefinition Width="1*" MinWidth="100"/>
+                  <ColumnDefinition Width="2"/>
+                  <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <controls:HeaderControl Grid.Column="0" Title="Tag Collections" Padding="0">
                   <Grid RowDefinitions="Auto, *" ColumnDefinitions="*, *">
@@ -250,7 +252,37 @@
                   </Grid>
                 </controls:HeaderControl>
                 <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
-                <controls:HeaderControl Grid.Column="2" Title="Tags Currently in the Project" Padding="0">
+                <controls:HeaderControl Grid.Column="2" Title="Most Recent Tags" Padding="0">
+                  <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                HorizontalScrollBarVisibility="Disabled"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch">
+                    <ItemsControl ItemsSource="{Binding RecentTags}">
+                      <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                          <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                      </ItemsControl.ItemsPanel>
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                          <Border Classes="tag" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                              <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.SelectedImage.AddTagIfNotExistsCommand}" CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal">
+                                  <TextBlock Text="{Binding}"/>
+                                  <TextBlock Margin="5,0,0,0" Text="{Binding Count}"/>
+                                </StackPanel>
+                              </Button>
+                            </StackPanel>
+                          </Border>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </ScrollViewer>
+                </controls:HeaderControl>
+                <GridSplitter Grid.Column="3" Width="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
+                
+                <controls:HeaderControl Grid.Column="4" Title="Tags Currently in the Project" Padding="0">
                   <ScrollViewer VerticalScrollBarVisibility="Visible"
                                 HorizontalScrollBarVisibility="Disabled"
                                 HorizontalAlignment="Stretch"

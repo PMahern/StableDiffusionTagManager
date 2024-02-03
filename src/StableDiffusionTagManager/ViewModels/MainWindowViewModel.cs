@@ -317,7 +317,7 @@ namespace StableDiffusionTagManager.ViewModels
             if (webps.Any())
             {
                 var messageBoxStandardWindow = MessageBoxManager
-                                .GetMessageBoxStandard("Unsuppoted Image Formats Detected",
+                                .GetMessageBoxStandard("Unsupported Image Formats Detected",
                                                          "This tool only supports JPG and PNG image file formats, webp images can be automatically converted and the originals moved to the archive subdirectory, would you like to convert all webp images to png now?",
                                                          ButtonEnum.YesNo,
                                                          Icon.Question);
@@ -427,6 +427,11 @@ namespace StableDiffusionTagManager.ViewModels
                         ImagesWithTags = new(FolderTagSets.TagsSets.Select(tagSet => new ImageWithTagsViewModel(tagSet.ImageFile, tagSet.TagSet, ImageDirtyHandler))
                                         .OrderBy(iwt => iwt.FirstNumberedChunk)
                                         .ThenBy(iwt => iwt.SecondNumberedChunk));
+
+                        foreach (var item in ImagesWithTags)
+                        {
+                            item.TagEntered += UpdateRecentTags;
+                        }
 
                         if (projFolder)
                         {
@@ -696,9 +701,20 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
+        private ObservableCollection<string> recentTags = new ObservableCollection<string>();
+        public ObservableCollection<string> RecentTags { get => recentTags; set { recentTags = value; OnPropertyChanged(); } }
+
         private ObservableCollection<TagWithCountViewModel> tagCounts = new ObservableCollection<TagWithCountViewModel>();
         public ObservableCollection<TagWithCountViewModel> TagCounts { get => tagCounts; set { tagCounts = value; OnPropertyChanged(); } }
 
+        public void UpdateRecentTags(string recentTag)
+        {
+            if(recentTag != "")
+            {
+                recentTags.Remove(recentTag);
+                recentTags.Insert(0, recentTag);
+            }
+        }
 
         private PixelSize? targetImageSize;
         public PixelSize? TargetImageSize
@@ -1155,6 +1171,7 @@ namespace StableDiffusionTagManager.ViewModels
             newFilename = Path.Combine(openFolder, $"{newFilename}.png");
             image.Save(newFilename);
             var newImageViewModel = new ImageWithTagsViewModel(image, newFilename, ImageDirtyHandler, tags);
+            newImageViewModel.TagEntered += this.UpdateRecentTags;
             if (tags != null)
             {
                 var set = new TagSet(Path.Combine(openFolder, newImageViewModel.GetTagsFileName()), tags);
@@ -1176,7 +1193,9 @@ namespace StableDiffusionTagManager.ViewModels
         public async Task ReviewComicPanels(List<Bitmap> panels)
         {
             ImageReviewDialog dialog = new ImageReviewDialog();
-            dialog.Images = panels.Select(p => new ImageReviewViewModel(p)).ToObservableCollection();
+            dialog.Images = panels.Select(p => new ImageReviewViewModel(p))
+                                  .ToObservableCollection();
+
             dialog.ReviewMode = ImageReviewDialogMode.MultiSelect;
             dialog.Title = "Select Images to Keep";
 

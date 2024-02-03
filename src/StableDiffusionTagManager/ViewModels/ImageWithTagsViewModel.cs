@@ -78,8 +78,8 @@ namespace StableDiffusionTagManager.ViewModels
             tagsDirty = true;
         }
 
-        public Action<string, string>? TagChanged;
         public Action<string>? TagRemoved;
+        public Action<string>? TagEntered;
 
         private Bitmap? imageSource;
         public Bitmap ImageSource
@@ -251,12 +251,14 @@ namespace StableDiffusionTagManager.ViewModels
         private void TagChangedHandler(string arg1, string arg2)
         {
             tagsDirty = true;
+            TagEntered?.Invoke(arg2);
         }
 
         internal void InsertTag(int index, TagViewModel newTag)
         {
             newTag.TagChanged += TagChangedHandler;
             tags.Insert(index, newTag);
+            TagEntered?.Invoke(newTag.Tag);
         }
 
         internal void AddTag(TagViewModel newTag)
@@ -265,6 +267,7 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 newTag.TagChanged += TagChangedHandler;
                 tags.Add(newTag);
+                TagEntered?.Invoke(newTag.Tag);
             }
         }
 
@@ -273,6 +276,7 @@ namespace StableDiffusionTagManager.ViewModels
             var tag = tags[index];
             tag.TagChanged -= TagChangedHandler;
             tags.RemoveAt(index);
+            TagRemoved?.Invoke(tag.Tag);
         }
 
         internal void AddTagIfNotExists(TagViewModel tagViewModel)
@@ -280,7 +284,14 @@ namespace StableDiffusionTagManager.ViewModels
             if (!Tags.Any(t => t.Tag == tagViewModel.Tag))
             {
                 AddTag(tagViewModel);
+                TagEntered?.Invoke(tagViewModel.Tag);
             }
+        }
+
+        [RelayCommand]
+        public void AddTagIfNotExists(string tag)
+        {
+            this.AddTagIfNotExists(new TagViewModel(tag));
         }
 
         internal void ApplyTagOrdering<TKey>(Func<string, TKey> orderBy)
