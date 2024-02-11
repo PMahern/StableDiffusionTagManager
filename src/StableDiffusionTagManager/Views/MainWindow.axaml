@@ -281,7 +281,6 @@
                   </ScrollViewer>
                 </controls:HeaderControl>
                 <GridSplitter Grid.Column="3" Width="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
-                
                 <controls:HeaderControl Grid.Column="4" Title="Tags Currently in the Project" Padding="0">
                   <ScrollViewer VerticalScrollBarVisibility="Visible"
                                 HorizontalScrollBarVisibility="Disabled"
