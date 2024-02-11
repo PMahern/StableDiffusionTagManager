@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace StableDiffusionTagManager.Converters
 {
-    internal class ColorBrushConverter : IValueConverter
+    public class ColorBrushConverter : IValueConverter
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {

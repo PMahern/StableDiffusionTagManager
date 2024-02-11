@@ -16,13 +16,8 @@
   </UserControl.Resources>
   <Grid DataContext="{Binding ElementName=ThisControl}">
     <DockPanel>
-      <Grid Classes="toolbar" DockPanel.Dock="Top">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="Auto" />
-          <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Horizontal" Classes="toolbar" Grid.Column="0">
+      <Grid Classes="toolbar" DockPanel.Dock="Left">
+        <StackPanel Orientation="Vertical" Classes="toolbar" Grid.Column="0" VerticalAlignment="Top">
           <ToggleButton Command="{Binding SetSelectModeCommand}" IsChecked="{Binding CurrentMode, Converter={StaticResource ResourceKey=modeConverter}, ConverterParameter={x:Static controls:ImageViewerMode.Selection}, Mode=OneWay}" ToolTip.Tip="Selection Mode">
             <mi:MaterialIcon Kind="Select" Width="20" Height="20"/>
           </ToggleButton>
@@ -50,12 +45,18 @@
           <Button Command="{Binding ConvertAlphaCommand}" IsVisible="{Binding ShowConvertAlphaButton}" ToolTip.Tip="Convert image alpha">
             <mi:MaterialIcon Kind="CompareRemove"/>
           </Button>
-          
           <Button Command="{Binding SaveCommand}" IsVisible="{Binding ShowSaveButton}" IsEnabled="{Binding IsPainted, ElementName=ImageBox}" ToolTip.Tip="Save Changes">
             <mi:MaterialIcon Kind="FloppyDisc"/>
           </Button>
         </StackPanel>
-        <StackPanel Orientation="Horizontal"  Classes="toolbar" Grid.Column="2" IsVisible="{Binding CurrentMode, Converter={StaticResource ResourceKey=modeConverter}, ConverterParameter={x:Static controls:ImageViewerMode.Selection}, Mode=OneWay}">
+      </Grid>
+      <Grid Classes="toolbar" DockPanel.Dock="Top">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Horizontal"  Classes="toolbar" Grid.Column="1" IsVisible="{Binding CurrentMode, Converter={StaticResource ResourceKey=modeConverter}, ConverterParameter={x:Static controls:ImageViewerMode.Selection}, Mode=OneWay}">
           <Button Command="{Binding CropSelectionToTargetImageSize}" ToolTip.Tip="Crop Selection To Target Size">
             <mi:MaterialIcon Kind="CropSquare" />
           </Button>

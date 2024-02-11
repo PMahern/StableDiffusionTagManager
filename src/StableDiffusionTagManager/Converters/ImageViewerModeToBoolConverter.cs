@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace StableDiffusionTagManager.Converters
 {
-    internal class ImageViewerModeToBoolConverter : IValueConverter
+    public class ImageViewerModeToBoolConverter : IValueConverter
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
