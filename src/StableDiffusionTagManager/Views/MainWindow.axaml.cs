@@ -194,10 +194,14 @@ namespace StableDiffusionTagManager.Views
         {
             var ac = sender as TagAutoCompleteBox;
             //Doesn't seem like bindings to IsFocused works, this is a workaround
-            ac.GotFocus += (sender, e) => { (ac.DataContext as TagViewModel).IsFocused = true; };
-            ac.LostFocus += (sender, e) => { (ac.DataContext as TagViewModel).IsFocused = false; };
+            var viewModel = ac?.DataContext as TagViewModel;
+            if(viewModel != null)
+            {
+                ac.GotFocus += (sender, e) => { viewModel.IsFocused = true; };
+                ac.LostFocus += (sender, e) => { viewModel.IsFocused = false; };
+            }
 
-            if (focusTag != null && focusTag == (ac.DataContext as TagViewModel))
+            if (focusTag != null && focusTag == viewModel)
             {
                 Dispatcher.UIThread.Post(() => ac?.Focus());
                 focusTag = null;
