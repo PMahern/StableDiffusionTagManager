@@ -844,6 +844,7 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 destFileWithoutExtension = Path.Combine(destDirectory, $"{Path.GetFileNameWithoutExtension(targetFile)}_{i.ToString("00")}");
                 destFile = $"{destFileWithoutExtension}{Path.GetExtension(targetFile)}";
+                ++i;
             }
 
             File.Move(Path.Combine(targetFolder, targetFile), destFile);
