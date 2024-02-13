@@ -1,10 +1,16 @@
-﻿using System.Collections.ObjectModel;
+﻿using StableDiffusionTagManager.Collections;
+using System.Collections.ObjectModel;
 
 namespace StableDiffusionTagManager.ViewModels
 {
     public  class TagCountLetterGroupViewModel
     {
-        public char Letter { get; set; } = 'A';
-        public ObservableCollection<TagWithCountViewModel> TagCounts { get; set; } = new ObservableCollection<TagWithCountViewModel>();
+        public TagCountLetterGroupViewModel(char letter)
+        {
+            Letter = letter;
+        }
+
+        public char Letter { get; }
+        public OrderedSetObservableCollection<TagWithCountViewModel> TagCounts { get; set; } = new OrderedSetObservableCollection<TagWithCountViewModel>((l, r) => l.Tag.CompareTo(r.Tag));
     }
 }

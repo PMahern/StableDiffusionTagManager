@@ -24,6 +24,8 @@ using ImageUtil;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SdWebUiApi;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using StableDiffusionTagManager.Collections;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -676,8 +678,8 @@ namespace StableDiffusionTagManager.ViewModels
         private ObservableCollection<string> recentTags = new ObservableCollection<string>();
         public ObservableCollection<string> RecentTags { get => recentTags; set { recentTags = value; OnPropertyChanged(); } }
 
-        private ObservableCollection<TagCountLetterGroupViewModel> tagCounts = new ObservableCollection<TagCountLetterGroupViewModel>();
-        public ObservableCollection<TagCountLetterGroupViewModel> TagCounts { get => tagCounts; set { tagCounts = value; OnPropertyChanged(); } }
+        private OrderedSetObservableCollection<TagCountLetterGroupViewModel> tagCounts = new OrderedSetObservableCollection<TagCountLetterGroupViewModel>((l, r) => l.Letter.CompareTo(r.Letter));
+        public OrderedSetObservableCollection<TagCountLetterGroupViewModel> TagCounts { get => tagCounts; set { tagCounts = value; OnPropertyChanged(); } }
 
         // This is set to false when certain processes are running htat affect large sets of tags, instead of updating the
         // counts on the fly we can just call UpdateTagCounts() to reinitialize the tag counts
@@ -690,16 +692,40 @@ namespace StableDiffusionTagManager.ViewModels
                 recentTags.Remove(addedTag);
                 recentTags.Insert(0, addedTag);
 
+                var firstLetter = Char.ToUpper(addedTag[0]);
                 if (!TagCountDictionary.ContainsKey(addedTag))
                 {
                     TagCountDictionary[addedTag] = 1;
+
+                    var group = TagCounts.FirstOrDefault(tg => tg.Letter == firstLetter);
+                    var vm = new TagWithCountViewModel(this)
+                    {
+                        Tag = addedTag,
+                        Count = 1
+                    };
+
+                    if (group == null)
+                    {
+                        group = new TagCountLetterGroupViewModel(firstLetter);
+         
+
+                        TagCounts.Add(group);
+                    }
+
+                    group.TagCounts.Add(new TagWithCountViewModel(this)
+                    {
+                        Tag = addedTag,
+                        Count = 1
+                    });
                 }
                 else
                 {
                     TagCountDictionary[addedTag]++;
-                }
 
-                UpdateTagCountsObservable();
+                    var group = TagCounts.First(tg => tg.Letter == firstLetter);
+                    var vm = group.TagCounts.First(tc => tc.Tag == addedTag);
+                    vm.Count = TagCountDictionary[addedTag];
+                }
             }
         }
 
@@ -714,12 +740,19 @@ namespace StableDiffusionTagManager.ViewModels
                 {
                     TagCountDictionary[removedTag]--;
 
+                    var firstLetter = Char.ToUpper(removedTag[0]);
+                    var group = TagCounts.First(tg => tg.Letter == firstLetter);
+                    var vm = group.TagCounts.First(tc => tc.Tag == removedTag);
+
                     if (TagCountDictionary[removedTag] == 0)
                     {
                         TagCountDictionary.Remove(removedTag);
+                        group.TagCounts.Remove(vm);
+                    } 
+                    else
+                    {
+                        vm.Count = TagCountDictionary[removedTag];
                     }
-
-                    UpdateTagCountsObservable();
                 }
             }
         }
@@ -799,15 +832,14 @@ namespace StableDiffusionTagManager.ViewModels
         public void UpdateTagCountsObservable()
         {
             TagCounts = TagCountDictionary.GroupBy(t => Char.ToUpper(t.Key[0]))
-                                          .Select(pair => new TagCountLetterGroupViewModel
+                                          .Select(pair => new TagCountLetterGroupViewModel(pair.Key)
                                           {
-                                              Letter = pair.Key,
                                               TagCounts = pair.Select(innerpair => new TagWithCountViewModel(this)
                                               {
                                                   Tag = innerpair.Key,
                                                   Count = innerpair.Value
-                                              }).ToObservableCollection()
-                                          }).ToObservableCollection();
+                                              }).ToOrderedSetObservableCollection((l, r) => l.Tag.CompareTo(r.Tag))
+                                          }).ToOrderedSetObservableCollection((l, r) => l.Letter.CompareTo(r.Letter));
         }
 
         public void MoveTagLeft(TagViewModel tag)
