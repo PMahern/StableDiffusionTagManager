@@ -128,9 +128,6 @@ namespace StableDiffusionTagManager.ViewModels
             return false;
         }
 
-
-        List<string>? tagCache;
-
         ImageWithTagsViewModel? selectedImage;
         public ImageWithTagsViewModel? SelectedImage
         {
@@ -139,45 +136,8 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 if (selectedImage != value)
                 {
-                    if (tagCache != null && selectedImage != null)
-                    {
-                        var newTags = selectedImage.Tags.Select(t => t.Tag);
-
-                        var removedTags = tagCache.Except(newTags);
-                        var addedTags = newTags.Except(tagCache);
-
-                        foreach (var removedTag in removedTags)
-                        {
-                            if (TagCountDictionary.ContainsKey(removedTag))
-                            {
-                                var vm = TagCountDictionary[removedTag];
-                                vm.Count -= 1;
-                                if (vm.Count == 0)
-                                {
-                                    TagCountDictionary.Remove(removedTag);
-                                    TagCounts.Remove(vm);
-                                }
-                            }
-                        }
-
-                        foreach (var addedTag in addedTags)
-                        {
-                            if (TagCountDictionary.ContainsKey(addedTag))
-                            {
-                                TagCountDictionary[addedTag].Count += 1;
-                            }
-                            else
-                            {
-                                var added = new TagWithCountViewModel(this) { Tag = addedTag, Count = 1 };
-                                TagCountDictionary[addedTag] = new TagWithCountViewModel(this) { Tag = addedTag, Count = 1 };
-                                TagCounts.Add(added);
-                            }
-                        }
-                    }
-
                     selectedImage = value;
 
-                    tagCache = selectedImage?.Tags.Select(t => t.Tag).ToList();
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(IsImageSelected));
                 }
@@ -210,7 +170,7 @@ namespace StableDiffusionTagManager.ViewModels
 
         public void RemoveTagCollection(TagCollectionViewModel collection)
         {
-            if(this.TagCollections != null)
+            if (this.TagCollections != null)
             {
                 this.TagCollections.Remove(collection);
                 if (this.EditTagCollectionTarget == collection)
@@ -430,7 +390,8 @@ namespace StableDiffusionTagManager.ViewModels
 
                         foreach (var item in ImagesWithTags)
                         {
-                            item.TagEntered += UpdateRecentTags;
+                            item.TagEntered += TagAdded;
+                            item.TagRemoved += TagRemoved;
                         }
 
                         if (projFolder)
@@ -485,7 +446,7 @@ namespace StableDiffusionTagManager.ViewModels
 
                 if (OpenProject != null)
                 {
-                    if(TagCollections != null)
+                    if (TagCollections != null)
                     {
                         OpenProject.TagCollections = TagCollections.Select(tc => new TagCollection()
                         {
@@ -497,7 +458,7 @@ namespace StableDiffusionTagManager.ViewModels
                     {
                         OpenProject.TagCollections.Clear();
                     }
-                    
+
                     OpenProject.Save();
                 }
             }
@@ -589,6 +550,8 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async Task AddTagToStartOfAllImages()
         {
+            _updateTagCounts = false;
+
             if (ImagesWithTags != null)
             {
                 var dialog = new TagSearchDialog();
@@ -606,11 +569,14 @@ namespace StableDiffusionTagManager.ViewModels
                 }
             }
 
+            _updateTagCounts = true;
+
             UpdateTagCounts();
         }
 
         public async void ReplaceTagInAllImages(string target)
         {
+            _updateTagCounts = false;
             if (ImagesWithTags != null)
             {
                 var dialog = new TagSearchDialog();
@@ -625,6 +591,7 @@ namespace StableDiffusionTagManager.ViewModels
                     }
                 }
             }
+            _updateTagCounts = true;
             UpdateTagCounts();
         }
 
@@ -647,6 +614,8 @@ namespace StableDiffusionTagManager.ViewModels
         {
             if (ImagesWithTags != null)
             {
+                _updateTagCounts = false;
+
                 foreach (var image in ImagesWithTags)
                 {
                     var toRemove = image.Tags.Where(t => t.Tag == tag).ToList();
@@ -655,6 +624,9 @@ namespace StableDiffusionTagManager.ViewModels
                         image.RemoveTag(tagToRemove);
                     }
                 }
+
+                _updateTagCounts = true;
+
                 UpdateTagCounts();
             }
         }
@@ -707,12 +679,48 @@ namespace StableDiffusionTagManager.ViewModels
         private ObservableCollection<TagWithCountViewModel> tagCounts = new ObservableCollection<TagWithCountViewModel>();
         public ObservableCollection<TagWithCountViewModel> TagCounts { get => tagCounts; set { tagCounts = value; OnPropertyChanged(); } }
 
-        public void UpdateRecentTags(string recentTag)
+        // This is set to false when certain processes are running htat affect large sets of tags, instead of updating the
+        // counts on the fly we can just call UpdateTagCounts() to reinitialize the tag counts
+        private bool _updateTagCounts = true;
+
+        public void TagAdded(string addedTag)
         {
-            if(recentTag != "")
+            if (_updateTagCounts && addedTag != "")
             {
-                recentTags.Remove(recentTag);
-                recentTags.Insert(0, recentTag);
+                recentTags.Remove(addedTag);
+                recentTags.Insert(0, addedTag);
+
+                if (!TagCountDictionary.ContainsKey(addedTag))
+                {
+                    TagCountDictionary[addedTag] = 1;
+                }
+                else
+                {
+                    TagCountDictionary[addedTag]++;
+                }
+
+                UpdateTagCountsObservable();
+            }
+        }
+
+        public void TagRemoved(string removedTag)
+        {
+            if (_updateTagCounts && removedTag != "")
+            {
+                recentTags.Remove(removedTag);
+                recentTags.Insert(0, removedTag);
+
+                if (TagCountDictionary.ContainsKey(removedTag))
+                {
+                    TagCountDictionary[removedTag]--;
+
+                    if (TagCountDictionary[removedTag] == 0)
+                    {
+                        TagCountDictionary.Remove(removedTag);
+                    }
+
+                    UpdateTagCountsObservable();
+                }
             }
         }
 
@@ -772,7 +780,7 @@ namespace StableDiffusionTagManager.ViewModels
         }
         #endregion
 
-        private Dictionary<string, TagWithCountViewModel> TagCountDictionary = new Dictionary<string, TagWithCountViewModel>();
+        private Dictionary<string, int> TagCountDictionary = new Dictionary<string, int>();
 
 
         public void UpdateTagCounts()
@@ -782,22 +790,19 @@ namespace StableDiffusionTagManager.ViewModels
                 TagCountDictionary = ImagesWithTags.SelectMany(i => i.Tags.Select(t => t.Tag).Where(t => t != ""))
                         .GroupBy(t => t)
                         .OrderBy(t => t.Key)
-                        .ToDictionary(g => g.Key, g => new TagWithCountViewModel(this) { Tag = g.Key, Count = g.Count() });
-                //.Select(pair => new TagWithCountViewModel(this)
-                //{
-                //    Tag = pair.Key,
-                //    Count = pair.Count()
-                //}).OrderBy(tc => tc.Tag)); ;
+                        .ToDictionary(g => g.Key, g => g.Count());
 
-                tagCache = selectedImage?.Tags.Select(t => t.Tag).ToList();
                 UpdateTagCountsObservable();
             }
         }
 
         public void UpdateTagCountsObservable()
         {
-            TagCounts = new ObservableCollection<TagWithCountViewModel>(TagCountDictionary
-                                                                            .Select(pair => pair.Value));
+            TagCounts = TagCountDictionary.Select(pair => new TagWithCountViewModel(this)
+            {
+                Tag = pair.Key,
+                Count = pair.Value
+            }).ToObservableCollection();
         }
 
         public void MoveTagLeft(TagViewModel tag)
@@ -1043,7 +1048,7 @@ namespace StableDiffusionTagManager.ViewModels
 
                     var viewer = new ImageReviewDialog();
                     viewer.Title = "Review image with removed background";
-                    viewer.Images = new ObservableCollection<ImageReviewViewModel>(){ new ImageReviewViewModel(imageResult) };
+                    viewer.Images = new ObservableCollection<ImageReviewViewModel>() { new ImageReviewViewModel(imageResult) };
                     viewer.ReviewMode = ImageReviewDialogMode.SingleSelect;
                     await ShowDialog(viewer);
 
@@ -1105,6 +1110,8 @@ namespace StableDiffusionTagManager.ViewModels
         {
             if (ImagesWithTags != null && ImagesWithTags.Count > 0)
             {
+                _updateTagCounts = false;
+
                 ShowProgressIndicator = true;
                 ProgressIndicatorMax = ImagesWithTags.Count();
                 ProgressIndicatorProgress = 0;
@@ -1129,6 +1136,8 @@ namespace StableDiffusionTagManager.ViewModels
                     ++ProgressIndicatorProgress;
                 }
 
+                _updateTagCounts = true;
+
                 UpdateTagCounts();
 
                 ShowProgressIndicator = false;
@@ -1140,7 +1149,7 @@ namespace StableDiffusionTagManager.ViewModels
         {
             if (ImagesWithTags != null && ImagesWithTags.Count > 0)
             {
-                foreach(var tag in MetaTags.Tags)
+                foreach (var tag in MetaTags.Tags)
                 {
                     RemoveTagFromAllImages(tag);
                 }
@@ -1172,12 +1181,15 @@ namespace StableDiffusionTagManager.ViewModels
             newFilename = Path.Combine(openFolder, $"{newFilename}.png");
             image.Save(newFilename);
             var newImageViewModel = new ImageWithTagsViewModel(image, newFilename, ImageDirtyHandler, tags);
-            newImageViewModel.TagEntered += this.UpdateRecentTags;
+            newImageViewModel.TagEntered += this.TagAdded;
+            newImageViewModel.TagRemoved += this.TagRemoved;
+
             if (tags != null)
             {
                 var set = new TagSet(Path.Combine(openFolder, newImageViewModel.GetTagsFileName()), tags);
                 set.WriteFile();
             }
+
             ImagesWithTags.Insert(index + 1, newImageViewModel);
         }
 
@@ -1405,7 +1417,7 @@ namespace StableDiffusionTagManager.ViewModels
 
                         await Task.Delay(1);
                     }
-                    
+
                     ShowProgressIndicator = false;
                 }
             }
