@@ -676,8 +676,8 @@ namespace StableDiffusionTagManager.ViewModels
         private ObservableCollection<string> recentTags = new ObservableCollection<string>();
         public ObservableCollection<string> RecentTags { get => recentTags; set { recentTags = value; OnPropertyChanged(); } }
 
-        private ObservableCollection<TagWithCountViewModel> tagCounts = new ObservableCollection<TagWithCountViewModel>();
-        public ObservableCollection<TagWithCountViewModel> TagCounts { get => tagCounts; set { tagCounts = value; OnPropertyChanged(); } }
+        private ObservableCollection<TagCountLetterGroupViewModel> tagCounts = new ObservableCollection<TagCountLetterGroupViewModel>();
+        public ObservableCollection<TagCountLetterGroupViewModel> TagCounts { get => tagCounts; set { tagCounts = value; OnPropertyChanged(); } }
 
         // This is set to false when certain processes are running htat affect large sets of tags, instead of updating the
         // counts on the fly we can just call UpdateTagCounts() to reinitialize the tag counts
@@ -798,11 +798,16 @@ namespace StableDiffusionTagManager.ViewModels
 
         public void UpdateTagCountsObservable()
         {
-            TagCounts = TagCountDictionary.Select(pair => new TagWithCountViewModel(this)
-            {
-                Tag = pair.Key,
-                Count = pair.Value
-            }).ToObservableCollection();
+            TagCounts = TagCountDictionary.GroupBy(t => Char.ToUpper(t.Key[0]))
+                                          .Select(pair => new TagCountLetterGroupViewModel
+                                          {
+                                              Letter = pair.Key,
+                                              TagCounts = pair.Select(innerpair => new TagWithCountViewModel(this)
+                                              {
+                                                  Tag = innerpair.Key,
+                                                  Count = innerpair.Value
+                                              }).ToObservableCollection()
+                                          }).ToObservableCollection();
         }
 
         public void MoveTagLeft(TagViewModel tag)

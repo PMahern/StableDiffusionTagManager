@@ -289,27 +289,41 @@
                     <ItemsControl ItemsSource="{Binding TagCounts}">
                       <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                          <WrapPanel Orientation="Horizontal" Margin="5"/>
+                          <StackPanel Orientation="Vertical" Margin="5"/>
                         </ItemsPanelTemplate>
                       </ItemsControl.ItemsPanel>
                       <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                          <Border Classes="tag">
-                            <StackPanel Orientation="Horizontal">
-                              <Button Command="{Binding AddTagCommand}">
-                                <StackPanel Orientation="Horizontal">
-                                  <TextBlock Text="{Binding Tag}"/>
-                                  <TextBlock Margin="5,0,0,0" Text="{Binding Count}"/>
-                                </StackPanel>
-                              </Button>
-                              <Button Command="{Binding ReplaceTagInAllImagesCommand}" ToolTip.Tip="Replace all instances of tag">
-                                <mi:MaterialIcon Kind="Update"/>
-                              </Button>
-                              <Button Command="{Binding RemoveTagFromAllImagesCommand}" ToolTip.Tip="Remove all instances of tag">
-                                <mi:MaterialIcon Kind="Delete"/>
-                              </Button>
-                            </StackPanel>
-                          </Border>
+                          <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding Letter}" FontSize="20"/>
+                            <ItemsControl ItemsSource="{Binding TagCounts}">
+                              <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                  <WrapPanel Orientation="Horizontal" Margin="5"/>
+                                </ItemsPanelTemplate>
+                              </ItemsControl.ItemsPanel>
+                              <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                  <Border Classes="tag">
+                                    <StackPanel Orientation="Horizontal">
+                                      <Button Command="{Binding AddTagCommand}">
+                                        <StackPanel Orientation="Horizontal">
+                                          <TextBlock Text="{Binding Tag}"/>
+                                          <TextBlock Margin="5,0,0,0" Text="{Binding Count}"/>
+                                        </StackPanel>
+                                      </Button>
+                                      <Button Command="{Binding ReplaceTagInAllImagesCommand}" ToolTip.Tip="Replace all instances of tag">
+                                        <mi:MaterialIcon Kind="Update"/>
+                                      </Button>
+                                      <Button Command="{Binding RemoveTagFromAllImagesCommand}" ToolTip.Tip="Remove all instances of tag">
+                                        <mi:MaterialIcon Kind="Delete"/>
+                                      </Button>
+                                    </StackPanel>
+                                  </Border>
+                                </DataTemplate>
+                              </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                          </StackPanel>
                         </DataTemplate>
                       </ItemsControl.ItemTemplate>
                     </ItemsControl>
