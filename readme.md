@@ -1,4 +1,4 @@
-![image](https://github.com/PMahern/StableDiffusionTagManager/assets/18010074/95a4408b-634f-4f97-bcc9-127d98aaea3e)# Stable Diffusion Tag Manager
+# Stable Diffusion Tag Manager
 
 Stable Diffusion Tag Manager is a simple desktop GUI application for managing an image set for training/refining a stable diffusion (or other) text-to-image generation model.  The main goal of this program is to combine several common tasks that are needed to prepare and tag images before feeding them into a set of tools like [these scripts](https://github.com/kohya-ss/sd-scripts) by [kohya-ss](https://github.com/bmaltais/kohya_ss).
 
