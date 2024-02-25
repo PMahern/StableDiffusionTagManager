@@ -24,7 +24,6 @@ using ImageUtil;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SdWebUiApi;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using StableDiffusionTagManager.Collections;
 
 namespace StableDiffusionTagManager.ViewModels
