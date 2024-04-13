@@ -16,7 +16,25 @@ The project is currently developed in Visual Studio 2022. Building it is pretty 
 - Clone the repo
 - Get the latest submodules by executing the command `git submodule update --init --recursive` in the repo root (this is for kumiko).
 - Build the solution `src/StableDiffusionTagManager.sln`.
-  
+
+## Running the application without building
+
+Grab the corresponding release for your supported os [here](https://github.com/PMahern/StableDiffusionTagManager/releases). Then you'll need to extract the archive to whatever folder you want the application in. From there there's different steps based on which os you're running.
+
+###Windows
+You simply need to run the StableDiffusionTagManager.exe (you may have to go to the exe's properties and uncheck the checkbox indicating the file was downloaded from the internet) executable. Windows smartscreen may pop up telling you the file is unsafe, unfortunately the way for me to get around this is to buy a quite expensive code signing certificate which I'm not willing to do at present.
+
+###Linux
+You'll need to add the execute permission to the StableDiffusionTagManager file (which is the executable). This can be done by running "sudo chmod +x StableDiffusionTagManager" in a terminal window in the Publish folder of the extracted  archive. After granting the execute permission you can run the application in the command line by running ./StableDiffusionTagManager or you can create a shortcut for it.
+
+###Mac
+On Mac it's a bit more tedious of a process, you need to remove the com.apple.quarantine attribute from several files in the archive's publish folder and then you can run the StableDiffusionTabManager either via a shortcut or running ./StableDiffusionTabManager in the publish folder. The files you need to remove this attribute from are the following: StableDiffusionTagManager, libSkiaSharp.dylib, libHarfBuzzSharp.dylib, and libAvaloniaNative.dylib. The commands would look like the following:
+
+xattr -d com.appl.quarantine StableDiffusionTagManager
+xattr -d com.appl.quarantine libSkiaSharp.dylib
+xattr -d com.appl.quarantine libHarfBuzzSharp.dylib
+xattr -d com.appl.quarantine libAvaloniaNative.dylib
+
 ## Usage
 
 Users can load a folder of images with corresponding tag files, when a folder is opened for the first time they will be prompted to create a project. Projects are not a requirement but allow some settings that are global to the image set.
