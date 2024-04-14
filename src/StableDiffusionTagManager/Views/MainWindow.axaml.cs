@@ -32,6 +32,7 @@ namespace StableDiffusionTagManager.Views
             Closing += ClosingHandler;
         }
 
+
         private void ClosingHandler(object? sender, CancelEventArgs e)
         {
             var viewModel = this.DataContext as MainWindowViewModel;
