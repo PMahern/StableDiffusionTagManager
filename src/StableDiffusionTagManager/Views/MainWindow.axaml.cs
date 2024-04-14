@@ -119,18 +119,6 @@ namespace StableDiffusionTagManager.Views
                     AddTagInFrontOfCurrentFocusedTag();
                 }                
 
-                if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.Right)
-                {
-                    e.Handled = true;
-                    FocusNextTag();
-                } 
-
-                if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.Left)
-                {
-                    e.Handled = true;
-                    FocusPreviousTag();
-                }
-
                 if ((e.KeyModifiers & KeyModifiers.Shift) > 0 && e.Key == Key.Delete)
                 {
                     e.Handled = true;
@@ -242,6 +230,16 @@ namespace StableDiffusionTagManager.Views
             }
         }
 
+        public void AddTagAfterCurrentFocusedTag()
+        {
+            var focusedTag = GetFocusedTag();
+            var viewModel = this.DataContext as MainWindowViewModel;
+            if (focusedTag != null)
+            {
+                viewModel?.AddTagAfterTag(focusedTag);
+            }
+        }
+
         public void MoveTagLeft()
         {
             var focusedTag = GetFocusedTag();
@@ -330,11 +328,24 @@ namespace StableDiffusionTagManager.Views
             var ac = tb?.GetVisualAncestors().OfType<TagAutoCompleteBox>().FirstOrDefault();
             if (ac != null)
             {
+                var autoCompletes = TagsList.GetVisualDescendants().OfType<TagAutoCompleteBox>().ToList();
+                var curIndex = autoCompletes.IndexOf(ac);
                 var tagModel = ac.DataContext as TagViewModel;
                 var viewModel = this.DataContext as MainWindowViewModel;
                 if (tagModel != null && viewModel != null)
                 {
                     viewModel.DeleteTagFromCurrentImage(tagModel);
+                }
+                autoCompletes = TagsList.GetVisualDescendants().OfType<TagAutoCompleteBox>().ToList();
+                if(autoCompletes.Any())
+                {
+                    if(autoCompletes.Count == curIndex)
+                    {
+                        autoCompletes.Last().Focus();
+                    } else
+                    {
+                        autoCompletes[curIndex].Focus();
+                    }
                 }
             }
         }
@@ -342,6 +353,28 @@ namespace StableDiffusionTagManager.Views
         public void TagEntryLostFocus(object sender, EventArgs e)
         {
 
+        }
+
+        public void TagEntryKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                AddTagAfterCurrentFocusedTag();
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Tab)
+            {
+                e.Handled = true;
+                if ((e.KeyModifiers & KeyModifiers.Shift) > 0)
+                {
+                    FocusPreviousTag();
+
+                }
+                else
+                {
+                    FocusNextTag();
+                }
+            }
         }
     }
 }

@@ -286,11 +286,23 @@ namespace StableDiffusionTagManager.ViewModels
                                                          Icon.Question);
                 if ((await ShowDialog(messageBoxStandardWindow)) == ButtonResult.Yes)
                 {
+                    var currentIndicatorStatus = ShowProgressIndicator;
+                    ShowProgressIndicator = true;
+                    ProgressIndicatorMax = webps.Count();
+                    ProgressIndicatorProgress = 0;
+                    ProgressIndicatorMessage = "Converting webps...";
+                    await Task.Delay(1);
+
                     foreach (var webp in webps)
                     {
                         ImageConverter.ConvertImageFileToPng(webp);
                         ArchiveImage(folder, webp);
+                        ProgressIndicatorProgress++;
+                        if ((ProgressIndicatorProgress % 25) == 0)
+                            await Task.Delay(1);
                     }
+
+                    ShowProgressIndicator = currentIndicatorStatus;
                 }
             }
         }
@@ -319,6 +331,11 @@ namespace StableDiffusionTagManager.ViewModels
 
         public async Task LoadFolder(string  folder)
         {
+            ShowProgressIndicator = true;
+            ProgressIndicatorMax = 100;
+            ProgressIndicatorProgress = 0;
+            ProgressIndicatorMessage = "Loading folder...";
+
             await CheckForAndConvertUnspportedImageFormats(folder);
 
             var projectPath = Path.Combine(folder, PROJECT_FOLDER_NAME);
@@ -348,6 +365,7 @@ namespace StableDiffusionTagManager.ViewModels
                     var pngs = Directory.EnumerateFiles(folder, "*.png").ToList();
                     var txts = Directory.EnumerateFiles(folder, "*.txt").ToList();
 
+
                     Directory.CreateDirectory(projectPath);
 
                     var project = new Project(projFile);
@@ -356,9 +374,17 @@ namespace StableDiffusionTagManager.ViewModels
                     var all = jpegs.Concat(pngs).Concat(txts).ToList();
                     if (renameImages)
                     {
+                        ProgressIndicatorMax = all.Count();
+                        ProgressIndicatorProgress = 0;
+                        ProgressIndicatorMessage = "Renaming images...";
+                        await Task.Delay(1);
+
                         foreach (var file in all)
                         {
                             File.Move(file, Path.Combine(projectPath, Path.GetFileName(file)));
+                            ProgressIndicatorProgress++;
+                            if((ProgressIndicatorProgress % 25) == 0)
+                                await Task.Delay(1);
                         }
 
                         var movedjpegs = Directory.EnumerateFiles(projectPath, "*.jpg").ToList();
@@ -367,6 +393,11 @@ namespace StableDiffusionTagManager.ViewModels
                         var imagesToCopy = movedjpegs.Concat(movedpngs).ToList();
 
                         int i = 1;
+
+                        ProgressIndicatorMax = imagesToCopy.Count();
+                        ProgressIndicatorProgress = 0;
+                        ProgressIndicatorMessage = "Copying image backups...";
+
                         foreach (var image in imagesToCopy)
                         {
                             var filename = i.ToString("00000");
@@ -378,16 +409,25 @@ namespace StableDiffusionTagManager.ViewModels
                                 File.Copy(matchingTagFile, Path.Combine(folder, $"{filename}.txt"));
                             }
                             project.AddBackedUpFileMap(Path.GetFileName(image), Path.GetFileName(newFileName));
-
+                            ProgressIndicatorProgress++;
+                            if ((ProgressIndicatorProgress % 25) == 0)
+                                await Task.Delay(1);
                             ++i;
                         }
                         project.Save();
                     }
                     else
                     {
+                        ProgressIndicatorMax = all.Count();
+                        ProgressIndicatorProgress = 0;
+                        ProgressIndicatorMessage = "Copying image backups...";
+
                         foreach (var file in all)
                         {
                             File.Copy(file, Path.Combine(projectPath, Path.GetFileName(file)));
+                            ProgressIndicatorProgress++;
+                            if ((ProgressIndicatorProgress % 25) == 0)
+                                await Task.Delay(1);
                         }
                     }
                 }
@@ -395,9 +435,24 @@ namespace StableDiffusionTagManager.ViewModels
 
             var FolderTagSets = new FolderTagSets(folder);
 
-            ImagesWithTags = new(FolderTagSets.TagsSets.Select(tagSet => new ImageWithTagsViewModel(tagSet.ImageFile, tagSet.TagSet, ImageDirtyHandler))
-                            .OrderBy(iwt => iwt.FirstNumberedChunk)
-                            .ThenBy(iwt => iwt.SecondNumberedChunk));
+            ProgressIndicatorMax = FolderTagSets.TagsSets.Count();
+            ProgressIndicatorProgress = 0;
+            ProgressIndicatorMessage = "Loading images...";
+            await Task.Delay(1);
+
+            var accum = new List<ImageWithTagsViewModel>();
+            foreach(var tagSet in FolderTagSets.TagsSets)
+            {
+                ProgressIndicatorProgress++;
+                accum.Add(new ImageWithTagsViewModel(tagSet.ImageFile, tagSet.TagSet, ImageDirtyHandler));
+                if ((ProgressIndicatorProgress % 25) == 0)
+                    await Task.Delay(1);
+            }
+
+            ImagesWithTags = accum
+                .OrderBy(iwt => iwt.FirstNumberedChunk)
+                .ThenBy(iwt => iwt.SecondNumberedChunk)
+                .ToObservableCollection();
 
             foreach (var item in ImagesWithTags)
             {
@@ -419,6 +474,8 @@ namespace StableDiffusionTagManager.ViewModels
 
             openFolder = folder;
             UpdateTagCounts();
+
+            ShowProgressIndicator = false;
         }
 
         private void UpdateProjectSettings()
@@ -492,6 +549,17 @@ namespace StableDiffusionTagManager.ViewModels
             if (index != -1)
             {
                 SelectedImage?.InsertTag(index, newTag);
+            }
+            FocusTagCallback?.Invoke(newTag);
+        }
+
+        public void AddTagAfterTag(TagViewModel tag)
+        {
+            var newTag = new TagViewModel("");
+            var index = SelectedImage?.Tags.IndexOf(tag) ?? -1;
+            if (index != -1)
+            {
+                SelectedImage?.InsertTag(index + 1, newTag);
             }
             FocusTagCallback?.Invoke(newTag);
         }

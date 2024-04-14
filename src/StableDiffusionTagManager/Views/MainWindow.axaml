@@ -159,7 +159,7 @@
                             <Border Classes="tag" DragDrop.AllowDrop="True">
                               <StackPanel Orientation="Horizontal" PointerPressed="TagDragStart" >
                                 <PathIcon Data="{StaticResource drag_regular}"/>
-                                <controls:TagAutoCompleteBox Text="{Binding Tag, Mode=TwoWay}" AttachedToVisualTree="AutoCompleteAttached"/>
+                                <controls:TagAutoCompleteBox Text="{Binding Tag, Mode=TwoWay}" KeyDown="TagEntryKeyDown" AttachedToVisualTree="AutoCompleteAttached"/>
                                 <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.SelectedImage.RemoveTagCommand}" CommandParameter="{Binding}">
                                   <mi:MaterialIcon Kind="Remove"/>
                                 </Button>
