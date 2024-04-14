@@ -24,7 +24,6 @@ using ImageUtil;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SdWebUiApi;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using StableDiffusionTagManager.Collections;
 
 namespace StableDiffusionTagManager.ViewModels
@@ -142,6 +141,8 @@ namespace StableDiffusionTagManager.ViewModels
 
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(IsImageSelected));
+                    AddTagToEndCommand?.NotifyCanExecuteChanged();
+                    AddTagToFrontCommand?.NotifyCanExecuteChanged();
                 }
             }
         }
@@ -310,109 +311,114 @@ namespace StableDiffusionTagManager.ViewModels
                     var pickedFolderPath = folderPickResult.First().TryGetLocalPath();
                     if (pickedFolderPath != null)
                     {
-                        await CheckForAndConvertUnspportedImageFormats(pickedFolderPath);
-
-                        var projectPath = Path.Combine(pickedFolderPath, PROJECT_FOLDER_NAME);
-                        var projFolder = Directory.Exists(projectPath);
-                        var projFile = Path.Combine(projectPath, PROJECT_FILE_NAME);
-
-                        if (!projFolder)
-                        {
-                            var messageBoxStandardWindow = MessageBoxManager
-                                    .GetMessageBoxStandard("Create Project?",
-                                                             "It appears you haven't created a project for this folder. Creating a project will back up all the current existing images and tag sets into a folder named .sdtmproj so you can restore them and will also let you set some properties on the project. Would you like to create a project now?",
-                                                             ButtonEnum.YesNo,
-                                                             Icon.Question);
-                            if ((await ShowDialog(messageBoxStandardWindow)) == ButtonResult.Yes)
-                            {
-                                projFolder = true;
-
-                                messageBoxStandardWindow = MessageBoxManager
-                                                            .GetMessageBoxStandard("Rename Images?",
-                                                                 "You can optionally rename all the images to have an increasing index instead of the current existing pattern.  Would you like to do this now?",
-                                                                 ButtonEnum.YesNo,
-                                                                 Icon.Question);
-
-                                var renameImages = (await ShowDialog(messageBoxStandardWindow) == ButtonResult.Yes);
-
-                                var jpegs = Directory.EnumerateFiles(pickedFolderPath, "*.jpg").ToList();
-                                var pngs = Directory.EnumerateFiles(pickedFolderPath, "*.png").ToList();
-                                var txts = Directory.EnumerateFiles(pickedFolderPath, "*.txt").ToList();
-
-                                Directory.CreateDirectory(projectPath);
-
-                                var project = new Project(projFile);
-                                project.ProjectUpdated = UpdateProjectSettings;
-
-                                var all = jpegs.Concat(pngs).Concat(txts).ToList();
-                                if (renameImages)
-                                {
-                                    foreach (var file in all)
-                                    {
-                                        File.Move(file, Path.Combine(projectPath, Path.GetFileName(file)));
-                                    }
-
-                                    var movedjpegs = Directory.EnumerateFiles(projectPath, "*.jpg").ToList();
-                                    var movedpngs = Directory.EnumerateFiles(projectPath, "*.png").ToList();
-                                    var movedtxts = Directory.EnumerateFiles(projectPath, "*.txt").ToList();
-                                    var imagesToCopy = movedjpegs.Concat(movedpngs).ToList();
-
-                                    int i = 1;
-                                    foreach (var image in imagesToCopy)
-                                    {
-                                        var filename = i.ToString("00000");
-                                        var newFileName = Path.Combine(pickedFolderPath, $"{filename}{Path.GetExtension(image)}");
-                                        File.Copy(image, newFileName);
-                                        var matchingTagFile = movedtxts.FirstOrDefault(f => Path.GetFileNameWithoutExtension(f) == Path.GetFileNameWithoutExtension(image));
-                                        if (matchingTagFile != null)
-                                        {
-                                            File.Copy(matchingTagFile, Path.Combine(pickedFolderPath, $"{filename}.txt"));
-                                        }
-                                        project.AddBackedUpFileMap(Path.GetFileName(image), Path.GetFileName(newFileName));
-
-                                        ++i;
-                                    }
-                                    project.Save();
-                                }
-                                else
-                                {
-                                    foreach (var file in all)
-                                    {
-                                        File.Copy(file, Path.Combine(projectPath, Path.GetFileName(file)));
-                                    }
-                                }
-                            }
-                        }
-
-                        var FolderTagSets = new FolderTagSets(pickedFolderPath);
-
-                        ImagesWithTags = new(FolderTagSets.TagsSets.Select(tagSet => new ImageWithTagsViewModel(tagSet.ImageFile, tagSet.TagSet, ImageDirtyHandler))
-                                        .OrderBy(iwt => iwt.FirstNumberedChunk)
-                                        .ThenBy(iwt => iwt.SecondNumberedChunk));
-
-                        foreach (var item in ImagesWithTags)
-                        {
-                            item.TagEntered += TagAdded;
-                            item.TagRemoved += TagRemoved;
-                        }
-
-                        if (projFolder)
-                        {
-                            OpenProject = new Project(projFile);
-                            OpenProject.ProjectUpdated += UpdateProjectSettings;
-                            UpdateProjectSettings();
-                        }
-
-                        if (OpenProject != null)
-                        {
-                            TagCollections = new ObservableCollection<TagCollectionViewModel>(OpenProject.TagCollections.Select(c => new TagCollectionViewModel(this, c.Name, c.Tags)));
-                        }
-
-                        openFolder = pickedFolderPath;
-                        UpdateTagCounts();
+                        await LoadFolder(pickedFolderPath);
                     }
                 }
             }
+        }
+
+        public async Task LoadFolder(string  folder)
+        {
+            await CheckForAndConvertUnspportedImageFormats(folder);
+
+            var projectPath = Path.Combine(folder, PROJECT_FOLDER_NAME);
+            var projFolder = Directory.Exists(projectPath);
+            var projFile = Path.Combine(projectPath, PROJECT_FILE_NAME);
+
+            if (!projFolder)
+            {
+                var messageBoxStandardWindow = MessageBoxManager
+                        .GetMessageBoxStandard("Create Project?",
+                                                 "It appears you haven't created a project for this folder. Creating a project will back up all the current existing images and tag sets into a folder named .sdtmproj so you can restore them and will also let you set some properties on the project. Would you like to create a project now?",
+                                                 ButtonEnum.YesNo,
+                                                 Icon.Question);
+                if ((await ShowDialog(messageBoxStandardWindow)) == ButtonResult.Yes)
+                {
+                    projFolder = true;
+
+                    messageBoxStandardWindow = MessageBoxManager
+                                                .GetMessageBoxStandard("Rename Images?",
+                                                     "You can optionally rename all the images to have an increasing index instead of the current existing pattern.  Would you like to do this now?",
+                                                     ButtonEnum.YesNo,
+                                                     Icon.Question);
+
+                    var renameImages = (await ShowDialog(messageBoxStandardWindow) == ButtonResult.Yes);
+
+                    var jpegs = Directory.EnumerateFiles(folder, "*.jpg").ToList();
+                    var pngs = Directory.EnumerateFiles(folder, "*.png").ToList();
+                    var txts = Directory.EnumerateFiles(folder, "*.txt").ToList();
+
+                    Directory.CreateDirectory(projectPath);
+
+                    var project = new Project(projFile);
+                    project.ProjectUpdated = UpdateProjectSettings;
+
+                    var all = jpegs.Concat(pngs).Concat(txts).ToList();
+                    if (renameImages)
+                    {
+                        foreach (var file in all)
+                        {
+                            File.Move(file, Path.Combine(projectPath, Path.GetFileName(file)));
+                        }
+
+                        var movedjpegs = Directory.EnumerateFiles(projectPath, "*.jpg").ToList();
+                        var movedpngs = Directory.EnumerateFiles(projectPath, "*.png").ToList();
+                        var movedtxts = Directory.EnumerateFiles(projectPath, "*.txt").ToList();
+                        var imagesToCopy = movedjpegs.Concat(movedpngs).ToList();
+
+                        int i = 1;
+                        foreach (var image in imagesToCopy)
+                        {
+                            var filename = i.ToString("00000");
+                            var newFileName = Path.Combine(folder, $"{filename}{Path.GetExtension(image)}");
+                            File.Copy(image, newFileName);
+                            var matchingTagFile = movedtxts.FirstOrDefault(f => Path.GetFileNameWithoutExtension(f) == Path.GetFileNameWithoutExtension(image));
+                            if (matchingTagFile != null)
+                            {
+                                File.Copy(matchingTagFile, Path.Combine(folder, $"{filename}.txt"));
+                            }
+                            project.AddBackedUpFileMap(Path.GetFileName(image), Path.GetFileName(newFileName));
+
+                            ++i;
+                        }
+                        project.Save();
+                    }
+                    else
+                    {
+                        foreach (var file in all)
+                        {
+                            File.Copy(file, Path.Combine(projectPath, Path.GetFileName(file)));
+                        }
+                    }
+                }
+            }
+
+            var FolderTagSets = new FolderTagSets(folder);
+
+            ImagesWithTags = new(FolderTagSets.TagsSets.Select(tagSet => new ImageWithTagsViewModel(tagSet.ImageFile, tagSet.TagSet, ImageDirtyHandler))
+                            .OrderBy(iwt => iwt.FirstNumberedChunk)
+                            .ThenBy(iwt => iwt.SecondNumberedChunk));
+
+            foreach (var item in ImagesWithTags)
+            {
+                item.TagEntered += TagAdded;
+                item.TagRemoved += TagRemoved;
+            }
+
+            if (projFolder)
+            {
+                OpenProject = new Project(projFile);
+                OpenProject.ProjectUpdated += UpdateProjectSettings;
+                UpdateProjectSettings();
+            }
+
+            if (OpenProject != null)
+            {
+                TagCollections = new ObservableCollection<TagCollectionViewModel>(OpenProject.TagCollections.Select(c => new TagCollectionViewModel(this, c.Name, c.Tags)));
+            }
+
+            openFolder = folder;
+            UpdateTagCounts();
         }
 
         private void UpdateProjectSettings()
@@ -633,6 +639,7 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
+        [RelayCommand()]
         internal void NextImage()
         {
             if (FilteredImageSet?.Any() ?? false)
@@ -652,6 +659,7 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
+        [RelayCommand()]
         internal void PreviousImage()
         {
             if (FilteredImageSet?.Any() ?? false)

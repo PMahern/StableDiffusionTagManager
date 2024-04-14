@@ -36,15 +36,17 @@
           <MenuItem Header="_Settings" Command="{Binding ProjectSettingsCommand}" />
         </MenuItem>
         <MenuItem  Header="_Tags">
-          <MenuItem Header="Add Tag To _Start" Command="{Binding AddTagToFrontCommand}"/>
-          <MenuItem Header="Add Tag to _End" Command="{Binding AddTagToEndCommand}"/>
+          <MenuItem Header="Add Tag To _Start" InputGesture="Shift+up" Command="{Binding AddTagToFrontCommand}"/>
+          <MenuItem Header="Add Tag to _End" InputGesture="Shift+down" Command="{Binding AddTagToEndCommand}"/>
           <MenuItem Header="Add Tag to _All Images " Command="{Binding AddTagToStartOfAllImagesCommand}"/>
           <MenuItem Header="Add Tag to End of All _Images " Command="{Binding AddTagToEndOfAllImagesCommand}"/>
           <MenuItem Header="_Remove Tag from All Images" Command="{Binding RemoveTagFromAllImagesCommand}"/>
         </MenuItem>
         <MenuItem  Header="_Images">
           <MenuItem Header="_Archive Selected Image" Command="{Binding DeleteSelectedImageCommand}"/>
-          <MenuItem Header="_Filter">
+          <MenuItem Header="_Next Image" InputGesture="Shift+." Command="{Binding NextImageCommand}"/>
+          <MenuItem Header="_Previous Image" InputGesture="Shift+," Command="{Binding PreviousImageCommand}"/>
+          <MenuItem Header="_Filter"> 
             <MenuItem Header="_None"  Command="{Binding SetImageFilterCommand}" CommandParameter="{x:Static models:ImageFilterMode.None}"/>
             <MenuItem Header="_Incomplete" Command="{Binding SetImageFilterCommand}" CommandParameter="{x:Static models:ImageFilterMode.NotCompleted}"/>
             <MenuItem Header="_Completed" Command="{Binding SetImageFilterCommand}" CommandParameter="{x:Static models:ImageFilterMode.Completed}"/>
@@ -64,7 +66,7 @@
           <RowDefinition Height="2"></RowDefinition>
           <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <ListBox Name="ImageList" ItemsSource="{Binding FilteredImageSet}"  VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SelectedImage}">
+        <ListBox Name="ImageList" ItemsSource="{Binding FilteredImageSet}"  VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedImage}">
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
               <VirtualizingStackPanel Orientation="Horizontal" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=Bounds.Height}" />
@@ -114,6 +116,9 @@
                   <StackPanel Orientation="Horizontal" Classes="toolbar" Grid.Column="0">
                     <Button IsVisible="{Binding IsProject}" Command="{Binding ToggleImageCompleteCommand}" ToolTip.Tip="Mark Image Done">
                       <mi:MaterialIcon Kind="Done"/>
+                    </Button>
+                    <Button Command="{Binding AddTagToFrontCommand}" ToolTip.Tip="Add Tag to Front">
+                      <mi:MaterialIcon Kind="Add"/>
                     </Button>
                     <Button Command="{Binding ClearTagsCommand}" ToolTip.Tip="Delete All Tags">
                       <mi:MaterialIcon Kind="DeleteSweep"/>

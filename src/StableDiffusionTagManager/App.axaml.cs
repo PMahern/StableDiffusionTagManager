@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using StableDiffusionTagManager.Models;
 using StableDiffusionTagManager.ViewModels;
 using StableDiffusionTagManager.Views;
@@ -105,6 +106,13 @@ namespace StableDiffusionTagManager
                 
                 window.DataContext = mainVM;
                 window.Closed += (sender, args) => desktop.Shutdown();
+                
+                if (desktop.Args != null && desktop.Args.Any())
+                {
+                    var path = Path.GetFullPath(desktop.Args[0]);
+                    window.Opened += (sender, args) => Dispatcher.UIThread.InvokeAsync(() => mainVM.LoadFolder(path));
+                }
+                    
             }
 
             base.OnFrameworkInitializationCompleted();
