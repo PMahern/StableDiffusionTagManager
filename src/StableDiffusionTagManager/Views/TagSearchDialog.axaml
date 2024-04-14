@@ -5,23 +5,25 @@
         xmlns:controls="using:StableDiffusionTagManager.Controls"
         mc:Ignorable="d"
         x:Class="StableDiffusionTagManager.Views.TagSearchDialog"
-        Width="200"
+        MinWidth="200"
         Height="130"
         CanResize="False"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="4"
         ExtendClientAreaToDecorationsHint="True"
         WindowStartupLocation="CenterOwner"
+        SizeToContent="Width"
         Focusable="False"
-        Icon="/Assets/logo.ico">
-    <controls:HeaderControl Title="{Binding DialogTitle}" CloseCommand="{Binding HeaderCloseCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        Icon="/Assets/logo.ico"
+        KeyDown="DialogKeyDown">
+    <controls:HeaderControl Title="{Binding DialogTitle}" CloseCommand="{Binding HeaderCloseCommand}" HorizontalAlignment="" VerticalAlignment="Stretch">
       <Grid Margin="5">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto" />
           <RowDefinition Height="*" />
           <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <controls:TagAutoCompleteBox Name="TagAutoComplete" />
+        <controls:TagAutoCompleteBox Name="TagAutoComplete" KeyDown="AutoCompleteKeyDown" />
         <StackPanel Classes="footer" Grid.Row="2">
           <Button Click="Ok_Clicked">Ok</Button>
           <Button Click="Cancel_Clicked">Cancel</Button>

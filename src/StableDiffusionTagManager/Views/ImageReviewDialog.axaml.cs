@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
 using StableDiffusionTagManager.ViewModels;
@@ -79,5 +80,13 @@ namespace StableDiffusionTagManager.Views
         /// Indiates if the user completed the dialog of cancelled out.
         /// </summary>
         public bool Success { get; set; } = false;
+
+        public void WindowKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
+        }
     }
 }

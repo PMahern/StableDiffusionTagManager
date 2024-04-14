@@ -10,7 +10,8 @@
         Height="900"
         x:Class="StableDiffusionTagManager.Views.ImageTouchupDialog"
         Icon="/Assets/logo.ico"
-        Title="Touchup Image">
+        Title="Touchup Image"
+        KeyDown="WindowKeyDown">
   <Grid>
     <Grid RowDefinitions="*,Auto">
       <Grid ColumnDefinitions="*,*">

@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
@@ -324,6 +325,14 @@ namespace StableDiffusionTagManager.Views
             this.Success = true;
             this.Image = ImageBox.ImageBox.CreateNewImageWithLayersFromRegion();
             Close();
+        }
+
+        public void WindowKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         }
     }
 }

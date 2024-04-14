@@ -608,6 +608,8 @@ namespace StableDiffusionTagManager.ViewModels
             if (ImagesWithTags != null)
             {
                 var dialog = new TagSearchDialog();
+                dialog.DialogTitle =  "Add Tag to End of All Images";
+
                 var tagResult = await ShowDialog<string?>(dialog);
 
                 if (tagResult != null)
@@ -631,6 +633,8 @@ namespace StableDiffusionTagManager.ViewModels
             if (ImagesWithTags != null)
             {
                 var dialog = new TagSearchDialog();
+                dialog.DialogTitle = "Add Tag to Start of All Images";
+
                 var tagResult = await ShowDialog<string?>(dialog);
 
                 if (tagResult != null)
@@ -656,7 +660,8 @@ namespace StableDiffusionTagManager.ViewModels
             if (ImagesWithTags != null)
             {
                 var dialog = new TagSearchDialog();
-                dialog.Title = $"Replace all instances of tag {target} with new tag";
+                dialog.DialogTitle = $"Replace all instances of tag {target} with new tag";
+
                 var tagResult = await ShowDialog<string?>(dialog);
 
                 if (tagResult != null)
@@ -677,6 +682,8 @@ namespace StableDiffusionTagManager.ViewModels
             if (ImagesWithTags != null)
             {
                 var dialog = new TagSearchDialog();
+                dialog.DialogTitle = "Remove tag from all images";
+
                 var tagResult = await ShowDialog<string?>(dialog);
 
                 if (tagResult != null)

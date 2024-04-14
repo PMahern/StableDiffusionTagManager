@@ -10,6 +10,7 @@ using Avalonia;
 using UVtools.AvaloniaControls;
 using CommunityToolkit.Mvvm.Input;
 using StableDiffusionTagManager.Controls;
+using Avalonia.Input;
 
 namespace StableDiffusionTagManager.Views
 {
@@ -67,6 +68,24 @@ namespace StableDiffusionTagManager.Views
         {
             this.success = false;
             Close();
+        }
+
+        public void AutoCompleteKeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                this.success = true;
+                Close();
+            }
+        }
+
+        public void DialogKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                this.success = false;
+                Close();
+            }
         }
     }
 }

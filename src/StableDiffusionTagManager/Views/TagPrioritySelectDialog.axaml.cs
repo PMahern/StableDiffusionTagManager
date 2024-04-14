@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using StableDiffusionTagManager.Controls;
 using StableDiffusionTagManager.ViewModels;
@@ -65,6 +66,14 @@ namespace StableDiffusionTagManager.Views
             else
             {
                 return null;
+            }
+        }
+
+        public void WindowKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Close();
             }
         }
     }
