@@ -1665,7 +1665,6 @@ namespace UVtools.AvaloniaControls
                 );
             }
 
-            //SkiaContext.SkCanvas.dr
             // Draw pixel grid
             if (zoomFactor > PixelGridZoomThreshold && SizeMode == SizeModes.Normal)
             {
