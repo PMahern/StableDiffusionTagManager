@@ -66,7 +66,7 @@
           <RowDefinition Height="2"></RowDefinition>
           <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <ListBox Name="ImageList" ItemsSource="{Binding FilteredImageSet}"  VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedImage}">
+        <ListBox Name="ImageList" ItemsSource="{Binding FilteredImageSet}"  VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.AllowAutoHide="False" SelectedItem="{Binding SelectedImage}">
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
               <VirtualizingStackPanel Orientation="Horizontal" Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=Bounds.Height}" />
