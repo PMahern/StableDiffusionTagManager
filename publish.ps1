@@ -1,4 +1,4 @@
-$versionsuffix = "beta12"
+$versionsuffix = "beta13"
 $projectpath = "src/StableDiffusionTagManager/StableDiffusionTagManager.csproj"
 $platforms = "win10-x64", "linux-x64", "osx-x64"
 
@@ -29,8 +29,13 @@ if(Test-Path $linuxtargz) {
 	Remove-Item $linuxtargz
 }
 
-7z a -tzip $osxzip "publish\osx-x64"
-7z a -tzip $windowszip "publish\win10-x64"
-7z a $linuxtemptar "publish\linux-x64"
-7z a $linuxtargz $linuxtemptar
-Remove-Item $linuxtemptar
+$originalDir = Get-Location
+Set-Location .\publish\osx-x64
+7z a -tzip ..\..\$osxzip "*"
+Set-Location $originalDir\publish\win10-x64
+7z a -tzip ..\..\$windowszip "*"
+Set-Location $originalDir\publish\linux-x64
+7z a ..\..\$linuxtemptar "*"
+7z a ..\..\$linuxtargz ..\..\$linuxtemptar
+Remove-Item ..\..\$linuxtemptar
+Set-Location $originalDir
