@@ -374,6 +374,8 @@ namespace StableDiffusionTagManager.Views
                 {
                     FocusNextTag();
                 }
+            } else if(e.Key == Key.Escape) {
+                FocusManager?.ClearFocus();
             }
         }
     }
