@@ -374,6 +374,20 @@ namespace StableDiffusionTagManager.Views
                 {
                     FocusNextTag();
                 }
+            } else if(e.Key == Key.Escape) {
+                var currentFocus = FocusManager.GetFocusedElement();
+                var tb = currentFocus as TextBox;
+                var ac = tb?.GetVisualAncestors().OfType<TagAutoCompleteBox>().FirstOrDefault();
+                if (ac != null)
+                {
+                    var tagModel = ac.DataContext as TagViewModel;
+                    var viewModel = this.DataContext as MainWindowViewModel;
+                    if (tagModel != null && viewModel != null && tagModel.Tag == "")
+                    {
+                        viewModel.DeleteTagFromCurrentImage(tagModel);
+                    }
+                }
+                FocusManager?.ClearFocus();
             }
         }
     }

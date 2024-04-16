@@ -1,10 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using StableDiffusionTagManager.Controls;
 using System.Threading.Tasks;
-using static UVtools.AvaloniaControls.AdvancedImageBox;
 
 namespace StableDiffusionTagManager.Views
 {
@@ -54,6 +54,14 @@ namespace StableDiffusionTagManager.Views
         {
             get => GetValue(SelectedColorProperty);
             set => SetValue(SelectedColorProperty, value);
+        }
+
+        public void WindowKeyDown(object sender, KeyEventArgs e) 
+        {
+            if(e.Key == Key.Escape)
+            {
+                Close();
+            }
         }
     }
 }

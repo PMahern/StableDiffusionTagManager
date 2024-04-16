@@ -17,7 +17,8 @@
       WindowStartupLocation="CenterOwner"
       Title="Select Color"
       Icon="/Assets/logo.ico"
-      Name="ThisControl">
+      Name="ThisControl"
+      KeyDown="WindowKeyDown">
   <Window.Styles>
     <Style Selector="RadioButton">
       <Setter Property="Margin" Value="5,0,0,0"></Setter>

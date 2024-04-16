@@ -11,7 +11,8 @@
         Height="800"
         x:Class="StableDiffusionTagManager.Views.ImageReviewDialog"
         Icon="/Assets/logo.ico"
-        Title="{Binding Title}">
+        Title="{Binding Title}"
+        KeyDown="WindowKeyDown">
   <Grid RowDefinitions="*,Auto">
     <Grid.Resources>
       <conv:ReviewModeToBoolConverter x:Key="reviewModeToBoolConverter"/>

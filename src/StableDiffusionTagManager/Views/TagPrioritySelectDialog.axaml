@@ -15,7 +15,8 @@
         WindowStartupLocation="CenterOwner"
         Title="Select Tag Priority Set"
         Icon="/Assets/logo.ico"
-        Name="ThisControl">
+        Name="ThisControl"
+        KeyDown="WindowKeyDown">
   <controls:HeaderControl DataContext="{Binding ElementName=ThisControl}" Title="Select Tag Priority Set" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="5" CloseCommand="{Binding CancelCommand}">
     <Grid RowDefinitions="Auto,Auto">
       <ComboBox ItemsSource="{Binding TagPrioritySets}" SelectedItem="{Binding SelectedTagPrioritySet}" HorizontalAlignment="Stretch">
