@@ -94,13 +94,10 @@ It's usually best to try and use the interrogate function to generate an initial
 - Shift + enter will add a tag in front of the currently focused tag (or at the front of all the tags if none is selected).
 - Shift + up will add a tag to the beginning of the current tag set
 - Shift + down will add a tag to the end of the current tag set
-- Shift + left or right arrow will move focus between the current image's tags
 - Ctrl + left or right will move the currently focused tag left or right
 - Shift + , or . will move between images in the set
 - Shift + delete will delete the currently focused tag
 - Ctrl + delete will delete the currently selected image (with a warning)
-
-
 
 ### Thanks
 
