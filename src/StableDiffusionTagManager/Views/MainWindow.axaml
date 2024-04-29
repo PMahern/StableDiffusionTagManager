@@ -51,6 +51,7 @@
             <MenuItem Header="_Incomplete" Command="{Binding SetImageFilterCommand}" CommandParameter="{x:Static models:ImageFilterMode.NotCompleted}"/>
             <MenuItem Header="_Completed" Command="{Binding SetImageFilterCommand}" CommandParameter="{x:Static models:ImageFilterMode.Completed}"/>
           </MenuItem>
+          <MenuItem Header="Show Standalone Image Editor" Command="{Binding ShowStandaloneImageEditorCommand}" />
         </MenuItem>
         <MenuItem Header="_Automation">
           <MenuItem Header="Edit Tag _Priority Sets..." Command="{Binding EditTagPrioritySetsCommand}"/>

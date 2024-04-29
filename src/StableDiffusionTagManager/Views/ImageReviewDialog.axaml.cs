@@ -25,6 +25,18 @@ namespace StableDiffusionTagManager.Views
             this.DataContext = this;
         }
 
+        public static readonly StyledProperty<ObservableCollection<ImageReviewActionViewModel>?> ExtraActionsProperty =
+            AvaloniaProperty.Register<ImageReviewDialog, ObservableCollection<ImageReviewActionViewModel>?>(nameof(ExtraActions), null);
+
+        /// <summary>
+        /// Gets or sets the images to review.
+        /// </summary>
+        public ObservableCollection<ImageReviewActionViewModel>? ExtraActions
+        {
+            get => GetValue(ExtraActionsProperty);
+            set => SetValue(ExtraActionsProperty, value);
+        }
+
         public static readonly StyledProperty<ObservableCollection<ImageReviewViewModel>?> ImagesPropery =
             AvaloniaProperty.Register<ImageReviewDialog, ObservableCollection<ImageReviewViewModel>?>(nameof(Images), null);
 
@@ -45,8 +57,17 @@ namespace StableDiffusionTagManager.Views
         /// </summary>
         public ImageReviewViewModel? SelectedImage
         {
-            get => GetValue(SelectedImageProperty);
-            set => SetValue(SelectedImageProperty, value);
+            get => GetValue(SelectedImageProperty); 
+            set {
+                SetValue(SelectedImageProperty, value);
+                if(ExtraActions != null)
+                {
+                    foreach (var item in ExtraActions)
+                    {
+                        item.ActionClickCommand.NotifyCanExecuteChanged();
+                    }
+                }
+            }
         }
 
         public IEnumerable<Bitmap> SelectedImages { get => Images?.Where(i => i.IsSelected).Select(i => i.Image) ?? Enumerable.Empty<Bitmap>(); }

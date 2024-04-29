@@ -13,92 +13,104 @@
         Title="Touchup Image"
         KeyDown="WindowKeyDown">
   <Grid>
-    <Grid RowDefinitions="*,Auto">
-      <Grid ColumnDefinitions="*,*">
-        <controls:ImageBoxWithControls Name="ImageBox"
-                                       Image="{Binding Image}"
-                                       ShowExtractComicPanelsButton="False"
-                                       ShowEditImageButton="False"
-                                       ShowInterrogateButton="False"
-                                       ShowRemoveBackgroundButton="False"
-                                       ShowConvertAlphaButton="False"/>
-        <DockPanel Grid.Column="1">
-          <StackPanel  Orientation="Vertical" DockPanel.Dock="Top">
-            <controls:HeaderControl Title="Prompt" >
-              <TextBox Height="150" Text="{Binding Prompt, Mode=TwoWay}" TextWrapping="Wrap" />
-            </controls:HeaderControl>
-            <controls:HeaderControl Title="Negative Prompt" >
-              <TextBox Height="150" Text="{Binding NegativePrompt, Mode=TwoWay}" TextWrapping="Wrap"/>
-            </controls:HeaderControl>
-            <controls:HeaderControl Title="Image Options">
-              <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*, Auto, *, Auto">
-                <Label>Image Width</Label>
-                <NumericUpDown Grid.Column="1" Value="{Binding ImageWidth}"  Increment="10" Minimum="1" Maximum="2048"/>
+    <DockPanel>
+      <Menu DockPanel.Dock="Top" Name="MainMenu" IsVisible="{Binding IsStandalone}">
+        <MenuItem  Header="_File">
+          <MenuItem Header="_Load Image..." Command="{Binding LoadImageCommand}"/>
+          <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
+        </MenuItem>
+      </Menu>
+      <Grid>
+        <Grid RowDefinitions="*,Auto">
+          <Grid ColumnDefinitions="*,*">
+            <controls:ImageBoxWithControls Name="ImageBox"
+                                           Image="{Binding Image}"
+                                           ShowExtractComicPanelsButton="False"
+                                           ShowEditImageButton="False"
+                                           ShowInterrogateButton="False"
+                                           ShowRemoveBackgroundButton="False"
+                                           ShowConvertAlphaButton="False"/>
+            <DockPanel Grid.Column="1">
+              <StackPanel  Orientation="Vertical" DockPanel.Dock="Top">
+                <controls:HeaderControl Title="Prompt" >
+                  <TextBox Height="150" Text="{Binding Prompt, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" />
+                </controls:HeaderControl>
+                <controls:HeaderControl Title="Negative Prompt" >
+                  <TextBox Height="150" Text="{Binding NegativePrompt, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                </controls:HeaderControl>
+                <controls:HeaderControl Title="Image Options">
+                  <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*, Auto, *, Auto">
+                    <Label>Image Width</Label>
+                    <NumericUpDown Grid.Column="1" Value="{Binding ImageWidth}"  Increment="10" Minimum="1" Maximum="2048"/>
 
-                <Label Grid.Column="2">Image Height</Label>
-                <NumericUpDown Grid.Column="3" Value="{Binding ImageHeight}"  Increment="10" Minimum="1" Maximum="2048"/>
-                </Grid>
-              </controls:HeaderControl>
-            <controls:HeaderControl Title="Sampler Options" >
-              <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*, Auto, *, Auto">
-                <Label>Sampler</Label>
-                <ComboBox Grid.Column="1" SelectedItem="{Binding SelectedSampler}" ItemsSource="{Binding Samplers}" Width="200"/>
+                    <Label Grid.Column="2">Image Height</Label>
+                    <NumericUpDown Grid.Column="3" Value="{Binding ImageHeight}"  Increment="10" Minimum="1" Maximum="2048"/>
+                  </Grid>
+                </controls:HeaderControl>
+                <controls:HeaderControl Title="Sampler Options" >
+                  <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*, Auto, *, Auto">
+                    <Label>Sampler</Label>
+                    <ComboBox Grid.Column="1" SelectedItem="{Binding SelectedSampler}" ItemsSource="{Binding Samplers}" Width="200"/>
 
-                <Label Grid.Column="2">Sampling Steps</Label>
-                <NumericUpDown Grid.Column="3" Value="{Binding SamplingSteps}"  Increment="1" Minimum="1" Maximum="100"/>
+                    <Label Grid.Column="2">Sampling Steps</Label>
+                    <NumericUpDown Grid.Column="3" Value="{Binding SamplingSteps}"  Increment="1" Minimum="1" Maximum="100"/>
 
+                    <Label Grid.Row="1">Denoise Strength</Label>
+                    <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding DenoiseStrength}" Increment=".1" Maximum="1" Minimum="0" />
 
-                <Label Grid.Row="1">Denoise Strength</Label>
-                <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding DenoiseStrength}" Increment=".1" Maximum="1" Minimum="0" />
-              </Grid>
-            </controls:HeaderControl>
-            <controls:HeaderControl Title="Mask Options">
-              <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*, Auto, *, Auto">
-                <Grid.Resources>
-                  <conv:MaskedContentToStringConverter x:Key="maskedContentToStringConverter"/>
-                </Grid.Resources>
-                <Label>Mask Blur</Label>
-                <NumericUpDown Grid.Column="1" Value="{Binding MaskBlur}"  Increment="1" Minimum="0" Maximum="10"/>
+                    <Label Grid.Column="2" Grid.Row="1">CFG Scale</Label>
+                    <NumericUpDown Grid.Column="3" Grid.Row="1" Value="{Binding CFGScale}"  Width="200"/>
+                  </Grid>
+                </controls:HeaderControl>
+                <controls:HeaderControl Title="Mask Options">
+                  <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*, Auto, *, Auto">
+                    <Grid.Resources>
+                      <conv:MaskedContentToStringConverter x:Key="maskedContentToStringConverter"/>
+                    </Grid.Resources>
+                    <Label>Mask Blur</Label>
+                    <NumericUpDown Grid.Column="1" Value="{Binding MaskBlur}"  Increment="1" Minimum="0" Maximum="10"/>
 
-                <Label Grid.Column="2">Inpaint Only Masked</Label>
-                <CheckBox Grid.Column="3" IsChecked="{Binding InpaintOnlyMasked}"/>
+                    <Label Grid.Column="2">Inpaint Only Masked</Label>
+                    <CheckBox Grid.Column="3" IsChecked="{Binding InpaintOnlyMasked}"/>
 
-                <Label Grid.Row="1">Inpaint Only Masked Padding</Label>
-                <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding OnlyMaskedPadding}"  Increment="1" Minimum="0" Maximum="1000"/>
+                    <Label Grid.Row="1">Inpaint Only Masked Padding</Label>
+                    <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding OnlyMaskedPadding}"  Increment="1" Minimum="0" Maximum="1000"/>
 
-                <Label Grid.Row="1" Grid.Column="2">Masked Content</Label>
-                <ComboBox Grid.Row="1" Grid.Column="3" SelectedItem="{Binding SelectedMaskedContent}" ItemsSource="{Binding MaskedContents}" Width="200">
-                  <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                      <TextBlock Text="{Binding Converter={StaticResource ResourceKey=maskedContentToStringConverter}}"/>
-                    </DataTemplate>
-                  </ComboBox.ItemTemplate>
-                </ComboBox>
-              </Grid>
-            </controls:HeaderControl>
-            <controls:HeaderControl Title="Other Options">
-              <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*, Auto, *, Auto">
-                <Label>Batch Size</Label>
-                <NumericUpDown Grid.Column="1" Value="{Binding BatchSize}"  Increment="1" Minimum="1" Maximum="100"/>
-              </Grid>
-            </controls:HeaderControl>
-            <Button Command="{Binding GenerateImages}">Generate</Button>
+                    <Label Grid.Row="1" Grid.Column="2">Masked Content</Label>
+                    <ComboBox Grid.Row="1" Grid.Column="3" SelectedItem="{Binding SelectedMaskedContent}" ItemsSource="{Binding MaskedContents}" Width="200">
+                      <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                          <TextBlock Text="{Binding Converter={StaticResource ResourceKey=maskedContentToStringConverter}}"/>
+                        </DataTemplate>
+                      </ComboBox.ItemTemplate>
+                    </ComboBox>
+                  </Grid>
+                </controls:HeaderControl>
+                <controls:HeaderControl Title="Other Options">
+                  <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*, Auto, *, Auto">
+                    <Label>Batch Size</Label>
+                    <NumericUpDown Grid.Column="1" Value="{Binding BatchSize}"  Increment="1" Minimum="1" Maximum="100"/>
+                  </Grid>
+                </controls:HeaderControl>
+                <Button Command="{Binding GenerateImages}">Generate</Button>
+              </StackPanel>
+            </DockPanel>
+          </Grid>
+          <StackPanel Classes="footer" IsVisible="{Binding !IsStandalone}" Grid.Row="1">
+            <Button Command="{Binding SaveChangesCommand}">Save Changes</Button>
+            <Button Command="{Binding CancelCommand}">Cancel</Button>
           </StackPanel>
-        </DockPanel>
+        </Grid>
+        <Border IsVisible="{Binding IsLoading}" Background="#40000000" >
+          <progRing:ProgressRing Width="80"
+                             Height="80"
+                             IsActive="{Binding IsLoading}"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Foreground="Green"
+                             Margin="10,20,0,0"/>
+        </Border>
       </Grid>
-      <StackPanel Classes="footer" Grid.Row="1">
-        <Button Command="{Binding SaveChangesCommand}">Save Changes</Button>
-        <Button Command="{Binding CancelCommand}">Cancel</Button>
-      </StackPanel>
-    </Grid>
-    <Border IsVisible="{Binding IsLoading}" Background="#40000000" >
-      <progRing:ProgressRing Width="80"
-                         Height="80"
-                         IsActive="{Binding IsLoading}"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"
-                         Foreground="Green"
-                         Margin="10,20,0,0"/>
-    </Border>
+    </DockPanel>
   </Grid>
 </Window>

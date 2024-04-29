@@ -12,7 +12,8 @@
         x:Class="StableDiffusionTagManager.Views.ImageReviewDialog"
         Icon="/Assets/logo.ico"
         Title="{Binding Title}"
-        KeyDown="WindowKeyDown">
+        KeyDown="WindowKeyDown"
+        Name="mainWindow">
   <Grid RowDefinitions="*,Auto">
     <Grid.Resources>
       <conv:ReviewModeToBoolConverter x:Key="reviewModeToBoolConverter"/>
@@ -59,6 +60,19 @@
       </ListBox>
     </Grid>
     <StackPanel Grid.Row="1" Classes="footer">
+      <ItemsControl ItemsSource="{Binding ExtraActions}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <StackPanel Orientation="Horizontal"/>
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Button Command="{Binding ActionClickCommand}" CommandParameter="{Binding ElementName=mainWindow, Path=DataContext.SelectedImage.Image}}" Content="{Binding Name}" />
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
       <Button Command="{Binding ChooseImageCommand}" IsVisible="{Binding ReviewMode, 
                                             Converter={StaticResource ResourceKey=reviewModeToBoolConverter}, 
                                             ConverterParameter={x:Static views:ImageReviewDialogMode.SingleSelect}}">Choose Image</Button>

@@ -25,6 +25,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SdWebUiApi;
 using StableDiffusionTagManager.Collections;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -1608,6 +1609,14 @@ namespace StableDiffusionTagManager.ViewModels
                     SelectedImage.AddTagIfNotExists(new TagViewModel(tag));
                 }
             }
+        }
+
+        [RelayCommand]
+        public async Task ShowStandaloneImageEditor()
+        {
+            var editor = new ImageTouchupDialog();
+            editor.IsStandalone = true;
+            await ShowDialog(editor);
         }
         #endregion
     }

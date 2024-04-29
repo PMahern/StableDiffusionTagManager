@@ -3,12 +3,17 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using Newtonsoft.Json;
 using SdWebUiApi;
 using SdWebUiApi.Api;
+using SdWebUiApi.Model;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Png;
 using StableDiffusionTagManager.Extensions;
 using StableDiffusionTagManager.Models;
 using StableDiffusionTagManager.ViewModels;
@@ -18,6 +23,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Color = Avalonia.Media.Color;
 
 namespace StableDiffusionTagManager.Views
 {
@@ -66,19 +72,30 @@ namespace StableDiffusionTagManager.Views
                                                              $"Querying stable diffusion webui for the list of available samplers failed. This likely indicates the server can't be reached. Error message:\n\r {ex.Message}",
                                                              ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
 
-                    await messageBoxStandardWindow.ShowWindowDialogAsync(this);
+                    if (this.IsActive)
+                    {
+                        await messageBoxStandardWindow.ShowWindowDialogAsync(this);
+                    }
                 });
             }
         }
         public bool Success { get; set; }
 
-        public static readonly StyledProperty<Bitmap?> ImagePropery =
+        public static readonly StyledProperty<bool> IsStandaloneProperty =
+            AvaloniaProperty.Register<ImageTouchupDialog, bool>(nameof(IsStandalone), false);
+        public bool IsStandalone
+        {
+            get => GetValue(IsStandaloneProperty);
+            set => SetValue(IsStandaloneProperty, value);
+        }
+
+        public static readonly StyledProperty<Bitmap?> ImageProperty =
             AvaloniaProperty.Register<ImageTouchupDialog, Bitmap?>(nameof(Image));
 
         public Bitmap? Image
         {
-            get => GetValue(ImagePropery);
-            set => SetValue(ImagePropery, value);
+            get => GetValue(ImageProperty);
+            set => SetValue(ImageProperty, value);
         }
 
         public static readonly StyledProperty<string> PromptProperty =
@@ -133,6 +150,15 @@ namespace StableDiffusionTagManager.Views
         {
             get => GetValue(OnlyMaskedPaddingProperty);
             set => SetValue(OnlyMaskedPaddingProperty, value);
+        }
+
+        public static readonly StyledProperty<decimal> CFGScaleProperty =
+            AvaloniaProperty.Register<ImageTouchupDialog, decimal>(nameof(CFGScale), 7);
+
+        public decimal CFGScale
+        {
+            get => GetValue(CFGScaleProperty);
+            set => SetValue(CFGScaleProperty, value);
         }
 
         public static readonly StyledProperty<int> SamplingStepsProperty =
@@ -215,6 +241,28 @@ namespace StableDiffusionTagManager.Views
 
         public Project? OpenProject { get; set; }
 
+
+        private Bitmap GetCurrentMaskImage()
+        {
+            if (ImageBox.CurrentMode == Controls.ImageViewerMode.Mask)
+            {
+                return ImageBox.ImageBox.CreateNewImageFromMask().InvertColors();
+            }
+            else
+            {
+                var renderTarget = new RenderTargetBitmap(Image.PixelSize);
+                var selectionRegion = ImageBox.SelectionRegion;
+                var whiteBrush = new SolidColorBrush(new Color(255, 255, 255, 255));
+                var blackBrush = new SolidColorBrush(new Color(255, 0, 0, 0));
+                using (var dc = renderTarget.CreateDrawingContext())
+                {
+                    dc.FillRectangle(blackBrush, new Rect(0, 0, Image.PixelSize.Width, Image.PixelSize.Height), 0);
+                    dc.DrawRectangle(whiteBrush, null, new RoundedRect(selectionRegion, 0));
+                }
+
+                return renderTarget;
+            }
+        }
         [RelayCommand]
         public async Task GenerateImages()
         {
@@ -232,27 +280,7 @@ namespace StableDiffusionTagManager.Views
                         flattened.Save(uploadStream);
                         var imagebase64 = Convert.ToBase64String(uploadStream.ToArray());
 
-                        Bitmap? maskImage = null;
-                        var invertmask = false;
-                        if (ImageBox.CurrentMode == Controls.ImageViewerMode.Mask)
-                        {
-                            maskImage = ImageBox.ImageBox.CreateNewImageFromMask();
-                            invertmask = true;
-                        }
-                        else
-                        {
-                            var renderTarget = new RenderTargetBitmap(Image.PixelSize);
-                            var selectionRegion = ImageBox.SelectionRegion;
-                            var whiteBrush = new SolidColorBrush(new Color(255, 255, 255, 255));
-                            var blackBrush = new SolidColorBrush(new Color(255, 0, 0, 0));
-                            using (var dc = renderTarget.CreateDrawingContext())
-                            {
-                                dc.FillRectangle(blackBrush, new Rect(0, 0, Image.PixelSize.Width, Image.PixelSize.Height), 0);
-                                dc.DrawRectangle(whiteBrush, null, new RoundedRect(selectionRegion, 0));
-                            }
-
-                            maskImage = renderTarget;
-                        }
+                        Bitmap? maskImage = GetCurrentMaskImage();
 
                         using var maskStream = new MemoryStream();
                         maskImage.Save(maskStream);
@@ -273,7 +301,7 @@ namespace StableDiffusionTagManager.Views
                             DenoisingStrength = DenoiseStrength,
                             InpaintingFill = (int)SelectedMaskedContent,
                             BatchSize = BatchSize,
-                            InpaintingMaskInvert = invertmask ? 1 : 0,
+                            InpaintingMaskInvert = 0,
                             SamplerName = SelectedSampler ?? "Euler a",
                             Steps = SamplingSteps,
                             MaskBlur = MaskBlur
@@ -291,6 +319,15 @@ namespace StableDiffusionTagManager.Views
                         var viewer = new ImageReviewDialog();
                         viewer.Title = "Select New Image";
                         viewer.Images = bitmaps;
+                        viewer.ExtraActions = new List<ImageReviewActionViewModel>()
+                        { 
+                            new ImageReviewActionViewModel(viewer)
+                            {
+                                Action = (bitmap) => SaveBitmapMaskData(bitmap),
+                                Name = "Save With Mask Data"
+                            }
+                        }.ToObservableCollection();
+
                         await viewer.ShowDialog(this);
 
                         if (viewer.Success)
@@ -309,6 +346,26 @@ namespace StableDiffusionTagManager.Views
 
                     await messageBoxStandardWindow.ShowWindowDialogAsync(this);
                     this.IsLoading = false;
+                }
+            }
+        }
+
+        public async Task SaveBitmapMaskData(Bitmap image)
+        {
+            var options = new FilePickerSaveOptions();
+            options.FileTypeChoices = new List<FilePickerFileType>() { FilePickerFileTypes.ImagePng };
+            var dialogResult = await StorageProvider.SaveFilePickerAsync(options);
+            if(dialogResult != null)
+            {
+                var mask = GetCurrentMaskImage();
+
+                if (mask != null)
+                {
+                    var maskResults = image.ApplyMask(mask);
+                    maskResults.FullMaskedImage.Save(dialogResult.Path.AbsolutePath);
+                    maskResults.CroppedMaskedImage.Save(dialogResult.Path.AbsolutePath.Replace(".png", "_cropped.png"));
+                    maskResults.CroppedMask.Save(dialogResult.Path.AbsolutePath.Replace(".png", "_croppedmask.png"));
+                    File.WriteAllText(dialogResult.Path.AbsolutePath.Replace(".png", "_maskbounds.json"), JsonConvert.SerializeObject(maskResults.Bounds, Formatting.Indented));
                 }
             }
         }
@@ -333,6 +390,72 @@ namespace StableDiffusionTagManager.Views
             {
                 Close();
             }
+        }
+
+        [RelayCommand]
+        public async Task LoadImage()
+        {
+            var options = new FilePickerOpenOptions();
+            options.AllowMultiple = false;
+            options.FileTypeFilter = new List<FilePickerFileType>() { FilePickerFileTypes.ImageAll };
+            var files = await StorageProvider.OpenFilePickerAsync(options);
+
+            if (files.Count > 0)
+            {
+                var file = files[0].Path.AbsolutePath;
+
+                Image = new Bitmap(files.First().Path.AbsolutePath);
+
+                //assumes each image has one and only one text chunk which is true for all images from StableDiffustion
+                if (file.EndsWith(".png"))
+                {
+                    using var image = SixLabors.ImageSharp.Image.Load(file);
+
+                        // Get the PNG metadata
+                    var pngMetadata = image.Metadata.GetFormatMetadata(PngFormat.Instance);
+
+                    //assumes each image has one and only one text chunk which is true for all images from StableDiffustion
+                    if (pngMetadata.TextData.Any(t => t.Keyword == "parameters"))
+                    {
+
+                        var data = pngMetadata.TextData[0].Value;
+                        var chunks = data.Split('\n');
+                        var negativePromptIndex = data.LastIndexOf("\nNegative prompt: ");
+                        var stepsIndex = data.LastIndexOf("\nSteps: ");
+                        if (negativePromptIndex != -1)
+                        {
+                            Prompt = data.Substring(0, negativePromptIndex);
+                            NegativePrompt = data.Substring(negativePromptIndex + 1, data.LastIndexOf("\nSteps: ") - negativePromptIndex - 1).Replace("Negative prompt: ", "");
+                        } else
+                        {
+                            Prompt = data.Substring(0, stepsIndex);
+                            NegativePrompt = "";
+                        }
+                        var otherSettings = data.Substring(stepsIndex).Split(",").Select(s =>
+                        {
+                            var pair = s.Split(":");
+                            return new { setting = pair[0].Trim(), value = pair[1].Trim() };
+                        });
+                        SamplingSteps = otherSettings.FirstOrDefault(s => s.setting == "Steps")?.value.ConvertTo<int>() ?? SamplingSteps;
+                        SelectedSampler = otherSettings.FirstOrDefault(s => s.setting == "Sampler")?.value ?? SelectedSampler;
+                        CFGScale = otherSettings.FirstOrDefault(s => s.setting == "CFG scale")?.value.ConvertTo<decimal>() ?? CFGScale;
+                        DenoiseStrength = otherSettings.FirstOrDefault(s => s.setting == "Denoising strength")?.value?.ConvertTo<decimal>() ?? DenoiseStrength;
+                        var dimensions = otherSettings.FirstOrDefault(s => s.setting == "Size")?.value.Split("x");
+                        if(dimensions != null)
+                        {
+                            ImageWidth = int.Parse(dimensions[0]);
+                            ImageHeight = int.Parse(dimensions[1]);
+                        }
+                    }
+                    
+                }
+            }
+        }
+
+        [RelayCommand]
+        public void Exit()
+        {
+            Close();
         }
     }
 }
