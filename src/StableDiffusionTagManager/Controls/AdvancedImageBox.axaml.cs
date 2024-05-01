@@ -3119,28 +3119,7 @@ namespace UVtools.AvaloniaControls
 
         public Bitmap? CreateNewImageWithLayersFromRegion(Rect? region = null, PixelSize? targetSize = null)
         {
-            if (Image != null)
-            {
-                var finalRegion = region ?? new Rect(0, 0, Image.PixelSize.Width, Image.PixelSize.Height);
-                var finalSize = targetSize ?? new PixelSize(Convert.ToInt32(finalRegion.Width), Convert.ToInt32(finalRegion.Height));
-                var newImage = new RenderTargetBitmap(finalSize);
-                var layers = GetImageLayers(Image);
-                using (var drawingContext = newImage.CreateDrawingContext())
-                {
-                    drawingContext.DrawImage(Image, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height));
-                    if (layers != null)
-                    {
-                        foreach (var paintLayer in layers)
-                        {
-                            drawingContext.DrawImage(paintLayer, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height));
-                        }
-                    }
-                }
-
-                return newImage;
-            }
-
-            return null;
+            return Image?.CreateNewImageFromRegion(region, targetSize, GetImageLayers(Image));
         }
 
         public Bitmap? CreateNewImageFromMask()

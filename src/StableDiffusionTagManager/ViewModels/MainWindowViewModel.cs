@@ -629,7 +629,7 @@ namespace StableDiffusionTagManager.ViewModels
             if (ImagesWithTags != null)
             {
                 var dialog = new TagSearchDialog();
-                dialog.DialogTitle =  "Add Tag to End of All Images";
+                dialog.DialogTitle = "Add Tag to End of All Images";
 
                 var tagResult = await ShowDialog<string?>(dialog);
 
@@ -1299,19 +1299,19 @@ namespace StableDiffusionTagManager.ViewModels
 
         #endregion
 
-        public void AddNewImage(Bitmap image, IEnumerable<string>? tags = null)
+        public void AddNewImage(Bitmap image, ImageWithTagsViewModel baseImage, IEnumerable<string>? tags = null)
         {
-            var index = ImagesWithTags.IndexOf(SelectedImage);
-            var withoutExtension = Path.GetFileNameWithoutExtension(SelectedImage.Filename);
-            if (SelectedImage.FirstNumberedChunk != -1)
+            var index = ImagesWithTags.IndexOf(baseImage);
+            var withoutExtension = Path.GetFileNameWithoutExtension(baseImage.Filename);
+            if (baseImage.FirstNumberedChunk != -1)
             {
-                withoutExtension = SelectedImage.FirstNumberedChunk.ToString("00000");
+                withoutExtension = baseImage.FirstNumberedChunk.ToString("00000");
             }
 
             int i = 0;
-            if (SelectedImage.SecondNumberedChunk != -1)
+            if (baseImage.SecondNumberedChunk != -1)
             {
-                i = SelectedImage.SecondNumberedChunk;
+                i = baseImage.SecondNumberedChunk;
             }
 
             var newFilename = $"{withoutExtension}__{i:00}";
@@ -1341,7 +1341,7 @@ namespace StableDiffusionTagManager.ViewModels
 
         public void ImageCropped(Bitmap image)
         {
-            AddNewImage(image, SelectedImage.Tags.Select(t => t.Tag));
+            AddNewImage(image, SelectedImage, SelectedImage.Tags.Select(t => t.Tag));
         }
 
         public async Task ReviewComicPanels(List<Bitmap> panels)
@@ -1359,7 +1359,7 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 foreach (var image in dialog.SelectedImages)
                 {
-                    AddNewImage(image);
+                    AddNewImage(image, SelectedImage);
                 }
             }
         }
@@ -1411,7 +1411,7 @@ namespace StableDiffusionTagManager.ViewModels
                     drawingContext.DrawImage(image, new Rect(0, 0, image.PixelSize.Width, image.PixelSize.Height), imageRegion);
                 }
 
-                AddNewImage(newImage, SelectedImage.Tags.Select(t => t.Tag));
+                AddNewImage(newImage, SelectedImage, SelectedImage.Tags.Select(t => t.Tag));
             }
         }
 
@@ -1562,6 +1562,34 @@ namespace StableDiffusionTagManager.ViewModels
 
                     ShowProgressIndicator = false;
                 }
+            }
+        }
+
+        [RelayCommand(CanExecute = nameof(ImagesLoaded))]
+        public async Task ExtractAllPanels()
+        {
+            if (openFolder != null && ImagesWithTags != null)
+            {
+                ShowProgressIndicator = true;
+                ProgressIndicatorMax = ImagesWithTags.Count();
+                ProgressIndicatorProgress = 0;
+                ProgressIndicatorMessage = "Extracting all comic panels...";
+
+                foreach (var image in ImagesWithTags.ToList())
+                {
+                    var panels = await image.ImageSource.ExtractComicPanels();
+                    foreach (var panel in panels)
+                    {
+                        AddNewImage(panel, image);
+                        panel.Save(image.Filename);
+                    }
+
+                    ProgressIndicatorProgress++;
+
+                    await Task.Delay(1);
+                }
+
+                ShowProgressIndicator = false;
             }
         }
 

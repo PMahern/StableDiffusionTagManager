@@ -4,6 +4,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
 using ImageUtil;
+using StableDiffusionTagManager.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -37,7 +38,7 @@ namespace StableDiffusionTagManager.Controls
         {
             base.OnPropertyChanged(change);
 
-            if(change.Property == ImageProperty)
+            if (change.Property == ImageProperty)
             {
                 UpdateSelectionRegion();
                 ImageBox.Image = Image;
@@ -433,36 +434,25 @@ namespace StableDiffusionTagManager.Controls
         public async Task ExtractComicPanels()
         {
             var window = this.VisualRoot as Window;
-            string tmpImage = Path.Combine(App.GetTempFileDirectory(), $"{Guid.NewGuid()}.png");
             if (Image != null)
             {
-                Image.Save(tmpImage);
-
-                var appDir = App.GetAppDirectory();
-
-                KumikoWrapper kwrapper = new KumikoWrapper(App.Settings.PythonPath, Path.Combine(new string[] { appDir, "Assets", "kumiko" }));
-                if (Image != null)
+                try
                 {
-                    try
+                    var comicPanels = await Image.ExtractComicPanels(ImageBox.GetImageLayers(Image));
+                    ComicPanelsExtracted?.Invoke(comicPanels);
+                }
+                catch (Exception e)
+                {
                     {
-                        var results = await kwrapper.GetImagePanels(tmpImage, App.GetTempFileDirectory());
-
-                        var comicPanels = results.Select(r => ImageBox.CreateNewImageWithLayersFromRegion(new Rect(r.TopLeftX, r.TopLeftY, r.Width, r.Height))).ToList();
-                        ComicPanelsExtracted?.Invoke(comicPanels);
-                    }
-                    catch (Exception e)
-                    {
+                        if (window != null)
                         {
-                            if (window != null)
-                            {
-                                var messageBoxStandardWindow = MsBox.Avalonia.MessageBoxManager
-                                        .GetMessageBoxStandard(
-                                            "Panel Extraction Failed",
-                                            $"{e.Message}",
-                                            MsBox.Avalonia.Enums.ButtonEnum.Ok);
+                            var messageBoxStandardWindow = MsBox.Avalonia.MessageBoxManager
+                                    .GetMessageBoxStandard(
+                                        "Panel Extraction Failed",
+                                        $"{e.Message}",
+                                        MsBox.Avalonia.Enums.ButtonEnum.Ok);
 
-                                await messageBoxStandardWindow.ShowWindowDialogAsync(window);
-                            }
+                            await messageBoxStandardWindow.ShowWindowDialogAsync(window);
                         }
                     }
                 }
@@ -591,9 +581,9 @@ namespace StableDiffusionTagManager.Controls
                 if (bitmap != null)
                 {
                     ExpandClicked?.Invoke(bitmap);
-                } 
+                }
             }
-            else if(Image != null)
+            else if (Image != null)
             {
                 ExpandClicked?.Invoke(Image);
             }
