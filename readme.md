@@ -28,7 +28,7 @@ You simply need to run the StableDiffusionTagManager.exe executable, you may hav
 You'll need to add the execute permission to the StableDiffusionTagManager file (which is the executable). This can be done by running _sudo chmod +x StableDiffusionTagManager_ in a terminal window in the directory of the extracted  archive. After granting the execute permission you can run the application in the command line by running _./StableDiffusionTagManager_ or you can create a shortcut for it.
 
 ### Mac
-On Mac it's a bit more tedious of a process, you need to remove the com.apple.quarantine attribute from several files in the archive's publish folder and then you can run StableDiffusionTabManager file either via a shortcut or running _./StableDiffusionTabManager_. The files you need to remove this attribute from are the following: StableDiffusionTagManager, libSkiaSharp.dylib, libHarfBuzzSharp.dylib, and libAvaloniaNative.dylib. The commands would look like the following:
+On Mac it's a bit more tedious of a process, you need to remove the com.apple.quarantine attribute from several files in the archive's publish folder and then you can run StableDiffusionTabManager file either via a shortcut or running _./StableDiffusionTagManager_. The files you need to remove this attribute from are the following: StableDiffusionTagManager, libSkiaSharp.dylib, libHarfBuzzSharp.dylib, and libAvaloniaNative.dylib. The commands would look like the following:
 
 _xattr -d com.apple.quarantine StableDiffusionTagManager_
 
