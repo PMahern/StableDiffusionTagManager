@@ -17,6 +17,7 @@
       <Menu DockPanel.Dock="Top" Name="MainMenu" IsVisible="{Binding IsStandalone}">
         <MenuItem  Header="_File">
           <MenuItem Header="_Load Image..." Command="{Binding LoadImageCommand}"/>
+          <MenuItem Header="_Save..." Command="{Binding SaveImageCommand}"/>
           <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
         </MenuItem>
       </Menu>

@@ -453,6 +453,29 @@ namespace StableDiffusionTagManager.Views
         }
 
         [RelayCommand]
+        public async Task SaveImage()
+        {
+            var options = new FilePickerSaveOptions();
+            options.FileTypeChoices = new List<FilePickerFileType>() { FilePickerFileTypes.ImagePng };
+            options.Title = "Save image...";
+            var file = await StorageProvider.SaveFilePickerAsync(options);
+
+            if (file != null && file.Path.AbsolutePath.EndsWith(".png"))
+            {
+                var path = file.TryGetLocalPath();
+                if (path != null && path.EndsWith(".png"))
+                {
+                    var toSave = ImageBox.CreateNewImageWithLayers();
+
+                    if (toSave != null)
+                    {
+                        toSave.Save(path);
+                    }
+                }
+            }
+        }
+
+        [RelayCommand]
         public void Exit()
         {
             Close();

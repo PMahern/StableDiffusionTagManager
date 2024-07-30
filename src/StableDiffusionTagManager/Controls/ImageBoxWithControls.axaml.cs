@@ -629,6 +629,12 @@ namespace StableDiffusionTagManager.Controls
         {
             ImageBox.ZoomToFit();
         }
+
+        public Bitmap? CreateNewImageWithLayers()
+        {
+            return ImageBox.CreateNewImageWithLayersFromRegion();
+        }
+
         #endregion
     }
 }

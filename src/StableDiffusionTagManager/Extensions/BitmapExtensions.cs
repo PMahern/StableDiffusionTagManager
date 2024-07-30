@@ -2,11 +2,9 @@
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp;
 using System.IO;
-using System.Reactive.Joins;
 using SixLabors.ImageSharp.PixelFormats;
 using Avalonia;
 using System.Collections.Generic;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using ImageUtil;
 using System.Linq;
