@@ -1,4 +1,6 @@
-﻿namespace ImageUtil
+﻿using SixLabors.ImageSharp;
+
+namespace ImageUtil
 {
     public static class ImageConverter
     {

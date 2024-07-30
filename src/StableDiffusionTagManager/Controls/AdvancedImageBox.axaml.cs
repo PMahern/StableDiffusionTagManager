@@ -1926,7 +1926,7 @@ namespace UVtools.AvaloniaControls
             if (_isPainting)
             {
                 var newestLayer = paintLayers[Image].Last();
-                using (var bitmapRenderContext = newestLayer.GetDrawingContextWithoutClear())
+                using (var bitmapRenderContext = newestLayer.CreateDrawingContext(false))
                 {
                     var brushSize = PaintBrushSize - 1;
                     var pos = PointToImage(pointer.Position);
@@ -1958,7 +1958,7 @@ namespace UVtools.AvaloniaControls
                         else
                             layerMip = layerMips.Last();
 
-                        using (var mipRenderContext = layerMip.GetDrawingContextWithoutClear())
+                        using (var mipRenderContext = layerMip.CreateDrawingContext(false))
                         {
                             mipRenderContext.DrawEllipse(brush, pen, new Rect(pos.X / mipScaleFactor - brushSize / mipScaleFactor, pos.Y / mipScaleFactor - brushSize / mipScaleFactor, d / mipScaleFactor, d / mipScaleFactor));
                             foreach (var point in intermediatePoints)
@@ -1974,7 +1974,7 @@ namespace UVtools.AvaloniaControls
             if (_isMasking)
             {
                 var newestLayer = maskLayers[Image].Last();
-                using (var bitmapRenderContext = newestLayer.GetDrawingContextWithoutClear())
+                using (var bitmapRenderContext = newestLayer.CreateDrawingContext(false))
                 {
                     var brushSize = MaskBrushSize - 1;
                     var pos = PointToImage(pointer.Position);
@@ -2007,7 +2007,7 @@ namespace UVtools.AvaloniaControls
                         else
                             layerMip = layerMips.Last();
 
-                        using (var mipRenderContext = layerMip.GetDrawingContextWithoutClear())
+                        using (var mipRenderContext = layerMip.CreateDrawingContext(false))
                         {
                             mipRenderContext.DrawEllipse(brush, pen, new Rect(pos.X / mipScaleFactor - brushSize / mipScaleFactor, pos.Y / mipScaleFactor - brushSize / mipScaleFactor, d / mipScaleFactor, d / mipScaleFactor));
                             foreach (var point in intermediatePoints)
