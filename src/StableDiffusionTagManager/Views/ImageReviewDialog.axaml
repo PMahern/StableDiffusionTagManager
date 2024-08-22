@@ -40,8 +40,7 @@
               <Grid
                      HorizontalAlignment="Left"
                      VerticalAlignment="Top"
-                     Background="White"
-                      Margin="5"
+                     Background="Black"
                      MinHeight="0"
                      MinWidth="0"
                      IsVisible="{Binding ElementName=ImageList, 
@@ -50,7 +49,8 @@
                                             Converter={StaticResource ResourceKey=reviewModeToBoolConverter}, 
                                             ConverterParameter={x:Static views:ImageReviewDialogMode.MultiSelect}}">
                 <CheckBox IsChecked="{Binding IsSelected}"
-                          Margin="0"
+                          Background="White"
+                          Margin="5"
                           Padding="0"
                         ></CheckBox>
               </Grid>
