@@ -23,6 +23,7 @@ namespace StableDiffusionTagManager.ViewModels
         private readonly int secondNumberedChunk = -1;
         private bool isNumbered = false;
         private string? imageFile = null;
+        private string? description = null; // Added field for storing the English description of the image
 
         private ImageWithTagsViewModel(string imageFile, Func<Bitmap, bool> imageDirtyCallback)
         {
@@ -44,9 +45,7 @@ namespace StableDiffusionTagManager.ViewModels
         public ImageWithTagsViewModel(string imageFile, TagSet tagSet, Func<Bitmap, bool> imageDirtyCallback) : this(imageFile, imageDirtyCallback)
         {
             this.imageFile = imageFile;
-            //using var stream = File.OpenRead(imageFile);
-            //thumbnail = Bitmap.DecodeToHeight(stream, THUMBNAIL_SIZE);
-            //imageSource = new Bitmap(imageFile);
+            Description = tagSet.Description;
             tags = new ObservableCollection<TagViewModel>(tagSet.Tags.Select(t => new TagViewModel(t)
             {
                 TagChanged = TagChangedHandler
@@ -54,11 +53,11 @@ namespace StableDiffusionTagManager.ViewModels
             tags.CollectionChanged += SetTagsDirty;
         }
 
-        public ImageWithTagsViewModel(Bitmap image, string newFileName, Func<Bitmap, bool> imageDirtyCallback, IEnumerable<string>? tags = null) : this(newFileName, imageDirtyCallback)
+        public ImageWithTagsViewModel(Bitmap image, string newFileName, Func<Bitmap, bool> imageDirtyCallback, string? description, IEnumerable<string>? tags = null) : this(newFileName, imageDirtyCallback)
         {
             imageSource = image;
-            //thumbnail = GenerateThumbnail();
 
+            this.description = description;
             if (tags != null)
             {
                 this.tags = new ObservableCollection<TagViewModel>(tags.Select(t => new TagViewModel(t)
@@ -190,7 +189,7 @@ namespace StableDiffusionTagManager.ViewModels
         public void RemoveTag(string tag)
         {
             var findResult = this.tags.FirstOrDefault(t => t.Tag == tag);
-            if(findResult != null)
+            if (findResult != null)
             {
                 this.tags.Remove(findResult);
                 TagRemoved?.Invoke(findResult.Tag);
@@ -296,11 +295,11 @@ namespace StableDiffusionTagManager.ViewModels
 
         internal void ApplyTagOrdering<TKey>(Func<string, TKey> orderBy)
         {
-            var newOrder = this.tags.OrderBy(t => orderBy(t.Tag)).ToList();
-            this.tags.Clear();
+            var newOrder = tags.OrderBy(t => orderBy(t.Tag)).ToList();
+            tags.Clear();
             foreach (var tag in newOrder)
             {
-                this.tags.Add(tag);
+                tags.Add(tag);
             }
         }
 
@@ -312,6 +311,18 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 RemoveTag(toReplaceWith);
                 found.Tag = toReplaceWith;
+            }
+        }
+
+        public string? Description
+        {
+            get => description;
+            set
+            {
+                if (SetProperty(ref description, value))
+                {
+                    tagsDirty = true;
+                }
             }
         }
     }

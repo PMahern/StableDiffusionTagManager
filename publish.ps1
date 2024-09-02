@@ -1,4 +1,4 @@
-$versionsuffix = "beta13"
+$versionsuffix = "0.14"
 $projectpath = "src/StableDiffusionTagManager/StableDiffusionTagManager.csproj"
 $platforms = "win10-x64", "linux-x64", "osx-x64"
 
@@ -11,10 +11,10 @@ foreach($platform in $platforms) {
 }
 
 
-$osxzip = "publish\sdtm-osx-x64-1.0.0-$($versionsuffix).zip"
-$windowszip = "publish\sdtm-win10-x64-1.0.0-$($versionsuffix).zip"
+$osxzip = "publish\sdtm-osx-x64-$($versionsuffix).zip"
+$windowszip = "publish\sdtm-win10-x64-$($versionsuffix).zip"
 $linuxtemptar = "publish\temp.tar"
-$linuxtargz = "publish\sdtm-linux-x64-1.0.0-$($versionsuffix).tgz"
+$linuxtargz = "publish\sdtm-linux-x64-$($versionsuffix).tgz"
 
 if(Test-Path $osxzip) {
 	Remove-Item $osxzip

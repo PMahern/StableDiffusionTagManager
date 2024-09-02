@@ -1,18 +1,16 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Diagnostics;
-using System.Reflection;
 using System.Text;
 
 namespace ImageUtil
 {
     public class KumikoPanelInfo
     {
-        public string filename { get; set; }
+        public string filename { get; set; } = "";
 
-        public int[] size { get; set; }
+        public int[] size { get; set; } = new int[0];
 
-        public int[][] panels { get; set; }
+        public int[][] panels { get; set; } = new int[0][];
     }
 
     public class PanelInfo
@@ -30,7 +28,6 @@ namespace ImageUtil
     {
         private readonly string pythonpath;
         private readonly string kumikopath;
-
 
         public KumikoWrapper(string pythonpath, string kumikopath)
         {
@@ -90,7 +87,7 @@ namespace ImageUtil
 
                         throw new Exception($"Panel Extraction Failed. No panels were found in the output file.\n\r Console output from kumiko execution was: {output}");
                     }
-                } catch (Exception ex)
+                } catch (Exception)
                 {
                     throw new Exception($"Error occured reading kumiko output file.\n\r Console output from kumiko execution was:\n\r {output}");
                 }

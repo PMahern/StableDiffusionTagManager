@@ -21,6 +21,11 @@
     <AvaloniaResource Remove="Styles\Controls\Toolbar.axaml" />
     <AvaloniaXaml Remove="Styles\Icons.axaml" />
     <None Remove=".gitignore" />
+    <None Remove="python\joycaption\interrogate.py" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="python\joycaption\interrogate.py" />
   </ItemGroup>
 
   <ItemGroup>
@@ -96,10 +101,10 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="xcopy /e /i /y /s $(ProjectDir)..\..\submodules\kumiko $(ProjectDir)$(OutDir)Assets\kumiko" />
+    <Exec Command="xcopy /e /i /y /s $(ProjectDir)..\..\submodules\kumiko $(ProjectDir)$(OutDir)Assets\kumiko&#xD;&#xA;xcopy /e /i /y /s $(ProjectDir)python $(ProjectDir)$(OutDir)Assets\python" />
   </Target>
 
   <Target Name="AddPayloadsFolder" AfterTargets="Publish">
-    <Exec Command="xcopy /e /i /y /s $(ProjectDir)..\..\submodules\kumiko $(PublishDir)Assets\kumiko" />
+    <Exec Command="xcopy /e /i /y /s $(ProjectDir)..\..\submodules\kumiko $(PublishDir)Assets\kumiko&#xD;&#xA;xcopy /e /i /y /s $(ProjectDir)python $(PublishDir)Assets\python" />
   </Target>
 </Project>

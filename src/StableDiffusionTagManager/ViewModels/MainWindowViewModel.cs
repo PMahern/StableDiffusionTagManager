@@ -517,7 +517,7 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 foreach (var image in ImagesWithTags)
                 {
-                    var set = new TagSet(Path.Combine(openFolder, image.GetTagsFileName()), image.Tags.Select(t => t.Tag));
+                    var set = new TagSet(Path.Combine(openFolder, image.GetTagsFileName()), image.Description, image.Tags.Select(t => t.Tag));
                     set.WriteFile();
 
                     image.ClearTagsDirty();
@@ -1119,7 +1119,6 @@ namespace StableDiffusionTagManager.ViewModels
             if (ImagesWithTags != null)
             {
                 var dirtyImages = ImagesWithTags.Where(iwt => iwt.IsImageDirty());
-
                 var dirtyTags = ImagesWithTags.Where(iwt => iwt.AreTagsDirty());
 
                 if (dirtyImages.Any() || dirtyTags.Any())
@@ -1149,14 +1148,40 @@ namespace StableDiffusionTagManager.ViewModels
         {
             //Cache the selected image in case it's changed during async operation
             var selectedImage = SelectedImage;
-            var tags = await Interrogate(bitmap);
+            ShowProgressIndicator = true;
+            ProgressIndicatorMessage = "Interrogating image...";
 
-            if (tags != null)
+            try
             {
-                foreach (var tag in tags)
+                var result = await Interrogate(bitmap);
+
+                if (result != null)
                 {
-                    selectedImage.AddTagIfNotExists(tag);
+                    if(result.Value.description != null)
+                    {
+                        selectedImage.Description = result.Value.description;
+                    }
+                    else
+                    {
+                        foreach (var tag in result.Value.tags)
+                        {
+                            selectedImage.AddTagIfNotExists(tag);
+                        }
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                var messageBoxStandardWindow = MessageBoxManager
+                                    .GetMessageBoxStandard("Interrogate Failed",
+                                                 $"Failed to interrogate the image. The error returned was: {ex.Message}",
+                                                 ButtonEnum.Ok,
+                                                 Icon.Warning);
+                await ShowDialog(messageBoxStandardWindow);
+            }
+            finally
+            {
+                ShowProgressIndicator = false;
             }
         }
 
@@ -1201,47 +1226,61 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
-        public async Task<IEnumerable<TagViewModel>?> Interrogate(Bitmap image)
+        public async Task<(string? description, IEnumerable<TagViewModel>? tags)?> Interrogate(Bitmap image)
         {
             var api = new DefaultApi(App.Settings.WebUiAddress);
 
-            var model = "deepdanbooru";
-
-            if (OpenProject != null && OpenProject.InterrogateMethod == SdWebUiApi.InterrogateMethod.Clip)
-            {
-                model = "clip";
-            }
             using var uploadStream = new MemoryStream();
             image.Save(uploadStream);
-            var imagebase64 = Convert.ToBase64String(uploadStream.ToArray());
-
-            try
+            if (OpenProject == null || OpenProject.InterrogateMethod == InterrogateMethod.JoyCaption)
             {
-                var result = await api.InterrogateapiSdapiV1InterrogatePostAsync(new SdWebUiApi.Model.InterrogateRequest
-                {
-                    Image = imagebase64,
-                    Model = model
-                });
+                var joyCaptioner = new JoyCaptioner();
 
-                var jtokResult = result as JToken;
-                var convertedresult = jtokResult?.ToObject<InterrogateResult>();
-                if (convertedresult != null)
+                ProgressIndicatorMessage = "Loading Joycaption Model...";
+
+                var captioner = new JoyCaptioner();
+                await captioner.Initialize(update => ProgressIndicatorMessage = update);
+
+                ProgressIndicatorMessage = "Generating Captions...";
+                return (description: await captioner.CaptionImage(uploadStream.ToArray()), tags: null);
+            }
+            else
+            {
+                var model = "deepdanbooru";
+
+                if (OpenProject.InterrogateMethod == InterrogateMethod.Clip)
                 {
-                    return convertedresult.caption.Split(", ")
-                                                  .Select(t => new TagViewModel(t));
+                    model = "clip";
+                }
+
+                var imagebase64 = Convert.ToBase64String(uploadStream.ToArray());
+                try
+                {
+                    var result = await api.InterrogateapiSdapiV1InterrogatePostAsync(new SdWebUiApi.Model.InterrogateRequest
+                    {
+                        Image = imagebase64,
+                        Model = model
+                    });
+
+                    var jtokResult = result as JToken;
+                    var convertedresult = jtokResult?.ToObject<InterrogateResult>();
+                    if (convertedresult != null)
+                    {
+                        return (description: null, tags: convertedresult.caption.Split(", ")
+                                                      .Select(t => new TagViewModel(t)));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var messageBoxStandardWindow = MessageBoxManager
+                            .GetMessageBoxStandard("Interrogate Failed",
+                                                         $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}",
+                                                         ButtonEnum.Ok,
+                                                         Icon.Warning);
+
+                    await ShowDialog(messageBoxStandardWindow);
                 }
             }
-            catch (Exception ex)
-            {
-                var messageBoxStandardWindow = MessageBoxManager
-                        .GetMessageBoxStandard("Interrogate Failed",
-                                                     $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}",
-                                                     ButtonEnum.Ok,
-                                                     Icon.Warning);
-
-                await ShowDialog(messageBoxStandardWindow);
-            }
-
             return null;
         }
 
@@ -1257,27 +1296,48 @@ namespace StableDiffusionTagManager.ViewModels
                 ProgressIndicatorProgress = 0;
                 ProgressIndicatorMessage = "Interrogating all images...";
 
-                foreach (var image in ImagesWithTags)
+                try
                 {
-                    var tags = await Interrogate(image.ImageSource);
 
-                    if (tags != null)
+                    foreach (var image in ImagesWithTags)
                     {
-                        foreach (var tag in tags)
+                        var result = await Interrogate(image.ImageSource);
+
+                        if (result != null)
                         {
-                            image.AddTagIfNotExists(tag);
+                            if (result.Value.description != null)
+                            {
+                                image.Description = result.Value.description;
+                            }
+                            else
+                            {
+                                foreach (var tag in result.Value.tags)
+                                {
+                                    image.AddTagIfNotExists(tag);
+                                }
+                            }
                         }
+                        else
+                        {
+                            //The interrogate failed, likely connection issue, cancel out
+                            break;
+                        }
+
+                        ++ProgressIndicatorProgress;
                     }
-                    else
-                    {
-                        //The interrogate failed, likely connection issue, cancel out
-                        break;
-                    }
-                    ++ProgressIndicatorProgress;
+
+                    _updateTagCounts = true;
                 }
+                catch (Exception ex)
+                {
+                    var messageBoxStandardWindow = MessageBoxManager
+                            .GetMessageBoxStandard("Interrogate Failed",
+                                                         $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}",
+                                                         ButtonEnum.Ok,
+                                                         Icon.Warning);
 
-                _updateTagCounts = true;
-
+                    await ShowDialog(messageBoxStandardWindow);
+                }
                 UpdateTagCounts();
 
                 ShowProgressIndicator = false;
@@ -1298,7 +1358,7 @@ namespace StableDiffusionTagManager.ViewModels
 
         #endregion
 
-        public void AddNewImage(Bitmap image, ImageWithTagsViewModel baseImage, IEnumerable<string>? tags = null)
+        public void AddNewImage(Bitmap image, ImageWithTagsViewModel baseImage, string? description = null, IEnumerable<string>? tags = null)
         {
             var index = ImagesWithTags.IndexOf(baseImage);
             var withoutExtension = Path.GetFileNameWithoutExtension(baseImage.Filename);
@@ -1320,13 +1380,13 @@ namespace StableDiffusionTagManager.ViewModels
             }
             newFilename = Path.Combine(openFolder, $"{newFilename}.png");
             image.Save(newFilename);
-            var newImageViewModel = new ImageWithTagsViewModel(image, newFilename, ImageDirtyHandler, tags);
+            var newImageViewModel = new ImageWithTagsViewModel(image, newFilename, ImageDirtyHandler, description, tags);
             newImageViewModel.TagEntered += this.TagAdded;
             newImageViewModel.TagRemoved += this.TagRemoved;
 
-            if (tags != null)
+            if (description != null || tags != null)
             {
-                var set = new TagSet(Path.Combine(openFolder, newImageViewModel.GetTagsFileName()), tags);
+                var set = new TagSet(Path.Combine(openFolder, newImageViewModel.GetTagsFileName()), description, tags);
                 set.WriteFile();
             }
 
@@ -1340,7 +1400,7 @@ namespace StableDiffusionTagManager.ViewModels
 
         public void ImageCropped(Bitmap image)
         {
-            AddNewImage(image, SelectedImage, SelectedImage.Tags.Select(t => t.Tag));
+            AddNewImage(image, SelectedImage, SelectedImage.Description, SelectedImage.Tags.Select(t => t.Tag));
         }
 
         public async Task ReviewComicPanels(List<Bitmap> panels)
@@ -1410,7 +1470,7 @@ namespace StableDiffusionTagManager.ViewModels
                     drawingContext.DrawImage(image, new Rect(0, 0, image.PixelSize.Width, image.PixelSize.Height), imageRegion);
                 }
 
-                AddNewImage(newImage, SelectedImage, SelectedImage.Tags.Select(t => t.Tag));
+                AddNewImage(newImage, SelectedImage, SelectedImage.Description, SelectedImage.Tags.Select(t => t.Tag));
             }
         }
 

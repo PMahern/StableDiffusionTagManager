@@ -111,9 +111,15 @@
               <Grid.RowDefinitions>
                 <RowDefinition Height="1*" MinHeight="100"/>
                 <RowDefinition Height="2"/>
+                <RowDefinition Height="1*" MinHeight="100"/>
+                <RowDefinition Height="2"/>
                 <RowDefinition Height="2*" MinHeight="100"/>
               </Grid.RowDefinitions>
-              <controls:HeaderControl Grid.Row="0" Title="Image Tags" MaxHeight="{Binding Path=Parent.ActualHeight, RelativeSource={RelativeSource Self}}" Padding="0">
+              <controls:HeaderControl Grid.Row="0" Title="Image Description" MaxHeight="{Binding Path=Parent.ActualHeight, RelativeSource={RelativeSource Self}}" Padding="0">
+                <TextBox  AcceptsReturn="True" IsEnabled="{Binding SelectedImage, Converter={x:Static ObjectConverters.IsNotNull}}" Text="{Binding SelectedImage.Description}" TextWrapping="Wrap"></TextBox>
+              </controls:HeaderControl>
+              <GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" ResizeBehavior="PreviousAndNext"/>
+              <controls:HeaderControl Grid.Row="2" Title="Image Tags" MaxHeight="{Binding Path=Parent.ActualHeight, RelativeSource={RelativeSource Self}}" Padding="0">
                 <Grid RowDefinitions="Auto,*">
                   <StackPanel Orientation="Horizontal" Classes="toolbar" Grid.Column="0">
                     <Button IsVisible="{Binding IsProject}" Command="{Binding ToggleImageCompleteCommand}" ToolTip.Tip="Mark Image Done">
@@ -174,8 +180,8 @@
                   </ScrollViewer>
                 </Grid>
               </controls:HeaderControl>
-              <GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" ResizeBehavior="PreviousAndNext"/>
-              <Grid Grid.Row="2">
+              <GridSplitter Grid.Row="3" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" ResizeBehavior="PreviousAndNext"/>
+              <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="1*" MinWidth="100"/>
                   <ColumnDefinition Width="2"/>

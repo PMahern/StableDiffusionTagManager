@@ -1396,7 +1396,6 @@ namespace UVtools.AvaloniaControls
 
         private Dictionary<Bitmap, List<RenderTargetBitmap>> paintLayers = new Dictionary<Bitmap, List<RenderTargetBitmap>>();
         private Dictionary<Bitmap, List<RenderTargetBitmap>> maskLayers = new Dictionary<Bitmap, List<RenderTargetBitmap>>();
-        private object framebuffer;
         public static readonly StyledProperty<ISolidColorBrush> PixelGridColorProperty =
             AvaloniaProperty.Register<AdvancedImageBox, ISolidColorBrush>(nameof(PixelGridColor), Avalonia.Media.Brushes.DimGray);
 
@@ -1499,13 +1498,17 @@ namespace UVtools.AvaloniaControls
             //Mip = this.FindControl<Image>("Mip");
 
             SizeModeChanged();
-
-            HorizontalScrollBar.Scroll += ScrollBarOnScroll;
-            VerticalScrollBar.Scroll += ScrollBarOnScroll;
-            ViewPort.PointerPressed += ViewPortOnPointerPressed;
-            ViewPort.PointerExited += ViewPortOnPointerLeave;
-            ViewPort.PointerMoved += ViewPortOnPointerMoved;
-            ViewPort.PointerWheelChanged += ViewPortOnPointerWheelChanged;
+            if (HorizontalScrollBar != null)
+                HorizontalScrollBar.Scroll += ScrollBarOnScroll;
+            if (VerticalScrollBar != null)
+                VerticalScrollBar.Scroll += ScrollBarOnScroll;
+            if (VerticalScrollBar != null)
+            {
+                ViewPort.PointerPressed += ViewPortOnPointerPressed;
+                ViewPort.PointerExited += ViewPortOnPointerLeave;
+                ViewPort.PointerMoved += ViewPortOnPointerMoved;
+                ViewPort.PointerWheelChanged += ViewPortOnPointerWheelChanged;
+            }
         }
 
         private void InitializeComponent()

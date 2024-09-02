@@ -1,9 +1,4 @@
 ﻿using SixLabors.ImageSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StableDiffusionTagManager.Extensions
 {
@@ -18,7 +13,7 @@ namespace StableDiffusionTagManager.Extensions
     {
         
         public CropBounds Bounds { get; set; } = new CropBounds();
-        public Image FullMaskedImage { get; set; }
+        public  Image FullMaskedImage { get; set; }
         public Image CroppedMaskedImage { get; set; }
         public Image CroppedMask { get; set; }
     }

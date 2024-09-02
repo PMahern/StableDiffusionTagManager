@@ -266,7 +266,6 @@ namespace StableDiffusionTagManager.Views
             await viewModel?.SaveCurrentImage(image);
         }
 
-
         public void FocusNextTag()
         {
             var currentFocus = FocusManager.GetFocusedElement();

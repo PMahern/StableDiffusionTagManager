@@ -489,7 +489,7 @@ namespace StableDiffusionTagManager.Controls
         }
 
         [RelayCommand]
-        public async void Interrogate()
+        public async Task Interrogate()
         {
             if (Image != null)
             {
@@ -505,7 +505,7 @@ namespace StableDiffusionTagManager.Controls
         }
 
         [RelayCommand]
-        public async void RemoveBackground()
+        public async Task RemoveBackground()
         {
             if (Image != null)
             {
@@ -521,7 +521,7 @@ namespace StableDiffusionTagManager.Controls
         }
 
         [RelayCommand]
-        public async void ConvertAlpha()
+        public async Task ConvertAlpha()
         {
             if (Image != null)
             {
@@ -537,7 +537,7 @@ namespace StableDiffusionTagManager.Controls
         }
 
         [RelayCommand]
-        public async void EditImage()
+        public async Task EditImage()
         {
             if (Image != null)
             {

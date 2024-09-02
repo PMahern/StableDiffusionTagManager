@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         x:Class="StableDiffusionTagManager.Views.ProjectSettingsDialog"
-        Height="310"
+        Height="330"
         Width="400"
         xmlns:controls="using:StableDiffusionTagManager.Controls"
         xmlns:conv="using:StableDiffusionTagManager.Converters"
@@ -26,7 +26,7 @@
     <conv:InterrogateMethodToBooleanConverter x:Key="interrogateConverter"/>
   </Window.Resources>
   <controls:HeaderControl DataContext="{Binding ElementName=ThisControl}" Title="Project Settings" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="5" CloseCommand="{Binding CancelCommand}">
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
       <Label >Default Prompt Prefix</Label>
       <TextBox Width="200" Grid.Column="1" Text="{Binding DefaultPromptPrefix}" />
 
@@ -46,15 +46,16 @@
         <NumericUpDown Grid.Column="3" Value="{Binding TargetImageHeight}" Width="60" Minimum="0"/>
       </Grid>
 
-      <Grid Grid.Row="5" Grid.ColumnSpan="2" ColumnDefinitions="*,Auto">
-        <Label>Interrogate Method</Label>
+      <Label Grid.Row="5" Grid.ColumnSpan="2">Interrogate Method</Label>
+      <Grid Grid.Row="6" Grid.ColumnSpan="2" ColumnDefinitions="*,Auto">
         <StackPanel Grid.Column="1" Orientation="Horizontal">
+          <RadioButton IsChecked="{Binding InterrogateMethod, Converter={StaticResource ResourceKey=interrogateConverter}, ConverterParameter={x:Static api:InterrogateMethod.JoyCaption}, Mode=TwoWay}">Joy Caption</RadioButton>
           <RadioButton IsChecked="{Binding InterrogateMethod, Converter={StaticResource ResourceKey=interrogateConverter}, ConverterParameter={x:Static api:InterrogateMethod.Clip}, Mode=TwoWay}">CLIP</RadioButton>
           <RadioButton IsChecked="{Binding InterrogateMethod, Converter={StaticResource ResourceKey=interrogateConverter}, ConverterParameter={x:Static api:InterrogateMethod.DeepDanBooru}, Mode=TwoWay}">DeepDanBooru</RadioButton>
         </StackPanel>
       </Grid>
 
-      <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Classes="footer">
+      <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Classes="footer">
         <Button Command="{Binding SaveCommand}">Save</Button>
         <Button Command="{Binding CancelCommand}">Cancel</Button>
       </StackPanel>
