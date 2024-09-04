@@ -19,6 +19,7 @@
     <AvaloniaResource Remove="Styles\Controls\Overlay.axaml" />
     <AvaloniaResource Remove="Styles\Controls\Tag.axaml" />
     <AvaloniaResource Remove="Styles\Controls\Toolbar.axaml" />
+    <AvaloniaXaml Remove="Styles\Controls\InputForm.axaml" />
     <AvaloniaXaml Remove="Styles\Icons.axaml" />
     <None Remove=".gitignore" />
     <None Remove="python\joycaption\interrogate.py" />
@@ -74,6 +75,9 @@
     <AvaloniaXaml Update="Styles\Controls\Overlay.axaml">
       <SubType>Designer</SubType>
     </AvaloniaXaml>
+    <AvaloniaResource Update="Styles\Controls\InputForm.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
     <AvaloniaResource Update="Styles\Icons.axaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>

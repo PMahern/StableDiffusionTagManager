@@ -1153,24 +1153,26 @@ namespace StableDiffusionTagManager.ViewModels
 
             try
             {
-                var result = await Interrogate(bitmap);
-
-                if (result != null)
+                var dialog = new InterrogationDialog();
+                await ShowDialog(dialog);
+                if (dialog.Success)
                 {
-                    if(result.Value.description != null)
+                    var result = await Interrogate(dialog.SelectedNaturalLanguageInterrogator?.Factory.Invoke(), dialog.SelectedTagInterrogator?.Factory.Invoke(), dialog.TagThreshold, bitmap);
+
+                    if (result.description != null)
                     {
-                        selectedImage.Description = result.Value.description;
+                        selectedImage.Description = result.description;
                     }
-                    else
+                    if (result.tags != null)
                     {
-                        foreach (var tag in result.Value.tags)
+                        foreach (var tag in result.tags)
                         {
-                            selectedImage.AddTagIfNotExists(tag);
+                            selectedImage.AddTagIfNotExists(new TagViewModel(tag));
                         }
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var messageBoxStandardWindow = MessageBoxManager
                                     .GetMessageBoxStandard("Interrogate Failed",
@@ -1226,62 +1228,54 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
-        public async Task<(string? description, IEnumerable<TagViewModel>? tags)?> Interrogate(Bitmap image)
+        public async Task<(string? description, IEnumerable<string>? tags)> Interrogate(INaturalLanguageInterrogator? naturalLanguageInterrogator, ITagInterrogator? tagInterrogator, float tagThreshold, Bitmap image)
         {
             var api = new DefaultApi(App.Settings.WebUiAddress);
 
             using var uploadStream = new MemoryStream();
             image.Save(uploadStream);
-            if (OpenProject == null || OpenProject.InterrogateMethod == InterrogateMethod.JoyCaption)
+
+            string? description = null;
+            if (naturalLanguageInterrogator != null)
             {
-                var joyCaptioner = new JoyCaptioner();
-
-                ProgressIndicatorMessage = "Loading Joycaption Model...";
-
-                var captioner = new JoyCaptioner();
-                await captioner.Initialize(update => ProgressIndicatorMessage = update);
-
-                ProgressIndicatorMessage = "Generating Captions...";
-                return (description: await captioner.CaptionImage(uploadStream.ToArray()), tags: null);
-            }
-            else
-            {
-                var model = "deepdanbooru";
-
-                if (OpenProject.InterrogateMethod == InterrogateMethod.Clip)
-                {
-                    model = "clip";
-                }
-
-                var imagebase64 = Convert.ToBase64String(uploadStream.ToArray());
                 try
                 {
-                    var result = await api.InterrogateapiSdapiV1InterrogatePostAsync(new SdWebUiApi.Model.InterrogateRequest
-                    {
-                        Image = imagebase64,
-                        Model = model
-                    });
-
-                    var jtokResult = result as JToken;
-                    var convertedresult = jtokResult?.ToObject<InterrogateResult>();
-                    if (convertedresult != null)
-                    {
-                        return (description: null, tags: convertedresult.caption.Split(", ")
-                                                      .Select(t => new TagViewModel(t)));
-                    }
+                    ProgressIndicatorMessage = "Initializing Natural Language Model...";
+                    await naturalLanguageInterrogator.Initialize(message => ProgressIndicatorMessage = message);
+                    description = await naturalLanguageInterrogator.CaptionImage(uploadStream.ToArray());
                 }
                 catch (Exception ex)
                 {
                     var messageBoxStandardWindow = MessageBoxManager
                             .GetMessageBoxStandard("Interrogate Failed",
-                                                         $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}",
+                                                         $"Failed to interrogate the image with the selected natural language interrogator. Error message: {ex.Message}",
                                                          ButtonEnum.Ok,
                                                          Icon.Warning);
 
                     await ShowDialog(messageBoxStandardWindow);
                 }
             }
-            return null;
+            List<string> tags = null;
+            if (tagInterrogator != null)
+            {
+                try
+                {
+                    ProgressIndicatorMessage = "Initializing Tag Model...";
+                    await tagInterrogator.Initialize(message => ProgressIndicatorMessage = message);
+                    tags = await tagInterrogator.TagImage(uploadStream.ToArray(), tagThreshold);
+                }
+                catch (Exception ex)
+                {
+                    var messageBoxStandardWindow = MessageBoxManager
+                            .GetMessageBoxStandard("Interrogate Failed",
+                                                         $"Failed to interrogate the image with the selected tag interrogator. Error message: {ex.Message}",
+                                                         ButtonEnum.Ok,
+                                                         Icon.Warning);
+
+                    await ShowDialog(messageBoxStandardWindow);
+                }
+            }
+            return (description: description, tags: tags);
         }
 
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
@@ -1289,57 +1283,59 @@ namespace StableDiffusionTagManager.ViewModels
         {
             if (ImagesWithTags != null && ImagesWithTags.Count > 0)
             {
-                _updateTagCounts = false;
-
-                ShowProgressIndicator = true;
-                ProgressIndicatorMax = ImagesWithTags.Count();
-                ProgressIndicatorProgress = 0;
-                ProgressIndicatorMessage = "Interrogating all images...";
-
-                try
+                var dialog = new InterrogationDialog();
+                await ShowDialog(dialog);
+                if (dialog.Success)
                 {
+                    _updateTagCounts = false;
 
-                    foreach (var image in ImagesWithTags)
+                    ShowProgressIndicator = true;
+                    ProgressIndicatorMax = ImagesWithTags.Count();
+                    ProgressIndicatorProgress = 0;
+                    ProgressIndicatorMessage = "Interrogating all images...";
+
+                    try
                     {
-                        var result = await Interrogate(image.ImageSource);
-
-                        if (result != null)
+                        var naturalLanguageInterrogator = dialog.SelectedNaturalLanguageInterrogator?.Factory.Invoke();
+                        var tagInterrogator = dialog.SelectedTagInterrogator?.Factory.Invoke();
+                        foreach (var image in ImagesWithTags)
                         {
-                            if (result.Value.description != null)
+                            var result = await Interrogate(naturalLanguageInterrogator, tagInterrogator, dialog.TagThreshold, image.ImageSource);
+
+                            if (result.description != null)
                             {
-                                image.Description = result.Value.description;
+                                image.Description = result.description;
+                            }
+                            if (result.tags != null)
+                            {
+                                foreach (var tag in result.tags)
+                                {
+                                    image.AddTagIfNotExists(new TagViewModel(tag));
+                                }
                             }
                             else
                             {
-                                foreach (var tag in result.Value.tags)
-                                {
-                                    image.AddTagIfNotExists(tag);
-                                }
+                                //The interrogate failed, likely connection issue, cancel out
+                                break;
                             }
-                        }
-                        else
-                        {
-                            //The interrogate failed, likely connection issue, cancel out
-                            break;
+
+                            ++ProgressIndicatorProgress;
                         }
 
-                        ++ProgressIndicatorProgress;
+                        _updateTagCounts = true;
                     }
+                    catch (Exception ex)
+                    {
+                        var messageBoxStandardWindow = MessageBoxManager
+                                .GetMessageBoxStandard("Interrogate Failed",
+                                                             $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}",
+                                                             ButtonEnum.Ok,
+                                                             Icon.Warning);
 
-                    _updateTagCounts = true;
+                        await ShowDialog(messageBoxStandardWindow);
+                    }
+                    UpdateTagCounts();
                 }
-                catch (Exception ex)
-                {
-                    var messageBoxStandardWindow = MessageBoxManager
-                            .GetMessageBoxStandard("Interrogate Failed",
-                                                         $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}",
-                                                         ButtonEnum.Ok,
-                                                         Icon.Warning);
-
-                    await ShowDialog(messageBoxStandardWindow);
-                }
-                UpdateTagCounts();
-
                 ShowProgressIndicator = false;
             }
         }

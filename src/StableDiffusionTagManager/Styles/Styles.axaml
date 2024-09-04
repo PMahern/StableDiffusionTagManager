@@ -43,7 +43,28 @@
                           HorizontalScrollBarVisibility="Disabled"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch">
-
+            <StackPanel Classes="inputform">
+              <Panel>
+                <Label Classes="controlgroup">Test Group</Label>
+                </Panel>
+              <Panel>
+                <Label>Test Label</Label>
+                <ComboBox SelectedItem="Test Item">
+                  Test Item
+                </ComboBox>
+              </Panel>
+              <Panel>
+                <Label>Test Label</Label>
+                <ComboBox SelectedItem="Test Item">
+                  Test Item
+                </ComboBox>
+              </Panel>
+              <Panel>
+                <Label>Test Label</Label>
+                <TextBox Text="Test Item">
+                </TextBox>
+              </Panel>
+            </StackPanel>
           </ScrollViewer>
         </controls:HeaderControl>
       </DockPanel>
@@ -57,8 +78,9 @@
   <StyleInclude Source="/Styles/Controls/Toolbar.axaml"/>
   <StyleInclude Source="/Styles/Controls/Dialog.axaml"/>
   <StyleInclude Source="/Styles/Controls/Overlay.axaml"/>
-  <Style Selector="MenuItem:pointerover /template/ Border#PART_LayoutRoot">
-    <Setter Property="Background" Value="{DynamicResource PrimaryInteractiveHoverColor}"/>
-  </Style>  
+  <StyleInclude Source="/Styles/Controls/InputForm.axaml"/>
+  <Style Selector="Label.controlgroup">
+    <Setter Property="FontWeight" Value="Bold"></Setter>
+  </Style>
 </Styles>
 

@@ -1,0 +1,60 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="using:StableDiffusionTagManager.Controls"
+        xmlns:imageutil="using:ImageUtil"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="280"
+        Height="300"
+        Width="400"
+        x:Class="StableDiffusionTagManager.Views.InterrogationDialog"
+        Title="Image Interrogation"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="4"
+        ExtendClientAreaToDecorationsHint="True"
+        WindowStartupLocation="CenterOwner"
+        Icon="/Assets/logo.ico"
+        CanResize="False"
+        Name="ThisControl">
+  <controls:HeaderControl Title="Image Interrogation">
+    <Grid RowDefinitions="*,Auto">
+      <StackPanel Classes="inputform">
+        <Panel>
+          <Label Classes="controlgroup">Natural Language</Label>
+        </Panel>
+        <Panel>
+          <Label>Model</Label>
+          <ComboBox ItemsSource="{x:Static imageutil:Interrogators.NaturalLanguageInterrogators}" SelectedItem="{Binding SelectedNaturalLanguageInterrogator, Mode=TwoWay}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </Panel>
+        <Panel>
+          <Label Classes="controlgroup">Tags</Label>
+        </Panel>
+        <Panel>
+          <Label>Model</Label>
+          <ComboBox ItemsSource="{x:Static imageutil:Interrogators.TagInterrogators}" SelectedItem="{Binding SelectedTagInterrogator, Mode=TwoWay}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Name}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+          </ComboBox>
+        </Panel>
+        <Panel>
+          <Label>Threshold</Label>
+          <NumericUpDown Width="75" Height="25" Minimum="0.0" Maximum="1.0" Increment="0.1" />
+        </Panel>
+      </StackPanel>
+      <StackPanel Grid.Row="1" Classes="footer">
+        <Button Command="{Binding InterrogateCommand}">Interrogate</Button>
+        <Button Command="{Binding CancelCommand}">Cancel</Button>
+      </StackPanel>
+    </Grid>
+  </controls:HeaderControl>
+
+</Window>

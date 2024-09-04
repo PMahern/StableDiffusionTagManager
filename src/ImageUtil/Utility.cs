@@ -1,5 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using LibGit2Sharp;
+using Newtonsoft.Json;
 using SdWebUiApi;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace ImageUtil
@@ -52,7 +55,40 @@ namespace ImageUtil
             }
         }
 
-        public static async Task ProcessLFSFilesInFolder(string folderPath, string lfsurl)
+        /// <summary>
+        /// Clone the repot at the given url into the given directory. 
+        /// </summary>
+        /// <param name="repoUrl"></param>
+        /// <param name="absoluteWorkingDirectory"></param>
+        /// <param name="updateCallBack"></param>
+        /// <returns>True if the repo was clone, false if it already existed.</returns>
+        public async static Task<bool> CloneRepo(string repoUrl, string absoluteWorkingDirectory, Action<string> updateCallBack)
+        {
+            if (!Directory.Exists(absoluteWorkingDirectory))
+            {
+                updateCallBack("Cloning repository...");
+
+                await Task.Run(() =>
+                {
+                    Repository.Clone(repoUrl, absoluteWorkingDirectory, new CloneOptions
+                    {
+                        Checkout = true,
+                    });
+                });
+
+                updateCallBack("Downloading large files...");
+
+                string lfsurl = $"{repoUrl}.git/info/lfs/objects/batch";
+
+                await Utility.ProcessLFSFilesInFolder(absoluteWorkingDirectory, lfsurl);
+
+                return true;
+            }
+
+            return false;
+        }
+
+            public static async Task ProcessLFSFilesInFolder(string folderPath, string lfsurl)
         {
             foreach (string filePath in Directory.GetFiles(folderPath))
             {
@@ -65,7 +101,74 @@ namespace ImageUtil
             }
         }
 
-        // ...
+        public async static Task<bool> CreateVenv(string absoluteWorkingDirectory, Action<string> updateCallBack, string? requirementsFile = null, IEnumerable<string>? additionalDependencies = null)
+        {
+            string venvPathPath = Path.Join(absoluteWorkingDirectory, "venv");
+
+            if (!Directory.Exists(venvPathPath))
+            {
+                updateCallBack("Creating virtual environment and downloading model dependencies, this can take a while...");
+
+                Process p = new Process();
+                ProcessStartInfo info = new ProcessStartInfo();
+
+
+                info.FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "cmd.exe" : "/bin/bash"; ;
+                var arguments = new StringBuilder();
+
+                if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    arguments.Append("/k \"python -m venv venv && venv\\Scripts\\activate.bat");
+                }
+                else
+                {
+                    arguments.Append("-c \"python -m venv venv && source venv/bin/activate");
+                }
+
+                if(requirementsFile != null)
+                {
+                    arguments.Append($" && pip install -r {requirementsFile}");
+                }
+
+                if (additionalDependencies != null)
+                {
+                    foreach (var dependency in additionalDependencies)
+                    {
+                        arguments.Append($" && pip install {dependency}");
+                    }
+                }
+
+                arguments.Append(" && exit\"");
+                info.Arguments = arguments.ToString();
+                
+
+                //var installSubstr = requirementsFile != $"pip install{(requirementsFile != null ? " -r requirements.txt " : "")}";
+                //if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                //{
+                //    info.FileName = "cmd.exe";
+                //    info.Arguments = $"/k \"python -m venv venv && venv\\Scripts\\activate.bat && {installSubstr} && pip install Pillow && pip install spaces && pip install protobuf && pip install bitsandbytes && exit\"";
+                //}
+                //else
+                //{
+                //    info.FileName = "/bin/bash";
+                //    info.Arguments = $"-c \"python -m venv venv && source venv/bin/activate && {installSubstr} && pip install Pillow && pip install spaces && pip install protobuf && pip install bitsandbytes && exit\"";
+                //}
+
+                info.RedirectStandardInput = true;
+                info.UseShellExecute = false;
+                info.CreateNoWindow = true;
+                info.WorkingDirectory = absoluteWorkingDirectory;
+
+                p.StartInfo = info;
+                p.Start();
+
+                await p.WaitForExitAsync();
+
+                return true;
+            }
+
+            return false;
+        }
 
         public static async Task DownloadIfLFSLink(string filePath, string lfsurl)
         {

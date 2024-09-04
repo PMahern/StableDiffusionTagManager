@@ -1,0 +1,49 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:StableDiffusionTagManager.Controls"
+        xmlns:sys="using:System"
+        >
+  <Design.PreviewWith>
+    <Window Width="300" Height="500">
+        <controls:HeaderControl Title="Test Header">
+          <StackPanel Classes="inputform">
+            <Panel>
+              <Label>Test Label</Label>
+              <ComboBox SelectedItem="Test Item">
+                Test Item
+              </ComboBox>
+            </Panel>
+            <Panel>
+              <Label>Test Label</Label>
+              <ComboBox SelectedItem="Test Item">
+                Test Item
+              </ComboBox>
+            </Panel>
+            <Panel>
+              <Label>Test Label</Label>
+              <TextBox Text="Test Item">
+              </TextBox>
+            </Panel>
+          </StackPanel>
+        </controls:HeaderControl>
+    </Window>
+  </Design.PreviewWith>
+  <Style Selector="StackPanel.inputform">
+    <Setter Property="Orientation" Value="Vertical"/>
+  </Style>
+
+  <Style Selector="StackPanel.inputform > Panel">
+    <Setter Property="Margin" Value=" 2"/>
+  </Style>
+  <Style Selector="StackPanel.inputform > Panel > :is(InputElement)">
+    <Setter Property="HorizontalAlignment" Value="Right"/>
+    <Setter Property="Width" Value="150"/>
+  </Style>
+  <Style Selector="StackPanel.inputform > Panel > Label">
+    <Setter Property="HorizontalAlignment" Value="Left"/>
+    <Setter Property="Width" Value="{x:Static sys:Double.NaN}" />
+  </Style>
+  <Style Selector="StackPanel.inputform > Panel > :is(ContentControl)">
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+  </Style>
+</Styles>
