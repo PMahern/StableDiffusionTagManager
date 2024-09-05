@@ -46,7 +46,7 @@ namespace TagUtil
 
                 var lastChunk = chunks[i];
                 var extractedTags = lastChunk.ExtractTags();
-                // If the number of tags is greater than 10% of the length of the last chunk, we assume that the last chunk is the tags
+                // If there's more than one comma per 10 characters, assume that the last chunk is tags.
                 if (extractedTags.Count > (lastChunk.Length / 10))
                 {
                     Tags = extractedTags;
@@ -55,6 +55,7 @@ namespace TagUtil
                 {
                     //Assume that the last chunk is more description.
                     descriptionBuilder.AppendLine(lastChunk);
+                    Tags = new List<string>();
                 }
 
                 Description = descriptionBuilder.ToString().Trim();

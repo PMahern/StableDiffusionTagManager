@@ -1147,9 +1147,6 @@ namespace StableDiffusionTagManager.ViewModels
         public async Task InterrogateAndApplyToSelectedImage(Bitmap bitmap)
         {
             //Cache the selected image in case it's changed during async operation
-            var selectedImage = SelectedImage;
-            ShowProgressIndicator = true;
-            ProgressIndicatorMessage = "Interrogating image...";
 
             try
             {
@@ -1157,6 +1154,10 @@ namespace StableDiffusionTagManager.ViewModels
                 await ShowDialog(dialog);
                 if (dialog.Success)
                 {
+                    var selectedImage = SelectedImage;
+                    ShowProgressIndicator = true;
+                    ProgressIndicatorMessage = "Interrogating image...";
+
                     var result = await Interrogate(dialog.SelectedNaturalLanguageInterrogator?.Factory.Invoke(), dialog.SelectedTagInterrogator?.Factory.Invoke(), dialog.TagThreshold, bitmap);
 
                     if (result.description != null)
@@ -1242,6 +1243,8 @@ namespace StableDiffusionTagManager.ViewModels
                 {
                     ProgressIndicatorMessage = "Initializing Natural Language Model...";
                     await naturalLanguageInterrogator.Initialize(message => ProgressIndicatorMessage = message);
+
+                    ProgressIndicatorMessage = "Executing image interrogation...";
                     description = await naturalLanguageInterrogator.CaptionImage(uploadStream.ToArray());
                 }
                 catch (Exception ex)
@@ -1262,6 +1265,7 @@ namespace StableDiffusionTagManager.ViewModels
                 {
                     ProgressIndicatorMessage = "Initializing Tag Model...";
                     await tagInterrogator.Initialize(message => ProgressIndicatorMessage = message);
+                    ProgressIndicatorMessage = "Executing image interrogation...";
                     tags = await tagInterrogator.TagImage(uploadStream.ToArray(), tagThreshold);
                 }
                 catch (Exception ex)
@@ -1315,7 +1319,6 @@ namespace StableDiffusionTagManager.ViewModels
                             }
                             else
                             {
-                                //The interrogate failed, likely connection issue, cancel out
                                 break;
                             }
 
@@ -1328,7 +1331,7 @@ namespace StableDiffusionTagManager.ViewModels
                     {
                         var messageBoxStandardWindow = MessageBoxManager
                                 .GetMessageBoxStandard("Interrogate Failed",
-                                                             $"Failed to interrogate the image. This likely means the stable diffusion webui server can't be reached. Error message: {ex.Message}",
+                                                             $"Failed to interrogate the image. Error message: {ex.Message}",
                                                              ButtonEnum.Ok,
                                                              Icon.Warning);
 
