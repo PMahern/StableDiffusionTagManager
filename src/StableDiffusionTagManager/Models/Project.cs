@@ -33,7 +33,6 @@ namespace StableDiffusionTagManager.Models
         private decimal? defaultDenoiseStrength = 0.5M;
         private string? activationKeyword = null;
         private PixelSize? targetImageSize = null;
-        private InterrogateMethod interrogateMethod = InterrogateMethod.DeepDanBooru;
         private List<TagCollection> tagCollections = new List<TagCollection>();
         private List<(string oldfile, string newfile)> backedUpFileMaps = new List<(string, string)>();
         private List<string> completedImages = new List<string>();
@@ -106,15 +105,7 @@ namespace StableDiffusionTagManager.Models
                 ProjectUpdated?.Invoke();
             }
         }
-        public InterrogateMethod InterrogateMethod
-        {
-            get => interrogateMethod; 
-            set
-            {
-                interrogateMethod = value;
-                ProjectUpdated?.Invoke();
-            }
-        }
+
         public List<TagCollection> TagCollections
         {
             get => tagCollections; 

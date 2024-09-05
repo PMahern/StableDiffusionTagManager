@@ -29,7 +29,6 @@ namespace StableDiffusionTagManager.Views
                     TargetImageWidth = project.TargetImageSize?.Width;
                     TargetImageHeight = project.TargetImageSize?.Height;
                     DefaultPromptPrefix = project.DefaultPromptPrefix;
-                    InterrogateMethod = project.InterrogateMethod;
                 }
             }
 
@@ -107,17 +106,6 @@ namespace StableDiffusionTagManager.Views
             set => SetValue(TargetImageHeightProperty, value);
         }
 
-        public static readonly StyledProperty<InterrogateMethod> InterrogateMethodProperty =
-            AvaloniaProperty.Register<ProjectSettingsDialog, InterrogateMethod>(nameof(InterrogateMethod), InterrogateMethod.DeepDanBooru);
-
-        /// <summary>
-        /// Gets or sets if control can render the image
-        /// </summary>
-        public InterrogateMethod InterrogateMethod
-        {
-            get => GetValue(InterrogateMethodProperty);
-            set => SetValue(InterrogateMethodProperty, value);
-        }
         #endregion
 
         #region Commands
@@ -139,7 +127,6 @@ namespace StableDiffusionTagManager.Views
                     project.TargetImageSize = null;
                 }
                 project.DefaultPromptPrefix = DefaultPromptPrefix;
-                project.InterrogateMethod = InterrogateMethod;
                 project.Save();
 
                 Close();
