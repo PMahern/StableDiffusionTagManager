@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.RegularExpressions;
 
 namespace TagUtil
 {
@@ -22,43 +23,35 @@ namespace TagUtil
             {
                 var content = System.IO.File.ReadAllText(file);
 
-                var chunks = content.Split(Environment.NewLine);
-
-                var descriptionBuilder = new StringBuilder();
-
-                var IsLastChunk = (string[] chunks, int i) =>
+                if (content != null)
                 {
-                    for (int j = i + 1; j < chunks.Length; j++)
+                    content = content.Trim();
+
+                    var chunks = Regex.Split(content, @"\r\n|\n");
+
+                    var descriptionBuilder = new StringBuilder();
+
+                    foreach (var chunk in chunks.Take(chunks.Length - 1))
                     {
-                        if (!string.IsNullOrWhiteSpace(chunks[j]))
-                        {
-                            return false;
-                        }
+                        descriptionBuilder.AppendLine(chunk);
                     }
-                    return true;
-                };
 
-                int i = 0;
-                for (i = 0; !IsLastChunk(chunks, i); i++)
-                {
-                    descriptionBuilder.AppendLine(chunks[i]);
-                }
+                    var lastChunk = chunks.Last();
+                    var extractedTags = lastChunk.ExtractTags();
+                    // If there's more than one comma per 15 characters, no periods, and no upper case letters assume that the last chunk is tags.
+                    if (extractedTags.Count > (lastChunk.Length / 15) && !lastChunk.Contains(".") && !lastChunk.Any(c => char.IsUpper(c)))
+                    {
+                        Tags = extractedTags;
+                    }
+                    else
+                    {
+                        //Assume that the last chunk is more description.
+                        descriptionBuilder.AppendLine(lastChunk);
+                        Tags = new List<string>();
+                    }
 
-                var lastChunk = chunks[i];
-                var extractedTags = lastChunk.ExtractTags();
-                // If there's more than one comma per 10 characters, assume that the last chunk is tags.
-                if (extractedTags.Count > (lastChunk.Length / 10))
-                {
-                    Tags = extractedTags;
+                    Description = descriptionBuilder.ToString().Trim();
                 }
-                else
-                {
-                    //Assume that the last chunk is more description.
-                    descriptionBuilder.AppendLine(lastChunk);
-                    Tags = new List<string>();
-                }
-
-                Description = descriptionBuilder.ToString().Trim();
             }
             else
             {
