@@ -2,15 +2,21 @@ from PIL import Image
 import sys
 from app import stream_chat
 from io import BytesIO
+import base64
 
 def main():
-    byte_data = sys.stdin.buffer.read()
-    image_bytes = BytesIO(byte_data)
+    while True:
+        
+        imagedata = sys.stdin.readline().strip()
+        binary_data = base64.b64decode(imagedata)
+        image_bytes = BytesIO(binary_data)
 
-    with Image.open(image_bytes).convert("RGB") as img:
-        captions = stream_chat(img)
-        print("GENERATION RESULT")
-        print(captions)
+        with Image.open(image_bytes).convert("RGB") as img:
+            captions = stream_chat(img)
+            print("GENERATION START")
+            print(captions)
+            print("GENERATION END")
+            sys.stdout.flush()
 
 if __name__ == "__main__":
     main()

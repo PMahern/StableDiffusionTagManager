@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Reflection;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -30,7 +28,6 @@ namespace ImageUtil
                 info.RedirectStandardInput = true;
                 info.UseShellExecute = false;
                 info.CreateNoWindow = true;
-
                 info.WorkingDirectory = absoluteWorkingDirectory;
                 info.RedirectStandardOutput = true;
                 info.RedirectStandardError = true;
@@ -53,14 +50,21 @@ namespace ImageUtil
                 p.BeginOutputReadLine();
                 p.BeginErrorReadLine();
 
-                if (data != null)
+                try
                 {
-                    using (Stream stdin = p.StandardInput.BaseStream)
+                    if (data != null)
                     {
-                        stdin.Write(data, 0, data.Length);
-                        stdin.Flush();
-                        stdin.Close();
+                        using (Stream stdin = p.StandardInput.BaseStream)
+                        {
+                            stdin.Write(data, 0, data.Length);
+                            stdin.Flush();
+                            stdin.Close();
+                        }
                     }
+                }
+                catch (Exception)
+                {
+                    throw new Exception($"Python script failed. Full output is {sb.ToString()}");
                 }
 
                 await p.WaitForExitAsync();

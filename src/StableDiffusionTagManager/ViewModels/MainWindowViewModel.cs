@@ -1158,7 +1158,10 @@ namespace StableDiffusionTagManager.ViewModels
                     ShowProgressIndicator = true;
                     ProgressIndicatorMessage = "Interrogating image...";
 
-                    var result = await Interrogate(dialog.SelectedNaturalLanguageInterrogator?.Factory.Invoke(), dialog.SelectedTagInterrogator?.Factory.Invoke(), dialog.TagThreshold, bitmap);
+                    using var naturalLanguageInterrogator = dialog.SelectedNaturalLanguageInterrogator?.Factory.Invoke();
+                    using var tagInterrogator = dialog.SelectedTagInterrogator?.Factory.Invoke();
+
+                    var result = await Interrogate(naturalLanguageInterrogator, tagInterrogator, dialog.TagThreshold, bitmap);
 
                     if (result.description != null)
                     {
@@ -1239,45 +1242,19 @@ namespace StableDiffusionTagManager.ViewModels
             string? description = null;
             if (naturalLanguageInterrogator != null)
             {
-                try
-                {
-                    ProgressIndicatorMessage = "Initializing Natural Language Model...";
-                    await naturalLanguageInterrogator.Initialize(message => ProgressIndicatorMessage = message);
+                ProgressIndicatorMessage = "Initializing Natural Language Model...";
+                await naturalLanguageInterrogator.Initialize(message => ProgressIndicatorMessage = message);
 
-                    ProgressIndicatorMessage = "Executing image interrogation...";
-                    description = await naturalLanguageInterrogator.CaptionImage(uploadStream.ToArray());
-                }
-                catch (Exception ex)
-                {
-                    var messageBoxStandardWindow = MessageBoxManager
-                            .GetMessageBoxStandard("Interrogate Failed",
-                                                         $"Failed to interrogate the image with the selected natural language interrogator. Error message: {ex.Message}",
-                                                         ButtonEnum.Ok,
-                                                         Icon.Warning);
-
-                    await ShowDialog(messageBoxStandardWindow);
-                }
+                ProgressIndicatorMessage = "Executing image interrogation...";
+                description = await naturalLanguageInterrogator.CaptionImage(uploadStream.ToArray());
             }
             List<string> tags = null;
             if (tagInterrogator != null)
             {
-                try
-                {
-                    ProgressIndicatorMessage = "Initializing Tag Model...";
-                    await tagInterrogator.Initialize(message => ProgressIndicatorMessage = message);
-                    ProgressIndicatorMessage = "Executing image interrogation...";
-                    tags = await tagInterrogator.TagImage(uploadStream.ToArray(), tagThreshold);
-                }
-                catch (Exception ex)
-                {
-                    var messageBoxStandardWindow = MessageBoxManager
-                            .GetMessageBoxStandard("Interrogate Failed",
-                                                         $"Failed to interrogate the image with the selected tag interrogator. Error message: {ex.Message}",
-                                                         ButtonEnum.Ok,
-                                                         Icon.Warning);
-
-                    await ShowDialog(messageBoxStandardWindow);
-                }
+                ProgressIndicatorMessage = "Initializing Tag Model...";
+                await tagInterrogator.Initialize(message => ProgressIndicatorMessage = message);
+                ProgressIndicatorMessage = "Executing image interrogation...";
+                tags = await tagInterrogator.TagImage(uploadStream.ToArray(), tagThreshold);
             }
             return (description: description, tags: tags);
         }
@@ -1300,8 +1277,8 @@ namespace StableDiffusionTagManager.ViewModels
 
                     try
                     {
-                        var naturalLanguageInterrogator = dialog.SelectedNaturalLanguageInterrogator?.Factory.Invoke();
-                        var tagInterrogator = dialog.SelectedTagInterrogator?.Factory.Invoke();
+                        using var naturalLanguageInterrogator = dialog.SelectedNaturalLanguageInterrogator?.Factory.Invoke();
+                        using var tagInterrogator = dialog.SelectedTagInterrogator?.Factory.Invoke();
                         foreach (var image in ImagesWithTags)
                         {
                             var result = await Interrogate(naturalLanguageInterrogator, tagInterrogator, dialog.TagThreshold, image.ImageSource);
@@ -1316,10 +1293,6 @@ namespace StableDiffusionTagManager.ViewModels
                                 {
                                     image.AddTagIfNotExists(new TagViewModel(tag));
                                 }
-                            }
-                            else
-                            {
-                                break;
                             }
 
                             ++ProgressIndicatorProgress;

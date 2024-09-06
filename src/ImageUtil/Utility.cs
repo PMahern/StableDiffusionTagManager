@@ -1,6 +1,5 @@
 ﻿using LibGit2Sharp;
 using Newtonsoft.Json;
-using SdWebUiApi;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -16,42 +15,18 @@ namespace ImageUtil
         /// <param name="searchString">The string to search for.</param>
         /// <param name="replaceString">The string to replace with.</param>
         /// <returns>True if replacements were made, otherwise false.</returns>
-        public static bool FindAndReplace(string filePath, string searchString, string replaceString)
+        public static void FindAndReplace(string filePath, string searchString, string replaceString)
         {
-            // Temporary file path to write the updated content
-            string tempFilePath = filePath + ".tmp";
-            bool replacementMade = false;
-
-            try
+            string? fileContents = null;
+            //Using explicit streams, was seeing some IOExceptions with ReadAllText/WriteAllText
+            using (var sr = new StreamReader(filePath))
             {
-                using (StreamReader reader = new StreamReader(filePath))
-                using (StreamWriter writer = new StreamWriter(tempFilePath))
-                {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        // Check if the line contains the search string
-                        if (line.Contains(searchString))
-                        {
-                            replacementMade = true;
-                        }
-
-                        // Replace occurrences of the search string with the replace string
-                        string updatedLine = line.Replace(searchString, replaceString);
-                        writer.WriteLine(updatedLine);
-                    }
-                }
-
-                // Replace the original file with the updated file
-                File.Delete(filePath);
-                File.Move(tempFilePath, filePath);
-
-                return replacementMade;
+                fileContents = sr.ReadToEnd();
             }
-            catch (Exception ex)
+            var results = fileContents.Replace(searchString, replaceString);
+            using (var sw = new StreamWriter(filePath, false))
             {
-                Console.WriteLine($"An error occurred while processing the file: {ex.Message}");
-                return false;
+                sw.Write(results);
             }
         }
 
@@ -140,19 +115,6 @@ namespace ImageUtil
 
                 arguments.Append(" && exit\"");
                 info.Arguments = arguments.ToString();
-                
-
-                //var installSubstr = requirementsFile != $"pip install{(requirementsFile != null ? " -r requirements.txt " : "")}";
-                //if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                //{
-                //    info.FileName = "cmd.exe";
-                //    info.Arguments = $"/k \"python -m venv venv && venv\\Scripts\\activate.bat && {installSubstr} && pip install Pillow && pip install spaces && pip install protobuf && pip install bitsandbytes && exit\"";
-                //}
-                //else
-                //{
-                //    info.FileName = "/bin/bash";
-                //    info.Arguments = $"-c \"python -m venv venv && source venv/bin/activate && {installSubstr} && pip install Pillow && pip install spaces && pip install protobuf && pip install bitsandbytes && exit\"";
-                //}
 
                 info.RedirectStandardInput = true;
                 info.UseShellExecute = false;

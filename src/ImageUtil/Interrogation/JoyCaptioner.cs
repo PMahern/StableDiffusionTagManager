@@ -1,43 +1,57 @@
-﻿namespace ImageUtil
+﻿using System.Runtime.InteropServices;
+
+namespace ImageUtil
 {
     public class JoyCaptioner : INaturalLanguageInterrogator
     {
+        private readonly string model;
+        private PythonImageEngine pythonImageEngine;
+        private bool initialized = false;
+        private bool disposed = false;
+
         public async Task Initialize(Action<string> updateCallBack)
         {
-            string repoUrl = "https://huggingface.co/spaces/fancyfeast/joy-caption-pre-alpha";
-            var absoluteWorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Join("taggers", "joycaption"));
-
-            if (await Utility.CloneRepo(repoUrl, absoluteWorkingDirectory, updateCallBack))
+            if (!initialized)
             {
+                string repoUrl = "https://huggingface.co/spaces/fancyfeast/joy-caption-pre-alpha";
+                var absoluteWorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Join("taggers", "joycaption"));
+
+                if (await Utility.CloneRepo(repoUrl, absoluteWorkingDirectory, updateCallBack))
+                {
+                    Utility.FindAndReplace(Path.Join(AppDomain.CurrentDomain.BaseDirectory, "taggers", "joycaption", "app.py"), "meta-llama/Meta-Llama-3.1-8B", "unsloth/Meta-Llama-3.1-8B-bnb-4bit");
+                }
+
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "python", "joycaption", "interrogate.py"), Path.Join(absoluteWorkingDirectory, "interrogate.py"), true);
 
-                //Replace the use of the meta hosted llama model to one that is publically available
-                Utility.FindAndReplace(Path.Join(AppDomain.CurrentDomain.BaseDirectory, "taggers", "joycaption", "app.py"), "meta-llama/Meta-Llama-3.1-8B", "unsloth/Meta-Llama-3.1-8B-bnb-4bit");
-            }
+                var additionalPackages = new List<string> { "Pillow", "spaces", "protobuf", "bitsandbytes" };
 
-            var additionalPackages = new List<string> { "Pillow", "spaces", "protobuf", "bitsandbytes" };
-            await Utility.CreateVenv(absoluteWorkingDirectory, updateCallBack, "requirements.txt", additionalPackages);
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    additionalPackages.Add("torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124");
+                }
+
+                await Utility.CreateVenv(absoluteWorkingDirectory, updateCallBack, "requirements.txt", additionalPackages);
+
+                pythonImageEngine = new PythonImageEngine("interrogate.py", "", Path.Join("taggers", "joycaption"), true);
+            }
+            initialized = true;
         }
 
-        public async Task<string> CaptionImage(byte[] imageData) {
-            var output = await PythonWrapper.RunPythonScript(Path.Join("interrogate.py"), "", imageData, Path.Join("taggers", "joycaption"), true);
-            const string targetPhrase = "GENERATION RESULT";
+        public Task<string> CaptionImage(byte[] imageData)
+        {
+            if (!initialized)
+                throw new InvalidOperationException("Tried to access an uninitialized Joy Captioner.");
 
-            // Find the position of the target phrase in the input text
-            int index = output.IndexOf(targetPhrase, StringComparison.OrdinalIgnoreCase);
+            if (disposed)
+                throw new ObjectDisposedException("Tried to access a disposed Joy Captioner.");
 
-            if (index == -1)
-            {
-                // Target phrase not found
-                return string.Empty;
-            }
+            return pythonImageEngine.SendImage(imageData);
+        }
 
-            // Calculate the start position of the text following the target phrase
-            int startIndex = index + targetPhrase.Length;
-
-            // Extract and return the text following the target phrase
-            // We use Trim to remove any leading white spaces
-            return output.Substring(startIndex).Trim();
+        public void Dispose()
+        {
+            disposed = true;
+            pythonImageEngine.Dispose();
         }
     }
 }
