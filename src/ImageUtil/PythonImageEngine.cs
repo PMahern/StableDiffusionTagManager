@@ -27,7 +27,7 @@ namespace ImageUtil
             info.Arguments = $"{scriptPath} {arguments}";
             info.RedirectStandardInput = true;
             info.UseShellExecute = false;
-            info.CreateNoWindow = false;
+            info.CreateNoWindow = true;
 
             info.WorkingDirectory = absoluteWorkingDirectory;
             info.RedirectStandardOutput = true;

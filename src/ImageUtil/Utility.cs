@@ -23,11 +23,18 @@ namespace ImageUtil
             {
                 fileContents = sr.ReadToEnd();
             }
-            var results = fileContents.Replace(searchString, replaceString);
-            using (var sw = new StreamWriter(filePath, false))
+            if(fileContents == null)
+                throw new Exception("Could not find file at path: " + filePath);
+
+            if (fileContents != null)
             {
-                sw.Write(results);
+                var results = fileContents.Replace(searchString, replaceString);
+                using (var sw = new StreamWriter(filePath, false))
+                {
+                    sw.Write(results);
+                }
             }
+
         }
 
         /// <summary>
@@ -67,12 +74,25 @@ namespace ImageUtil
         {
             foreach (string filePath in Directory.GetFiles(folderPath))
             {
-                await DownloadIfLFSLink(filePath, lfsurl);
+                try
+                {
+                    await DownloadIfLFSLink(filePath, lfsurl);
+                }
+                catch (Exception e)
+                {
+                }
+
             }
 
             foreach (string subFolderPath in Directory.GetDirectories(folderPath).Where(path => !path.Contains(".git")))
             {
-                await ProcessLFSFilesInFolder(subFolderPath, lfsurl);
+                try
+                {
+                    await ProcessLFSFilesInFolder(subFolderPath, lfsurl);
+                }
+                catch (Exception e)
+                {
+                }
             }
         }
 
