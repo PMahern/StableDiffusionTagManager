@@ -7,7 +7,8 @@ Stable Diffusion Tag Manager is a simple desktop GUI application for managing an
 Stable Diffusion Tag Manager is a stand alone application with no prequisites to launch the application on linux, osx, and windows. However, some of it's functionality relies on other projects which have prerequisites.
 
 - Comic book panel extraction uses the [kumiko](https://github.com/njean42/kumiko) library by [njean42](https://github.com/njean42), which requires python.
-- Image interrogation and touchup via stable diffusion rely on a running instance of [Automatic1111's](https://github.com/AUTOMATIC1111) [stable diffusion webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) that can be reached from the local system.
+- Image interrogation requires python.
+- Touchup via stable diffusion rely on a running instance of [Automatic1111's](https://github.com/AUTOMATIC1111) [stable diffusion webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) or [lllyasviel's](https://github.com/lllyasviel) [Forge](https://github.com/lllyasviel/stable-diffusion-webui-forge) that can be reached from the local system.
 
 ## Building the project
 
@@ -89,7 +90,7 @@ Probably not the best example, but the intent is that you can fix up images befo
 Upon startup, the application will look for a tags.csv in the folder where the exe lies. It expects a csv with two columns, the first being a tag name and the second being a number. It will order the tags in descending order and use these 
 as autocomplete suggestions anywhere you might type a tag. One such example file can be found [here](https://github.com/stmobo/Machine-Learning/blob/master/danbooru-chars.csv).
 
-It's usually best to try and use the interrogate function to generate an initial set of tags. It hallucinates a lot of tags but you can quickly trim the excess ones and it often times may spot things you didn't think to add. After getting an initial set of tags there are several hotkeys to help with the extremely tedious process of tagging.
+It's usually best to try and use the interrogate function to generate an initial description and set of tags. It hallucinates a lot of tags but you can quickly trim the excess ones and it often times may spot things you didn't think to add. After getting an initial set of tags there are several hotkeys to help with the extremely tedious process of tagging.
 
 - Shift + enter will add a tag in front of the currently focused tag (or at the front of all the tags if none is selected).
 - Shift + up will add a tag to the beginning of the current tag set
