@@ -1,4 +1,7 @@
-﻿namespace ImageUtil
+﻿using ImageUtil.Interrogation;
+using System.Runtime.InteropServices;
+
+namespace ImageUtil
 {
     public class InterrogatorDescription<T>
     {
@@ -38,6 +41,15 @@
                     Factory = () => new JoyCaptioner()
                 }
             };
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                NaturalLanguageInterrogators.Add(new InterrogatorDescription<INaturalLanguageInterrogator>
+                {
+                    Name = "CogVLM2",
+                    Factory = () => new CogVLM2Interrogator()
+                });
+            }
         }
 
         public static List<InterrogatorDescription<ITagInterrogator>> TagInterrogators;
