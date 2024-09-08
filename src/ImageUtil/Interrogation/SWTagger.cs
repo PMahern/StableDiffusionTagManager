@@ -20,7 +20,7 @@ namespace ImageUtil
             pythonImageEngine.Dispose();
         }
 
-        public async Task Initialize(Action<string> updateCallBack)
+        public async Task Initialize(Action<string> updateCallBack, Action<string> consoleCallBack)
         {
             if (!initialized)
             {
@@ -32,9 +32,9 @@ namespace ImageUtil
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "python", "sw", "interrogate.py"), Path.Join(absoluteWorkingDirectory, "interrogate.py"), true);
 
                 var additionalPackages = new List<string> { "gradio" };
-                await Utility.CreateVenv(absoluteWorkingDirectory, updateCallBack, "requirements.txt", additionalPackages);
+                await Utility.CreateVenv(absoluteWorkingDirectory, updateCallBack, consoleCallBack, "requirements.txt", additionalPackages);
 
-                pythonImageEngine = new PythonImageEngine("interrogate.py", $"{model} 0.5", Path.Join("taggers", "sw"), true);
+                pythonImageEngine = new PythonImageEngine("interrogate.py", $"{model} 0.5", Path.Join("taggers", "sw"), true, consoleCallBack);
             }
             initialized = true;
         }

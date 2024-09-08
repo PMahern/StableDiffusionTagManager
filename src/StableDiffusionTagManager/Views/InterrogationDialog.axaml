@@ -33,6 +33,10 @@
           </ComboBox>
         </Panel>
         <Panel>
+          <Label>Prompt</Label>
+          <TextBox Width="300" Text="{Binding Prompt}"  />
+        </Panel>
+        <Panel>
           <Label Classes="controlgroup">Tags</Label>
         </Panel>
         <Panel>

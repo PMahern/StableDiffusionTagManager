@@ -10,7 +10,7 @@ namespace ImageUtil.Interrogation
         private bool initialized = false;
         private bool disposed = false;
 
-        public async Task Initialize(Action<string> updateCallBack)
+        public async Task Initialize(Action<string> updateCallBack, Action<string> consoleCallBack)
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
@@ -28,22 +28,23 @@ namespace ImageUtil.Interrogation
                 File.Copy(Path.Combine(assetDirectory, "interrogate.py"), Path.Join(absoluteWorkingDirectory, "interrogate.py"), true);
                 File.Copy(Path.Combine(assetDirectory, "requirements.txt"), Path.Join(absoluteWorkingDirectory, "requirements.txt"), true);
 
-                await Utility.CreateVenv(absoluteWorkingDirectory, updateCallBack, "requirements.txt");
+                await Utility.CreateVenv(absoluteWorkingDirectory, updateCallBack, consoleCallBack, "requirements.txt");
 
-                pythonImageEngine = new PythonImageEngine("interrogate.py", "", relativeWorkingDirectory, true);
+                pythonImageEngine = new PythonImageEngine("interrogate.py", "", relativeWorkingDirectory, true, consoleCallBack);
             }
             initialized = true;
         }
 
-        public Task<string> CaptionImage(byte[] imageData)
+        public async Task<string> CaptionImage(string prompt, byte[] imageData)
         {
             if (!initialized)
                 throw new InvalidOperationException("Tried to access an uninitialized CogVLM2Interrogator.");
 
             if (disposed)
                 throw new ObjectDisposedException("Tried to access a disposed CogVLM2Interrogator.");
+            await pythonImageEngine.SendString(prompt);
 
-            return pythonImageEngine.SendImage(imageData);
+            return await pythonImageEngine.SendImage(imageData);
         }
 
         public void Dispose()

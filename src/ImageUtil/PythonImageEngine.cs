@@ -9,9 +9,12 @@ namespace ImageUtil
         private Process pythonProcess;
         private bool disposed = false;
         private StringBuilder sb = new StringBuilder();
+        private bool insideResult = false;
+        private readonly Action<string>? consoleOut;
 
-        public PythonImageEngine(string scriptPath, string arguments, string workingdirectory, bool isvenv = false)
+        public PythonImageEngine(string scriptPath, string arguments, string workingdirectory, bool isvenv = false, Action<string>? consoleOut = null)
         {
+            this.consoleOut = consoleOut;
             ProcessStartInfo info = new ProcessStartInfo();
 
             var pythonExe = "python";
@@ -37,6 +40,27 @@ namespace ImageUtil
             pythonProcess.StartInfo = info;
 
             pythonProcess.Start();
+            
+        }
+
+        public async Task SendString(string data)
+        {
+            if (!this.disposed)
+            {
+                try
+                {
+                    await pythonProcess.StandardInput.WriteLineAsync(data); // Send data to the Python script
+                    await pythonProcess.StandardInput.FlushAsync();
+                }
+                catch
+                {
+                    throw new Exception($"Failed to submit image to python. Error output was {pythonProcess.StandardError.ReadToEnd()}");
+                }
+            }
+            else
+            {
+                throw new ObjectDisposedException("PythonImageEngine");
+            }
         }
 
         public async Task<string> SendImage(byte[] imageData)
@@ -69,7 +93,7 @@ namespace ImageUtil
 
             while (true)
             {
-                var output = pythonProcess.StandardOutput.ReadLine();
+                var output = await pythonProcess.StandardOutput.ReadLineAsync();
                 if (output == null)
                 {
                     throw new Exception($"Python process terminated unexpectedly. Error output was {pythonProcess.StandardError.ReadToEnd()}");
@@ -77,15 +101,22 @@ namespace ImageUtil
 
                 if (output.Contains(startPhrase))
                 {
-                    sb.Clear();
+                    insideResult = true;
                 }
                 else if (output.Contains(endPhrase))
                 {
-                    return sb.ToString();
+                    var result =  sb.ToString();
+                    sb.Clear();
+                    insideResult = false;
+                    return result;
                 }
                 else
-                {
-                    sb.AppendLine(output);
+                    {
+                    if (insideResult)
+                        sb.AppendLine(output);
+                    else
+                        consoleOut?.Invoke(output);
+
                 }
             }
         }

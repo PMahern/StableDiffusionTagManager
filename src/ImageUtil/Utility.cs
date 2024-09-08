@@ -96,13 +96,13 @@ namespace ImageUtil
             }
         }
 
-        public async static Task<bool> CreateVenv(string absoluteWorkingDirectory, Action<string> updateCallBack, string? requirementsFile = null, IEnumerable<string>? additionalDependencies = null)
+        public async static Task<bool> CreateVenv(string absoluteWorkingDirectory, Action<string> updateCallBack, Action<string> consoleCallback, string? requirementsFile = null, IEnumerable<string>? additionalDependencies = null)
         {
             string venvPathPath = Path.Join(absoluteWorkingDirectory, "venv");
 
             if (!Directory.Exists(venvPathPath))
             {
-                updateCallBack("Creating virtual environment and downloading model dependencies, this can take a while...");
+                updateCallBack("Creating virtual environment and downloading model dependencies...");
 
                 Process p = new Process();
                 ProcessStartInfo info = new ProcessStartInfo();
@@ -136,13 +136,21 @@ namespace ImageUtil
                 arguments.Append(" && exit\"");
                 info.Arguments = arguments.ToString();
 
-                info.RedirectStandardInput = true;
+                info.RedirectStandardOutput = true;
                 info.UseShellExecute = false;
                 info.CreateNoWindow = true;
                 info.WorkingDirectory = absoluteWorkingDirectory;
+                
+                p.OutputDataReceived += (sender, args) =>
+                {
+                    if (args.Data != null && !string.IsNullOrWhiteSpace(args.Data))
+                        consoleCallback(args.Data);
+                };
 
                 p.StartInfo = info;
                 p.Start();
+
+                p.BeginOutputReadLine();
 
                 await p.WaitForExitAsync();
 

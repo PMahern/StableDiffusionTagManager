@@ -29,6 +29,8 @@ model = AutoModelForCausalLM.from_pretrained(
 
 def main():
     while True:
+        promptdata = sys.stdin.readline().strip()
+
         imagedata = sys.stdin.readline().strip()
         binary_data = base64.b64decode(imagedata)
         image_bytes = BytesIO(binary_data)
@@ -38,7 +40,7 @@ def main():
 
             input_by_model = model.build_conversation_input_ids(
                 tokenizer,
-                query="Describe this image with as much detail possible.",
+                query=promptdata,
                 history=history,
                 images=[image],
                 template_version='chat'

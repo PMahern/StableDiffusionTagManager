@@ -784,7 +784,7 @@ namespace StableDiffusionTagManager.ViewModels
         private OrderedSetObservableCollection<TagCountLetterGroupViewModel> tagCounts = new OrderedSetObservableCollection<TagCountLetterGroupViewModel>((l, r) => l.Letter.CompareTo(r.Letter));
         public OrderedSetObservableCollection<TagCountLetterGroupViewModel> TagCounts { get => tagCounts; set { tagCounts = value; OnPropertyChanged(); } }
 
-        // This is set to false when certain processes are running htat affect large sets of tags, instead of updating the
+        // This is set to false when certain processes are running that affect large sets of tags, instead of updating the
         // counts on the fly we can just call UpdateTagCounts() to reinitialize the tag counts
         private bool _updateTagCounts = true;
 
@@ -879,8 +879,13 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 showProgressIndicator = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(ShowDeterminateProgressIndicator));
+                OnPropertyChanged(nameof(ShowIndeterminateProgress));
             }
         }
+
+        public bool ShowIndeterminateProgress => ProgressIndicatorMax == 0 && string.IsNullOrEmpty(ConsoleText);
+        public bool ShowDeterminateProgressIndicator => ProgressIndicatorMax != 0;
 
         private int progressIndicatorMax = 0;
         public int ProgressIndicatorMax
@@ -890,6 +895,8 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 progressIndicatorMax = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(ShowDeterminateProgressIndicator));
+                OnPropertyChanged(nameof(ShowIndeterminateProgress));
             }
         }
 
@@ -915,6 +922,18 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
         #endregion
+
+        private string consoleText = "";
+        public string ConsoleText
+        {
+            get => consoleText;
+            private set
+            {
+                consoleText = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ShowIndeterminateProgress));
+            }
+        }
 
         private Dictionary<string, int> TagCountDictionary = new Dictionary<string, int>();
 
@@ -1161,7 +1180,7 @@ namespace StableDiffusionTagManager.ViewModels
                     using var naturalLanguageInterrogator = dialog.SelectedNaturalLanguageInterrogator?.Factory.Invoke();
                     using var tagInterrogator = dialog.SelectedTagInterrogator?.Factory.Invoke();
 
-                    var result = await Interrogate(naturalLanguageInterrogator, tagInterrogator, dialog.TagThreshold, bitmap);
+                    var result = await Interrogate(naturalLanguageInterrogator, dialog.Prompt, tagInterrogator, dialog.TagThreshold, bitmap);
 
                     if (result.description != null)
                     {
@@ -1232,9 +1251,10 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
-        public async Task<(string? description, IEnumerable<string>? tags)> Interrogate(INaturalLanguageInterrogator? naturalLanguageInterrogator, ITagInterrogator? tagInterrogator, float tagThreshold, Bitmap image)
+        public async Task<(string? description, IEnumerable<string>? tags)> Interrogate(INaturalLanguageInterrogator? naturalLanguageInterrogator, string prompt, ITagInterrogator? tagInterrogator, float tagThreshold, Bitmap image)
         {
             var api = new DefaultApi(App.Settings.WebUiAddress);
+            ProgressIndicatorMax = 0;
 
             using var uploadStream = new MemoryStream();
             image.Save(uploadStream);
@@ -1243,17 +1263,23 @@ namespace StableDiffusionTagManager.ViewModels
             if (naturalLanguageInterrogator != null)
             {
                 ProgressIndicatorMessage = "Initializing Natural Language Model...";
-                await naturalLanguageInterrogator.Initialize(message => ProgressIndicatorMessage = message);
+                ConsoleText = "Initializing...";
+                await naturalLanguageInterrogator.Initialize(message => ProgressIndicatorMessage = message, output => ConsoleText += output + Environment.NewLine);
 
                 ProgressIndicatorMessage = "Executing image interrogation...";
-                description = await naturalLanguageInterrogator.CaptionImage(uploadStream.ToArray());
+                ConsoleText = "Interrogation start...";
+                description = await naturalLanguageInterrogator.CaptionImage(prompt, uploadStream.ToArray());
             }
             List<string> tags = null;
             if (tagInterrogator != null)
             {
                 ProgressIndicatorMessage = "Initializing Tag Model...";
-                await tagInterrogator.Initialize(message => ProgressIndicatorMessage = message);
+                ProgressIndicatorMax = 0;
+                ConsoleText = "Initializing...";
+                await tagInterrogator.Initialize(message => ProgressIndicatorMessage = message, output => ConsoleText += output + Environment.NewLine);
+
                 ProgressIndicatorMessage = "Executing image interrogation...";
+                ConsoleText = "Interrogation start...";
                 tags = await tagInterrogator.TagImage(uploadStream.ToArray(), tagThreshold);
             }
             return (description: description, tags: tags);
@@ -1281,7 +1307,7 @@ namespace StableDiffusionTagManager.ViewModels
                         using var tagInterrogator = dialog.SelectedTagInterrogator?.Factory.Invoke();
                         foreach (var image in ImagesWithTags)
                         {
-                            var result = await Interrogate(naturalLanguageInterrogator, tagInterrogator, dialog.TagThreshold, image.ImageSource);
+                            var result = await Interrogate(naturalLanguageInterrogator, dialog.Prompt, tagInterrogator, dialog.TagThreshold, image.ImageSource);
 
                             if (result.description != null)
                             {

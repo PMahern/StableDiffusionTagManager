@@ -1,4 +1,5 @@
 ﻿using ImageUtil.Interrogation;
+using System;
 using System.Runtime.InteropServices;
 
 namespace ImageUtil
@@ -7,6 +8,8 @@ namespace ImageUtil
     {
         public string Name { get; set; }
         public Func<T> Factory { get; set; }
+
+        public string DefaultPrompt { get; set; }
     }
 
     public static class Interrogators
@@ -38,7 +41,8 @@ namespace ImageUtil
                 new InterrogatorDescription<INaturalLanguageInterrogator>
                 {
                     Name = "Joy Caption",
-                    Factory = () => new JoyCaptioner()
+                    Factory = () => new JoyCaptioner(),
+                    DefaultPrompt = "A descriptive caption for this image:"
                 }
             };
 
@@ -47,7 +51,8 @@ namespace ImageUtil
                 NaturalLanguageInterrogators.Add(new InterrogatorDescription<INaturalLanguageInterrogator>
                 {
                     Name = "CogVLM2",
-                    Factory = () => new CogVLM2Interrogator()
+                    Factory = () => new CogVLM2Interrogator(),
+                    DefaultPrompt = "Describe the image with as much detail as possible."
                 });
             }
         }

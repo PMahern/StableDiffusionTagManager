@@ -9,6 +9,7 @@
         xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         xmlns:models="using:StableDiffusionTagManager.Models"
         xmlns:conv="using:StableDiffusionTagManager.Converters"
+        xmlns:progRing="clr-namespace:AvaloniaProgressRing;assembly=AvaloniaProgressRing"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="StableDiffusionTagManager.Views.MainWindow"
         Icon="/Assets/logo.ico"
@@ -350,7 +351,13 @@
     </DockPanel>
     <Border IsVisible="{Binding ShowProgressIndicator}" Classes="progressoverlay">
       <controls:HeaderControl Title="{Binding ProgressIndicatorMessage}">
-        <ProgressBar Grid.Row="1" Minimum="0" Maximum="{Binding ProgressIndicatorMax}" Value="{Binding ProgressIndicatorProgress}" />
+        <StackPanel>
+          <ProgressBar IsVisible="{Binding ShowDeterminateProgressIndicator}" Height="10" Grid.Row="1" Minimum="0" Maximum="{Binding ProgressIndicatorMax}" Value="{Binding ProgressIndicatorProgress}" />
+          <progRing:ProgressRing IsVisible="{Binding ShowIndeterminateProgress}"/>
+          <ScrollViewer IsVisible="{Binding ConsoleText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+            <TextBlock Text="{Binding ConsoleText}" />
+          </ScrollViewer>
+        </StackPanel>
       </controls:HeaderControl>
     </Border>
   </Grid>

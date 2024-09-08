@@ -1,14 +1,23 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:StableDiffusionTagManager.Controls">
+        xmlns:controls="using:StableDiffusionTagManager.Controls"
+        xmlns:progRing="clr-namespace:AvaloniaProgressRing;assembly=AvaloniaProgressRing"
+        >
     <Design.PreviewWith>
-        <Window Width="400" Height="400">
+        <Window Width="800" Height="800">
           <Grid>
-              <Button>Some Control</Button>
+              <Button VerticalAlignment="Top">Some Control</Button>
               <Button>Some Other Control</Button>
               <Border Classes="progressoverlay">
                   <controls:HeaderControl Title="A really super long message that is way too long">
+                    <StackPanel>
                       <ProgressBar Maximum="100" Value="50" />
+                      <progRing:ProgressRing
+                             IsActive="True"/>
+                      <ScrollViewer>
+                        <TextBlock Text="Test console text."></TextBlock>
+                      </ScrollViewer>
+                    </StackPanel>
                   </controls:HeaderControl>
               </Border>
           </Grid>
@@ -27,12 +36,34 @@
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   
-  <Style Selector="Border.progressoverlay > controls|HeaderControl > ProgressBar">
-    <Setter Property="Height" Value="20" />
+  <Style Selector="Border.progressoverlay > controls|HeaderControl > StackPanel > ProgressBar">
+    <Setter Property="Height" Value="15" />
     <Setter Property="MinWidth" Value="100" />
     <Setter Property="HorizontalAlignment" Value="Stretch" />
     <Setter Property="Background" Value="{DynamicResource SystemChromeAltLowColor}" />
-    
+    <!--<Setter Property="HorizontalAlignment" Value="Center"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>-->
+  </Style>
+
+  <Style Selector="Border.progressoverlay > controls|HeaderControl > StackPanel > progRing|ProgressRing">
+    <Setter Property="Height" Value="40" />
+    <Setter Property="Width" Value="40" />
+    <Setter Property="HorizontalAlignment" Value="Center"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="Foreground" Value="Green"/>
+    <Setter Property="Margin" Value="20"/>
+  </Style>
+
+  <Style Selector="Border.progressoverlay > controls|HeaderControl > StackPanel > ScrollViewer > TextBlock">
+    <Setter Property="Foreground" Value="White" />
+    <!--<Setter Property="HorizontalAlignment" Value="Center"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>-->
+  </Style>
+  
+  <Style Selector="Border.progressoverlay > controls|HeaderControl > StackPanel > ScrollViewer">
+    <Setter Property="Height" Value="300" />
+    <Setter Property="Width" Value="500" />
+    <Setter Property="Background" Value="Black" />
     <!--<Setter Property="HorizontalAlignment" Value="Center"/>
     <Setter Property="VerticalAlignment" Value="Center"/>-->
   </Style>
