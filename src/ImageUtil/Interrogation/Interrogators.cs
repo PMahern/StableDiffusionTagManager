@@ -10,7 +10,7 @@ namespace ImageUtil
         public Func<T> Factory { get; set; }
 
         public string DefaultPrompt { get; set; }
-    }
+    }    
 
     public static class Interrogators
     {
@@ -28,6 +28,18 @@ namespace ImageUtil
             "SmilingWolf/wd-v1-4-vit-tagger-v2"
         };
 
+        private static JoyCaptionAlphaOne? activeAlphaOneJoyCaptioner = null;
+
+        private static JoyCaptionAlphaOne GetJoyCaptionAlphaOne()
+        {
+            if (activeAlphaOneJoyCaptioner == null || activeAlphaOneJoyCaptioner.Disposed)
+            {
+                activeAlphaOneJoyCaptioner = new JoyCaptionAlphaOne();
+            }
+
+            return activeAlphaOneJoyCaptioner;
+        }
+
         static Interrogators()
         {
             TagInterrogators = SmilingWolfModels.Select(model => new InterrogatorDescription<ITagInterrogator>
@@ -36,13 +48,25 @@ namespace ImageUtil
                 Factory = () => new SWTagger(model)
             }).ToList();
 
+            TagInterrogators.Add(new InterrogatorDescription<ITagInterrogator>
+            {
+                Name = "Joy Caption Alpha One",
+                Factory = GetJoyCaptionAlphaOne
+            });
+
             NaturalLanguageInterrogators = new List<InterrogatorDescription<INaturalLanguageInterrogator>>
             {
                 new InterrogatorDescription<INaturalLanguageInterrogator>
                 {
-                    Name = "Joy Caption",
-                    Factory = () => new JoyCaptioner(),
+                    Name = "Joy Caption Pre Alpha",
+                    Factory = () => new JoyCaptionPreAlpha(),
                     DefaultPrompt = "A descriptive caption for this image:"
+                },
+                new InterrogatorDescription<INaturalLanguageInterrogator>
+                {
+                    Name = "Joy Caption Alpha One",
+                    Factory = GetJoyCaptionAlphaOne,
+                    DefaultPrompt = "Write a descriptive caption for this image in a formal tone."
                 }
             };
 

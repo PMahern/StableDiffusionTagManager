@@ -30,12 +30,12 @@ namespace ImageUtil.Interrogation
 
                 await Utility.CreateVenv(absoluteWorkingDirectory, updateCallBack, consoleCallBack, "requirements.txt");
 
-                pythonImageEngine = new PythonImageEngine("interrogate.py", "", relativeWorkingDirectory, true, consoleCallBack);
+                pythonImageEngine = new PythonImageEngine("interrogate.py", "", relativeWorkingDirectory, true);
             }
             initialized = true;
         }
 
-        public async Task<string> CaptionImage(string prompt, byte[] imageData)
+        public async Task<string> CaptionImage(string prompt, byte[] imageData, Action<string> consoleCallBack)
         {
             if (!initialized)
                 throw new InvalidOperationException("Tried to access an uninitialized CogVLM2Interrogator.");
@@ -44,7 +44,7 @@ namespace ImageUtil.Interrogation
                 throw new ObjectDisposedException("Tried to access a disposed CogVLM2Interrogator.");
             await pythonImageEngine.SendString(prompt);
 
-            return await pythonImageEngine.SendImage(imageData);
+            return await pythonImageEngine.SendImage(imageData, consoleCallBack);
         }
 
         public void Dispose()

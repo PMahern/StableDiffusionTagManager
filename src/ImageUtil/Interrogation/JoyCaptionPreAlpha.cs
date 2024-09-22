@@ -2,7 +2,7 @@
 
 namespace ImageUtil
 {
-    public class JoyCaptioner : INaturalLanguageInterrogator
+    public class JoyCaptionPreAlpha : INaturalLanguageInterrogator
     {
         private readonly string model;
         private PythonImageEngine pythonImageEngine;
@@ -29,12 +29,12 @@ namespace ImageUtil
 
                 await Utility.CreateVenv(absoluteWorkingDirectory, updateCallBack, consoleCallBack, "requirements.txt", additionalPackages);
 
-                pythonImageEngine = new PythonImageEngine("interrogate.py", "", Path.Join("taggers", "joycaption"), true, consoleCallBack);
+                pythonImageEngine = new PythonImageEngine("interrogate.py", "", Path.Join("taggers", "joycaption"), true);
             }
             initialized = true;
         }
 
-        public async Task<string> CaptionImage(string prompt, byte[] imageData)
+        public async Task<string> CaptionImage(string prompt, byte[] imageData, Action<string> consoleCallBack)
         {
             if (!initialized)
                 throw new InvalidOperationException("Tried to access an uninitialized Joy Captioner.");
@@ -44,7 +44,7 @@ namespace ImageUtil
 
             await pythonImageEngine.SendString(prompt);
 
-            return await pythonImageEngine.SendImage(imageData);
+            return await pythonImageEngine.SendImage(imageData, consoleCallBack);
         }
 
         public void Dispose()

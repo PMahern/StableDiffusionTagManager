@@ -34,12 +34,12 @@ namespace ImageUtil
                 var additionalPackages = new List<string> { "gradio" };
                 await Utility.CreateVenv(absoluteWorkingDirectory, updateCallBack, consoleCallBack, "requirements.txt", additionalPackages);
 
-                pythonImageEngine = new PythonImageEngine("interrogate.py", $"{model} 0.5", Path.Join("taggers", "sw"), true, consoleCallBack);
+                pythonImageEngine = new PythonImageEngine("interrogate.py", $"{model} 0.5", Path.Join("taggers", "sw"), true);
             }
             initialized = true;
         }
 
-        public async Task<List<string>> TagImage(byte[] imageData, float threshold)
+        public async Task<List<string>> TagImage(byte[] imageData, float threshold, Action<string> consoleCallBack)
         {
             if (!initialized)
                 throw new InvalidOperationException("Tried to access an unitialized SW Tagger.");
@@ -47,7 +47,7 @@ namespace ImageUtil
             if (disposed)
                 throw new ObjectDisposedException("Tried to access a disposed SW Tagger.");
 
-            var output = await pythonImageEngine.SendImage(imageData);
+            var output = await pythonImageEngine.SendImage(imageData, consoleCallBack);
             // We use Trim to remove any leading white spaces
             var result = output.Trim();
             result = result.Trim('(', ')', '\'');

@@ -10,11 +10,9 @@ namespace ImageUtil
         private bool disposed = false;
         private StringBuilder sb = new StringBuilder();
         private bool insideResult = false;
-        private readonly Action<string>? consoleOut;
 
-        public PythonImageEngine(string scriptPath, string arguments, string workingdirectory, bool isvenv = false, Action<string>? consoleOut = null)
+        public PythonImageEngine(string scriptPath, string arguments, string workingdirectory, bool isvenv = false)
         {
-            this.consoleOut = consoleOut;
             ProcessStartInfo info = new ProcessStartInfo();
 
             var pythonExe = "python";
@@ -63,7 +61,7 @@ namespace ImageUtil
             }
         }
 
-        public async Task<string> SendImage(byte[] imageData)
+        public async Task<string> SendImage(byte[] imageData, Action<string>? consoleOut = null)
         {
             if (!this.disposed)
             {
@@ -82,10 +80,10 @@ namespace ImageUtil
             {
                 throw new ObjectDisposedException("PythonImageEngine");
             }
-            return await WaitForGenerationResult();
+            return await WaitForGenerationResult(consoleOut);
         }
 
-        private async Task<string> WaitForGenerationResult()
+        private async Task<string> WaitForGenerationResult(Action<string>? consoleOut = null)
         {
             StringBuilder sb = new StringBuilder();
             string startPhrase = "GENERATION START";

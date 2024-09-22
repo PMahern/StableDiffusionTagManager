@@ -22,10 +22,12 @@
     <AvaloniaXaml Remove="Styles\Controls\InputForm.axaml" />
     <AvaloniaXaml Remove="Styles\Icons.axaml" />
     <None Remove=".gitignore" />
+    <None Remove="python\joycaptionalphaone\interrogate.py" />
     <None Remove="python\joycaption\interrogate.py" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="python\joycaptionalphaone\interrogate.py" />
     <Resource Include="python\joycaption\interrogate.py" />
   </ItemGroup>
 

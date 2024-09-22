@@ -25,6 +25,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SdWebUiApi;
 using StableDiffusionTagManager.Collections;
+using Avalonia.Threading;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -1165,14 +1166,14 @@ namespace StableDiffusionTagManager.ViewModels
         }
         public async Task InterrogateAndApplyToSelectedImage(Bitmap bitmap)
         {
-            //Cache the selected image in case it's changed during async operation
-
+            
             try
             {
                 var dialog = new InterrogationDialog();
                 await ShowDialog(dialog);
                 if (dialog.Success)
                 {
+                    //Cache the selected image in case it's changed during async operation
                     var selectedImage = SelectedImage;
                     ShowProgressIndicator = true;
                     ProgressIndicatorMessage = "Interrogating image...";
@@ -1263,24 +1264,24 @@ namespace StableDiffusionTagManager.ViewModels
             if (naturalLanguageInterrogator != null)
             {
                 ProgressIndicatorMessage = "Initializing Natural Language Model...";
-                ConsoleText = "Initializing...";
-                await naturalLanguageInterrogator.Initialize(message => ProgressIndicatorMessage = message, output => ConsoleText += output + Environment.NewLine);
+                ConsoleText = $"Initializing...{Environment.NewLine}";
+                await naturalLanguageInterrogator.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
 
                 ProgressIndicatorMessage = "Executing image interrogation...";
-                ConsoleText = "Interrogation start...";
-                description = await naturalLanguageInterrogator.CaptionImage(prompt, uploadStream.ToArray());
+                ConsoleText = $"Interrogation start...{Environment.NewLine}";
+                description = await naturalLanguageInterrogator.CaptionImage(prompt, uploadStream.ToArray(), AddConsoleText);
             }
             List<string> tags = null;
             if (tagInterrogator != null)
             {
                 ProgressIndicatorMessage = "Initializing Tag Model...";
                 ProgressIndicatorMax = 0;
-                ConsoleText = "Initializing...";
+                ConsoleText = $"Initializing...{Environment.NewLine}";
                 await tagInterrogator.Initialize(message => ProgressIndicatorMessage = message, output => ConsoleText += output + Environment.NewLine);
 
                 ProgressIndicatorMessage = "Executing image interrogation...";
-                ConsoleText = "Interrogation start...";
-                tags = await tagInterrogator.TagImage(uploadStream.ToArray(), tagThreshold);
+                ConsoleText = $"Interrogation start...{Environment.NewLine}";
+                tags = await tagInterrogator.TagImage(uploadStream.ToArray(), tagThreshold, AddConsoleText);
             }
             return (description: description, tags: tags);
         }
@@ -1489,6 +1490,11 @@ namespace StableDiffusionTagManager.ViewModels
                     RebuildFilteredImageSet();
                 }
             }
+        }
+
+        public void AddConsoleText(string text)
+        {
+            Dispatcher.UIThread.InvokeAsync(() => ConsoleText += text + Environment.NewLine); 
         }
 
         #region Tag Priority Sets
