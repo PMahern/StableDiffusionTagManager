@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace ImageUtil
 {
@@ -49,10 +50,17 @@ namespace ImageUtil
 
             var output = await pythonImageEngine.SendImage(imageData, consoleCallBack);
             // We use Trim to remove any leading white spaces
-            var result = output.Trim();
-            result = result.Trim('(', ')', '\'');
-            var parts = result.Split(new[] { "', {" }, StringSplitOptions.None);
-            return parts[0].Split(", ").ToList();
+            var match = Regex.Match(output, @"^\('([^']*)',");
+
+            if (match.Success)
+            {
+                string listPart = match.Groups[1].Value;
+                return new List<string>(listPart.Split(new[] { ", " }, StringSplitOptions.None));
+            }
+            else
+            {
+                return new List<string>();
+            }
         }
     }
 }
