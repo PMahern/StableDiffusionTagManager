@@ -61,7 +61,7 @@ namespace ImageUtil
             }
         }
 
-        public async Task<string> SendImage(byte[] imageData, Action<string>? consoleOut = null)
+        public async Task SendImage(byte[] imageData, Action<string>? consoleOut = null)
         {
             if (!this.disposed)
             {
@@ -80,10 +80,9 @@ namespace ImageUtil
             {
                 throw new ObjectDisposedException("PythonImageEngine");
             }
-            return await WaitForGenerationResult(consoleOut);
         }
 
-        private async Task<string> WaitForGenerationResult(Action<string>? consoleOut = null)
+        public async Task<string> WaitForGenerationResultString(Action<string>? consoleOut = null)
         {
             StringBuilder sb = new StringBuilder();
             string startPhrase = "GENERATION START";
@@ -114,7 +113,37 @@ namespace ImageUtil
                         sb.AppendLine(output);
                     else
                         consoleOut?.Invoke(output);
+                }
+            }
+        }
 
+        public async Task<string> WaitForGenerationResultImage(Action<string>? consoleOut = null)
+        {
+            string startPhrase = "GENERATION START";
+            string endPhrase = "GENERATION END";
+            string base64Data = "";
+            while (true)
+            {
+                var output = await pythonProcess.StandardOutput.ReadLineAsync();
+                if (output == null)
+                {
+                    throw new Exception($"Python process terminated unexpectedly. Error output was {pythonProcess.StandardError.ReadToEnd()}");
+                }
+                if (output.Contains(startPhrase))
+                {
+                    insideResult = true;
+                }
+                else if (output.Contains(endPhrase))
+                {
+                    insideResult = false;
+                    return base64Data;
+                }
+                else
+                {
+                    if (insideResult)
+                        base64Data += output;
+                    else
+                        consoleOut?.Invoke(output);
                 }
             }
         }

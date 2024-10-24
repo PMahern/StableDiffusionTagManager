@@ -5,7 +5,10 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using CommunityToolkit.Mvvm.Input;
+using ImageUtil;
 using StableDiffusionTagManager.Controls;
+using StableDiffusionTagManager.Extensions;
 using StableDiffusionTagManager.ViewModels;
 using System;
 using System.ComponentModel;
@@ -80,7 +83,7 @@ namespace StableDiffusionTagManager.Views
                 ImageBox.ConvertAlphaClicked = async (image) => await viewModel.ReviewConvertAlpha(image);
                 ImageBox.ExpandClicked = async (image) => await viewModel.ExpandImage(image);
                 ImageBox.EditImageClicked = async (image) => await viewModel.RunImgToImg(image);
-                
+                viewModel.GetImageBoxMask = () => ImageBox?.ImageBox?.CreateNewImageFromMask()?.InvertColors();
             };
         }
 

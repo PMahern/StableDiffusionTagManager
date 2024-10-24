@@ -1257,9 +1257,6 @@ namespace StableDiffusionTagManager.ViewModels
             var api = new DefaultApi(App.Settings.WebUiAddress);
             ProgressIndicatorMax = 0;
 
-            using var uploadStream = new MemoryStream();
-            image.Save(uploadStream);
-
             string? description = null;
             if (naturalLanguageInterrogator != null)
             {
@@ -1269,7 +1266,7 @@ namespace StableDiffusionTagManager.ViewModels
 
                 ProgressIndicatorMessage = "Executing image interrogation...";
                 ConsoleText = $"Interrogation start...{Environment.NewLine}";
-                description = await naturalLanguageInterrogator.CaptionImage(prompt, uploadStream.ToArray(), AddConsoleText);
+                description = await naturalLanguageInterrogator.CaptionImage(prompt, image.ToByteArray(), AddConsoleText);
             }
             List<string> tags = null;
             if (tagInterrogator != null)
@@ -1281,7 +1278,7 @@ namespace StableDiffusionTagManager.ViewModels
 
                 ProgressIndicatorMessage = "Executing image interrogation...";
                 ConsoleText = $"Interrogation start...{Environment.NewLine}";
-                tags = await tagInterrogator.TagImage(uploadStream.ToArray(), tagThreshold, AddConsoleText);
+                tags = await tagInterrogator.TagImage(image.ToByteArray(), tagThreshold, AddConsoleText);
             }
             return (description: description, tags: tags);
         }
@@ -1509,6 +1506,8 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
+        public Func<Bitmap?> GetImageBoxMask { get; internal set; }
+
         [RelayCommand]
         public void ApplyTagPrioritySet(TagPrioritySetButtonViewModel buttonVM)
         {
@@ -1710,5 +1709,42 @@ namespace StableDiffusionTagManager.ViewModels
             await ShowDialog(editor);
         }
         #endregion
+
+        [RelayCommand]
+        public async Task RemoveFromSelectedImageWithLama()
+        {
+            ShowProgressIndicator = true;
+            ProgressIndicatorMax = 0;
+            ProgressIndicatorMessage = "Initializing Python Utilities...";
+            ConsoleText = $"Initializing...{Environment.NewLine}";
+
+            var utilities = new PythonUtilities();
+            await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
+
+            var mask = GetImageBoxMask?.Invoke();
+            if(mask != null)
+            {
+                var bytes = await utilities.RunLama(SelectedImage.ImageSource.ToByteArray(), mask.ToByteArray(), AddConsoleText);
+
+                using (var mstream = new MemoryStream(bytes))
+                {
+                    var imageResult = new Bitmap(mstream);
+
+                    var viewer = new ImageReviewDialog();
+                    viewer.Title = "Review image after lama removal";
+                    viewer.Images = new ObservableCollection<ImageReviewViewModel>() { new ImageReviewViewModel(imageResult) };
+                    viewer.ReviewMode = ImageReviewDialogMode.SingleSelect;
+                    await ShowDialog(viewer);
+
+                    if (viewer.Success)
+                    {
+                        selectedImage.ImageSource = imageResult;
+                        selectedImage.ImageSource.Save(Path.Combine(this.openFolder, selectedImage.Filename));
+                    }
+                }
+            }
+
+            ShowProgressIndicator = false;
+        }
     }
 }

@@ -48,7 +48,8 @@ namespace ImageUtil
             if (disposed)
                 throw new ObjectDisposedException("Tried to access a disposed SW Tagger.");
 
-            var output = await pythonImageEngine.SendImage(imageData, consoleCallBack);
+            await pythonImageEngine.SendImage(imageData, consoleCallBack);
+            var output = await pythonImageEngine.WaitForGenerationResultString(consoleCallBack);
             // We use Trim to remove any leading white spaces
             var match = Regex.Match(output, @"^\('([^']*)',");
 

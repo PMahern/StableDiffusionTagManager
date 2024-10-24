@@ -53,14 +53,16 @@ namespace ImageUtil.Interrogation
 
             await pythonImageEngine.SendString("descriptive");
 
-            return await pythonImageEngine.SendImage(imageData, consoleCallBack);
+            await pythonImageEngine.SendImage(imageData, consoleCallBack);
+            return await pythonImageEngine.WaitForGenerationResultString(consoleCallBack);
         }
 
         public async Task<List<string>> TagImage(byte[] imageData, float threshold, Action<string> consoleCallBack)
         {
             await pythonImageEngine.SendString("rng-tags");
 
-            var results = await pythonImageEngine.SendImage(imageData, consoleCallBack);   
+            await pythonImageEngine.SendImage(imageData, consoleCallBack); 
+            var results = await pythonImageEngine.WaitForGenerationResultString(consoleCallBack);
             return results.Split(", ").ToList();
         }
 

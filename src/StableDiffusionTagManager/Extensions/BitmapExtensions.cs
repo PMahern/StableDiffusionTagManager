@@ -148,5 +148,12 @@ namespace StableDiffusionTagManager.Extensions
 
             return newImage;
         }
+
+        public static byte[] ToByteArray(this Bitmap image)
+        {
+            using var uploadStream = new MemoryStream();
+            image.Save(uploadStream);
+            return uploadStream.ToArray();
+        }
     }
 }

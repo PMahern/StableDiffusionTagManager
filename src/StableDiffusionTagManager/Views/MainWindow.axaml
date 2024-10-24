@@ -103,7 +103,13 @@
                                     Image="{Binding SelectedImage.ImageSource}"
                                     TargetImageSize="{Binding TargetImageSize}"
                                     ShowSaveButton="True"
-                                    ShowMaskModeButton="False"/>
+                                    ShowMaskModeButton="True">
+                <controls:ImageBoxWithControls.AdditionalMaskButtonsContent>
+                  <Button Command="{Binding ElementName=mainWindow, Path=DataContext.RemoveFromSelectedImageWithLamaCommand}" ToolTip.Tip="Remove Masked Content With Lama">
+                    <mi:MaterialIcon Kind="Remove"/>
+                  </Button>
+                </controls:ImageBoxWithControls.AdditionalMaskButtonsContent>
+                </controls:ImageBoxWithControls>
             </DockPanel>
           </Border>
           <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>

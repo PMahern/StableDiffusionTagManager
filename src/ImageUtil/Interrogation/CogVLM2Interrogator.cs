@@ -44,7 +44,8 @@ namespace ImageUtil.Interrogation
                 throw new ObjectDisposedException("Tried to access a disposed CogVLM2Interrogator.");
             await pythonImageEngine.SendString(prompt);
 
-            return await pythonImageEngine.SendImage(imageData, consoleCallBack);
+            await pythonImageEngine.SendImage(imageData, consoleCallBack);
+            return await pythonImageEngine.WaitForGenerationResultString(consoleCallBack);
         }
 
         public void Dispose()

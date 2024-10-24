@@ -92,6 +92,7 @@
           </Button>
         </StackPanel>
         <StackPanel  IsVisible="{Binding CurrentMode, Converter={StaticResource ResourceKey=modeConverter}, ConverterParameter={x:Static controls:ImageViewerMode.Mask}, Mode=OneWay}" Orientation="Horizontal" Classes="toolbar" Grid.Column="2">
+          <ContentControl Name="AdditionalMaskButtons" Content="{Binding AdditionalMaskButtonsContent}"/>
           <ComboBox ItemsSource="{Binding BrushSizes}" SelectedItem="{Binding SelectedMaskSize}"  ToolTip.Tip="Mask Brush Size">
             <ComboBox.ItemTemplate>
               <DataTemplate>

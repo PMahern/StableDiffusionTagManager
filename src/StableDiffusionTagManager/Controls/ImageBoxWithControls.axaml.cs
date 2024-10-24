@@ -71,6 +71,15 @@ namespace StableDiffusionTagManager.Controls
             }
         }
 
+        public static readonly StyledProperty<object> AdditionalMaskButtonsContentProperty =
+             AvaloniaProperty.Register<ImageBoxWithControls, object>(nameof(AdditionalMaskButtonsContent));
+
+        public object AdditionalMaskButtonsContent
+        {
+            get => GetValue(AdditionalMaskButtonsContentProperty);
+            set => SetValue(AdditionalMaskButtonsContentProperty, value);
+        }
+
         public static readonly StyledProperty<bool> ShowEditImageButtonProperty =
             AvaloniaProperty.Register<ImageBoxWithControls, bool>(nameof(ShowEditImageButton), true);
 

@@ -44,7 +44,8 @@ namespace ImageUtil
 
             await pythonImageEngine.SendString(prompt);
 
-            return await pythonImageEngine.SendImage(imageData, consoleCallBack);
+            await pythonImageEngine.SendImage(imageData, consoleCallBack);
+            return await pythonImageEngine.WaitForGenerationResultString(consoleCallBack);
         }
 
         public void Dispose()
