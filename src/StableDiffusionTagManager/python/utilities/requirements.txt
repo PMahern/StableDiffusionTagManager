@@ -1,1 +1,8 @@
 simple-lama-inpainting
+ultralytics
+huggingface_hub
+torch
+torchvision
+requests
+dill
+numpy

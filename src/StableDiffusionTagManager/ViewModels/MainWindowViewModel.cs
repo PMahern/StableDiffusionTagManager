@@ -1166,7 +1166,7 @@ namespace StableDiffusionTagManager.ViewModels
         }
         public async Task InterrogateAndApplyToSelectedImage(Bitmap bitmap)
         {
-            
+
             try
             {
                 var dialog = new InterrogationDialog();
@@ -1491,7 +1491,7 @@ namespace StableDiffusionTagManager.ViewModels
 
         public void AddConsoleText(string text)
         {
-            Dispatcher.UIThread.InvokeAsync(() => ConsoleText += text + Environment.NewLine); 
+            Dispatcher.UIThread.InvokeAsync(() => ConsoleText += text + Environment.NewLine);
         }
 
         #region Tag Priority Sets
@@ -1507,6 +1507,7 @@ namespace StableDiffusionTagManager.ViewModels
         }
 
         public Func<Bitmap?> GetImageBoxMask { get; internal set; }
+        public Action<Bitmap, Bitmap> SetImageBoxMask { get; internal set; }
 
         [RelayCommand]
         public void ApplyTagPrioritySet(TagPrioritySetButtonViewModel buttonVM)
@@ -1718,32 +1719,95 @@ namespace StableDiffusionTagManager.ViewModels
             ProgressIndicatorMessage = "Initializing Python Utilities...";
             ConsoleText = $"Initializing...{Environment.NewLine}";
 
-            var utilities = new PythonUtilities();
+            using var utilities = new PythonUtilities();
             await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
 
-            var mask = GetImageBoxMask?.Invoke();
-            if(mask != null)
+            try
             {
-                var bytes = await utilities.RunLama(SelectedImage.ImageSource.ToByteArray(), mask.ToByteArray(), AddConsoleText);
-
-                using (var mstream = new MemoryStream(bytes))
+                var mask = GetImageBoxMask?.Invoke();
+                if (mask != null)
                 {
-                    var imageResult = new Bitmap(mstream);
+                    var bytes = await utilities.RunLama(SelectedImage.ImageSource.ToByteArray(), mask.ToByteArray(), AddConsoleText);
 
-                    var viewer = new ImageReviewDialog();
-                    viewer.Title = "Review image after lama removal";
-                    viewer.Images = new ObservableCollection<ImageReviewViewModel>() { new ImageReviewViewModel(imageResult) };
-                    viewer.ReviewMode = ImageReviewDialogMode.SingleSelect;
-                    await ShowDialog(viewer);
-
-                    if (viewer.Success)
+                    using (var mstream = new MemoryStream(bytes))
                     {
-                        selectedImage.ImageSource = imageResult;
-                        selectedImage.ImageSource.Save(Path.Combine(this.openFolder, selectedImage.Filename));
+                        var imageResult = new Bitmap(mstream);
+
+                        var viewer = new ImageReviewDialog();
+                        viewer.Title = "Review image after lama removal";
+                        viewer.Images = new ObservableCollection<ImageReviewViewModel>() { new ImageReviewViewModel(imageResult) };
+                        viewer.ReviewMode = ImageReviewDialogMode.SingleSelect;
+                        await ShowDialog(viewer);
+
+                        if (viewer.Success)
+                        {
+                            selectedImage.ImageSource = imageResult;
+                            selectedImage.ImageSource.Save(Path.Combine(this.openFolder, selectedImage.Filename));
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                var messageBoxStandardWindow = MessageBoxManager
+                        .GetMessageBoxStandard("Lama Remover Failed",
+                                                     $"Failed to execute lama model. Error message: {ex.Message}",
+                                                     ButtonEnum.Ok,
+                                                     Icon.Warning);
 
+                await ShowDialog(messageBoxStandardWindow);
+            }
+            ShowProgressIndicator = false;
+        }
+
+        [RelayCommand]
+        public async Task GenerateImageMaskWithYolo()
+        {
+            var dialog = new YOLOModelSelectorDialog();
+
+            var selectedYoloModelPath = await ShowDialog<string?>(dialog);
+
+            if (!string.IsNullOrEmpty(selectedYoloModelPath))
+            {
+                ShowProgressIndicator = true;
+                ProgressIndicatorMax = 0;
+                ProgressIndicatorMessage = "Initializing Python Utilities...";
+                ConsoleText = $"Initializing...{Environment.NewLine}";
+
+                using var utilities = new PythonUtilities();
+                await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
+
+                try
+                {
+                    var bytes = await utilities.GenerateYoloMask(selectedYoloModelPath, selectedImage.ImageSource.ToByteArray(), AddConsoleText);
+
+                    using (var mstream = new MemoryStream(bytes))
+                    {
+                        var imageResult = new Bitmap(mstream);
+
+                        var viewer = new ImageReviewDialog();
+                        viewer.Title = "Review generated mask";
+                        viewer.Images = new ObservableCollection<ImageReviewViewModel>() { new ImageReviewViewModel(imageResult) };
+                        viewer.ReviewMode = ImageReviewDialogMode.SingleSelect;
+                        await ShowDialog(viewer);
+
+                        if (viewer.Success)
+                        {
+                            SetImageBoxMask(SelectedImage.ImageSource, imageResult);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var messageBoxStandardWindow = MessageBoxManager
+                            .GetMessageBoxStandard("YOLO Mask Generation Failed",
+                                                         $"Failed to generate mask. Error message: {ex.Message}",
+                                                         ButtonEnum.Ok,
+                                                         Icon.Warning);
+
+                    await ShowDialog(messageBoxStandardWindow);
+                }
+            }
             ShowProgressIndicator = false;
         }
     }

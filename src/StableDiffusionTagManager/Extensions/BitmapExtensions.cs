@@ -149,11 +149,52 @@ namespace StableDiffusionTagManager.Extensions
             return newImage;
         }
 
+
+
         public static byte[] ToByteArray(this Bitmap image)
         {
             using var uploadStream = new MemoryStream();
             image.Save(uploadStream);
             return uploadStream.ToArray();
         }
+
+        public static RenderTargetBitmap ToRenderTargetBitmap(this Bitmap bitmap)
+        {
+            var pixelSize = new PixelSize(bitmap.PixelSize.Width, bitmap.PixelSize.Height);
+            var renderTargetBitmap = new RenderTargetBitmap(pixelSize);
+
+            using (var drawingContext = renderTargetBitmap.CreateDrawingContext())
+            {
+                drawingContext.DrawImage(bitmap, new Rect(0, 0, pixelSize.Width, pixelSize.Height));
+            }
+
+            return renderTargetBitmap;
+        }
+        public static Bitmap ConvertMaskToAlpha(this Bitmap mask)
+        {
+            using var slMask = mask.CreateSixLaborsRGBAImage();
+            var alphaMaskedImage = new Image<Rgba32>(slMask.Width, slMask.Height);
+
+            // Convert the mask to alpha channel
+            for (int y = 0; y < slMask.Height; y++)
+            {
+                for (int x = 0; x < slMask.Width; x++)
+                {
+                    Rgba32 maskPixel = slMask[x, y];
+
+                    // Set the alpha channel to the intensity of the mask pixel
+                    maskPixel.A = maskPixel.R;
+                    maskPixel.R = 0;
+                    maskPixel.G = 0;
+                    maskPixel.B = 0;
+
+                    alphaMaskedImage[x, y] = maskPixel;
+                }
+            }
+
+            return alphaMaskedImage.CreateBitmap();
+        }
+        
+
     }
 }

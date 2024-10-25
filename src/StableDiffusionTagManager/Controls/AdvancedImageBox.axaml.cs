@@ -730,14 +730,7 @@ namespace UVtools.AvaloniaControls
                 }
             }
 
-            if (maskLayers.ContainsKey(image))
-            {
-                maskLayers[image].Clear();
-                for (int i = 2; i < maxMipReached; i++)
-                {
-                    mips.Remove((image, i));
-                }
-            }
+            ClearMask(image);
         }
 
         public void UndoLastPaint(Bitmap image)
@@ -3151,7 +3144,35 @@ namespace UVtools.AvaloniaControls
 
             return null;
         }
-        #endregion
 
+        void ClearMask(Bitmap image)
+        {
+            if (maskLayers.ContainsKey(image))
+            {
+                maskLayers[image].Clear();
+                for (int i = 2; i < maxMipReached; i++)
+                {
+                    mips.Remove((image, i));
+                }
+            }
+        }
+
+        public void SetImageMask(Bitmap image, Bitmap mask)
+        {
+            var convertedmask = mask.ConvertMaskToAlpha().ToRenderTargetBitmap();
+
+            if (maskLayers.ContainsKey(image))
+            {
+                maskLayers[image].Add(convertedmask);
+            }
+            else
+            {
+                maskLayers.Add(image, new List<RenderTargetBitmap> { convertedmask });
+            }
+
+            // Change all pixels to white with alpha based on darkness
+            
+        }
+        #endregion
     }
 }

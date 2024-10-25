@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StableDiffusionTagManager"
+        xmlns:controls="clr-namespace:StableDiffusionTagManager.Controls;assembly=StableDiffusionTagManager"
+        mc:Ignorable="d"
+        Width="400"
+        Height="150"
+        CanResize="False"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="4"
+        ExtendClientAreaToDecorationsHint="True"
+        WindowStartupLocation="CenterOwner"
+        x:Class="StableDiffusionTagManager.YOLOModelSelectorDialog"
+        Title="YOLOModelSelectorDialog"
+        Name="ThisControl">
+  <controls:HeaderControl DataContext="{Binding ElementName=ThisControl}" Title="YOLO Mask Generation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="5" CloseCommand="{Binding CancelCommand}">
+    <Grid RowDefinitions="*,Auto">
+      <local:YOLOModelSelectorView DataContext="{Binding SelectorViewModel}" />
+      <StackPanel Grid.Row="1" Classes="footer">
+        <Button Command="{Binding GenerateCommand}">Generate Mask</Button>
+        <Button Command="{Binding CancelCommand}">Cancel</Button>
+      </StackPanel>
+    </Grid>
+  </controls:HeaderControl>
+
+</Window>

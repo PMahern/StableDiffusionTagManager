@@ -47,7 +47,7 @@
           <MenuItem Header="_Archive Selected Image" Command="{Binding DeleteSelectedImageCommand}"/>
           <MenuItem Header="_Next Image" InputGesture="Shift+." Command="{Binding NextImageCommand}"/>
           <MenuItem Header="_Previous Image" InputGesture="Shift+," Command="{Binding PreviousImageCommand}"/>
-          <MenuItem Header="_Filter"> 
+          <MenuItem Header="_Filter">
             <MenuItem Header="_None"  Command="{Binding SetImageFilterCommand}" CommandParameter="{x:Static models:ImageFilterMode.None}"/>
             <MenuItem Header="_Incomplete" Command="{Binding SetImageFilterCommand}" CommandParameter="{x:Static models:ImageFilterMode.NotCompleted}"/>
             <MenuItem Header="_Completed" Command="{Binding SetImageFilterCommand}" CommandParameter="{x:Static models:ImageFilterMode.Completed}"/>
@@ -105,11 +105,16 @@
                                     ShowSaveButton="True"
                                     ShowMaskModeButton="True">
                 <controls:ImageBoxWithControls.AdditionalMaskButtonsContent>
-                  <Button Command="{Binding ElementName=mainWindow, Path=DataContext.RemoveFromSelectedImageWithLamaCommand}" ToolTip.Tip="Remove Masked Content With Lama">
-                    <mi:MaterialIcon Kind="Remove"/>
-                  </Button>
+                  <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding ElementName=mainWindow, Path=DataContext.RemoveFromSelectedImageWithLamaCommand}" ToolTip.Tip="Remove Masked Content With Lama">
+                      <mi:MaterialIcon Kind="Remove"/>
+                    </Button>
+                    <Button Command="{Binding ElementName=mainWindow, Path=DataContext.GenerateImageMaskWithYoloCommand}" ToolTip.Tip="Generate Mask With Yolo">
+                      <mi:MaterialIcon Kind="QuestionMark"/>
+                    </Button>
+                  </StackPanel>
                 </controls:ImageBoxWithControls.AdditionalMaskButtonsContent>
-                </controls:ImageBoxWithControls>
+              </controls:ImageBoxWithControls>
             </DockPanel>
           </Border>
           <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>

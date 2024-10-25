@@ -84,6 +84,7 @@ namespace StableDiffusionTagManager.Views
                 ImageBox.ExpandClicked = async (image) => await viewModel.ExpandImage(image);
                 ImageBox.EditImageClicked = async (image) => await viewModel.RunImgToImg(image);
                 viewModel.GetImageBoxMask = () => ImageBox?.ImageBox?.CreateNewImageFromMask()?.InvertColors();
+                viewModel.SetImageBoxMask = (image, mask) => ImageBox?.ImageBox?.SetImageMask(image, mask);
             };
         }
 
