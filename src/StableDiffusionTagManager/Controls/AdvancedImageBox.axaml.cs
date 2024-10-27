@@ -1485,11 +1485,12 @@ namespace UVtools.AvaloniaControls
             var imageViewPort = GetImageViewPort();
 
             // Draw image
-            context.DrawImage(toDraw,
-                GetSourceImageRegion(),
-                imageViewPort
-            );
-
+            using (context.PushRenderOptions(new RenderOptions { BitmapInterpolationMode = BitmapInterpolationMode.None }))
+            {
+                context.DrawImage(toDraw,
+                    GetSourceImageRegion(),
+                    imageViewPort);
+            }
             if (paintHistoryBuffer[toDraw].Any())
             {
                 context.DrawImage(paintHistoryBuffer[toDraw].Peek(),
@@ -1500,7 +1501,7 @@ namespace UVtools.AvaloniaControls
             if (maskHistoryBuffer != null && (MaskWithMouseButtons != MouseButtons.None))
             {
                 IEnumerable<Bitmap> maskLayers = this.maskHistoryBuffer[toDraw];
-                if(maskHistoryBuffer != null && maskHistoryBuffer[toDraw].Any())
+                if (maskHistoryBuffer != null && maskHistoryBuffer[toDraw].Any())
                 {
                     context.DrawImage(maskHistoryBuffer[toDraw].Peek(),
                     GetSourceImageRegion(),
@@ -2983,7 +2984,7 @@ namespace UVtools.AvaloniaControls
                 Stack<RenderTargetBitmap> buffer = new();
                 buffer.Push(convertedmask);
                 maskHistoryBuffer.Add(image, buffer);
-            }            
+            }
         }
         #endregion
     }
