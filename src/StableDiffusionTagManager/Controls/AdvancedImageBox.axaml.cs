@@ -1455,6 +1455,8 @@ namespace UVtools.AvaloniaControls
 
         public override void Render(DrawingContext context)
         {
+            var zoomFactor = ZoomFactor;
+
             base.Render(context);
 
             var viewPortSize = ViewPortSize;
@@ -1490,32 +1492,32 @@ namespace UVtools.AvaloniaControls
                 context.DrawImage(toDraw,
                     GetSourceImageRegion(),
                     imageViewPort);
-            }
-            if (paintHistoryBuffer[toDraw].Any())
-            {
-                context.DrawImage(paintHistoryBuffer[toDraw].Peek(),
-                GetSourceImageRegion(),
-                imageViewPort);
-            }
 
-            if (maskHistoryBuffer != null && (MaskWithMouseButtons != MouseButtons.None))
-            {
-                IEnumerable<Bitmap> maskLayers = this.maskHistoryBuffer[toDraw];
-                if (maskHistoryBuffer != null && maskHistoryBuffer[toDraw].Any())
+                if (paintHistoryBuffer[toDraw].Any())
                 {
-                    context.DrawImage(maskHistoryBuffer[toDraw].Peek(),
+                    context.DrawImage(paintHistoryBuffer[toDraw].Peek(),
                     GetSourceImageRegion(),
                     imageViewPort);
                 }
+
+                if (maskHistoryBuffer != null && (MaskWithMouseButtons != MouseButtons.None))
+                {
+                    IEnumerable<Bitmap> maskLayers = this.maskHistoryBuffer[toDraw];
+                    if (maskHistoryBuffer != null && maskHistoryBuffer[toDraw].Any())
+                    {
+                        context.DrawImage(maskHistoryBuffer[toDraw].Peek(),
+                        GetSourceImageRegion(),
+                        imageViewPort);
+                    }
+                }
+
+                
+
+                if ((PaintWithMouseButtons & MouseButtons.LeftButton) != 0 && _pointerPosition is { X: >= 0, Y: >= 0 })
+                {
+                    context.DrawEllipse(new SolidColorBrush(PaintBrushColor), null, _pointerPosition, (PaintBrushSize - 1) * zoomFactor, (PaintBrushSize - 1) * zoomFactor);
+                }
             }
-
-            var zoomFactor = ZoomFactor;
-
-            if ((PaintWithMouseButtons & MouseButtons.LeftButton) != 0 && _pointerPosition is { X: >= 0, Y: >= 0 })
-            {
-                context.DrawEllipse(new SolidColorBrush(PaintBrushColor), null, _pointerPosition, (PaintBrushSize - 1) * zoomFactor, (PaintBrushSize - 1) * zoomFactor);
-            }
-
             if (HaveTrackerImage && _pointerPosition is { X: >= 0, Y: >= 0 })
             {
                 var destSize = TrackerImageAutoZoom
