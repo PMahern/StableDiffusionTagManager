@@ -1373,13 +1373,11 @@ namespace UVtools.AvaloniaControls
         {
             InitializeComponent();
 
-            //FocusableProperty.OverrideDefaultValue(typeof(AdvancedImageBox), true);
             AffectsRender<AdvancedImageBox>(ShowGridProperty);
 
             HorizontalScrollBar = this.FindControl<ScrollBar>("HorizontalScrollBar");
             VerticalScrollBar = this.FindControl<ScrollBar>("VerticalScrollBar");
             ViewPort = this.FindControl<ContentPresenter>("ViewPort");
-            //Mip = this.FindControl<Image>("Mip");
 
             SizeModeChanged();
             if (HorizontalScrollBar != null)
@@ -1489,7 +1487,8 @@ namespace UVtools.AvaloniaControls
             // Draw image
             context.DrawImage(toDraw,
                 GetSourceImageRegion(),
-                imageViewPort
+                imageViewPort,
+                BitmapInterpolationMode.
             );
 
             if (paintHistoryBuffer[toDraw].Any())
