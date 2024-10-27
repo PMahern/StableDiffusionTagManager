@@ -31,6 +31,7 @@ using Point = Avalonia.Point;
 using Size = Avalonia.Size;
 using StableDiffusionTagManager.Extensions;
 using System.Diagnostics;
+using SkiaSharp;
 
 namespace UVtools.AvaloniaControls
 {
@@ -580,25 +581,23 @@ namespace UVtools.AvaloniaControls
 
         private void ImageChanged(Bitmap? value)
         {
-
-            mipScaleFactor = 0;
             SelectNone();
             IsPainted = false;
-            if (value != null && !paintLayers.ContainsKey(value))
+            if (value != null && !paintHistoryBuffer.ContainsKey(value))
             {
-                if (!paintLayers.ContainsKey(value))
+                if (!paintHistoryBuffer.ContainsKey(value))
                 {
-                    paintLayers[value] = new List<RenderTargetBitmap>();
+                    paintHistoryBuffer[value] = new Stack<RenderTargetBitmap>();
                 }
                 else
                 {
-                    IsPainted = paintLayers[value].Any();
+                    IsPainted = paintHistoryBuffer[value].Any();
                 }
             }
 
-            if (value != null && !maskLayers.ContainsKey(value))
+            if (value != null && !maskHistoryBuffer.ContainsKey(value))
             {
-                maskLayers[value] = new List<RenderTargetBitmap>();
+                maskHistoryBuffer[value] = new Stack<RenderTargetBitmap>();
             }
 
             ZoomToFit();
@@ -606,9 +605,6 @@ namespace UVtools.AvaloniaControls
             TriggerRender();
             RaisePropertyChanged(nameof(IsImageLoaded));
         }
-
-        private Dictionary<(Bitmap, int), (Bitmap image, List<RenderTargetBitmap> paintLayers, List<RenderTargetBitmap> maskLayers)> mips = new();
-        private int mipScaleFactor = 0;
 
         private RenderTargetBitmap CreateBitmapMip(Bitmap source, int width, int height)
         {
@@ -621,113 +617,32 @@ namespace UVtools.AvaloniaControls
         }
 
         private int maxMipReached = 1;
-        private void UpdateRenderedMipLevel()
+
+        public RenderTargetBitmap? GetImagePaint(Bitmap image)
         {
-            var image = Image;
-            if (image == null)
+            if (paintHistoryBuffer.ContainsKey(image) && paintHistoryBuffer[image].Any())
             {
-                mipScaleFactor = 0;
-                return;
+                return paintHistoryBuffer[image].Peek();
             }
 
-            var zoomFactor = ZoomFactor;
-            var curHeight = Image.PixelSize.Height;
-            var curWidth = Image.PixelSize.Width;
-            var nextHeight = curHeight / 2;
-            var nextWidth = curWidth / 2;
-            var minHeight = Image.PixelSize.Height * zoomFactor;
-            var minWidth = Image.PixelSize.Width * zoomFactor;
-            var newmipScaleFactor = 1;
-
-            while (nextHeight > minHeight && nextWidth > minWidth)
-            {
-                newmipScaleFactor *= 2;
-                curHeight = nextHeight;
-                curWidth = nextWidth;
-                nextHeight /= 2;
-                nextWidth /= 2;
-            }
-
-            if (newmipScaleFactor > 1 && newmipScaleFactor != mipScaleFactor)
-            {
-                var key = (Image, newmipScaleFactor);
-                var paintLayers = this.paintLayers[image];
-                var maskLayers = this.maskLayers[image];
-                if (!mips.ContainsKey(key))
-                {
-                    var imagemip = CreateBitmapMip(image, curWidth, curHeight);
-                    var layerMips = new List<RenderTargetBitmap>();
-
-                    foreach (var layer in paintLayers)
-                    {
-                        layerMips.Add(CreateBitmapMip(layer, curWidth, curHeight));
-                    }
-
-                    var maskLayerMips = new List<RenderTargetBitmap>();
-                    foreach (var layer in maskLayers)
-                    {
-                        layerMips.Add(CreateBitmapMip(layer, curWidth, curHeight));
-                    }
-
-                    mips[key] = (image: imagemip, paintLayers: layerMips, maskLayers: maskLayerMips);
-                }
-                else
-                {
-                    var entry = mips[key];
-
-                    if (entry.paintLayers.Count() < paintLayers.Count())
-                    {
-                        var index = entry.paintLayers.Count();
-                        for (int i = index; i < paintLayers.Count(); i++)
-                        {
-                            entry.paintLayers.Add(CreateBitmapMip(paintLayers[i], curWidth, curHeight));
-                        }
-                    }
-
-                    if (entry.maskLayers.Count() < maskLayers.Count())
-                    {
-                        var index = entry.maskLayers.Count();
-                        for (int i = index; i < maskLayers.Count(); i++)
-                        {
-                            entry.maskLayers.Add(CreateBitmapMip(maskLayers[i], curWidth, curHeight));
-                        }
-                    }
-                }
-            }
-
-            mipScaleFactor = newmipScaleFactor;
-            maxMipReached = Math.Max(maxMipReached, mipScaleFactor);
+            return null;
         }
 
-        public List<RenderTargetBitmap> GetImageLayers(Bitmap image)
+        public RenderTargetBitmap? GetImageMask(Bitmap image)
         {
-            if (paintLayers.ContainsKey(image))
+            if (maskHistoryBuffer.ContainsKey(image) && maskHistoryBuffer[image].Any())
             {
-                return paintLayers[image];
+                return maskHistoryBuffer[image].Peek();
             }
 
-            return new();
+            return null;
         }
 
-        public List<RenderTargetBitmap> GetImageMaskLayers(Bitmap image)
+        public void ClearPaintAndMask(Bitmap image)
         {
-            if (maskLayers.ContainsKey(image))
+            if (paintHistoryBuffer.ContainsKey(image))
             {
-                return maskLayers[image];
-            }
-
-            return new();
-
-        }
-        public void ClearMipsAndLayers(Bitmap image)
-        {
-            if (paintLayers.ContainsKey(image))
-            {
-                paintLayers[image].Clear();
-                for (int i = 2; i < maxMipReached; i++)
-                {
-                    mips.Remove((image, i));
-                }
+                paintHistoryBuffer[image].Clear();
             }
 
             ClearMask(image);
@@ -735,22 +650,10 @@ namespace UVtools.AvaloniaControls
 
         public void UndoLastPaint(Bitmap image)
         {
-            if (paintLayers.ContainsKey(image) && paintLayers[image].Any())
+            if (paintHistoryBuffer.ContainsKey(image) && paintHistoryBuffer[image].Any())
             {
-                var set = paintLayers[image];
-                set.Remove(set.Last());
-                for (int i = 2; i <= maxMipReached; i *= 2)
-                {
-                    var key = (image, i);
-                    if (mips.ContainsKey(key))
-                    {
-                        var paintLayerMips = mips[key].paintLayers;
-                        while (paintLayerMips.Count() > set.Count())
-                        {
-                            paintLayerMips.Remove(paintLayerMips.Last());
-                        }
-                    }
-                }
+                var set = paintHistoryBuffer[image];
+                set.Pop();
                 IsPainted = set.Any();
                 TriggerRender();
             }
@@ -759,25 +662,13 @@ namespace UVtools.AvaloniaControls
                 IsPainted = false;
             }
         }
-
         public void UndoLastMask(Bitmap image)
         {
-            if (maskLayers.ContainsKey(image) && maskLayers[image].Any())
+            if (maskHistoryBuffer.ContainsKey(image) && maskHistoryBuffer[image].Any())
             {
-                var set = maskLayers[image];
-                set.Remove(set.Last());
-                for (int i = 2; i <= maxMipReached; i *= 2)
-                {
-                    var key = (image, i);
-                    if (mips.ContainsKey(key))
-                    {
-                        var maskLayerMips = mips[key].maskLayers;
-                        while (maskLayerMips.Count() > set.Count())
-                        {
-                            maskLayerMips.Remove(maskLayerMips.Last());
-                        }
-                    }
-                }
+                var set = maskHistoryBuffer[image];
+                set.Pop();
+
                 TriggerRender();
             }
         }
@@ -805,7 +696,7 @@ namespace UVtools.AvaloniaControls
 
         public bool ImageHasPaint(Bitmap image)
         {
-            return paintLayers.ContainsKey(image) && paintLayers[image].Any();
+            return paintHistoryBuffer.ContainsKey(image) && paintHistoryBuffer[image].Any();
         }
 
         public bool IsImageLoaded => Image is not null;
@@ -1387,8 +1278,8 @@ namespace UVtools.AvaloniaControls
             }
         }
 
-        private Dictionary<Bitmap, List<RenderTargetBitmap>> paintLayers = new Dictionary<Bitmap, List<RenderTargetBitmap>>();
-        private Dictionary<Bitmap, List<RenderTargetBitmap>> maskLayers = new Dictionary<Bitmap, List<RenderTargetBitmap>>();
+        private Dictionary<Bitmap, Stack<RenderTargetBitmap>> paintHistoryBuffer = new();
+        private Dictionary<Bitmap, Stack<RenderTargetBitmap>> maskHistoryBuffer = new();
         public static readonly StyledProperty<ISolidColorBrush> PixelGridColorProperty =
             AvaloniaProperty.Register<AdvancedImageBox, ISolidColorBrush>(nameof(PixelGridColor), Avalonia.Media.Brushes.DimGray);
 
@@ -1564,7 +1455,6 @@ namespace UVtools.AvaloniaControls
             InvalidateVisual();
         }
 
-
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -1596,45 +1486,26 @@ namespace UVtools.AvaloniaControls
             if (toDraw is null) return;
             var imageViewPort = GetImageViewPort();
 
-            //var targetImage = bitmapMips.ContainsKey(image) ? bitmapMips[image].First() : image;
-            IEnumerable<Bitmap> paintLayers = this.paintLayers[toDraw];
-            if (mipScaleFactor > 1)
-            {
-                var mipSet = mips[(toDraw, mipScaleFactor)];
-                toDraw = mipSet.image;
-                paintLayers = mipSet.paintLayers;
-            }
-
             // Draw image
             context.DrawImage(toDraw,
-                GetSourceImageRegion(mipScaleFactor),
+                GetSourceImageRegion(),
                 imageViewPort
             );
 
-            if (paintLayers != null)
+            if (paintHistoryBuffer[toDraw].Any())
             {
-                foreach (var bitmap in paintLayers)
-                {
-                    context.DrawImage(bitmap,
-                    GetSourceImageRegion(mipScaleFactor),
-                    imageViewPort);
-                }
+                context.DrawImage(paintHistoryBuffer[toDraw].Peek(),
+                GetSourceImageRegion(),
+                imageViewPort);
             }
 
-
-            if (maskLayers != null && (MaskWithMouseButtons != MouseButtons.None))
+            if (maskHistoryBuffer != null && (MaskWithMouseButtons != MouseButtons.None))
             {
-                IEnumerable<Bitmap> maskLayers = this.maskLayers[Image];
-                if (mipScaleFactor > 1)
+                IEnumerable<Bitmap> maskLayers = this.maskHistoryBuffer[toDraw];
+                if(maskHistoryBuffer != null && maskHistoryBuffer[toDraw].Any())
                 {
-                    var mipSet = mips[(Image, mipScaleFactor)];
-                    maskLayers = mipSet.maskLayers;
-                }
-
-                foreach (var bitmap in maskLayers)
-                {
-                    context.DrawImage(bitmap,
-                    GetSourceImageRegion(mipScaleFactor),
+                    context.DrawImage(maskHistoryBuffer[toDraw].Peek(),
+                    GetSourceImageRegion(),
                     imageViewPort);
                 }
             }
@@ -1731,8 +1602,6 @@ namespace UVtools.AvaloniaControls
                 Debug.WriteLine($"Updated ViewPort: {DateTime.Now.Ticks}");
                 //TriggerRender();
             }*/
-
-            UpdateRenderedMipLevel();
 
             return changed;
         }
@@ -1833,8 +1702,8 @@ namespace UVtools.AvaloniaControls
                )
             {
                 IsPainting = true;
-                var newImage = new RenderTargetBitmap(Image.PixelSize);
-                paintLayers[Image].Add(newImage);
+                var newImage = paintHistoryBuffer[Image].Any() ? paintHistoryBuffer[Image].Peek().ToRenderTargetBitmap() : new RenderTargetBitmap(Image.PixelSize);
+                paintHistoryBuffer[Image].Push(newImage);
 
                 IsPainted = true;
             }
@@ -1845,7 +1714,8 @@ namespace UVtools.AvaloniaControls
                )
             {
                 IsMasking = true;
-                maskLayers[Image].Add(new RenderTargetBitmap(Image.PixelSize));
+                var newImage = maskHistoryBuffer[Image].Any() ? maskHistoryBuffer[Image].Peek().ToRenderTargetBitmap() : new RenderTargetBitmap(Image.PixelSize);
+                maskHistoryBuffer[Image].Push(newImage);
             }
             else if (
                     pointer.Properties.IsLeftButtonPressed && (EyeDropWithMouseButtons & MouseButtons.LeftButton) != 0 ||
@@ -1921,11 +1791,11 @@ namespace UVtools.AvaloniaControls
 
             if (_isPainting)
             {
-                var newestLayer = paintLayers[Image].Last();
+                var newestLayer = paintHistoryBuffer[Image].Peek();
                 using (var bitmapRenderContext = newestLayer.CreateDrawingContext(false))
                 {
                     var brushSize = PaintBrushSize - 1;
-                    var pos = PointToImage(pointer.Position);
+                    var pos = PointToImage(pointer.Position, false);
                     var brush = new SolidColorBrush(PaintBrushColor);
                     var pen = new Pen(brush);
                     var d = brushSize * 2.0;
@@ -1937,43 +1807,19 @@ namespace UVtools.AvaloniaControls
                     var intermediatePoints = e.GetIntermediatePoints(this);
                     foreach (var point in intermediatePoints)
                     {
-                        pos = PointToImage(point.Position);
+                        pos = PointToImage(point.Position, false);
                         bitmapRenderContext.DrawEllipse(brush, pen, new Rect(pos.X - brushSize, pos.Y - brushSize, d, d));
-                    }
-                    RenderTargetBitmap layerMip = null;
-                    //Draw to the current active layer mip
-                    if (mipScaleFactor > 1)
-                    {
-                        var layerMips = mips[(Image, mipScaleFactor)].paintLayers;
-
-                        if (layerMips.Count() < paintLayers[Image].Count())
-                        {
-                            layerMip = new RenderTargetBitmap(new PixelSize(Image.PixelSize.Width / mipScaleFactor, Image.PixelSize.Height / mipScaleFactor));
-                            layerMips.Add(layerMip);
-                        }
-                        else
-                            layerMip = layerMips.Last();
-
-                        using (var mipRenderContext = layerMip.CreateDrawingContext(false))
-                        {
-                            mipRenderContext.DrawEllipse(brush, pen, new Rect(pos.X / mipScaleFactor - brushSize / mipScaleFactor, pos.Y / mipScaleFactor - brushSize / mipScaleFactor, d / mipScaleFactor, d / mipScaleFactor));
-                            foreach (var point in intermediatePoints)
-                            {
-                                pos = PointToImage(point.Position);
-                                mipRenderContext.DrawEllipse(brush, pen, new Rect(pos.X / mipScaleFactor - brushSize / mipScaleFactor, pos.Y / mipScaleFactor - brushSize / mipScaleFactor, d / mipScaleFactor, d / mipScaleFactor));
-                            }
-                        }
                     }
                 }
                 TriggerRender(false);
             }
             if (_isMasking)
             {
-                var newestLayer = maskLayers[Image].Last();
+                var newestLayer = maskHistoryBuffer[Image].Peek();
                 using (var bitmapRenderContext = newestLayer.CreateDrawingContext(false))
                 {
                     var brushSize = MaskBrushSize - 1;
-                    var pos = PointToImage(pointer.Position);
+                    var pos = PointToImage(pointer.Position, false);
                     var brush = new SolidColorBrush(new Color(255, 0, 0, 0));
                     var pen = new Pen(brush);
                     var d = brushSize * 2.0;
@@ -1986,32 +1832,8 @@ namespace UVtools.AvaloniaControls
                     var intermediatePoints = e.GetIntermediatePoints(this);
                     foreach (var point in intermediatePoints)
                     {
-                        pos = PointToImage(point.Position);
+                        pos = PointToImage(point.Position, false);
                         bitmapRenderContext.DrawEllipse(brush, pen, new Rect(pos.X - brushSize, pos.Y - brushSize, d, d));
-                    }
-                    RenderTargetBitmap layerMip = null;
-                    //Draw to the current active layer mip
-                    if (mipScaleFactor > 1)
-                    {
-                        var layerMips = mips[(Image, mipScaleFactor)].maskLayers;
-
-                        if (layerMips.Count() < maskLayers[Image].Count())
-                        {
-                            layerMip = new RenderTargetBitmap(new PixelSize(Image.PixelSize.Width / mipScaleFactor, Image.PixelSize.Height / mipScaleFactor));
-                            layerMips.Add(layerMip);
-                        }
-                        else
-                            layerMip = layerMips.Last();
-
-                        using (var mipRenderContext = layerMip.CreateDrawingContext(false))
-                        {
-                            mipRenderContext.DrawEllipse(brush, pen, new Rect(pos.X / mipScaleFactor - brushSize / mipScaleFactor, pos.Y / mipScaleFactor - brushSize / mipScaleFactor, d / mipScaleFactor, d / mipScaleFactor));
-                            foreach (var point in intermediatePoints)
-                            {
-                                pos = PointToImage(point.Position);
-                                mipRenderContext.DrawEllipse(brush, pen, new Rect(pos.X / mipScaleFactor - brushSize / mipScaleFactor, pos.Y / mipScaleFactor - brushSize / mipScaleFactor, d / mipScaleFactor, d / mipScaleFactor));
-                            }
-                        }
                     }
                 }
                 TriggerRender(false);
@@ -2521,7 +2343,7 @@ namespace UVtools.AvaloniaControls
 
             var viewport = GetImageViewPort();
 
-            if (!!fitToBounds || viewport.Contains(point))
+            if (!fitToBounds || viewport.Contains(point))
             {
                 x = (point.X + Offset.X - viewport.X) / ZoomFactor;
                 y = (point.Y + Offset.Y - viewport.Y) / ZoomFactor;
@@ -2995,7 +2817,7 @@ namespace UVtools.AvaloniaControls
         ///   Gets the source image region.
         /// </summary>
         /// <returns></returns>
-        public Rect GetSourceImageRegion(double mipScaleFactor = 1.0)
+        public Rect GetSourceImageRegion()
         {
             var image = Image;
             if (image is null) return new Rect();
@@ -3006,10 +2828,10 @@ namespace UVtools.AvaloniaControls
                     var offset = Offset;
                     var viewPort = GetImageViewPort();
                     var zoomFactor = ZoomFactor;
-                    double sourceLeft = (offset.X / zoomFactor) / mipScaleFactor;
-                    double sourceTop = (offset.Y / zoomFactor) / mipScaleFactor;
-                    double sourceWidth = (viewPort.Width / zoomFactor) / mipScaleFactor;
-                    double sourceHeight = (viewPort.Height / zoomFactor) / mipScaleFactor;
+                    double sourceLeft = (offset.X / zoomFactor);
+                    double sourceTop = (offset.Y / zoomFactor);
+                    double sourceWidth = (viewPort.Width / zoomFactor);
+                    double sourceHeight = (viewPort.Height / zoomFactor);
 
                     return new(sourceLeft, sourceTop, sourceWidth, sourceHeight);
             }
@@ -3115,7 +2937,7 @@ namespace UVtools.AvaloniaControls
 
         public Bitmap? CreateNewImageWithLayersFromRegion(Rect? region = null, PixelSize? targetSize = null)
         {
-            return Image?.CreateNewImageFromRegion(region, targetSize, GetImageLayers(Image));
+            return Image?.CreateNewImageFromRegion(region, targetSize, GetImagePaint(Image));
         }
 
         public Bitmap? CreateNewImageFromMask()
@@ -3125,18 +2947,15 @@ namespace UVtools.AvaloniaControls
                 var finalRegion = new Rect(0, 0, Image.PixelSize.Width, Image.PixelSize.Height);
                 var finalSize = new PixelSize(Convert.ToInt32(finalRegion.Width), Convert.ToInt32(finalRegion.Height));
                 var newImage = new RenderTargetBitmap(finalSize);
-                var layers = GetImageMaskLayers(Image);
+                var mask = GetImageMask(Image);
 
                 var imageRect = new Rect(0, 0, finalSize.Width, finalSize.Height);
                 using (var drawingContext = newImage.CreateDrawingContext())
                 {
                     drawingContext.FillRectangle(new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)), imageRect, 0);
-                    if (layers != null)
+                    if (mask != null)
                     {
-                        foreach (var maskLayer in layers)
-                        {
-                            drawingContext.DrawImage(maskLayer, finalRegion, imageRect);
-                        }
+                        drawingContext.DrawImage(mask, finalRegion, imageRect);
                     }
                 }
                 return newImage;
@@ -3147,13 +2966,9 @@ namespace UVtools.AvaloniaControls
 
         void ClearMask(Bitmap image)
         {
-            if (maskLayers.ContainsKey(image))
+            if (maskHistoryBuffer.ContainsKey(image))
             {
-                maskLayers[image].Clear();
-                for (int i = 2; i < maxMipReached; i++)
-                {
-                    mips.Remove((image, i));
-                }
+                maskHistoryBuffer[image].Clear();
             }
         }
 
@@ -3161,17 +2976,16 @@ namespace UVtools.AvaloniaControls
         {
             var convertedmask = mask.ConvertMaskToAlpha().ToRenderTargetBitmap();
 
-            if (maskLayers.ContainsKey(image))
+            if (maskHistoryBuffer.ContainsKey(image))
             {
-                maskLayers[image].Add(convertedmask);
+                maskHistoryBuffer[image].Push(convertedmask);
             }
             else
             {
-                maskLayers.Add(image, new List<RenderTargetBitmap> { convertedmask });
-            }
-
-            // Change all pixels to white with alpha based on darkness
-            
+                Stack<RenderTargetBitmap> buffer = new();
+                buffer.Push(convertedmask);
+                maskHistoryBuffer.Add(image, buffer);
+            }            
         }
         #endregion
     }

@@ -116,7 +116,7 @@ namespace StableDiffusionTagManager.Extensions
             };
         }
 
-        public static async Task<List<Bitmap>?> ExtractComicPanels(this Bitmap bitmap, List<RenderTargetBitmap>? layers = null)
+        public static async Task<List<Bitmap>?> ExtractComicPanels(this Bitmap bitmap, RenderTargetBitmap? paint = null)
         {
             string tmpImage = Path.Combine(App.GetTempFileDirectory(), $"{Guid.NewGuid()}.png");
             bitmap.Save(tmpImage);
@@ -126,10 +126,10 @@ namespace StableDiffusionTagManager.Extensions
             KumikoWrapper kwrapper = new KumikoWrapper(App.Settings.PythonPath, Path.Combine(new string[] { appDir, "Assets", "kumiko" }));
             var results = await kwrapper.GetImagePanels(tmpImage, App.GetTempFileDirectory());
 
-            return results.Select(r => bitmap.CreateNewImageFromRegion(new Rect(r.TopLeftX, r.TopLeftY, r.Width, r.Height), null, layers)).ToList();
+            return results.Select(r => bitmap.CreateNewImageFromRegion(new Rect(r.TopLeftX, r.TopLeftY, r.Width, r.Height), null, paint)).ToList();
         }
 
-        public static Bitmap CreateNewImageFromRegion(this Bitmap bitmap, Rect? region = null, PixelSize? targetSize = null, List<RenderTargetBitmap>? layers = null)
+        public static Bitmap CreateNewImageFromRegion(this Bitmap bitmap, Rect? region = null, PixelSize? targetSize = null, RenderTargetBitmap? paint = null)
         {
             var finalRegion = region ?? new Rect(0, 0, bitmap.PixelSize.Width, bitmap.PixelSize.Height);
             var finalSize = targetSize ?? new PixelSize(Convert.ToInt32(finalRegion.Width), Convert.ToInt32(finalRegion.Height));
@@ -137,12 +137,9 @@ namespace StableDiffusionTagManager.Extensions
             using (var drawingContext = newImage.CreateDrawingContext())
             {
                 drawingContext.DrawImage(bitmap, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height));
-                if (layers != null)
+                if (paint != null)
                 {
-                    foreach (var paintLayer in layers)
-                    {
-                        drawingContext.DrawImage(paintLayer, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height));
-                    }
+                    drawingContext.DrawImage(paint, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height));
                 }
             }
 

@@ -447,7 +447,7 @@ namespace StableDiffusionTagManager.Controls
             {
                 try
                 {
-                    var comicPanels = await Image.ExtractComicPanels(ImageBox.GetImageLayers(Image));
+                    var comicPanels = await Image.ExtractComicPanels(ImageBox.GetImagePaint(Image));
                     ComicPanelsExtracted?.Invoke(comicPanels);
                 }
                 catch (Exception e)
