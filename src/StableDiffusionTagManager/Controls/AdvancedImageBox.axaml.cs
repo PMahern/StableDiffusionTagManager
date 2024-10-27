@@ -1487,8 +1487,7 @@ namespace UVtools.AvaloniaControls
             // Draw image
             context.DrawImage(toDraw,
                 GetSourceImageRegion(),
-                imageViewPort,
-                BitmapInterpolationMode.
+                imageViewPort
             );
 
             if (paintHistoryBuffer[toDraw].Any())
