@@ -995,7 +995,7 @@ namespace UVtools.AvaloniaControls
         }
 
         public static readonly StyledProperty<Color> PaintBrushColorProperty =
-            AvaloniaProperty.Register<AdvancedImageBox, Color>(nameof(PaintBrushSize), new Color(255, 255, 255, 255));
+            AvaloniaProperty.Register<AdvancedImageBox, Color>(nameof(PaintBrushColor), new Color(255, 255, 255, 255));
 
         /// <summary>
         /// Gets or sets size of the paint brush
@@ -1017,6 +1017,18 @@ namespace UVtools.AvaloniaControls
             get => GetValue(MaskBrushSizeProperty);
             set => SetValue(MaskBrushSizeProperty, value);
         }
+        public static readonly StyledProperty<Color> MaskColorProperty =
+            AvaloniaProperty.Register<AdvancedImageBox, Color>(nameof(MaskColor), new Color(255, 255, 255, 255));
+
+        /// <summary>
+        /// Gets or sets size of the paint brush
+        /// </summary>
+        public Color MaskColor
+        {
+            get => GetValue(MaskColorProperty);
+            set => SetValue(MaskColorProperty, value);
+        }
+
 
         public static readonly StyledProperty<bool> InvertMousePanProperty =
             AvaloniaProperty.Register<AdvancedImageBox, bool>(nameof(InvertMousePan), false);
@@ -1500,7 +1512,7 @@ namespace UVtools.AvaloniaControls
                     opacityBrush.DestinationRect = new RelativeRect(imageViewPort, RelativeUnit.Absolute);
                     using (context.PushOpacityMask(opacityBrush, new Rect(0, 0, viewPortSize.Width, viewPortSize.Height)))
                     {
-                        var whiteBrush = new SolidColorBrush(new Color(255, 255, 255, 255));
+                        var whiteBrush = new SolidColorBrush(MaskColor);
                         context.DrawRectangle(whiteBrush, null, imageViewPort);
                     }
                 }
