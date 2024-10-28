@@ -32,6 +32,7 @@ using Size = Avalonia.Size;
 using StableDiffusionTagManager.Extensions;
 using System.Diagnostics;
 using SkiaSharp;
+using Polly;
 
 namespace UVtools.AvaloniaControls
 {
@@ -604,16 +605,6 @@ namespace UVtools.AvaloniaControls
             UpdateViewPort();
             TriggerRender();
             RaisePropertyChanged(nameof(IsImageLoaded));
-        }
-
-        private RenderTargetBitmap CreateBitmapMip(Bitmap source, int width, int height)
-        {
-            var renderImage = new RenderTargetBitmap(new PixelSize(width, height));
-            using (var bitmapRenderContext = renderImage.CreateDrawingContext())
-            {
-                bitmapRenderContext.DrawImage(source, new Rect(0, 0, source.PixelSize.Width, source.PixelSize.Height), new Rect(0, 0, width, height));
-            }
-            return renderImage;
         }
 
         private int maxMipReached = 1;
@@ -1485,33 +1476,34 @@ namespace UVtools.AvaloniaControls
             var toDraw = Image;
             if (toDraw is null) return;
             var imageViewPort = GetImageViewPort();
+            var sourceImageRegion = GetSourceImageRegion();
 
             // Draw image
             using (context.PushRenderOptions(new RenderOptions { BitmapInterpolationMode = BitmapInterpolationMode.None }))
             {
                 context.DrawImage(toDraw,
-                    GetSourceImageRegion(),
+                    sourceImageRegion,
                     imageViewPort);
 
                 if (paintHistoryBuffer[toDraw].Any())
                 {
                     context.DrawImage(paintHistoryBuffer[toDraw].Peek(),
-                    GetSourceImageRegion(),
-                    imageViewPort);
+                        sourceImageRegion,
+                        imageViewPort);
                 }
 
-                if (maskHistoryBuffer != null && (MaskWithMouseButtons != MouseButtons.None))
+                if ((MaskWithMouseButtons != MouseButtons.None) && maskHistoryBuffer != null && this.maskHistoryBuffer.ContainsKey(toDraw) && maskHistoryBuffer[toDraw].Any())
                 {
-                    IEnumerable<Bitmap> maskLayers = this.maskHistoryBuffer[toDraw];
-                    if (maskHistoryBuffer != null && maskHistoryBuffer[toDraw].Any())
+                    var offset = Offset;
+                    var opacityBrush = new ImageBrush(maskHistoryBuffer[toDraw].Peek());
+                    opacityBrush.SourceRect = new RelativeRect(sourceImageRegion, RelativeUnit.Absolute);
+                    opacityBrush.DestinationRect = new RelativeRect(imageViewPort, RelativeUnit.Absolute);
+                    using (context.PushOpacityMask(opacityBrush, new Rect(0, 0, viewPortSize.Width, viewPortSize.Height)))
                     {
-                        context.DrawImage(maskHistoryBuffer[toDraw].Peek(),
-                        GetSourceImageRegion(),
-                        imageViewPort);
+                        var whiteBrush = new SolidColorBrush(new Color(255, 255, 255, 255));
+                        context.DrawRectangle(whiteBrush, null, imageViewPort);
                     }
                 }
-
-                
 
                 if ((PaintWithMouseButtons & MouseButtons.LeftButton) != 0 && _pointerPosition is { X: >= 0, Y: >= 0 })
                 {
@@ -1576,8 +1568,6 @@ namespace UVtools.AvaloniaControls
             var scaledImageHeight = ScaledImageHeight;
             var width = scaledImageWidth - HorizontalScrollBar.ViewportSize;
             var height = scaledImageHeight - VerticalScrollBar.ViewportSize;
-            //var width = scaledImageWidth <= Viewport.Width ? Viewport.Width : scaledImageWidth;
-            //var height = scaledImageHeight <= Viewport.Height ? Viewport.Height : scaledImageHeight;
 
             bool changed = false;
             if (Math.Abs(HorizontalScrollBar.Maximum - width) > 0.01)
@@ -1591,18 +1581,6 @@ namespace UVtools.AvaloniaControls
                 VerticalScrollBar.Maximum = height;
                 changed = true;
             }
-
-            /*if (changed)
-            {
-                var newContainer = new ContentControl
-                {
-                    Width = width,
-                    Height = height
-                };
-                FillContainer.Content = SizedContainer = newContainer;
-                Debug.WriteLine($"Updated ViewPort: {DateTime.Now.Ticks}");
-                //TriggerRender();
-            }*/
 
             return changed;
         }
@@ -1649,6 +1627,7 @@ namespace UVtools.AvaloniaControls
         {
             return Math.Abs(p1.X - p2.X) < 10.0 && Math.Abs(p1.Y - p2.Y) < 10.0;
         }
+
         private void ViewPortOnPointerPressed(object? sender, PointerPressedEventArgs e)
         {
             if (e.Handled
@@ -2953,10 +2932,13 @@ namespace UVtools.AvaloniaControls
                 var imageRect = new Rect(0, 0, finalSize.Width, finalSize.Height);
                 using (var drawingContext = newImage.CreateDrawingContext())
                 {
-                    drawingContext.FillRectangle(new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)), imageRect, 0);
-                    if (mask != null)
+                    using (drawingContext.PushRenderOptions(new RenderOptions { BitmapInterpolationMode = BitmapInterpolationMode.None }))
                     {
-                        drawingContext.DrawImage(mask, finalRegion, imageRect);
+                        drawingContext.FillRectangle(new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)), imageRect, 0);
+                        if (mask != null)
+                        {
+                            drawingContext.DrawImage(mask, finalRegion, imageRect);
+                        }
                     }
                 }
                 return newImage;

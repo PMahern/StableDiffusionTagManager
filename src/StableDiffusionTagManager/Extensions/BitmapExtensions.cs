@@ -9,6 +9,8 @@ using System;
 using ImageUtil;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Media;
+using Polly;
 
 namespace StableDiffusionTagManager.Extensions
 {
@@ -136,10 +138,13 @@ namespace StableDiffusionTagManager.Extensions
             var newImage = new RenderTargetBitmap(finalSize);
             using (var drawingContext = newImage.CreateDrawingContext())
             {
-                drawingContext.DrawImage(bitmap, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height));
-                if (paint != null)
+                using (drawingContext.PushRenderOptions(new RenderOptions { BitmapInterpolationMode = BitmapInterpolationMode.None }))
                 {
-                    drawingContext.DrawImage(paint, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height));
+                    drawingContext.DrawImage(bitmap, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height));
+                    if (paint != null)
+                    {
+                        drawingContext.DrawImage(paint, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height));
+                    }
                 }
             }
 
@@ -162,7 +167,10 @@ namespace StableDiffusionTagManager.Extensions
 
             using (var drawingContext = renderTargetBitmap.CreateDrawingContext())
             {
-                drawingContext.DrawImage(bitmap, new Rect(0, 0, pixelSize.Width, pixelSize.Height));
+                using (drawingContext.PushRenderOptions(new RenderOptions { BitmapInterpolationMode = BitmapInterpolationMode.None }))
+                {
+                    drawingContext.DrawImage(bitmap, new Rect(0, 0, pixelSize.Width, pixelSize.Height));
+                }
             }
 
             return renderTargetBitmap;
