@@ -6,8 +6,10 @@ using System.Text;
 
 namespace ImageUtil
 {
-    static class Utility
+    public static class Utility
     {
+        public static string PythonPath = "python";
+
         /// <summary>
         /// Finds and replaces occurrences of a string in a file.
         /// </summary>
@@ -99,7 +101,7 @@ namespace ImageUtil
         public async static Task<bool> CreateVenv(string absoluteWorkingDirectory, Action<string> updateCallBack, Action<string> consoleCallback, string? requirementsFile = null, IEnumerable<string>? additionalDependencies = null)
         {
             string venvPathPath = Path.Join(absoluteWorkingDirectory, "venv");
-
+            
             if (!Directory.Exists(venvPathPath))
             {
                 updateCallBack("Creating virtual environment and downloading model dependencies...");
@@ -107,17 +109,16 @@ namespace ImageUtil
                 Process p = new Process();
                 ProcessStartInfo info = new ProcessStartInfo();
 
-
                 info.FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "cmd.exe" : "/bin/bash"; ;
                 var arguments = new StringBuilder();
 
                 if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    arguments.Append("/k \"python -m venv venv && venv\\Scripts\\activate.bat");
+                    arguments.Append($"/k \"{PythonPath} -m venv venv && venv\\Scripts\\activate.bat");
                 }
                 else
                 {
-                    arguments.Append("-c \"python -m venv venv && source venv/bin/activate");
+                    arguments.Append($"-c \"{PythonPath} -m venv venv && source venv/bin/activate");
                 }
 
                 if(requirementsFile != null)
