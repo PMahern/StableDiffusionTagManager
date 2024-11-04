@@ -330,14 +330,25 @@ namespace StableDiffusionTagManager.Controls
             }
         }
 
-        private bool isChoosingColor = false;
+        private bool isChoosingPaintColor = false;
 
-        public bool IsChoosingColor
+        public bool IsChoosingPaintColor
         {
-            get => isChoosingColor;
+            get => isChoosingPaintColor;
             set
             {
-                RaiseAndSetIfChanged(ref isChoosingColor, value);
+                RaiseAndSetIfChanged(ref isChoosingPaintColor, value);
+            }
+        }
+
+        private bool isChoosingMaskColor = false;
+
+        public bool IsChoosingMaskColor
+        {
+            get => isChoosingMaskColor;
+            set
+            {
+                RaiseAndSetIfChanged(ref isChoosingMaskColor, value);
             }
         }
 
@@ -380,6 +391,18 @@ namespace StableDiffusionTagManager.Controls
             }
         }
 
+        private Color maskColor = new Color(255, 255, 255, 255);
+        public Color MaskColor
+        {
+            get => maskColor;
+            set
+            {
+                RaiseAndSetIfChanged(ref maskColor, value);
+                EyeDropWithMouseButtons = MouseButtons.None;
+                MaskWithMouseButtons = MouseButtons.LeftButton;
+            }
+        }
+
         #region Commands
         [RelayCommand]
         public void SetSelectMode()
@@ -416,9 +439,15 @@ namespace StableDiffusionTagManager.Controls
         }
 
         [RelayCommand]
-        public void ChooseColor()
+        public void ChoosePaintColor()
         {
-            IsChoosingColor = true;
+            IsChoosingPaintColor = true;
+        }
+
+        [RelayCommand]
+        public void ChooseMaskColor()
+        {
+            IsChoosingMaskColor = true;
         }
 
         [RelayCommand]
@@ -447,7 +476,7 @@ namespace StableDiffusionTagManager.Controls
             {
                 try
                 {
-                    var comicPanels = await Image.ExtractComicPanels(ImageBox.GetImageLayers(Image));
+                    var comicPanels = await Image.ExtractComicPanels(ImageBox.GetImagePaint(Image));
                     ComicPanelsExtracted?.Invoke(comicPanels);
                 }
                 catch (Exception e)
@@ -563,9 +592,15 @@ namespace StableDiffusionTagManager.Controls
         }
 
         [RelayCommand]
-        public void CloseColorSelector()
+        public void ClosePaintColorSelector()
         {
-            IsChoosingColor = false;
+            IsChoosingPaintColor = false;
+        }
+
+        [RelayCommand]
+        public void CloseMaskColorSelector()
+        {
+            IsChoosingMaskColor = false;
         }
 
         [RelayCommand]

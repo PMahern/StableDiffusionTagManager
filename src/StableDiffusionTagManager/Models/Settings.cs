@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using ImageUtil;
 using System.Collections.Generic;
 using System.Xml.Linq;
 
@@ -21,11 +22,11 @@ namespace StableDiffusionTagManager.Models
         protected override void AddSettings(XDocument doc)
         {
             SaveSetting(doc, STABLE_DIFFUSION_WEBUI_ADDRESS_ATTRIBUTE, WebUiAddress);
-            SaveSetting(doc, PYTHON_PATH_ATTRIBUTE, PythonPath);
+            SaveSetting(doc, PYTHON_PATH_ATTRIBUTE, Utility.PythonPath);
         }
 
         public string? WebUiAddress { get; set; } = "http://localhost:7860";
 
-        public string? PythonPath { get; set; } = "python";
+        public string? PythonPath { get => Utility.PythonPath; set => Utility.PythonPath = value; }
     }
 }

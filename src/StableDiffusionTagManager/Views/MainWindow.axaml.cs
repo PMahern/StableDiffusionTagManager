@@ -71,7 +71,7 @@ namespace StableDiffusionTagManager.Views
                     var bitmap = ImageBox.ImageBox.CreateNewImageWithLayersFromRegion();
                     if (clear)
                     {
-                        ImageBox.ImageBox.ClearMipsAndLayers(originalBitmap);
+                        ImageBox.ImageBox.ClearPaintAndMask(originalBitmap);
                     }
                     return bitmap;
                 };

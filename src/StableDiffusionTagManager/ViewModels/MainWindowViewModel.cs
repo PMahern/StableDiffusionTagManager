@@ -1461,9 +1461,11 @@ namespace StableDiffusionTagManager.ViewModels
                 var newImage = new RenderTargetBitmap(finalSize);
                 using (var drawingContext = newImage.CreateDrawingContext())
                 {
-                    drawingContext.FillRectangle(new SolidColorBrush(new Color(255, 255, 255, 255)), new Rect(0, 0, finalSize.Width, finalSize.Height));
-
-                    drawingContext.DrawImage(image, new Rect(0, 0, image.PixelSize.Width, image.PixelSize.Height), imageRegion);
+                    using (drawingContext.PushRenderOptions(new RenderOptions { BitmapInterpolationMode = BitmapInterpolationMode.None }))
+                    {
+                        drawingContext.FillRectangle(new SolidColorBrush(new Color(255, 255, 255, 255)), new Rect(0, 0, finalSize.Width, finalSize.Height));
+                        drawingContext.DrawImage(image, new Rect(0, 0, image.PixelSize.Width, image.PixelSize.Height), imageRegion);
+                    }
                 }
 
                 AddNewImage(newImage, SelectedImage, SelectedImage.Description, SelectedImage.Tags.Select(t => t.Tag));
@@ -1590,8 +1592,11 @@ namespace StableDiffusionTagManager.ViewModels
             var newImage = new RenderTargetBitmap(sourceImage.PixelSize);
             using (var drawingContext = newImage.CreateDrawingContext())
             {
-                drawingContext.FillRectangle(new SolidColorBrush(color), new Rect(0, 0, sourceImage.PixelSize.Width, sourceImage.PixelSize.Height));
-                drawingContext.DrawImage(sourceImage, new Rect(0, 0, sourceImage.PixelSize.Width, sourceImage.PixelSize.Height));
+                using (drawingContext.PushRenderOptions(new RenderOptions { BitmapInterpolationMode = BitmapInterpolationMode.None }))
+                {
+                    drawingContext.FillRectangle(new SolidColorBrush(color), new Rect(0, 0, sourceImage.PixelSize.Width, sourceImage.PixelSize.Height));
+                    drawingContext.DrawImage(sourceImage, new Rect(0, 0, sourceImage.PixelSize.Width, sourceImage.PixelSize.Height));
+                }
             }
             return newImage;
         }

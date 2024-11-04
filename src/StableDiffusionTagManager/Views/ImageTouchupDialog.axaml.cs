@@ -332,7 +332,7 @@ namespace StableDiffusionTagManager.Views
 
                         if (viewer.Success)
                         {
-                            ImageBox.ImageBox.ClearMipsAndLayers(Image);
+                            ImageBox.ImageBox.ClearPaintAndMask(Image);
                             this.Image = viewer.SelectedImage.Image;
                         }
                     }

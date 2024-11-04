@@ -9,6 +9,8 @@ using System;
 using ImageUtil;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Media;
+using Polly;
 
 namespace StableDiffusionTagManager.Extensions
 {
@@ -116,7 +118,7 @@ namespace StableDiffusionTagManager.Extensions
             };
         }
 
-        public static async Task<List<Bitmap>?> ExtractComicPanels(this Bitmap bitmap, List<RenderTargetBitmap>? layers = null)
+        public static async Task<List<Bitmap>?> ExtractComicPanels(this Bitmap bitmap, RenderTargetBitmap? paint = null)
         {
             string tmpImage = Path.Combine(App.GetTempFileDirectory(), $"{Guid.NewGuid()}.png");
             bitmap.Save(tmpImage);
@@ -126,22 +128,22 @@ namespace StableDiffusionTagManager.Extensions
             KumikoWrapper kwrapper = new KumikoWrapper(App.Settings.PythonPath, Path.Combine(new string[] { appDir, "Assets", "kumiko" }));
             var results = await kwrapper.GetImagePanels(tmpImage, App.GetTempFileDirectory());
 
-            return results.Select(r => bitmap.CreateNewImageFromRegion(new Rect(r.TopLeftX, r.TopLeftY, r.Width, r.Height), null, layers)).ToList();
+            return results.Select(r => bitmap.CreateNewImageFromRegion(new Rect(r.TopLeftX, r.TopLeftY, r.Width, r.Height), null, paint)).ToList();
         }
 
-        public static Bitmap CreateNewImageFromRegion(this Bitmap bitmap, Rect? region = null, PixelSize? targetSize = null, List<RenderTargetBitmap>? layers = null)
+        public static Bitmap CreateNewImageFromRegion(this Bitmap bitmap, Rect? region = null, PixelSize? targetSize = null, RenderTargetBitmap? paint = null)
         {
             var finalRegion = region ?? new Rect(0, 0, bitmap.PixelSize.Width, bitmap.PixelSize.Height);
             var finalSize = targetSize ?? new PixelSize(Convert.ToInt32(finalRegion.Width), Convert.ToInt32(finalRegion.Height));
             var newImage = new RenderTargetBitmap(finalSize);
             using (var drawingContext = newImage.CreateDrawingContext())
             {
-                drawingContext.DrawImage(bitmap, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height));
-                if (layers != null)
+                using (drawingContext.PushRenderOptions(new RenderOptions { BitmapInterpolationMode = BitmapInterpolationMode.None }))
                 {
-                    foreach (var paintLayer in layers)
+                    drawingContext.DrawImage(bitmap, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height));
+                    if (paint != null)
                     {
-                        drawingContext.DrawImage(paintLayer, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height));
+                        drawingContext.DrawImage(paint, finalRegion, new Rect(0, 0, finalSize.Width, finalSize.Height));
                     }
                 }
             }
@@ -165,7 +167,10 @@ namespace StableDiffusionTagManager.Extensions
 
             using (var drawingContext = renderTargetBitmap.CreateDrawingContext())
             {
-                drawingContext.DrawImage(bitmap, new Rect(0, 0, pixelSize.Width, pixelSize.Height));
+                using (drawingContext.PushRenderOptions(new RenderOptions { BitmapInterpolationMode = BitmapInterpolationMode.None }))
+                {
+                    drawingContext.DrawImage(bitmap, new Rect(0, 0, pixelSize.Width, pixelSize.Height));
+                }
             }
 
             return renderTargetBitmap;

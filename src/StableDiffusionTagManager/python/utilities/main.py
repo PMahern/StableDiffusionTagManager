@@ -89,8 +89,10 @@ def main():
             
             if simple_lama == None:
                 print("Initializing SimpleLama")
+                sys.stdout.flush()
                 simple_lama = SimpleLama()
                 print("SimpleLama initialization complete.")
+                sys.stdout.flush()
 
             imagedata = sys.stdin.readline().strip()
             binary_data = base64.b64decode(imagedata)

@@ -83,7 +83,7 @@
               </DataTemplate>
             </ComboBox.ItemTemplate>
           </ComboBox>
-          <Button Command="{Binding ChooseColorCommand}" Background="{Binding PaintBrushColor, Converter={StaticResource ResourceKey=colorConverter}}" ToolTip.Tip="Brush Color"/>
+          <Button Command="{Binding ChoosePaintColorCommand}" Background="{Binding PaintBrushColor, Converter={StaticResource ResourceKey=colorConverter}}" ToolTip.Tip="Brush Color"/>
           <Button Command="{Binding ToggleEyeDropperCommand}" ToolTip.Tip="Get Color from Pixel">
             <mi:MaterialIcon Kind="Eyedropper"/>
           </Button>
@@ -93,6 +93,7 @@
         </StackPanel>
         <StackPanel  IsVisible="{Binding CurrentMode, Converter={StaticResource ResourceKey=modeConverter}, ConverterParameter={x:Static controls:ImageViewerMode.Mask}, Mode=OneWay}" Orientation="Horizontal" Classes="toolbar" Grid.Column="2">
           <ContentControl Name="AdditionalMaskButtons" Content="{Binding AdditionalMaskButtonsContent}"/>
+          <Button Command="{Binding ChooseMaskColorCommand}" Background="{Binding MaskColor, Converter={StaticResource ResourceKey=colorConverter}}" ToolTip.Tip="Brush Color"/>
           <ComboBox ItemsSource="{Binding BrushSizes}" SelectedItem="{Binding SelectedMaskSize}"  ToolTip.Tip="Mask Brush Size">
             <ComboBox.ItemTemplate>
               <DataTemplate>
@@ -118,13 +119,21 @@
                                     PaintBrushSize="{Binding SelectedBrushSize}"
                                     MaskBrushSize="{Binding SelectedMaskSize}"
                                     PaintBrushColor="{Binding PaintBrushColor, Mode=TwoWay}"
+                                    MaskColor="{Binding MaskColor, Mode=TwoWay}"
                                     SelectionRegion="{Binding SelectionRegion, Mode=TwoWay}"
                                     IsAspectRatioLocked="{Binding IsAspectRatioLocked, Mode=TwoWay}"/>
     </DockPanel>
-    <Border IsVisible="{Binding IsChoosingColor}" Background="#40000000">
-      <controls:HeaderControl Title="Select Color" CloseCommand="{Binding CloseColorSelectorCommand}" Height="450" Width="400">
+    <Border IsVisible="{Binding IsChoosingPaintColor}" Background="#40000000">
+      <controls:HeaderControl Title="Select Paint Color" CloseCommand="{Binding ClosePaintColorSelectorCommand}" Height="450" Width="400">
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-          <cp:ColorPicker IsVisible="{Binding IsChoosingColor}" Color="{Binding PaintBrushColor, Mode=TwoWay}" />
+          <cp:ColorPicker IsVisible="{Binding IsChoosingPaintColor}" Color="{Binding PaintBrushColor, Mode=TwoWay}" />
+        </Border>
+      </controls:HeaderControl>
+    </Border>
+    <Border IsVisible="{Binding IsChoosingMaskColor}" Background="#40000000">
+      <controls:HeaderControl Title="Select Mask Color" CloseCommand="{Binding CloseMaskColorSelectorCommand}" Height="450" Width="400">
+        <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+          <cp:ColorPicker IsVisible="{Binding IsChoosingMaskColor}" Color="{Binding MaskColor, Mode=TwoWay}" />
         </Border>
       </controls:HeaderControl>
     </Border>
