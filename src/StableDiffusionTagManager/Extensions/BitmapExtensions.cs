@@ -194,7 +194,55 @@ namespace StableDiffusionTagManager.Extensions
 
             return alphaMaskedImage.CreateBitmap();
         }
-        
 
+        public static Bitmap ExpandMask(this Bitmap bitmap, int n)
+        {
+            if (n == 0)
+            {
+                return bitmap;
+            }
+            var mask = bitmap.CreateSixLaborsRGBAImage();
+            int width = mask.Width;
+            int height = mask.Height;
+            // Perform edge detection
+            var edgeMask = mask.Clone();
+            edgeMask.Mutate(x => x.DetectEdges());
+            var radius = Math.Abs(n);
+            var radiussquared = radius & radius;
+            var setColor = n > 0 ? new Rgba32(255, 255, 255, 255) : new Rgba32(0, 0, 0, 0);
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    Rgba32 pixel = mask[x, y];
+                    Rgba32 edgePixel = edgeMask[x, y];
+
+                    // Check if the pixel is near an edge
+                    if (edgePixel.R > 0)
+                    {
+                        // Check neighboring pixels within n distance
+                        for (int i = -radius; i <= radius; i++)
+                        {
+                            for (int j = -radius; j <= radius; j++)
+                            {
+                                int neighborX = x + i;
+                                int neighborY = y + j;
+
+                                if (neighborX >= 0 && neighborX < width && neighborY >= 0 && neighborY < height)
+                                {
+                                    if ((i * i + j * j) <= radiussquared) // Check if the pixel is within the circle
+                                    {
+                                        mask[neighborX, neighborY] = setColor;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return mask.CreateBitmap();
+        }
     }
 }

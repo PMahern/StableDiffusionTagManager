@@ -108,6 +108,7 @@ def main():
                 sys.stdout.flush()
         elif operation == "yolo":
             modelpath = sys.stdin.readline().strip()
+            threshold = sys.stdin.readline().strip()
 
             imagedata = sys.stdin.readline().strip()
             binary_data = base64.b64decode(imagedata)
@@ -115,29 +116,36 @@ def main():
 
             with Image.open(image_bytes).convert("RGB")as img:
                 if current_yolo_model != modelpath:
-                    yolo = YOLO(modelpath)    
-                pred = yolo(img)
+                    yolo = YOLO(modelpath)
+
+                pred = yolo(img, conf=float(threshold))
+                
+                maskImages = []
 
                 for result in pred:
                         bboxes = result.boxes.xyxy.cpu().numpy().tolist()
                         if result.masks is not None:
                             masks = result.masks
-                            maskImages = mask_to_pil(masks.data, img.size)
-                            maskImages = [maskImage.convert("L") for maskImage in maskImages]
+                            convertedMasks = mask_to_pil(masks.data, img.size)
+                            maskImages.extend([maskImage.convert("L") for maskImage in convertedMasks])
 
                             for j, bbox in enumerate(bboxes):
                                 if j >= len(masks) or masks[j] is None:
                                     bboxmask = create_mask_from_bbox(bbox, img.size)
                                     maskImages.append(bboxmask)
                         else:
-                            maskImages = [create_mask_from_bbox(bbox, new_image.size) for bbox in bboxes]
-
-                        combined_mask = merge_masks(maskImages)
-
-                print("GENERATION START")
-                print(img2base64(combined_mask.convert("L")))
-                print("GENERATION END")
-                sys.stdout.flush()
+                            maskImages.extend([create_mask_from_bbox(bbox, img.size) for bbox in bboxes])
+                        
+                if len(maskImages) > 0:
+                    combined_mask = merge_masks(maskImages)
+                    print("GENERATION START")
+                    print(img2base64(combined_mask.convert("L")))
+                    print("GENERATION END")
+                    sys.stdout.flush()
+                else:
+                    print("NO RESULTS")
+                    sys.stdout.flush()
+                
 
 
 if __name__ == "__main__":

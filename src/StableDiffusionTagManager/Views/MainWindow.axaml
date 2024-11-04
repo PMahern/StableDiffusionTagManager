@@ -61,6 +61,7 @@
           <MenuItem Header="_Extract Panels from All Images" Command="{Binding ExtractAllPanelsCommand}"/>
           <MenuItem Header="_Interrogate All Images" Command="{Binding InterrogateAllImagesCommand}"/>
           <MenuItem Header="_Remove Metatags" Command="{Binding RemoveMetaTagsCommand}"/>
+          <MenuItem Header="_Generate Masks Then Remove From All Images" Command="{Binding GenerateMaskThenRemoveFromAllImagesCommand}"/>
         </MenuItem>
       </Menu>
       <Grid>

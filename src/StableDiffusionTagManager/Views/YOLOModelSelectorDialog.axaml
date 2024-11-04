@@ -6,7 +6,7 @@
         xmlns:controls="clr-namespace:StableDiffusionTagManager.Controls;assembly=StableDiffusionTagManager"
         mc:Ignorable="d"
         Width="400"
-        Height="150"
+        Height="250"
         CanResize="False"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="4"
