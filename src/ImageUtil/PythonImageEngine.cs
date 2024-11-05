@@ -121,6 +121,7 @@ namespace ImageUtil
         {
             string startPhrase = "GENERATION START";
             string endPhrase = "GENERATION END";
+            string noResultPhrase = "NO RESULTS";
             string base64Data = "";
             while (true)
             {
@@ -128,6 +129,10 @@ namespace ImageUtil
                 if (output == null)
                 {
                     throw new Exception($"Python process terminated unexpectedly. Error output was {pythonProcess.StandardError.ReadToEnd()}");
+                }
+                else if (output.Contains(noResultPhrase))
+                {
+                    return null;
                 }
                 if (output.Contains(startPhrase))
                 {

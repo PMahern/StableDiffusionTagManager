@@ -38,8 +38,8 @@ namespace TagUtil
 
                     var lastChunk = chunks.Last();
                     var extractedTags = lastChunk.ExtractTags();
-                    // If there's more than one comma per 15 characters, no periods, and no upper case letters assume that the last chunk is tags.
-                    if (extractedTags.Count > (lastChunk.Length / 15) && !lastChunk.Contains(".") && !lastChunk.Any(c => char.IsUpper(c)))
+                    // If there's more than one comma per 25 characters, no periods, and no upper case letters assume that the last chunk is tags.
+                    if (extractedTags.Count > (lastChunk.Length / 25) && !lastChunk.Contains(".") && !lastChunk.Any(c => char.IsUpper(c)))
                     {
                         Tags = extractedTags;
                     }

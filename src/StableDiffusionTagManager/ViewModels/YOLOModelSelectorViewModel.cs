@@ -31,13 +31,16 @@ namespace StableDiffusionTagManager.ViewModels
         }
 
         public YOLOModelSelectorItem? SelectedModel { get; set; }
+        public float Threshold { get; set; } = 0.5f;
+
+        public int ExpandMask { get; set; } = 0;
 
         public YOLOModelSelectorViewModel()
         {
             string yoloModelDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "yolomodels");
 
             models = Directory.GetFiles(yoloModelDirectory, "*.pt").Select(file => new YOLOModelSelectorItem(file)).ToList();
-            SelectedModel = models.First();
+            SelectedModel = models.FirstOrDefault();
         }
     }
 }

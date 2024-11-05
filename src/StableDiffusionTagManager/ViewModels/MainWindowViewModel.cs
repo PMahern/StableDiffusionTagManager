@@ -1770,10 +1770,11 @@ namespace StableDiffusionTagManager.ViewModels
         {
             var dialog = new YOLOModelSelectorDialog();
 
-            var selectedYoloModelPath = await ShowDialog<string?>(dialog);
+            var dialogResult = await ShowDialog<(string, float, int)?>(dialog);
 
-            if (!string.IsNullOrEmpty(selectedYoloModelPath))
+            if (dialogResult != null)
             {
+                var (selectedYoloModelPath, threshold, expandMask) = dialogResult.Value;
                 ShowProgressIndicator = true;
                 ProgressIndicatorMax = 0;
                 ProgressIndicatorMessage = "Initializing Python Utilities...";
@@ -1786,10 +1787,10 @@ namespace StableDiffusionTagManager.ViewModels
                 
                     var bytes = await utilities.GenerateYoloMask(selectedYoloModelPath, selectedImage.ImageSource.ToByteArray(), AddConsoleText);
 
-                    using (var mstream = new MemoryStream(bytes))
+                    if (bytes != null)
                     {
-                        var imageResult = new Bitmap(mstream);
-
+                        var imageResult = bytes.ToBitmap();
+                        imageResult = expandMask != 0 ? imageResult.ExpandMask(expandMask) : imageResult;
                         var viewer = new ImageReviewDialog();
                         viewer.Title = "Review generated mask";
                         viewer.Images = new ObservableCollection<ImageReviewViewModel>() { new ImageReviewViewModel(imageResult) };
@@ -1800,6 +1801,16 @@ namespace StableDiffusionTagManager.ViewModels
                         {
                             SetImageBoxMask(SelectedImage.ImageSource, imageResult);
                         }
+                    }  
+                    else
+                    {
+                        var messageBoxStandardWindow = MessageBoxManager
+                           .GetMessageBoxStandard("No Masks Detected",
+                                                        $"YOLO model had no detections.",
+                                                        ButtonEnum.Ok,
+                                                        Icon.Info);
+
+                        await ShowDialog(messageBoxStandardWindow);
                     }
                 }
                 catch (Exception ex)
@@ -1807,6 +1818,56 @@ namespace StableDiffusionTagManager.ViewModels
                     var messageBoxStandardWindow = MessageBoxManager
                             .GetMessageBoxStandard("YOLO Mask Generation Failed",
                                                          $"Failed to generate mask. Error message: {ex.Message}",
+                                                         ButtonEnum.Ok,
+                                                         Icon.Warning);
+
+                    await ShowDialog(messageBoxStandardWindow);
+                }
+            }
+            ShowProgressIndicator = false;
+        }
+
+        [RelayCommand]
+        public async Task GenerateMaskThenRemoveFromAllImages()
+        {
+            var dialog = new YOLOModelSelectorDialog();
+
+            var dialogResult = await ShowDialog<(string, float, int)?>(dialog);
+
+            if (dialogResult != null)
+            {
+                var (selectedYoloModelPath, threshold, expandMask) = dialogResult.Value;
+                ShowProgressIndicator = true;
+                ProgressIndicatorProgress = 0;
+                ProgressIndicatorMax = ImagesWithTags.Count;
+                ProgressIndicatorMessage = "Initializing Python Utilities...";
+                ConsoleText = $"Initializing...{Environment.NewLine}";
+
+                using var utilities = new PythonUtilities();
+                await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
+
+                try
+                {
+                    foreach(var image in ImagesWithTags)
+                    {
+                        ProgressIndicatorProgress++;
+                        AddConsoleText("Processing image " + image.Filename);
+                        var bytes = await utilities.GenerateYoloMask(selectedYoloModelPath, image.ImageSource.ToByteArray(), threshold, AddConsoleText);
+                        if (bytes != null)
+                        {
+                            bytes = expandMask != 0 ? bytes.ToBitmap().ExpandMask(expandMask).ToByteArray() : bytes;
+                            var result = await utilities.RunLama(image.ImageSource.ToByteArray(), bytes, AddConsoleText);
+                            ArchiveImage(openFolder, image.Filename, image.GetTagsFileName());
+                            image.ImageSource = result.ToBitmap();
+                            image.ImageSource.Save(Path.Combine(this.openFolder, image.Filename));
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var messageBoxStandardWindow = MessageBoxManager
+                            .GetMessageBoxStandard("Mask then remove failed",
+                                                         $"Failed to run mask find and remove process. Error message: {ex.Message}",
                                                          ButtonEnum.Ok,
                                                          Icon.Warning);
 

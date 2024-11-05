@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace StableDiffusionTagManager;
 
-public partial class YOLOModelSelectorDialog : Window, IDialogWithResultAsync<string?>
+public partial class YOLOModelSelectorDialog : Window, IDialogWithResultAsync<(string modelPath, float threshold, int expandMask)?>
 {
     public bool Success { get; set; } = false;
-    public string? Result { get; set; }
-    public async Task<string?> ShowWithResult(Window parent)
+    public (string modelPath, float threshold, int expandMask)? Result { get; set; }
+    public async Task<(string modelPath, float threshold, int expandMask)?> ShowWithResult(Window parent)
     {
         await ShowDialog(parent);
-        return Success ? selectorViewModel?.SelectedModel?.Filename : null;
+        return Success ? (selectorViewModel?.SelectedModel.Filename, selectorViewModel.Threshold, selectorViewModel.ExpandMask)  : null;
     }
 
     private YOLOModelSelectorViewModel selectorViewModel;

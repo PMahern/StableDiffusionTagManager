@@ -2,10 +2,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="50"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="140"
              x:Class="StableDiffusionTagManager.YOLOModelSelectorView">
-  <Grid ColumnDefinitions="Auto,*">
-    <Label>Select Model</Label>
-    <ComboBox Width="200" Grid.Column="1" ItemsSource="{Binding Models}" SelectedItem="{Binding SelectedModel}" DisplayMemberBinding="{Binding Name}" HorizontalAlignment="Right" />
-  </Grid>
+  <StackPanel Classes="inputform">
+    <Panel>
+      <Label>Select Model</Label>
+      <ComboBox Width="200" ItemsSource="{Binding Models}" SelectedItem="{Binding SelectedModel}" DisplayMemberBinding="{Binding Name}" HorizontalAlignment="Right" />
+    </Panel>
+    <Panel>
+      <Label>Threshold</Label>
+      <NumericUpDown Width="100" Value="{Binding Threshold}" Increment="0.1" HorizontalAlignment="Right" />
+    </Panel>
+    <Panel>
+      <Label>Expand Mask</Label>
+      <NumericUpDown Width="100" Value="{Binding ExpandMask}" Increment="1" HorizontalAlignment="Right" />
+    </Panel>
+  </StackPanel>
 </UserControl>

@@ -43,7 +43,7 @@ namespace ImageUtil
             return Convert.FromBase64String(res);
         }
 
-        public async Task<byte[]> GenerateYoloMask(string modelPath, byte[] imageData, Action<string> consoleCallBack)
+        public async Task<byte[]?> GenerateYoloMask(string modelPath, byte[] imageData, float threshold, Action<string> consoleCallBack)
         {
             if (!initialized)
                 throw new InvalidOperationException("Tried to access an uninitialized Python Utilities Engine.");
@@ -53,9 +53,10 @@ namespace ImageUtil
 
             await pythonImageEngine.SendString("yolo");
             await pythonImageEngine.SendString(modelPath);
+            await pythonImageEngine.SendString(threshold.ToString());
             await pythonImageEngine.SendImage(imageData, consoleCallBack);
             var res = await pythonImageEngine.WaitForGenerationResultImage(consoleCallBack);
-            return Convert.FromBase64String(res);
+            return res != null ? Convert.FromBase64String(res) : null;
         }
 
         public void Dispose()
