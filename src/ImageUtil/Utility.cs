@@ -104,7 +104,7 @@ namespace ImageUtil
             {
                 using (Process process = new Process())
                 {
-                    process.StartInfo.FileName = "python";
+                    process.StartInfo.FileName = PythonPath;
                     process.StartInfo.Arguments = "--version";
                     process.StartInfo.RedirectStandardOutput = true;
                     process.StartInfo.RedirectStandardError = true;

@@ -1785,7 +1785,7 @@ namespace StableDiffusionTagManager.ViewModels
                 {
                     await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
                 
-                    var bytes = await utilities.GenerateYoloMask(selectedYoloModelPath, selectedImage.ImageSource.ToByteArray(), AddConsoleText);
+                    var bytes = await utilities.GenerateYoloMask(selectedYoloModelPath, selectedImage.ImageSource.ToByteArray(), threshold, AddConsoleText);
 
                     if (bytes != null)
                     {
