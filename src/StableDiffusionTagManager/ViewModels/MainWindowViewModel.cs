@@ -1725,10 +1725,10 @@ namespace StableDiffusionTagManager.ViewModels
             ConsoleText = $"Initializing...{Environment.NewLine}";
 
             using var utilities = new PythonUtilities();
-            await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
-
             try
             {
+                await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
+
                 var mask = GetImageBoxMask?.Invoke();
                 if (mask != null)
                 {
@@ -1780,10 +1780,10 @@ namespace StableDiffusionTagManager.ViewModels
                 ConsoleText = $"Initializing...{Environment.NewLine}";
 
                 using var utilities = new PythonUtilities();
-                await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
-
                 try
                 {
+                    await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
+                
                     var bytes = await utilities.GenerateYoloMask(selectedYoloModelPath, selectedImage.ImageSource.ToByteArray(), AddConsoleText);
 
                     using (var mstream = new MemoryStream(bytes))

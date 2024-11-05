@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ImageUtil
 {
@@ -25,7 +26,7 @@ namespace ImageUtil
             {
                 fileContents = sr.ReadToEnd();
             }
-            if(fileContents == null)
+            if (fileContents == null)
                 throw new Exception("Could not find file at path: " + filePath);
 
             if (fileContents != null)
@@ -72,7 +73,7 @@ namespace ImageUtil
             return false;
         }
 
-            public static async Task ProcessLFSFilesInFolder(string folderPath, string lfsurl)
+        public static async Task ProcessLFSFilesInFolder(string folderPath, string lfsurl)
         {
             foreach (string filePath in Directory.GetFiles(folderPath))
             {
@@ -97,11 +98,64 @@ namespace ImageUtil
                 }
             }
         }
+        public static async Task CheckPythonVersionAsync()
+        {
+            try
+            {
+                using (Process process = new Process())
+                {
+                    process.StartInfo.FileName = "python";
+                    process.StartInfo.Arguments = "--version";
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.RedirectStandardError = true;
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.CreateNoWindow = true;
+
+                    process.Start();
+
+                    string output = await process.StandardOutput.ReadToEndAsync();
+                    string errorOutput = await process.StandardError.ReadToEndAsync();
+
+                    await process.WaitForExitAsync();
+
+                    // Check which output contains the version information
+                    string versionOutput = !string.IsNullOrWhiteSpace(output) ? output : errorOutput;
+
+                    if (!string.IsNullOrWhiteSpace(versionOutput))
+                    {
+                        // Extract the first two version numbers using regex
+                        var match = Regex.Match(versionOutput, @"\b(\d+\.\d+)");
+                        if (match.Success)
+                        {
+                            if (match.Value != "3.11")
+                            {
+                                throw new Exception("Python version is not 3.11. Please install Python 3.11.");
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Could not parse the Python version.");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Python is not installed or could not be detected.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while checking the Python version: " + ex.Message);
+            }
+        }
+
 
         public async static Task<bool> CreateVenv(string absoluteWorkingDirectory, Action<string> updateCallBack, Action<string> consoleCallback, string? requirementsFile = null, IEnumerable<string>? additionalDependencies = null)
         {
             string venvPathPath = Path.Join(absoluteWorkingDirectory, "venv");
-            
+
+            await CheckPythonVersionAsync();
+
             if (!Directory.Exists(venvPathPath))
             {
                 updateCallBack("Creating virtual environment and downloading model dependencies...");
@@ -112,7 +166,7 @@ namespace ImageUtil
                 info.FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "cmd.exe" : "/bin/bash"; ;
                 var arguments = new StringBuilder();
 
-                if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     arguments.Append($"/k \"{PythonPath} -m venv venv && venv\\Scripts\\activate.bat");
                 }
@@ -121,7 +175,7 @@ namespace ImageUtil
                     arguments.Append($"-c \"{PythonPath} -m venv venv && source venv/bin/activate");
                 }
 
-                if(requirementsFile != null)
+                if (requirementsFile != null)
                 {
                     arguments.Append($" && pip install -r {requirementsFile}");
                 }
@@ -141,7 +195,7 @@ namespace ImageUtil
                 info.UseShellExecute = false;
                 info.CreateNoWindow = true;
                 info.WorkingDirectory = absoluteWorkingDirectory;
-                
+
                 p.OutputDataReceived += (sender, args) =>
                 {
                     if (args.Data != null && !string.IsNullOrWhiteSpace(args.Data))
