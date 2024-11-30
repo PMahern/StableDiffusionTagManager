@@ -16,8 +16,8 @@
         Icon="/Assets/logo.ico"
         CanResize="False"
         Name="ThisControl">
-  <controls:HeaderControl Title="Image Interrogation">
-    <Grid RowDefinitions="*,Auto">
+  <controls:HeaderControl Title="Image Interrogation" DataContext="{Binding ElementName=ThisControl}">
+    <Grid RowDefinitions="*,Auto" >
       <StackPanel Classes="inputform">
         <Panel>
           <Label Classes="controlgroup">Natural Language</Label>
@@ -33,8 +33,7 @@
           </ComboBox>
         </Panel>
         <Panel>
-          <Label>Prompt</Label>
-          <TextBox Width="300" Text="{Binding Prompt}"  />
+          <ContentControl Content="{Binding SelectedInterrogatorSettingsViewModel}" />
         </Panel>
         <Panel>
           <Label Classes="controlgroup">Tags</Label>
@@ -42,11 +41,11 @@
         <Panel>
           <Label>Model</Label>
           <ComboBox ItemsSource="{x:Static imageutil:Interrogators.TagInterrogators}" SelectedItem="{Binding SelectedTagInterrogator, Mode=TwoWay}">
-          <ComboBox.ItemTemplate>
-            <DataTemplate>
-              <TextBlock Text="{Binding Name}" />
-            </DataTemplate>
-          </ComboBox.ItemTemplate>
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
           </ComboBox>
         </Panel>
         <Panel>

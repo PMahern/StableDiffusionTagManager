@@ -37,7 +37,6 @@ namespace ImageUtil
                     sw.Write(results);
                 }
             }
-
         }
 
         /// <summary>
@@ -81,10 +80,7 @@ namespace ImageUtil
                 {
                     await DownloadIfLFSLink(filePath, lfsurl);
                 }
-                catch (Exception e)
-                {
-                }
-
+                catch (Exception e) { }
             }
 
             foreach (string subFolderPath in Directory.GetDirectories(folderPath).Where(path => !path.Contains(".git")))
@@ -93,9 +89,7 @@ namespace ImageUtil
                 {
                     await ProcessLFSFilesInFolder(subFolderPath, lfsurl);
                 }
-                catch (Exception e)
-                {
-                }
+                catch (Exception) { }
             }
         }
         public static async Task CheckPythonVersionAsync()

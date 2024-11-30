@@ -64,12 +64,7 @@
           <MenuItem Header="_Generate Masks Then Remove From All Images" Command="{Binding GenerateMaskThenRemoveFromAllImagesCommand}"/>
         </MenuItem>
       </Menu>
-      <Grid>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="100" MinHeight="100"></RowDefinition>
-          <RowDefinition Height="2"></RowDefinition>
-          <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
+      <Grid RowDefinitions="100,2,*">
         <ListBox Name="ImageList" ItemsSource="{Binding FilteredImageSet}"  VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.AllowAutoHide="False" SelectedItem="{Binding SelectedImage}">
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>

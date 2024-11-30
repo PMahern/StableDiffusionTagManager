@@ -2,8 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using ImageUtil;
-using Newtonsoft.Json.Linq;
-using System;
+using StableDiffusionTagManager.ViewModels;
 
 namespace StableDiffusionTagManager.Views;
 
@@ -12,9 +11,8 @@ public partial class InterrogationDialog : Window
     public InterrogationDialog()
     {
         InitializeComponent();
-
-        DataContext = this;
     }
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
@@ -31,9 +29,10 @@ public partial class InterrogationDialog : Window
     public InterrogatorDescription<INaturalLanguageInterrogator>? SelectedNaturalLanguageInterrogator
     {
         get => GetValue(SelectedNaturalLanguageInterrogatorProperty);
-        set {
+        set
+        {
             SetValue(SelectedNaturalLanguageInterrogatorProperty, value);
-            
+            SelectedNaturalLanguageSettingsViewModel = value?.GetSettingsViewModel();
         }
     }
 
@@ -64,13 +63,21 @@ public partial class InterrogationDialog : Window
         set => SetValue(PromptProperty, value);
     }
 
+    public static readonly StyledProperty<ViewModelBase?> SelectedInterrogatorSettingsViewModelProperty =
+            AvaloniaProperty.Register<InterrogationDialog, ViewModelBase?>(nameof(SelectedNaturalLanguageSettingsViewModel));
+
+    public ViewModelBase? SelectedNaturalLanguageSettingsViewModel
+    {
+        get => GetValue(SelectedInterrogatorSettingsViewModelProperty);
+        set => SetValue(SelectedInterrogatorSettingsViewModelProperty, value);
+    }
 
     public bool Success { get; set; } = false;
 
     [RelayCommand]
     public void Interrogate()
     {
-        if(SelectedNaturalLanguageInterrogator != null || SelectedTagInterrogator != null)
+        if (SelectedNaturalLanguageInterrogator != null || SelectedTagInterrogator != null)
         {
             Success = true;
             Close();

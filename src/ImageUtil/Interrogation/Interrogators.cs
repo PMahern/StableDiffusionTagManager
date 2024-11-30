@@ -1,5 +1,4 @@
 ﻿using ImageUtil.Interrogation;
-using System;
 using System.Runtime.InteropServices;
 
 namespace ImageUtil

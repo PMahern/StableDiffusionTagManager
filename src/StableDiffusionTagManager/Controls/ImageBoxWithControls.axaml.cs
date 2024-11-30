@@ -3,13 +3,11 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
-using ImageUtil;
 using StableDiffusionTagManager.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -45,7 +43,7 @@ namespace StableDiffusionTagManager.Controls
             }
         }
         public event EventHandler<Bitmap>? ImageCropped;
-        public Func<Bitmap, Task> SaveClicked;
+        public Func<Bitmap, Task>? SaveClicked;
         public Func<Bitmap, Task>? InterrogateClicked;
         public Func<Bitmap, Task>? RemoveBackgroundClicked;
         public Func<Bitmap, Task>? ConvertAlphaClicked;

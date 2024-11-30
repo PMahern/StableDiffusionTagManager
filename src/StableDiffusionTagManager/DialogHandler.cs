@@ -1,9 +1,10 @@
 ﻿using Avalonia.Controls;
 using MsBox.Avalonia.Base;
 using StableDiffusionTagManager.Controls;
+using StableDiffusionTagManager.Views;
 using System.Threading.Tasks;
 
-namespace StableDiffusionTagManager.Views
+namespace StableDiffusionTagManager
 {
     public class DialogHandler
     {
