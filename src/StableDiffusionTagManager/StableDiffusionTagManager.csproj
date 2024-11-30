@@ -22,19 +22,6 @@
     <AvaloniaXaml Remove="Styles\Controls\InputForm.axaml" />
     <AvaloniaXaml Remove="Styles\Icons.axaml" />
     <None Remove=".gitignore" />
-    <None Remove="python\joycaptionalphaone\interrogate.py" />
-    <None Remove="python\joycaption\interrogate.py" />
-    <None Remove="python\sw\interrogate.py" />
-    <None Remove="python\utilities\main.py" />
-    <None Remove="python\utilities\requirements.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="python\joycaptionalphaone\interrogate.py" />
-    <Resource Include="python\joycaption\interrogate.py" />
-    <Resource Include="python\sw\interrogate.py" />
-    <Resource Include="python\utilities\main.py" />
-    <Resource Include="python\utilities\requirements.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -113,10 +100,10 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="xcopy /e /i /y /s $(ProjectDir)..\..\submodules\kumiko $(ProjectDir)$(OutDir)Assets\kumiko&#xD;&#xA;xcopy /e /i /y /s $(ProjectDir)python $(ProjectDir)$(OutDir)Assets\python" />
+    <Exec Command="xcopy /e /i /y /s $(ProjectDir)..\..\submodules\kumiko $(ProjectDir)$(OutDir)Assets\kumiko" />
   </Target>
 
   <Target Name="AddPayloadsFolder" AfterTargets="Publish">
-    <Exec Command="xcopy /e /i /y /s $(ProjectDir)..\..\submodules\kumiko $(PublishDir)Assets\kumiko&#xD;&#xA;xcopy /e /i /y /s $(ProjectDir)python $(PublishDir)Assets\python" />
+    <Exec Command="xcopy /e /i /y /s $(ProjectDir)..\..\submodules\kumiko $(PublishDir)Assets\kumiko" />
   </Target>
 </Project>

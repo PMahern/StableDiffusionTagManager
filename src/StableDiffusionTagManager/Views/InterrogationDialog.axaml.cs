@@ -32,7 +32,6 @@ public partial class InterrogationDialog : Window
         set
         {
             SetValue(SelectedNaturalLanguageInterrogatorProperty, value);
-            SelectedNaturalLanguageSettingsViewModel = value?.GetSettingsViewModel();
         }
     }
 

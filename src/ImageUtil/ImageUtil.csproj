@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="python\joycaptionalphaone\interrogate.py" />
+    <None Remove="python\joycaption\interrogate.py" />
+    <None Remove="python\sw\interrogate.py" />
+    <None Remove="python\utilities\main.py" />
+    <None Remove="python\utilities\requirements.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FileHelpers" Version="3.5.2" />
     <PackageReference Include="LibGit2Sharp" Version="0.30.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
@@ -17,4 +25,18 @@
     <ProjectReference Include="..\SdWebUiApi\SdWebUiApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="python\joycaptionalphaone\interrogate.py" />
+    <Resource Include="python\joycaption\interrogate.py" />
+    <Resource Include="python\sw\interrogate.py" />
+    <Resource Include="python\utilities\main.py" />
+    <Resource Include="python\utilities\requirements.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="python\**\*.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Assets\python\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </Content>
+  </ItemGroup>
 </Project>

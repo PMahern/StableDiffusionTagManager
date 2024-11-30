@@ -18,7 +18,7 @@ namespace ImageUtil
         public void Dispose()
         {
             disposed = true;
-            pythonImageEngine.Dispose();
+            pythonImageEngine?.Dispose();
         }
 
         public async Task Initialize(Action<string> updateCallBack, Action<string> consoleCallBack)
