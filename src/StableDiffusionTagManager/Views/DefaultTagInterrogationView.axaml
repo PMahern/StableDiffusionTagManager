@@ -3,11 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="StableDiffusionTagManager.Views.DefaultNaturalLanguageInterrogationView">
+             x:Class="StableDiffusionTagManager.Views.DefaultTagInterrogationView">
   <StackPanel Classes="inputform">
     <Panel>
-      <Label>Prompt</Label>
-      <TextBox Width="300" Text="{Binding Prompt}"  />
+      <Label>Threshold</Label>
+      <NumericUpDown Value="{Binding Threshold}" Width="75" Height="25" Minimum="0.0" Maximum="1.0" Increment="0.1" />
     </Panel>
   </StackPanel>
 </UserControl>

@@ -32,9 +32,7 @@
             </ComboBox.ItemTemplate>
           </ComboBox>
         </Panel>
-        <Panel>
-          <ContentControl Content="{Binding SelectedInterrogatorSettingsViewModel}" />
-        </Panel>
+        <ContentControl Content="{Binding SelectedNaturalLanguageSettingsViewModel}" />
         <Panel>
           <Label Classes="controlgroup">Tags</Label>
         </Panel>
@@ -48,10 +46,7 @@
             </ComboBox.ItemTemplate>
           </ComboBox>
         </Panel>
-        <Panel>
-          <Label>Threshold</Label>
-          <NumericUpDown Width="75" Height="25" Minimum="0.0" Maximum="1.0" Increment="0.1" />
-        </Panel>
+        <ContentControl Content="{Binding SelectedTagSettingsViewModel}" />
       </StackPanel>
       <StackPanel Grid.Row="1" Classes="footer">
         <Button Command="{Binding InterrogateCommand}">Interrogate</Button>

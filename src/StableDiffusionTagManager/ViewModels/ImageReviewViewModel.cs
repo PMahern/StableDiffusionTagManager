@@ -50,7 +50,6 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
-
         public bool IsSelected
         {
             get => isSelected; 

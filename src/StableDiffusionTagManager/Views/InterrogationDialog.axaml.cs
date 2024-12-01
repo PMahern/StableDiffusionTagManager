@@ -3,11 +3,33 @@ using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using ImageUtil;
 using StableDiffusionTagManager.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StableDiffusionTagManager.Views;
 
+
 public partial class InterrogationDialog : Window
 {
+    public static Dictionary<InterrogatorDescription<ITagInterrogator>, Func<InterrogatorViewModel<List<string>>>> TaggerViewModelFactories;
+    public static Dictionary<InterrogatorDescription<INaturalLanguageInterrogator>, Func<InterrogatorViewModel<string>>> NaturalLanguageViewModelFactories;
+
+    static InterrogationDialog()
+    {
+        TaggerViewModelFactories = Interrogators.TagInterrogators.ToDictionary(i => i, i =>
+        {
+            var expr = () => (InterrogatorViewModel<List<string>>)new DefaultTagInterrogationViewModel(i.Factory);
+            return expr;
+        });
+
+        NaturalLanguageViewModelFactories = Interrogators.NaturalLanguageInterrogators.ToDictionary(i => i, i =>
+        {
+            var expr = () => (InterrogatorViewModel<string>)new DefaultNaturalLanguageInterrogationViewModel(i);
+            return expr;
+        });
+    }
+
     public InterrogationDialog()
     {
         InitializeComponent();
@@ -17,9 +39,28 @@ public partial class InterrogationDialog : Window
     {
         base.OnPropertyChanged(change);
 
-        if (change.Property.Name == nameof(SelectedNaturalLanguageInterrogator))
+        if (change.Property == SelectedTagInterrogatorProperty)
         {
-            Prompt = SelectedNaturalLanguageInterrogator?.DefaultPrompt ?? "Describe the image.";
+            if (SelectedTagInterrogator != null)
+            {
+                SelectedTagSettingsViewModel = TaggerViewModelFactories[SelectedTagInterrogator]();
+            }
+            else
+            {
+                SelectedTagSettingsViewModel = null;
+            }
+        }
+
+        if (change.Property == SelectedNaturalLanguageInterrogatorProperty)
+        {
+            if (SelectedNaturalLanguageInterrogator != null)
+            {
+                SelectedNaturalLanguageSettingsViewModel = NaturalLanguageViewModelFactories[SelectedNaturalLanguageInterrogator]();
+            }
+            else
+            {
+                SelectedNaturalLanguageSettingsViewModel = null;
+            }
         }
     }
 
@@ -44,32 +85,24 @@ public partial class InterrogationDialog : Window
         set => SetValue(SelectedTagInterrogatorProperty, value);
     }
 
-    public static readonly StyledProperty<float> TagThresholdProperty =
-            AvaloniaProperty.Register<InterrogationDialog, float>(nameof(TagThreshold), 0.3f);
+    public static readonly StyledProperty<InterrogatorViewModel<string>?> SelectedNaturalLanguageSettingsViewModelProperty =
+            AvaloniaProperty.Register<InterrogationDialog, InterrogatorViewModel<string>?>(nameof(SelectedNaturalLanguageSettingsViewModel));
 
-    public float TagThreshold
+    public InterrogatorViewModel<string>? SelectedNaturalLanguageSettingsViewModel
     {
-        get => GetValue(TagThresholdProperty);
-        set => SetValue(TagThresholdProperty, value);
+        get => GetValue(SelectedNaturalLanguageSettingsViewModelProperty);
+        set => SetValue(SelectedNaturalLanguageSettingsViewModelProperty, value);
     }
 
-    public static readonly StyledProperty<string> PromptProperty =
-            AvaloniaProperty.Register<InterrogationDialog, string>(nameof(Prompt), "Describe the image.");
+    public static readonly StyledProperty<InterrogatorViewModel<List<string>>?> SelectedTagSettingsViewModelProperty =
+            AvaloniaProperty.Register<InterrogationDialog, InterrogatorViewModel<List<string>>?>(nameof(SelectedTagSettingsViewModel));
 
-    public string Prompt
+    public InterrogatorViewModel<List<string>>? SelectedTagSettingsViewModel
     {
-        get => GetValue(PromptProperty);
-        set => SetValue(PromptProperty, value);
+        get => GetValue(SelectedTagSettingsViewModelProperty);
+        set => SetValue(SelectedTagSettingsViewModelProperty, value);
     }
 
-    public static readonly StyledProperty<ViewModelBase?> SelectedInterrogatorSettingsViewModelProperty =
-            AvaloniaProperty.Register<InterrogationDialog, ViewModelBase?>(nameof(SelectedNaturalLanguageSettingsViewModel));
-
-    public ViewModelBase? SelectedNaturalLanguageSettingsViewModel
-    {
-        get => GetValue(SelectedInterrogatorSettingsViewModelProperty);
-        set => SetValue(SelectedInterrogatorSettingsViewModelProperty, value);
-    }
 
     public bool Success { get; set; } = false;
 
