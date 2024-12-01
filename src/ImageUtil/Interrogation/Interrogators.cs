@@ -39,6 +39,17 @@ namespace ImageUtil
             return activeAlphaOneJoyCaptioner;
         }
 
+        private static JoyCaptionAlphaTwo? activeAlphaTwopJoyCaptioner = null;
+        private static JoyCaptionAlphaTwo GetJoyCaptionAlphaTwo()
+        {
+            if (activeAlphaTwopJoyCaptioner == null || activeAlphaTwopJoyCaptioner.Disposed)
+            {
+                activeAlphaTwopJoyCaptioner = new JoyCaptionAlphaTwo();
+            }
+
+            return activeAlphaTwopJoyCaptioner;
+        }
+
         static Interrogators()
         {
             TagInterrogators = SmilingWolfModels.Select(model => new InterrogatorDescription<ITagInterrogator>
@@ -66,6 +77,11 @@ namespace ImageUtil
                     Name = "Joy Caption Alpha One",
                     Factory = GetJoyCaptionAlphaOne,
                     DefaultPrompt = "Write a descriptive caption for this image in a formal tone."
+                },
+                new InterrogatorDescription<INaturalLanguageInterrogator>
+                {
+                    Name = "Joy Caption Alpha Two",
+                    Factory = GetJoyCaptionAlphaTwo
                 }
             };
 

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="python\joycaptionalphatwo\interrogate.py" />
     <None Remove="python\joycaptionalphaone\interrogate.py" />
     <None Remove="python\joycaption\interrogate.py" />
     <None Remove="python\sw\interrogate.py" />
@@ -26,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="python\joycaptionalphatwo\interrogate.py" />
     <Resource Include="python\joycaptionalphaone\interrogate.py" />
     <Resource Include="python\joycaption\interrogate.py" />
     <Resource Include="python\sw\interrogate.py" />
@@ -38,5 +40,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Link>Assets\python\%(RecursiveDir)%(FileName)%(Extension)</Link>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="python\joycaptionalphatwo\interrogate.py" />
   </ItemGroup>
 </Project>

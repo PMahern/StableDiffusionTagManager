@@ -82,6 +82,9 @@
     <Compile Update="Views\ImageTouchupDialog.axaml.cs">
       <DependentUpon>ImageTouchupDialog.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\JoyCaptionAlphaTwoTagInterrogationView.axaml.cs">
+      <DependentUpon>JoyCaptionAlphaTwoTagInterrogationView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\TagPrioritySelectDialog.axaml.cs">
       <DependentUpon>TagPrioritySelectDialog.axaml</DependentUpon>
     </Compile>
