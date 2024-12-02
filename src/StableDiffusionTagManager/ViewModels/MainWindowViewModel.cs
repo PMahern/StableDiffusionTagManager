@@ -26,7 +26,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SdWebUiApi;
 using StableDiffusionTagManager.Collections;
 using Avalonia.Threading;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace StableDiffusionTagManager.ViewModels
 {
