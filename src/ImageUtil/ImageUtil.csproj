@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="python\**\*.py">
+    <Content Include="python\**\*.py;python\**\*.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Link>Assets\python\%(RecursiveDir)%(FileName)%(Extension)</Link>
     </Content>

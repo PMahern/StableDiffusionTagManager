@@ -4,6 +4,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
 using StableDiffusionTagManager.Extensions;
+using StableDiffusionTagManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -42,6 +43,7 @@ namespace StableDiffusionTagManager.Controls
                 ImageBox.Image = Image;
             }
         }
+
         public event EventHandler<Bitmap>? ImageCropped;
         public Func<Bitmap, Task>? SaveClicked;
         public Func<Bitmap, Task>? InterrogateClicked;
@@ -474,7 +476,7 @@ namespace StableDiffusionTagManager.Controls
             {
                 try
                 {
-                    var comicPanels = await Image.ExtractComicPanels(ImageBox.GetImagePaint(Image));
+                    var comicPanels = await Image.ExtractComicPanels("", ImageBox.GetImagePaint(Image));
                     ComicPanelsExtracted?.Invoke(comicPanels);
                 }
                 catch (Exception e)

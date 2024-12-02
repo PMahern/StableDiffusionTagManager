@@ -13,35 +13,30 @@ public partial class YOLOModelSelectorDialog : Window, IDialogWithResultAsync<(s
     public async Task<(string modelPath, float threshold, int expandMask)?> ShowWithResult(Window parent)
     {
         await ShowDialog(parent);
-        return Success ? (selectorViewModel?.SelectedModel.Filename, selectorViewModel.Threshold, selectorViewModel.ExpandMask)  : null;
-    }
-
-    private YOLOModelSelectorViewModel selectorViewModel;
-    public YOLOModelSelectorViewModel SelectorViewModel
-    {
-        get => selectorViewModel;
+        var viewModel = DataContext as YOLOModelSelectorDialogViewModel;
+        if(viewModel != null && viewModel.SelectorViewModel.SelectedModel != null)
+        {
+            return Success ? (viewModel.SelectorViewModel.SelectedModel.Filename, viewModel.SelectorViewModel.Threshold, viewModel.SelectorViewModel.ExpandMask) : null;
+        }
+        return null;
     }
 
     public YOLOModelSelectorDialog()
     {
-        this.DataContext = this;
-        selectorViewModel = new YOLOModelSelectorViewModel();
-
         InitializeComponent();
     }
 
-    [RelayCommand]
-    public void Generate()
+    private void GenerateClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        if (SelectorViewModel?.SelectedModel != null)
+        var viewModel = DataContext as YOLOModelSelectorDialogViewModel;
+        if (viewModel != null && viewModel.SelectorViewModel?.SelectedModel != null)
         {
             Success = true;
             Close();
         }
     }
 
-    [RelayCommand]
-    public void Cancel()
+    private void CancelClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         Close();
     }

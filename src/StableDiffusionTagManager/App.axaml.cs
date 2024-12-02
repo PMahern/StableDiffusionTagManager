@@ -11,6 +11,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace StableDiffusionTagManager
 {
@@ -24,8 +26,6 @@ namespace StableDiffusionTagManager
         {
             AvaloniaXamlLoader.Load(this);
         }
-
-        public static Settings Settings { get; set; } = new Settings(SETTINGS_FILE);
 
         public static string GetAppDirectory()
         {
@@ -100,19 +100,29 @@ namespace StableDiffusionTagManager
                 // Line below is needed to remove Avalonia data validation.
                 // Without this line you will get duplicate validations from both Avalonia and CT
                 //ExpressionObserver.DataValidators.RemoveAll(x => x is DataAnnotationsValidationPlugin);
+
                 MainWindow window = new();
                 desktop.MainWindow = window;
-                var mainVM = new MainWindowViewModel();
-                
+
+                // Register all the services needed for the application to run
+                var collection = new ServiceCollection();
+                collection.AddCommonServices();
+                collection.AddSingleton(new Settings(SETTINGS_FILE));
+                // Creates a ServiceProvider containing services from the provided IServiceCollection
+                var services = collection.BuildServiceProvider();
+                var factory = services.GetRequiredService<ViewModelFactory>();
+                var mainVM = factory.CreateViewModel<MainWindowViewModel>();
+
+                desktop.MainWindow = window;
+
                 window.DataContext = mainVM;
                 window.Closed += (sender, args) => desktop.Shutdown();
-                
+
                 if (desktop.Args != null && desktop.Args.Any())
                 {
                     var path = Path.GetFullPath(desktop.Args[0]);
                     window.Opened += (sender, args) => Dispatcher.UIThread.InvokeAsync(() => mainVM.LoadFolder(path));
                 }
-                    
             }
 
             base.OnFrameworkInitializationCompleted();

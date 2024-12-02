@@ -1,5 +1,4 @@
 ﻿using StableDiffusionTagManager.Collections;
-using System.Collections.ObjectModel;
 
 namespace StableDiffusionTagManager.ViewModels
 {

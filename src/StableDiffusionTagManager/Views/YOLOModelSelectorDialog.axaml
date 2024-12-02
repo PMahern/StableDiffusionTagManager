@@ -13,14 +13,13 @@
         ExtendClientAreaToDecorationsHint="True"
         WindowStartupLocation="CenterOwner"
         x:Class="StableDiffusionTagManager.YOLOModelSelectorDialog"
-        Title="YOLOModelSelectorDialog"
-        Name="ThisControl">
-  <controls:HeaderControl DataContext="{Binding ElementName=ThisControl}" Title="YOLO Mask Generation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="5" CloseCommand="{Binding CancelCommand}">
+        Title="YOLOModelSelectorDialog">
+  <controls:HeaderControl Title="YOLO Mask Generation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="5" CloseCommand="{Binding CancelCommand}">
     <Grid RowDefinitions="*,Auto">
       <local:YOLOModelSelectorView DataContext="{Binding SelectorViewModel}" />
       <StackPanel Grid.Row="1" Classes="footer">
-        <Button Command="{Binding GenerateCommand}">Generate Mask</Button>
-        <Button Command="{Binding CancelCommand}">Cancel</Button>
+        <Button Click="GenerateClicked">Generate Mask</Button>
+        <Button Click="CancelClicked">Cancel</Button>
       </StackPanel>
     </Grid>
   </controls:HeaderControl>

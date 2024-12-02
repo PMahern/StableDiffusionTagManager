@@ -26,6 +26,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SdWebUiApi;
 using StableDiffusionTagManager.Collections;
 using Avalonia.Threading;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -35,10 +36,14 @@ namespace StableDiffusionTagManager.ViewModels
         private static readonly string PROJECT_FILE_NAME = "_project.xml";
         private static readonly string ARCHIVE_FOLDER = "archive";
         private static readonly string TAG_PRIORITY_SETS_FOLDER = "TagPrioritySets";
+        private readonly ViewModelFactory viewModelFactory;
+        private readonly Settings settings;
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(ViewModelFactory viewModelFactory, Settings settings)
         {
             UpdateTagPrioritySets();
+            this.settings = settings;
+            this.viewModelFactory = viewModelFactory;
         }
 
         private List<string>? _CopiedTags = null;
@@ -1069,7 +1074,7 @@ namespace StableDiffusionTagManager.ViewModels
         {
             if (SelectedImage != null)
             {
-                var dialog = new ImageTouchupDialog();
+                var dialog = new ImageTouchupDialog(settings);
 
                 dialog.Tags = SelectedImage.Tags.Select(t => t.Tag).ToList();
                 dialog.Image = image;
@@ -1087,7 +1092,7 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public async void ApplicationSettings()
         {
-            var dialog = new SettingsDialog();
+            var dialog = new SettingsDialog(settings);
 
             await ShowDialog(dialog);
         }
@@ -1170,8 +1175,11 @@ namespace StableDiffusionTagManager.ViewModels
             try
             {
                 var dialog = new InterrogationDialog();
+                var vm = viewModelFactory.CreateViewModel<InterrogationDialogViewModel>();
+                dialog.DataContext = vm;
+
                 await ShowDialog(dialog);
-                if (dialog.Success)
+                if (vm.Success)
                 {
                     //Cache the selected image in case it's changed during async operation
                     var selectedImage = SelectedImage;
@@ -1179,7 +1187,7 @@ namespace StableDiffusionTagManager.ViewModels
                     ProgressIndicatorMessage = "Interrogating image...";
 
 
-                    var result = await Interrogate(dialog.SelectedNaturalLanguageSettingsViewModel, dialog.SelectedTagSettingsViewModel, bitmap);
+                    var result = await Interrogate(vm.SelectedNaturalLanguageSettingsViewModel, vm.SelectedTagSettingsViewModel, bitmap);
 
                     if (result.description != null)
                     {
@@ -1215,7 +1223,7 @@ namespace StableDiffusionTagManager.ViewModels
             //Cache the selected image in case it's changed during async operation
             var selectedImage = SelectedImage;
 
-            var api = new DefaultApi(App.Settings.WebUiAddress);
+            var api = new DefaultApi(settings.WebUiAddress);
 
             using var uploadStream = new MemoryStream();
             bitmap.Save(uploadStream);
@@ -1252,7 +1260,7 @@ namespace StableDiffusionTagManager.ViewModels
 
         public async Task<(string? description, IEnumerable<string>? tags)> Interrogate(InterrogatorViewModel<string>? naturalLanguageInterrogator, InterrogatorViewModel<List<string>>? tagInterrrogator, Bitmap image)
         {
-            var api = new DefaultApi(App.Settings.WebUiAddress);
+            var api = new DefaultApi(settings.WebUiAddress);
             ProgressIndicatorMax = 0;
 
             string? description = null;
@@ -1279,8 +1287,11 @@ namespace StableDiffusionTagManager.ViewModels
             if (ImagesWithTags != null && ImagesWithTags.Count > 0)
             {
                 var dialog = new InterrogationDialog();
+                var vm = viewModelFactory.CreateViewModel<InterrogationDialogViewModel>();
+                dialog.DataContext = vm;
+
                 await ShowDialog(dialog);
-                if (dialog.Success)
+                if (vm.Success)
                 {
                     _updateTagCounts = false;
 
@@ -1293,7 +1304,7 @@ namespace StableDiffusionTagManager.ViewModels
                     {
                         foreach (var image in ImagesWithTags)
                         {
-                            var result = await Interrogate(dialog.SelectedNaturalLanguageSettingsViewModel, dialog.SelectedTagSettingsViewModel, image.ImageSource);
+                            var result = await Interrogate(vm.SelectedNaturalLanguageSettingsViewModel, vm.SelectedTagSettingsViewModel, image.ImageSource);
 
                             if (result.description != null)
                             {
@@ -1633,7 +1644,7 @@ namespace StableDiffusionTagManager.ViewModels
 
                 foreach (var image in ImagesWithTags.ToList())
                 {
-                    var panels = await image.ImageSource.ExtractComicPanels();
+                    var panels = await image.ImageSource.ExtractComicPanels(settings.PythonPath);
                     foreach (var panel in panels)
                     {
                         AddNewImage(panel, image);
@@ -1698,7 +1709,7 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public async Task ShowStandaloneImageEditor()
         {
-            var editor = new ImageTouchupDialog();
+            var editor = new ImageTouchupDialog(settings);
             editor.IsStandalone = true;
             await ShowDialog(editor);
         }
@@ -1757,6 +1768,7 @@ namespace StableDiffusionTagManager.ViewModels
         public async Task GenerateImageMaskWithYolo()
         {
             var dialog = new YOLOModelSelectorDialog();
+            dialog.DataContext = viewModelFactory.CreateViewModel<YOLOModelSelectorDialogViewModel>();
 
             var dialogResult = await ShowDialog<(string, float, int)?>(dialog);
 
@@ -1819,6 +1831,7 @@ namespace StableDiffusionTagManager.ViewModels
         public async Task GenerateMaskThenRemoveFromAllImages()
         {
             var dialog = new YOLOModelSelectorDialog();
+            dialog.DataContext = viewModelFactory.CreateViewModel<YOLOModelSelectorDialogViewModel>();
 
             var dialogResult = await ShowDialog<(string, float, int)?>(dialog);
 

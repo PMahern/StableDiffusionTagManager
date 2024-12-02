@@ -118,14 +118,14 @@ namespace StableDiffusionTagManager.Extensions
             };
         }
 
-        public static async Task<List<Bitmap>?> ExtractComicPanels(this Bitmap bitmap, RenderTargetBitmap? paint = null)
+        public static async Task<List<Bitmap>?> ExtractComicPanels(this Bitmap bitmap, string pythonPath, RenderTargetBitmap? paint = null)
         {
             string tmpImage = Path.Combine(App.GetTempFileDirectory(), $"{Guid.NewGuid()}.png");
             bitmap.Save(tmpImage);
 
             var appDir = App.GetAppDirectory();
 
-            KumikoWrapper kwrapper = new KumikoWrapper(App.Settings.PythonPath, Path.Combine(new string[] { appDir, "Assets", "kumiko" }));
+            KumikoWrapper kwrapper = new KumikoWrapper(pythonPath, Path.Combine(new string[] { appDir, "Assets", "kumiko" }));
             var results = await kwrapper.GetImagePanels(tmpImage, App.GetTempFileDirectory());
 
             return results.Select(r => bitmap.CreateNewImageFromRegion(new Rect(r.TopLeftX, r.TopLeftY, r.Width, r.Height), null, paint)).ToList();

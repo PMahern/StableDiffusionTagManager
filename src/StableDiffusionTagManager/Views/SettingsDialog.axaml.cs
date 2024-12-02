@@ -1,18 +1,20 @@
 using Avalonia;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
+using StableDiffusionTagManager.Models;
 
 namespace StableDiffusionTagManager.Views
 {
     public partial class SettingsDialog : Window
     {
-        public SettingsDialog()
+        public SettingsDialog(Settings settings)
         {
             InitializeComponent();
 
-            this.WebUIAddress = App.Settings.WebUiAddress;
-            this.PythonPath = App.Settings.PythonPath;
+            this.WebUIAddress = settings.WebUiAddress;
+            this.PythonPath = settings.PythonPath;
             this.DataContext = this;
+            this.settings = settings;
         }
 
         public static readonly StyledProperty<string?> WebUIAddressProperty =
@@ -29,6 +31,7 @@ namespace StableDiffusionTagManager.Views
 
         public static readonly StyledProperty<string?> PythonPathProperty =
             AvaloniaProperty.Register<SettingsDialog, string?>(nameof(PythonPath));
+        private readonly Settings settings;
 
         /// <summary>
         /// Gets or sets if control can render the image
@@ -42,9 +45,9 @@ namespace StableDiffusionTagManager.Views
         [RelayCommand]
         public void Save()
         {
-            App.Settings.WebUiAddress = WebUIAddress;
-            App.Settings.PythonPath = PythonPath;
-            App.Settings.Save();
+            settings.WebUiAddress = WebUIAddress;
+            settings.PythonPath = PythonPath;
+            settings.Save();
 
             Close();
         }

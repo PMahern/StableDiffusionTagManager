@@ -5,8 +5,6 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using CommunityToolkit.Mvvm.Input;
-using ImageUtil;
 using StableDiffusionTagManager.Controls;
 using StableDiffusionTagManager.Extensions;
 using StableDiffusionTagManager.ViewModels;
@@ -65,6 +63,7 @@ namespace StableDiffusionTagManager.Views
                     Closing -= ClosingHandler;
                     Close();
                 };
+
                 viewModel.ImageDirtyCallback = (image) => ImageBox.ImageBox.ImageHasPaint(image);
                 viewModel.GetModifiedImageDataCallback = (originalBitmap, clear) =>
                 {

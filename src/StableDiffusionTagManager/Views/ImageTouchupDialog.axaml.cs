@@ -29,13 +29,14 @@ namespace StableDiffusionTagManager.Views
 {
     public partial class ImageTouchupDialog : Window
     {
-        public ImageTouchupDialog()
+        public ImageTouchupDialog(Settings settings)
         {
             InitializeComponent();
 
             this.DataContext = this;
 
             Opened += ImageCleanupDialog_Opened;
+            this.settings = settings;
         }
 
         private void ImageCleanupDialog_Opened(object? sender, EventArgs e)
@@ -52,7 +53,7 @@ namespace StableDiffusionTagManager.Views
         {
             try
             {
-                var api = new DefaultApi(App.Settings.WebUiAddress);
+                var api = new DefaultApi(settings.WebUiAddress);
 
                 var samplers = await api.GetSamplersSdapiV1SamplersGetAsync();
 
@@ -230,6 +231,7 @@ namespace StableDiffusionTagManager.Views
 
         public static readonly StyledProperty<int> ImageHeightProperty =
             AvaloniaProperty.Register<ImageTouchupDialog, int>(nameof(ImageHeight), 512);
+        private readonly Settings settings;
 
         public int ImageHeight
         {
@@ -266,11 +268,11 @@ namespace StableDiffusionTagManager.Views
         [RelayCommand]
         public async Task GenerateImages()
         {
-            if (App.Settings.WebUiAddress != null)
+            if (settings.WebUiAddress != null)
             {
                 try
                 {
-                    var api = new DefaultApi(App.Settings.WebUiAddress);
+                    var api = new DefaultApi(settings.WebUiAddress);
 
                     var flattened = ImageBox.ImageBox.CreateNewImageWithLayersFromRegion();
                     if (flattened != null)
