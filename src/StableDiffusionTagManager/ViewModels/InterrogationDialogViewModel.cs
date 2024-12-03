@@ -10,14 +10,12 @@ namespace StableDiffusionTagManager.ViewModels
 {
     public partial class InterrogationDialogViewModel : ViewModelBase
     {
-        //public static Dictionary<InterrogatorDescription<ITagInterrogator>, Func<InterrogatorViewModel<List<string>>>> TaggerViewModelFactories;
-        //public static Dictionary<InterrogatorDescription<INaturalLanguageInterrogator>, Func<InterrogatorViewModel<string>>> NaturalLanguageViewModelFactories;
         public event EventHandler? RequestClose;
 
         public InterrogationDialogViewModel(IEnumerable<ITaggerViewModelFactory> taggers, IEnumerable<INaturalLanguageInterrogatorViewModelFactory> naturalLanguageInterrogators)
         {
-            Taggers = taggers;
-            NaturalLanguageInterrogators = naturalLanguageInterrogators;
+            Taggers = taggers.Prepend(null);
+            NaturalLanguageInterrogators =  naturalLanguageInterrogators.Prepend(null);
         }
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs change)
@@ -51,7 +49,7 @@ namespace StableDiffusionTagManager.ViewModels
 
 
         [ObservableProperty]
-        public IEnumerable<ITaggerViewModelFactory> taggers;
+        public IEnumerable<ITaggerViewModelFactory?> taggers;
 
         [ObservableProperty]
         private ITaggerViewModelFactory? selectedTagInterrogator;
@@ -60,7 +58,7 @@ namespace StableDiffusionTagManager.ViewModels
 
 
         [ObservableProperty]
-        public IEnumerable<INaturalLanguageInterrogatorViewModelFactory> naturalLanguageInterrogators;
+        public IEnumerable<INaturalLanguageInterrogatorViewModelFactory?> naturalLanguageInterrogators;
         [ObservableProperty]
         private INaturalLanguageInterrogatorViewModelFactory? selectedNaturalLanguageInterrogator;
         [ObservableProperty]
@@ -72,8 +70,7 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public void Interrogate()
         {
-            //if (SelectedNaturalLanguageInterrogator != null || SelectedTagInterrogator != null)
-            if (SelectedTagInterrogator != null)
+            if (SelectedNaturalLanguageInterrogator != null || SelectedTagInterrogator != null)
             {
                 Success = true;
                 RequestClose?.Invoke(this, EventArgs.Empty);

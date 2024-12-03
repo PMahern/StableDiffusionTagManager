@@ -41,8 +41,4 @@
       <Link>Assets\python\%(RecursiveDir)%(FileName)%(Extension)</Link>
     </Content>
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="python\joycaptionalphatwo\interrogate.py" />
-  </ItemGroup>
 </Project>

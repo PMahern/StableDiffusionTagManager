@@ -9,6 +9,16 @@ namespace StableDiffusionTagManager.ViewModels
         InterrogatorViewModel<List<string>> CreateViewModel();
     }
 
+    public class JoyCaptionAlphaTwoTaggerViewModelFactory : ITaggerViewModelFactory
+    {
+
+        public string Name => "Joy Caption Alpha Two";
+
+        public InterrogatorViewModel<List<string>> CreateViewModel()
+        {
+            return new JoyCaptionAlphaTwoTagInterrogationViewModel();
+        }
+    }
     public class wdswinv2taggerv3ViewModelFactory : ITaggerViewModelFactory
     {
         public string Name => "SmilingWolf/wd-swinv2-tagger-v3";

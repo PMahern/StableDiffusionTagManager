@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StableDiffusionTagManager.Services
+namespace StableDiffusionTagManager.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class ServiceAttribute : Attribute

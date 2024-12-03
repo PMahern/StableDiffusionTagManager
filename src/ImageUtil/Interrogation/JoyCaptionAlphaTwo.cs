@@ -1,14 +1,62 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace ImageUtil.Interrogation
 {
-    public class JoyCaptionAlphaArgs
+    public class JoyCaptionAlphaTwoArgs
     {
-
+        public string CaptionType { get; set; }
+        public string Length { get; set; }
+        public string ExtraOptions { get; set; }
+        public string NameInput { get; set; }
+        public string CustomPrompt { get; set; } = "";
     }
 
-    public class JoyCaptionAlphaTwo : INaturalLanguageInterrogator<JoyCaptionAlphaArgs>, ITagInterrogator
+    public class JoyCaptionAlphaTwo : INaturalLanguageInterrogator<JoyCaptionAlphaTwoArgs>, ITagInterrogator<JoyCaptionAlphaTwoArgs>
     {
+        public static readonly List<string> ExtraOptionText = new List<string>
+        {
+            "If there is a person/character in the image you must refer to them as {name}.",
+            "Do NOT include information about people/characters that cannot be changed (like ethnicity, gender, etc), but do still include changeable attributes (like hair style).",
+            "Include information about lighting.",
+            "Include information about camera angle.",
+            "Include information about whether there is a watermark or not.",
+            "Include information about whether there are JPEG artifacts or not.",
+            "If it is a photo you MUST include information about what camera was likely used and details such as aperture, shutter speed, ISO, etc.",
+            "Do NOT include anything sexual; keep it PG.",
+            "Do NOT mention the image's resolution.",
+            "You MUST include information about the subjective aesthetic quality of the image from low to very high.",
+            "Include information on the image's composition style, such as leading lines, rule of thirds, or symmetry.",
+            "Do NOT mention any text that is in the image.",
+            "Specify the depth of field and whether the background is in focus or blurred.",
+            "If applicable, mention the likely use of artificial or natural lighting sources.",
+            "Do NOT use any ambiguous language.",
+            "Include whether the image is sfw, suggestive, or nsfw.",
+            "ONLY describe the most important elements of the image."
+        };
+
+        public static readonly List<string> TaggingPrompts = new List<string>
+        {
+            "Booru tag list",
+            "Booru-like tag list"
+        };
+
+        public static readonly List<string> NaturalLanguagePrompts = new List<string>
+        {
+            "Descriptive",
+            "Descriptive (Informal)",
+            "Training Prompt",
+            "MidJourney",
+            "Art Critic",
+            "Product Listing",
+            "Social Media Post"
+        };
+
+        public static readonly List<string> LengthChoices = new List<string>
+        {
+            "any", "very short", "short", "medium-length", "long", "very long"
+        }.Concat(Enumerable.Range(2, 25).Select(x => (x * 10).ToString())).ToList();
+        
         private readonly string model;
         private PythonImageEngine pythonImageEngine;
         private bool initialized = false;
@@ -44,7 +92,7 @@ namespace ImageUtil.Interrogation
             initialized = true;
         }
 
-        public async Task<string> CaptionImage(JoyCaptionAlphaArgs args, byte[] imageData, Action<string> consoleCallBack)
+        public async Task<string> CaptionImage(JoyCaptionAlphaTwoArgs args, byte[] imageData, Action<string> consoleCallBack)
         {
             if (!initialized)
                 throw new InvalidOperationException("Tried to access an uninitialized Joy Captioner Alpha Two.");
@@ -52,17 +100,26 @@ namespace ImageUtil.Interrogation
             if (disposed)
                 throw new ObjectDisposedException("Tried to access a disposed Joy Captioner Alpha Two.");
 
-            await pythonImageEngine.SendString("descriptive");
-
+            await pythonImageEngine.SendString(args.CaptionType);
+            await pythonImageEngine.SendString(args.Length);
+            await pythonImageEngine.SendString(args.ExtraOptions);
+            await pythonImageEngine.SendString(args.NameInput);
+            await pythonImageEngine.SendString(args.CustomPrompt);
+            
             await pythonImageEngine.SendImage(imageData, consoleCallBack);
             return await pythonImageEngine.WaitForGenerationResultString(consoleCallBack);
         }
 
-        public async Task<List<string>> TagImage(byte[] imageData, float threshold, Action<string> consoleCallBack)
+        public async Task<List<string>> TagImage(JoyCaptionAlphaTwoArgs args, byte[] imageData, Action<string> consoleCallBack)
         {
-            await pythonImageEngine.SendString("rng-tags");
+            await pythonImageEngine.SendString(args.CaptionType);
+            await pythonImageEngine.SendString(args.Length);
+            await pythonImageEngine.SendString(args.ExtraOptions);
+            await pythonImageEngine.SendString(args.NameInput);
+            await pythonImageEngine.SendString(args.CustomPrompt);
 
             await pythonImageEngine.SendImage(imageData, consoleCallBack);
+
             var results = await pythonImageEngine.WaitForGenerationResultString(consoleCallBack);
             return results.Split(", ").ToList();
         }

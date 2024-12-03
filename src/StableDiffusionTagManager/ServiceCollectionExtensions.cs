@@ -1,10 +1,9 @@
-﻿using Avalonia.Controls;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using StableDiffusionTagManager.Attributes;
 using StableDiffusionTagManager.Services;
 using StableDiffusionTagManager.ViewModels;
-using System;
-using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace StableDiffusionTagManager
 {
@@ -26,13 +25,29 @@ namespace StableDiffusionTagManager
 
             collection.Scan(collection => collection
                 .FromAssemblyOf<Program>()
-                .AddClasses(classes => classes.AssignableTo<ITaggerViewModelFactory>())
+                .AddClasses(classes => classes.AssignableTo<ITaggerViewModelFactory>().WithoutAttribute<SupportedPlatformsAttribute>())
+                .AsImplementedInterfaces()
+                .WithTransientLifetime());
+
+            collection.Scan(collection => collection
+                .FromAssemblyOf<Program>()
+                .AddClasses(classes => classes.AssignableTo<ITaggerViewModelFactory>()
+                                              .WithAttribute<SupportedPlatformsAttribute>(attr => attr.Platforms.Any(platform => RuntimeInformation.IsOSPlatform(OSPlatform.Create(platform))))
+                            )
                 .AsImplementedInterfaces()
                 .WithTransientLifetime());
 
             collection.Scan(collection => collection
                .FromAssemblyOf<Program>()
-               .AddClasses(classes => classes.AssignableTo<INaturalLanguageInterrogatorViewModelFactory>())
+               .AddClasses(classes => classes.AssignableTo<INaturalLanguageInterrogatorViewModelFactory>().WithoutAttribute<SupportedPlatformsAttribute>())
+               .AsImplementedInterfaces()
+               .WithTransientLifetime());
+
+            collection.Scan(collection => collection
+               .FromAssemblyOf<Program>()
+               .AddClasses(classes => classes.AssignableTo<INaturalLanguageInterrogatorViewModelFactory>()
+                                              .WithAttribute<SupportedPlatformsAttribute>(attr => attr.Platforms.Any(platform => RuntimeInformation.IsOSPlatform(OSPlatform.Create(platform))))
+                            )
                .AsImplementedInterfaces()
                .WithTransientLifetime());
 

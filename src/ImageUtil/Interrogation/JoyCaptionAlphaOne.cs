@@ -2,7 +2,7 @@
 
 namespace ImageUtil.Interrogation
 {
-    public class JoyCaptionAlphaOne : INaturalLanguageInterrogator<string>, ITagInterrogator
+    public class JoyCaptionAlphaOne : INaturalLanguageInterrogator<string>, ITagInterrogator<float>
     {
         private readonly string model;
         private PythonImageEngine pythonImageEngine;
@@ -57,7 +57,7 @@ namespace ImageUtil.Interrogation
             return await pythonImageEngine.WaitForGenerationResultString(consoleCallBack);
         }
 
-        public async Task<List<string>> TagImage(byte[] imageData, float threshold, Action<string> consoleCallBack)
+        public async Task<List<string>> TagImage(float threshold, byte[] imageData, Action<string> consoleCallBack)
         {
             await pythonImageEngine.SendString("rng-tags");
 

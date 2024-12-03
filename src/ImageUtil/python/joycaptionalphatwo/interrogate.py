@@ -10,7 +10,9 @@ import torch.amp.autocast_mode
 from PIL import Image
 import os
 import torchvision.transforms.functional as TVF
-
+import sys
+import base64
+from io import BytesIO
 
 CLIP_PATH = "google/siglip-so400m-patch14-384"
 CHECKPOINT_PATH = Path("cgrkzexw-599808")
@@ -276,23 +278,23 @@ def stream_chat(input_image: Image.Image, caption_type: str, caption_length: str
 
 
 def main():
-    while True:
-        caption_type = sys.stdin.readline().strip()
+	while True:
+		caption_type = sys.stdin.readline().strip()
 		caption_length = sys.stdin.readline().strip()
 		extra_options = sys.stdin.readline().strip().split(",")
 		name_input = sys.stdin.readline().strip()
 		custom_prompt = sys.stdin.readline().strip()
-        imagedata = sys.stdin.readline().strip()
+		imagedata = sys.stdin.readline().strip()
 
-        binary_data = base64.b64decode(imagedata)
-        image_bytes = BytesIO(binary_data)
+		binary_data = base64.b64decode(imagedata)
+		image_bytes = BytesIO(binary_data)
 
-        with Image.open(image_bytes).convert("RGB") as img:
-            captions = stream_chat(img, promptdata, "formal", "any")
-            print("GENERATION START")
-            print(captions)
-            print("GENERATION END")
-            sys.stdout.flush()
+		with Image.open(image_bytes).convert("RGB") as img:
+			prompt_str, captions = stream_chat(img, caption_type, caption_length, extra_options, name_input, custom_prompt)
+			print("GENERATION START")
+			print(captions)
+			print("GENERATION END")
+			sys.stdout.flush()
 
 if __name__ == "__main__":
     main()

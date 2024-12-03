@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using StableDiffusionTagManager.Extensions;
+using StableDiffusionTagManager.Attributes;
 
 namespace StableDiffusionTagManager.Services
 {

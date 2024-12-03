@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using StableDiffusionTagManager.Attributes;
 using StableDiffusionTagManager.ViewModels;
 using System;
 

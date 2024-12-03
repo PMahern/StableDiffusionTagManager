@@ -1189,7 +1189,7 @@ namespace StableDiffusionTagManager.ViewModels
                     ProgressIndicatorMessage = "Interrogating image...";
 
 
-                    var result = await Interrogate(/*vm.SelectedNaturalLanguageSettingsViewModel*/null, vm.SelectedTagSettingsViewModel, bitmap);
+                    var result = await Interrogate(vm.SelectedNaturalLanguageSettingsViewModel, vm.SelectedTagSettingsViewModel, bitmap);
 
                     if (result.description != null)
                     {
@@ -1306,7 +1306,7 @@ namespace StableDiffusionTagManager.ViewModels
                     {
                         foreach (var image in ImagesWithTags)
                         {
-                            var result = await Interrogate(/*vm.SelectedNaturalLanguageSettingsViewModel*/null, vm.SelectedTagSettingsViewModel, image.ImageSource);
+                            var result = await Interrogate(vm.SelectedNaturalLanguageSettingsViewModel, vm.SelectedTagSettingsViewModel, image.ImageSource);
 
                             if (result.description != null)
                             {

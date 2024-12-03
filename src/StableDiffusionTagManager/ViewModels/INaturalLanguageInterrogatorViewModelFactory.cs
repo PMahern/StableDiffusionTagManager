@@ -1,6 +1,8 @@
 ﻿using ImageUtil;
 using ImageUtil.Interrogation;
+using StableDiffusionTagManager.Attributes;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -9,8 +11,11 @@ namespace StableDiffusionTagManager.ViewModels
         string Name { get; }
 
         public InterrogatorViewModel<string> CreateViewModel();
+
+        public List<OSPlatform> SupportedPlatforms => new List<OSPlatform> { OSPlatform.Windows, OSPlatform.Linux, OSPlatform.OSX };
     }
 
+    [SupportedPlatforms("Linux")]
     public class CogVLM2InterrogatorViewModelFactory : INaturalLanguageInterrogatorViewModelFactory
     {
         public string Name => "CogVLM2";
@@ -19,6 +24,8 @@ namespace StableDiffusionTagManager.ViewModels
         {
             return new DefaultNaturalLanguageInterrogationViewModel(() => new CogVLM2Interrogator(), "Describe the image with as much detail as possible.");
         }
+
+        public List<OSPlatform> SupportedPlatforms => new List<OSPlatform> { OSPlatform.Linux };
     }
 
     public class JoyCaptionPreAlphaViewModelFactory : INaturalLanguageInterrogatorViewModelFactory

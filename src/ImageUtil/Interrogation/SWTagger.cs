@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace ImageUtil
 {
-    public class SWTagger : ITagInterrogator
+    public class SWTagger : ITagInterrogator<float>
     {
         private readonly string model;
         private PythonImageEngine pythonImageEngine;
@@ -40,7 +40,7 @@ namespace ImageUtil
             initialized = true;
         }
 
-        public async Task<List<string>> TagImage(byte[] imageData, float threshold, Action<string> consoleCallBack)
+        public async Task<List<string>> TagImage(float threshold, byte[] imageData,  Action<string> consoleCallBack)
         {
             if (!initialized)
                 throw new InvalidOperationException("Tried to access an unitialized SW Tagger.");
