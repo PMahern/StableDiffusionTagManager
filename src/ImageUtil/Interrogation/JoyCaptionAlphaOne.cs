@@ -2,7 +2,7 @@
 
 namespace ImageUtil.Interrogation
 {
-    internal class JoyCaptionAlphaOne : INaturalLanguageInterrogator, ITagInterrogator
+    public class JoyCaptionAlphaOne : INaturalLanguageInterrogator<string>, ITagInterrogator
     {
         private readonly string model;
         private PythonImageEngine pythonImageEngine;

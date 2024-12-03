@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace ImageUtil
 {
-    internal class SWTagger : ITagInterrogator
+    public class SWTagger : ITagInterrogator
     {
         private readonly string model;
         private PythonImageEngine pythonImageEngine;

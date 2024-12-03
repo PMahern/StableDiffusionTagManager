@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using StableDiffusionTagManager.Services;
 
 namespace StableDiffusionTagManager
 {

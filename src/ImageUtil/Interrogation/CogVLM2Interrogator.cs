@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace ImageUtil.Interrogation
 {
-    public class CogVLM2Interrogator : INaturalLanguageInterrogator
+    public class CogVLM2Interrogator : INaturalLanguageInterrogator<string>
     {
         private readonly string model;
         private PythonImageEngine pythonImageEngine;

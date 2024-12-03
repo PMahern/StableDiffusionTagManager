@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using StableDiffusionTagManager.Services;
 namespace StableDiffusionTagManager.ViewModels
 {
     public partial class YOLOModelSelectorDialogViewModel : ViewModelBase

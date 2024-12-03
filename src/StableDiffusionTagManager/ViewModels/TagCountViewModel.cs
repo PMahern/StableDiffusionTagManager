@@ -1,8 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using HarfBuzzSharp;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace StableDiffusionTagManager.ViewModels
 {

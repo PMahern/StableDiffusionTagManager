@@ -28,7 +28,7 @@
         </Panel>
         <Panel>
           <Label>Model</Label>
-          <ComboBox ItemsSource="{x:Static imageutil:Interrogators.NaturalLanguageInterrogators}" SelectedItem="{Binding SelectedNaturalLanguageInterrogator, Mode=TwoWay}">
+          <ComboBox ItemsSource="{Binding NaturalLanguageInterrogators}" SelectedItem="{Binding SelectedNaturalLanguageInterrogator, Mode=TwoWay}">
             <ComboBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Text="{Binding Name}" />
@@ -42,7 +42,7 @@
         </Panel>
         <Panel>
           <Label>Model</Label>
-          <ComboBox ItemsSource="{x:Static imageutil:Interrogators.TagInterrogators}" SelectedItem="{Binding SelectedTagInterrogator, Mode=TwoWay}">
+          <ComboBox ItemsSource="{Binding Taggers}" SelectedItem="{Binding SelectedTagInterrogator, Mode=TwoWay}">
             <ComboBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Text="{Binding Name}" />

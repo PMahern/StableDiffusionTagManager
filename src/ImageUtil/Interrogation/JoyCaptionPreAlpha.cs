@@ -2,7 +2,7 @@
 
 namespace ImageUtil
 {
-    public class JoyCaptionPreAlpha : INaturalLanguageInterrogator
+    public class JoyCaptionPreAlpha : INaturalLanguageInterrogator<string>
     {
         private readonly string model;
         private PythonImageEngine pythonImageEngine;

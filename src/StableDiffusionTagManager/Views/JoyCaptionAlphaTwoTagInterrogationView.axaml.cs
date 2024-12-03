@@ -1,8 +1,6 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace StableDiffusionTagManager;
+namespace StableDiffusionTagManager.Views;
 
 public partial class JoyCaptionAlphaTwoTagInterrogationView : UserControl
 {

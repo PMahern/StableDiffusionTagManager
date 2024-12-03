@@ -2,7 +2,12 @@
 
 namespace ImageUtil.Interrogation
 {
-    public class JoyCaptionAlphaTwo : INaturalLanguageInterrogator, ITagInterrogator
+    public class JoyCaptionAlphaArgs
+    {
+
+    }
+
+    public class JoyCaptionAlphaTwo : INaturalLanguageInterrogator<JoyCaptionAlphaArgs>, ITagInterrogator
     {
         private readonly string model;
         private PythonImageEngine pythonImageEngine;
@@ -33,23 +38,19 @@ namespace ImageUtil.Interrogation
                 // Search and replace in .yaml files
                 var yamljsonFiles = Directory.GetFiles(absoluteWorkingDirectory, "*.yaml", SearchOption.AllDirectories)
                                             .Concat(Directory.GetFiles(absoluteWorkingDirectory, "*.json", SearchOption.AllDirectories)).ToArray();
-                foreach (string file in yamljsonFiles)
-                {
-                    Utility.FindAndReplace(file, "meta-llama/Meta-Llama-3.1-8B", "unsloth/Meta-Llama-3.1-8B-bnb-4bit");
-                }
 
                 pythonImageEngine = new PythonImageEngine("interrogate.py", "", Path.Join("taggers", "joycaptionalphatwo"), true);
             }
             initialized = true;
         }
 
-        public async Task<string> CaptionImage(string prompt, byte[] imageData, Action<string> consoleCallBack)
+        public async Task<string> CaptionImage(JoyCaptionAlphaArgs args, byte[] imageData, Action<string> consoleCallBack)
         {
             if (!initialized)
-                throw new InvalidOperationException("Tried to access an uninitialized Joy Captioner Alpha One.");
+                throw new InvalidOperationException("Tried to access an uninitialized Joy Captioner Alpha Two.");
 
             if (disposed)
-                throw new ObjectDisposedException("Tried to access a disposed Joy Captioner Alpha One.");
+                throw new ObjectDisposedException("Tried to access a disposed Joy Captioner Alpha Two.");
 
             await pythonImageEngine.SendString("descriptive");
 

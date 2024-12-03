@@ -75,7 +75,7 @@ namespace StableDiffusionTagManager.Views
                     return bitmap;
                 };
                 ImageBox.SaveClicked = async (image) => await viewModel.SaveCurrentImage(image);
-                ImageBox.ComicPanelsExtracted = async (images) => await viewModel.ReviewComicPanels(images);
+                ImageBox.ComicPanelsExtracted = async (pair) => await viewModel.ExtractAndReviewComicPanels(pair.baseImage, pair.paint);
                 ImageBox.ImageCropped += (source, image) => viewModel.ImageCropped(image);
                 ImageBox.InterrogateClicked = async (image) => await viewModel.InterrogateAndApplyToSelectedImage(image);
                 ImageBox.RemoveBackgroundClicked = async (image) => await viewModel.ReviewRemoveBackground(image);

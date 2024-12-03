@@ -26,6 +26,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SdWebUiApi;
 using StableDiffusionTagManager.Collections;
 using Avalonia.Threading;
+using StableDiffusionTagManager.Services;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -36,13 +37,15 @@ namespace StableDiffusionTagManager.ViewModels
         private static readonly string ARCHIVE_FOLDER = "archive";
         private static readonly string TAG_PRIORITY_SETS_FOLDER = "TagPrioritySets";
         private readonly ViewModelFactory viewModelFactory;
+        private readonly ComicPanelExtractor comicPanelExtractorService;
         private readonly Settings settings;
 
-        public MainWindowViewModel(ViewModelFactory viewModelFactory, Settings settings)
+        public MainWindowViewModel(ViewModelFactory viewModelFactory, ComicPanelExtractor comicPanelExtractorService, Settings settings)
         {
             UpdateTagPrioritySets();
             this.settings = settings;
             this.viewModelFactory = viewModelFactory;
+            this.comicPanelExtractorService = comicPanelExtractorService;
         }
 
         private List<string>? _CopiedTags = null;
@@ -1186,7 +1189,7 @@ namespace StableDiffusionTagManager.ViewModels
                     ProgressIndicatorMessage = "Interrogating image...";
 
 
-                    var result = await Interrogate(vm.SelectedNaturalLanguageSettingsViewModel, vm.SelectedTagSettingsViewModel, bitmap);
+                    var result = await Interrogate(/*vm.SelectedNaturalLanguageSettingsViewModel*/null, vm.SelectedTagSettingsViewModel, bitmap);
 
                     if (result.description != null)
                     {
@@ -1303,7 +1306,7 @@ namespace StableDiffusionTagManager.ViewModels
                     {
                         foreach (var image in ImagesWithTags)
                         {
-                            var result = await Interrogate(vm.SelectedNaturalLanguageSettingsViewModel, vm.SelectedTagSettingsViewModel, image.ImageSource);
+                            var result = await Interrogate(/*vm.SelectedNaturalLanguageSettingsViewModel*/null, vm.SelectedTagSettingsViewModel, image.ImageSource);
 
                             if (result.description != null)
                             {
@@ -1397,22 +1400,26 @@ namespace StableDiffusionTagManager.ViewModels
             AddNewImage(image, SelectedImage, SelectedImage.Description, SelectedImage.Tags.Select(t => t.Tag));
         }
 
-        public async Task ReviewComicPanels(List<Bitmap> panels)
+        public async Task ExtractAndReviewComicPanels(Bitmap baseImage, RenderTargetBitmap? paint)
         {
-            ImageReviewDialog dialog = new ImageReviewDialog();
-            dialog.Images = panels.Select(p => new ImageReviewViewModel(p))
-                                  .ToObservableCollection();
-
-            dialog.ReviewMode = ImageReviewDialogMode.MultiSelect;
-            dialog.Title = "Select Images to Keep";
-
-            await ShowDialog(dialog);
-
-            if (dialog.Success)
+            var panels = await comicPanelExtractorService.ExtractComicPanels(baseImage, paint);
+            if (panels != null)
             {
-                foreach (var image in dialog.SelectedImages)
+                ImageReviewDialog dialog = new ImageReviewDialog();
+                dialog.Images = panels.Select(p => new ImageReviewViewModel(p))
+                                      .ToObservableCollection();
+
+                dialog.ReviewMode = ImageReviewDialogMode.MultiSelect;
+                dialog.Title = "Select Images to Keep";
+
+                await ShowDialog(dialog);
+
+                if (dialog.Success)
                 {
-                    AddNewImage(image, SelectedImage);
+                    foreach (var image in dialog.SelectedImages)
+                    {
+                        AddNewImage(image, SelectedImage);
+                    }
                 }
             }
         }
@@ -1643,7 +1650,7 @@ namespace StableDiffusionTagManager.ViewModels
 
                 foreach (var image in ImagesWithTags.ToList())
                 {
-                    var panels = await image.ImageSource.ExtractComicPanels(settings.PythonPath);
+                    var panels = await comicPanelExtractorService.ExtractComicPanels(image.ImageSource);
                     foreach (var panel in panels)
                     {
                         AddNewImage(panel, image);
@@ -1783,7 +1790,7 @@ namespace StableDiffusionTagManager.ViewModels
                 try
                 {
                     await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
-                
+
                     var bytes = await utilities.GenerateYoloMask(selectedYoloModelPath, selectedImage.ImageSource.ToByteArray(), threshold, AddConsoleText);
 
                     if (bytes != null)
@@ -1800,7 +1807,7 @@ namespace StableDiffusionTagManager.ViewModels
                         {
                             SetImageBoxMask(SelectedImage.ImageSource, imageResult);
                         }
-                    }  
+                    }
                     else
                     {
                         var messageBoxStandardWindow = MessageBoxManager
@@ -1848,7 +1855,7 @@ namespace StableDiffusionTagManager.ViewModels
 
                 try
                 {
-                    foreach(var image in ImagesWithTags)
+                    foreach (var image in ImagesWithTags)
                     {
                         ProgressIndicatorProgress++;
                         AddConsoleText("Processing image " + image.Filename);

@@ -10,26 +10,14 @@ namespace StableDiffusionTagManager.ViewModels
 {
     public partial class InterrogationDialogViewModel : ViewModelBase
     {
-        public static Dictionary<InterrogatorDescription<ITagInterrogator>, Func<InterrogatorViewModel<List<string>>>> TaggerViewModelFactories;
-        public static Dictionary<InterrogatorDescription<INaturalLanguageInterrogator>, Func<InterrogatorViewModel<string>>> NaturalLanguageViewModelFactories;
+        //public static Dictionary<InterrogatorDescription<ITagInterrogator>, Func<InterrogatorViewModel<List<string>>>> TaggerViewModelFactories;
+        //public static Dictionary<InterrogatorDescription<INaturalLanguageInterrogator>, Func<InterrogatorViewModel<string>>> NaturalLanguageViewModelFactories;
         public event EventHandler? RequestClose;
 
-        public InterrogationDialogViewModel()
-        { }
-
-        static InterrogationDialogViewModel()
+        public InterrogationDialogViewModel(IEnumerable<ITaggerViewModelFactory> taggers, IEnumerable<INaturalLanguageInterrogatorViewModelFactory> naturalLanguageInterrogators)
         {
-            TaggerViewModelFactories = Interrogators.TagInterrogators.ToDictionary(i => i, i =>
-            {
-                var expr = () => (InterrogatorViewModel<List<string>>)new DefaultTagInterrogationViewModel(i.Factory);
-                return expr;
-            });
-
-            NaturalLanguageViewModelFactories = Interrogators.NaturalLanguageInterrogators.ToDictionary(i => i, i =>
-            {
-                var expr = () => (InterrogatorViewModel<string>)new DefaultNaturalLanguageInterrogationViewModel(i);
-                return expr;
-            });
+            Taggers = taggers;
+            NaturalLanguageInterrogators = naturalLanguageInterrogators;
         }
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs change)
@@ -40,7 +28,7 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 if (SelectedTagInterrogator != null)
                 {
-                    SelectedTagSettingsViewModel = TaggerViewModelFactories[SelectedTagInterrogator]();
+                    SelectedTagSettingsViewModel = SelectedTagInterrogator.CreateViewModel();
                 }
                 else
                 {
@@ -52,7 +40,7 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 if (SelectedNaturalLanguageInterrogator != null)
                 {
-                    SelectedNaturalLanguageSettingsViewModel = NaturalLanguageViewModelFactories[SelectedNaturalLanguageInterrogator]();
+                    SelectedNaturalLanguageSettingsViewModel = SelectedNaturalLanguageInterrogator.CreateViewModel();
                 }
                 else
                 {
@@ -61,24 +49,31 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
-        [ObservableProperty]
-        private InterrogatorDescription<INaturalLanguageInterrogator>? selectedNaturalLanguageInterrogator;
 
         [ObservableProperty]
-        private InterrogatorDescription<ITagInterrogator>? selectedTagInterrogator;
+        public IEnumerable<ITaggerViewModelFactory> taggers;
 
+        [ObservableProperty]
+        private ITaggerViewModelFactory? selectedTagInterrogator;
+        [ObservableProperty]
+        private InterrogatorViewModel<List<string>>? selectedTagSettingsViewModel;
+
+
+        [ObservableProperty]
+        public IEnumerable<INaturalLanguageInterrogatorViewModelFactory> naturalLanguageInterrogators;
+        [ObservableProperty]
+        private INaturalLanguageInterrogatorViewModelFactory? selectedNaturalLanguageInterrogator;
         [ObservableProperty]
         private InterrogatorViewModel<string>? selectedNaturalLanguageSettingsViewModel;
 
-        [ObservableProperty]
-        private InterrogatorViewModel<List<string>>? selectedTagSettingsViewModel;
 
         public bool Success { get; set; } = false;
 
         [RelayCommand]
         public void Interrogate()
         {
-            if (SelectedNaturalLanguageInterrogator != null || SelectedTagInterrogator != null)
+            //if (SelectedNaturalLanguageInterrogator != null || SelectedTagInterrogator != null)
+            if (SelectedTagInterrogator != null)
             {
                 Success = true;
                 RequestClose?.Invoke(this, EventArgs.Empty);

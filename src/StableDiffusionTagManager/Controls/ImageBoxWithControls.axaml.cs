@@ -50,7 +50,7 @@ namespace StableDiffusionTagManager.Controls
         public Func<Bitmap, Task>? RemoveBackgroundClicked;
         public Func<Bitmap, Task>? ConvertAlphaClicked;
         public Func<Bitmap, Task>? EditImageClicked;
-        public Func<List<Bitmap?>, Task>? ComicPanelsExtracted;
+        public Func<(Bitmap baseImage, RenderTargetBitmap? paint), Task>? ComicPanelsExtracted;
         public Func<Bitmap, Task>? ExpandClicked;
 
 
@@ -476,8 +476,7 @@ namespace StableDiffusionTagManager.Controls
             {
                 try
                 {
-                    var comicPanels = await Image.ExtractComicPanels("", ImageBox.GetImagePaint(Image));
-                    ComicPanelsExtracted?.Invoke(comicPanels);
+                    ComicPanelsExtracted?.Invoke((Image, ImageBox.GetImagePaint(Image)));
                 }
                 catch (Exception e)
                 {
