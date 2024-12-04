@@ -88,7 +88,7 @@ Comic panel extraction via kumiko can be done with the ![image](https://github.c
 ![image](https://github.com/PMahern/StableDiffusionTagManager/assets/18010074/db0aefb5-6d34-44c1-a456-4583202ef226)
 
 ## Image Interrogation
-![iImage Interrogation](docs/interrogation example.png)
+![iImage Interrogation](docs/interrogation%20example.png)
 Currently the application implements/uses the following image interrogators:
  -  [Fancy Feast's](https://huggingface.co/fancyfeast) Joy Caption (Pre-Alpha, Alpha One, and Alpha Two)
  -  [Smiling Wolf's](https://huggingface.co/SmilingWolf) booru tag generators
