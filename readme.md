@@ -53,16 +53,17 @@ Users can load a folder of images with corresponding tag files, when a folder is
 
 ## Application Settings
 ![The settings dialog](./docs/settings.png)
+
 In the file menu you can find a settings option that allows you to specify some global settings. The first is the web address of the stable diffusion webui/forge server you intend to use for inpainting (if you plan to use it), the second option is a fair bit more important, it's the executable for python 3.11 installed on your local system. Several features rely on the python path setting so make sure it's right!
 ## Projects
 
-![Project Settings](./docs/project settings.png)
+![Project Settings](./docs/project%20settings.png)
 
 Projects allow you to specify settings to help expedite certain tasks. The default prompt prefix will add the entered text as a prefix to the tags currently defined on an image when opening the image touch up window. The default negative prompt and denoise stregth will be automatically entered into their respective fields on the touch up screen. The image size setting specifies a size for images to crop to when using a special crop option, with the intent that eventually all images in the set will be resized to the same size since models tend to train better if the images are all the same size and match the size the original base model was trained on (such as 512x512 pixels for stable diffusion 1.5 or 1024x1024 on SDXL).
 
 After loading your image set you'll be presented with the following layout.
 
-![Main Window](./docs/main window.png)
+![Main Window](./docs/main%20window.png)
 
 Across the top are the images in the set and on the right are the natural language description and tags for the currently selected image. On the left is an image viewer with the currently selected image and some simple controls for manipulating the image.
 
@@ -96,7 +97,8 @@ Currently the application implements/uses the following image interrogators:
 You can specify both a Natural Language and Tag interrogator to populate both fields for an image, there's also an option under the Automation menu to do all the images in the entire set.
 
 ## Mask Generation
-![yolo mask generation.png](docs/yolo mask generation.png)
+![yolo mask generation.png](docs/yolo%20mask%20generation.png)
+
 While in mask mode you can use YOLO to generate a mask for the image. The application will look for a "yolomodels" folder in the root directory for models.  Currently masking is only used for passing a mask to LaMa for removing things from the current image. There is a batch process under the Automation menu that will run YOLO mask generation for every image then pass the mask with the image to LaMa to remove the masked areas. 
 
 ### Image "Touch up"
