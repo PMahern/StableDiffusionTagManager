@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using TagUtil;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -33,18 +34,19 @@ namespace StableDiffusionTagManager.ViewModels
 
         public override bool IsValid => true;
 
-        public async override Task<List<string>> Interrogate(byte[] imageData, Action<string> updateCallBack, Action<string> consoleCallBack)
+        public override ConfiguredInterrogationContext<List<string>> CreateInterrogationContext()
         {
             var interrogator = new JoyCaptionAlphaTwo();
-            await interrogator.Initialize(updateCallBack, consoleCallBack);
+
             var args = new JoyCaptionAlphaTwoArgs
             {
                 CaptionType = SelectedPrompt,
                 Length = SelectedLength,
-                ExtraOptions = ExtraOptions.Where(x => x.IsChecked).Select(x => x.Text).Aggregate((l, r) => $"{l},{r}"),
+                ExtraOptions = ExtraOptions.Where(x => x.IsChecked).Any() ? ExtraOptions.Where(x => x.IsChecked).Select(x => x.Text).Aggregate((l, r) => $"{l},{r}") : "",
                 NameInput = CharacterName
             };
-            return await interrogator.TagImage(args, imageData, consoleCallBack);
+
+            return new ConfiguredInterrogationContext<List<string>>(interrogator, interrogator.Initialize, (imageData, updateCallback, consoleCallback) => interrogator.TagImage(args, imageData, consoleCallback));
         }
     }
 }

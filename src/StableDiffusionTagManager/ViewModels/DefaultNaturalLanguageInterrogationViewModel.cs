@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using ImageUtil;
+using ImageUtil.Interrogation;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace StableDiffusionTagManager.ViewModels
@@ -19,11 +21,11 @@ namespace StableDiffusionTagManager.ViewModels
             this.prompt = defaultPrompt ?? "Describe the image.";
         }
 
-        public override async Task<string> Interrogate(byte[] imageData, Action<string> updateCallBack, Action<string> consoleCallBack)
+        public override ConfiguredInterrogationContext<string> CreateInterrogationContext()
         {
-            using var interrogator = factory.Invoke();
-            await interrogator.Initialize(updateCallBack, consoleCallBack);
-            return await interrogator.CaptionImage(Prompt, imageData, consoleCallBack);
+            var interrogator = factory.Invoke();
+
+            return new ConfiguredInterrogationContext<string>(interrogator, interrogator.Initialize, (imageData, updateCallback, consoleCallback) => interrogator.CaptionImage(Prompt, imageData, consoleCallback));
         }
     }
 }

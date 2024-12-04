@@ -27,6 +27,7 @@ using SdWebUiApi;
 using StableDiffusionTagManager.Collections;
 using Avalonia.Threading;
 using StableDiffusionTagManager.Services;
+using ImageUtil.Interrogation;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -1171,9 +1172,9 @@ namespace StableDiffusionTagManager.ViewModels
 
             return true;
         }
+
         public async Task InterrogateAndApplyToSelectedImage(Bitmap bitmap)
         {
-
             try
             {
                 var dialog = new InterrogationDialog();
@@ -1185,21 +1186,35 @@ namespace StableDiffusionTagManager.ViewModels
                 {
                     //Cache the selected image in case it's changed during async operation
                     var selectedImage = SelectedImage;
-                    ShowProgressIndicator = true;
-                    ProgressIndicatorMessage = "Interrogating image...";
-
-
-                    var result = await Interrogate(vm.SelectedNaturalLanguageSettingsViewModel, vm.SelectedTagSettingsViewModel, bitmap);
-
-                    if (result.description != null)
+                    if (selectedImage != null)
                     {
-                        selectedImage.Description = result.description;
-                    }
-                    if (result.tags != null)
-                    {
-                        foreach (var tag in result.tags)
+                        ShowProgressIndicator = true;
+                        ProgressIndicatorMessage = "Interrogating image...";
+
+                        var imageData = bitmap.ToByteArray();
+
+                        if (vm.SelectedNaturalLanguageSettingsViewModel != null)
                         {
-                            selectedImage.AddTagIfNotExists(new TagViewModel(tag));
+                            using var NLinterrogator = vm.SelectedNaturalLanguageSettingsViewModel.CreateInterrogationContext();
+                            ProgressIndicatorMax = 0;
+                            ProgressIndicatorMessage = "Executing natural language interrogation...";
+                            ConsoleText = $"Initializing...{Environment.NewLine}";
+                            await NLinterrogator.InitializeOperation(message => ProgressIndicatorMessage = message, AddConsoleText);
+                            selectedImage.Description = await NLinterrogator.InterrogateOperation(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
+                        }
+
+                        if (vm.SelectedTagSettingsViewModel != null)
+                        {
+                            using var taginterrogator = vm.SelectedTagSettingsViewModel.CreateInterrogationContext();
+                            ProgressIndicatorMax = 0;
+                            ProgressIndicatorMessage = "Executing tag interrogation...";
+                            ConsoleText = $"Initializing...{Environment.NewLine}";
+                            await taginterrogator.InitializeOperation(message => ProgressIndicatorMessage = message, AddConsoleText);
+                            var tags = await taginterrogator.InterrogateOperation(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
+                            foreach (var tag in tags)
+                            {
+                                selectedImage.AddTagIfNotExists(new TagViewModel(tag));
+                            }
                         }
                     }
                 }
@@ -1260,9 +1275,16 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
-        public async Task<(string? description, IEnumerable<string>? tags)> Interrogate(InterrogatorViewModel<string>? naturalLanguageInterrogator, InterrogatorViewModel<List<string>>? tagInterrrogator, Bitmap image)
+        public Task<TResult> Interrogate<TResult>(ConfiguredInterrogationContext<TResult> interrogator, byte[] imageData)
         {
-            var api = new DefaultApi(settings.WebUiAddress);
+            ProgressIndicatorMax = 0;
+            ProgressIndicatorMessage = "Executing image interrogation..";
+            ConsoleText = $"Initializing...{Environment.NewLine}";
+            return interrogator.InterrogateOperation(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
+        }
+
+        public async Task<(string? description, IEnumerable<string>? tags)> Interrogate(ConfiguredInterrogationContext<string>? naturalLanguageInterrogator, ConfiguredInterrogationContext<List<string>>? tagInterrrogator, Bitmap image)
+        {
             ProgressIndicatorMax = 0;
 
             string? description = null;
@@ -1270,7 +1292,7 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 ProgressIndicatorMessage = "Executing image interrogation..";
                 ConsoleText = $"Initializing...{Environment.NewLine}";
-                description = await naturalLanguageInterrogator.Interrogate(image.ToByteArray(), message => ProgressIndicatorMessage = message, AddConsoleText);
+                description = await naturalLanguageInterrogator.InterrogateOperation(image.ToByteArray(), message => ProgressIndicatorMessage = message, AddConsoleText);
             }
             List<string> tags = null;
             if (tagInterrrogator != null)
@@ -1278,7 +1300,7 @@ namespace StableDiffusionTagManager.ViewModels
                 ProgressIndicatorMessage = "Executing image interrogation...";
                 ProgressIndicatorMax = 0;
                 ConsoleText = $"Initializing...{Environment.NewLine}";
-                tags = await tagInterrrogator.Interrogate(image.ToByteArray(), message => ProgressIndicatorMessage = message, AddConsoleText);
+                tags = await tagInterrrogator.InterrogateOperation  (image.ToByteArray(), message => ProgressIndicatorMessage = message, AddConsoleText);
             }
             return (description: description, tags: tags);
         }
@@ -1298,29 +1320,51 @@ namespace StableDiffusionTagManager.ViewModels
                     _updateTagCounts = false;
 
                     ShowProgressIndicator = true;
-                    ProgressIndicatorMax = ImagesWithTags.Count();
+                    ProgressIndicatorMax = 0;
+                    if(vm.SelectedNaturalLanguageSettingsViewModel != null)
+                        ProgressIndicatorMax += ImagesWithTags.Count();
+                    if (vm.SelectedTagSettingsViewModel != null)
+                        ProgressIndicatorMax += ImagesWithTags.Count();
+                    ImagesWithTags.Count();
                     ProgressIndicatorProgress = 0;
                     ProgressIndicatorMessage = "Interrogating all images...";
 
                     try
                     {
-                        foreach (var image in ImagesWithTags)
+                        if (vm.SelectedNaturalLanguageSettingsViewModel != null)
                         {
-                            var result = await Interrogate(vm.SelectedNaturalLanguageSettingsViewModel, vm.SelectedTagSettingsViewModel, image.ImageSource);
+                            using var NLinterrogator = vm.SelectedNaturalLanguageSettingsViewModel.CreateInterrogationContext();
+                            ProgressIndicatorMessage = "Executing natural language interrogation...";
+                            ConsoleText = $"Initializing...{Environment.NewLine}";
+                            await NLinterrogator.InitializeOperation(message => ProgressIndicatorMessage = message, AddConsoleText);
 
-                            if (result.description != null)
+                            foreach (var image in ImagesWithTags)
                             {
-                                image.Description = result.description;
-                            }
-                            if (result.tags != null)
+                                var imageData = image.ImageSource.ToByteArray();
+                                image.Description = await NLinterrogator.InterrogateOperation(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
+
+                                ++ProgressIndicatorProgress;
+                            }                            
+                        }
+
+                        if (vm.SelectedTagSettingsViewModel != null)
+                        {
+                            using var taginterrogator = vm.SelectedTagSettingsViewModel.CreateInterrogationContext();
+                            ProgressIndicatorMax = 0;
+                            ProgressIndicatorMessage = "Executing tag interrogation...";
+                            ConsoleText = $"Initializing...{Environment.NewLine}";
+                            await taginterrogator.InitializeOperation(message => ProgressIndicatorMessage = message, AddConsoleText);
+                            
+                            foreach (var image in ImagesWithTags)
                             {
-                                foreach (var tag in result.tags)
+                                var imageData = image.ImageSource.ToByteArray();
+                                var tags = await taginterrogator.InterrogateOperation(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
+                                foreach (var tag in tags)
                                 {
                                     image.AddTagIfNotExists(new TagViewModel(tag));
                                 }
+                                ++ProgressIndicatorProgress;
                             }
-
-                            ++ProgressIndicatorProgress;
                         }
 
                         _updateTagCounts = true;
