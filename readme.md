@@ -4,11 +4,19 @@ Stable Diffusion Tag Manager is a simple desktop GUI application for managing an
 
 ## Prequisites
 
-Stable Diffusion Tag Manager is a stand alone application with no prequisites to launch the application on linux, osx, and windows. However, some of it's functionality relies on other projects which have prerequisites.
+Stable Diffusion Tag Manager is a stand alone application with no prequisites to launch the application on linux, osx, and windows. However, much of it's functionality relies on other projects that utiliize python. Currently in order to use these features you must have python 3.11 installed. 
+The following features require python 3.11:
 
-- Comic book panel extraction uses the [kumiko](https://github.com/njean42/kumiko) library by [njean42](https://github.com/njean42), which requires python.
-- Image interrogation requires python.
+- Mask generation with YOLO models.
+- Masked area removal with LaMa.
+- Image interrogation.
+- Comic book panel extraction with the [kumiko](https://github.com/njean42/kumiko) library by [njean42](https://github.com/njean42).
+
+Keep in mind that for many of these features the application will need to create a python venv, install libraries, and download models so the first time they're used it can take a while to initialize everything.
+
+Additionally the following features also have external dependencies:
 - Touchup via stable diffusion rely on a running instance of [Automatic1111's](https://github.com/AUTOMATIC1111) [stable diffusion webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) or [lllyasviel's](https://github.com/lllyasviel) [Forge](https://github.com/lllyasviel/stable-diffusion-webui-forge) that can be reached from the local system.
+- RemBG requires having the rembg extension inside of the stable diffusion webui instance you're pointing to. I intend to remove this dependency eventually and just run it locally through python.
 
 ## Building the project
 
@@ -30,7 +38,7 @@ You'll need to add the execute permission to the StableDiffusionTagManager file 
 
 ### Mac
 On Mac it's a bit more tedious of a process, you need to remove the com.apple.quarantine attribute from several files in the archive's publish folder and then you can run StableDiffusionTabManager file either via a shortcut or running _./StableDiffusionTagManager_. The files you need to remove this attribute from are the following: StableDiffusionTagManager, libSkiaSharp.dylib, libHarfBuzzSharp.dylib, and libAvaloniaNative.dylib. The commands would look like the following:
-
+<!--  -->
 _xattr -d com.apple.quarantine StableDiffusionTagManager_
 
 _xattr -d com.apple.quarantine libSkiaSharp.dylib_
@@ -43,17 +51,20 @@ _xattr -d com.apple.quarantine libAvaloniaNative.dylib_
 
 Users can load a folder of images with corresponding tag files, when a folder is opened for the first time they will be prompted to create a project. Projects are not a requirement but allow some settings that are global to the image set.
 
+## Application Settings
+![The settings dialog](./docs/settings.png)
+In the file menu you can find a settings option that allows you to specify some global settings. The first is the web address of the stable diffusion webui/forge server you intend to use for inpainting (if you plan to use it), the second option is a fair bit more important, it's the executable for python 3.11 installed on your local system. Several features rely on the python path setting so make sure it's right!
 ## Projects
 
-![image](https://github.com/PMahern/StableDiffusionTagManager/assets/18010074/e027c627-0f78-4dca-893a-8fbbbd367e48)
+![Project Settings](./docs/project settings.png)
 
 Projects allow you to specify settings to help expedite certain tasks. The default prompt prefix will add the entered text as a prefix to the tags currently defined on an image when opening the image touch up window. The default negative prompt and denoise stregth will be automatically entered into their respective fields on the touch up screen. The image size setting specifies a size for images to crop to when using a special crop option, with the intent that eventually all images in the set will be resized to the same size since models tend to train better if the images are all the same size and match the size the original base model was trained on (such as 512x512 pixels for stable diffusion 1.5 or 1024x1024 on SDXL).
 
 After loading your image set you'll be presented with the following layout.
 
-![image](https://github.com/PMahern/StableDiffusionTagManager/assets/18010074/bce2102e-5d41-474b-9c2c-78a4511b4bc3)
+![Main Window](./docs/main window.png)
 
-Across the top are the images in the set and on the right are the tags for the currently selected image. On the left is an image viewer with the currently selected image and some simple controls for manipulating the image.
+Across the top are the images in the set and on the right are the natural language description and tags for the currently selected image. On the left is an image viewer with the currently selected image and some simple controls for manipulating the image.
 
 ## The Image Viewer 
 
@@ -61,7 +72,7 @@ Across the top are the images in the set and on the right are the tags for the c
 
 ## Image editing/cropping
 
-The image viewer itself has some tools for simple editing of the image. It's not meant to replace photoshp or paint.net but it gives you a place to quickly tweak images in your dataset without having to go to another application.
+The image viewer itself has some tools for simple editing of the image. It's not meant to replace photoshop or paint.net but it gives you a place to quickly tweak images in your dataset without having to go to another application.
 
 ![image](https://github.com/PMahern/StableDiffusionTagManager/assets/18010074/24d93cea-dce4-4e57-aa94-65356484956b)
 
@@ -75,6 +86,19 @@ Comic panel extraction via kumiko can be done with the ![image](https://github.c
 
 ![image](https://github.com/PMahern/StableDiffusionTagManager/assets/18010074/db0aefb5-6d34-44c1-a456-4583202ef226)
 
+## Image Interrogation
+![iImage Interrogation](docs/interrogation example.png)
+Currently the application implements/uses the following image interrogators:
+ -  [Fancy Feast's](https://huggingface.co/fancyfeast) Joy Caption (Pre-Alpha, Alpha One, and Alpha Two)
+ -  [Smiling Wolf's](https://huggingface.co/SmilingWolf) booru tag generators
+ -  [CogVLM2](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B) (Linux only unfortunately due to Triton not being available elsewhere)
+
+You can specify both a Natural Language and Tag interrogator to populate both fields for an image, there's also an option under the Automation menu to do all the images in the entire set.
+
+## Mask Generation
+![yolo mask generation.png](docs/yolo mask generation.png)
+While in mask mode you can use YOLO to generate a mask for the image. The application will look for a "yolomodels" folder in the root directory for models.  Currently masking is only used for passing a mask to LaMa for removing things from the current image. There is a batch process under the Automation menu that will run YOLO mask generation for every image then pass the mask with the image to LaMa to remove the masked areas. 
+
 ### Image "Touch up"
 
 After clicking the ![image](https://github.com/PMahern/StableDiffusionTagManager/assets/18010074/247dbac7-fc33-4834-a839-1c48240238be) button a new window will popup which will allow you to feed the image into AUTOMATIC1111's stable diffusion webui and pick a new version. It has a limited set of inputs you can feed into the inpaint function, it's not meant to replace the full set of functions currently already available in stable diffusion webui's interface. If there's any missing inputs that seem like they should be added feel free to suggest!
@@ -85,7 +109,7 @@ After clicking the ![image](https://github.com/PMahern/StableDiffusionTagManager
 
 Probably not the best example, but the intent is that you can fix up images before using them to train, removing elements like speech bubbles or other characters from the scene.
 
-## Tagging
+## Manual Tagging
 
 Upon startup, the application will look for a tags.csv in the folder where the exe lies. It expects a csv with two columns, the first being a tag name and the second being a number. It will order the tags in descending order and use these 
 as autocomplete suggestions anywhere you might type a tag. One such example file can be found [here](https://github.com/stmobo/Machine-Learning/blob/master/danbooru-chars.csv).
