@@ -62,21 +62,21 @@ namespace TagUtil
         public void WriteFile()
         {
             var output = new StringBuilder();
-            if (Description != null && (Tags?.Any() ?? false))
+            if (!string.IsNullOrWhiteSpace(Description) && (Tags?.Any() ?? false))
             {
                 output.AppendLine(Description);
                 output.AppendLine();
                 output.AppendLine(Tags.Aggregate((l, r) => $"{l}, {r}"));
             }
-            else if(Description != null)
+            else if (!string.IsNullOrWhiteSpace(Description))
             {
                 output.AppendLine(Description);
             }
-            else if(Tags?.Any() ?? false)
+            else if (Tags?.Any() ?? false)
             {
                 output.AppendLine(Tags.Aggregate((l, r) => $"{l}, {r}"));
             }
-            if(output.Length > 0)
+            if (output.Length > 0)
                 System.IO.File.WriteAllText(File, output.ToString());
         }
     }

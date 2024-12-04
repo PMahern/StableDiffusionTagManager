@@ -522,7 +522,7 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public void SaveChanges()
         {
-            if (ImagesWithTags != null)
+            if (ImagesWithTags != null && openFolder != null)
             {
                 foreach (var image in ImagesWithTags)
                 {
