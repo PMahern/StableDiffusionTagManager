@@ -46,42 +46,42 @@ namespace StableDiffusionTagManager.Views
 
         private async Task InitiateDrag(object sender, PointerPressedEventArgs args)
         {
-            var element = args.Source as Visual;
-            if (element != null && (element.FindAncestorOfType<Button>()  == null) && (element.FindAncestorOfType<TagAutoCompleteBox>() == null))
-            {
-                var prioritySetViewModel = element.DataContext as TagPrioritySetViewModel;
+            //var element = args.Source as Visual;
+            //if (element != null && (element.FindAncestorOfType<Button>()  == null) && (element.FindAncestorOfType<TagAutoCompleteBox>() == null))
+            //{
+            //    var prioritySetViewModel = element.DataContext as TagPrioritySetViewModel;
 
-                if (prioritySetViewModel != null && !TagPrioritySets.Contains(prioritySetViewModel) && SelectedPrioritySet != null)
-                {
-                    IsDraggingParent = SelectedPrioritySet.Entries.Contains(prioritySetViewModel);
-                    IsDraggingChild = !IsDraggingParent;
+            //    if (prioritySetViewModel != null && !TagPrioritySets.Contains(prioritySetViewModel) && SelectedPrioritySet != null)
+            //    {
+            //        IsDraggingParent = SelectedPrioritySet.Entries.Contains(prioritySetViewModel);
+            //        IsDraggingChild = !IsDraggingParent;
 
-                    var dataObject = new DataObject();
-                    dataObject.Set(CUSTOM_DRAG_FORMAT, prioritySetViewModel);
-                    await DragDrop.DoDragDrop(args, dataObject, DragDropEffects.Move);
-                }
-            }
+            //        var dataObject = new DataObject();
+            //        dataObject.Set(CUSTOM_DRAG_FORMAT, prioritySetViewModel);
+            //        await DragDrop.DoDragDrop(args, dataObject, DragDropEffects.Move);
+            //    }
+            //}
         }
 
         public void PrioritySetDropped(object? sender, DragEventArgs args)
         {
             var targetDataSet = IsDraggingParent ? SelectedPrioritySet : SelectedChildSet;
-            if (targetDataSet != null)
-            {
-                var vm = args.Data.Get(CUSTOM_DRAG_FORMAT) as TagPrioritySetViewModel;
-                var sourceVisual = (args.Source as Visual);
-                if (vm != null && sourceVisual != null)
-                {
-                    var destVm = sourceVisual
-                                                .GetSelfAndVisualAncestors()
-                                                .FirstOrDefault(anc => anc.DataContext is TagPrioritySetViewModel)
-                                                ?.DataContext as TagPrioritySetViewModel;
-                    if (destVm != null)
-                    {
-                        targetDataSet.MovePrioritySet(vm, destVm);
-                    }
-                }
-            }
+            //if (targetDataSet != null)
+            //{
+            //    var vm = args.Data.Get(CUSTOM_DRAG_FORMAT) as TagPrioritySetViewModel;
+            //    var sourceVisual = (args.Source as Visual);
+            //    if (vm != null && sourceVisual != null)
+            //    {
+            //        var destVm = sourceVisual
+            //                                    .GetSelfAndVisualAncestors()
+            //                                    .FirstOrDefault(anc => anc.DataContext is TagPrioritySetViewModel)
+            //                                    ?.DataContext as TagPrioritySetViewModel;
+            //        if (destVm != null)
+            //        {
+            //            targetDataSet.MovePrioritySet(vm, destVm);
+            //        }
+            //    }
+            //}
         }
 
         public async void LoadTagPrioritySets()
@@ -90,7 +90,7 @@ namespace StableDiffusionTagManager.Views
             {
                 Directory.CreateDirectory(PRIORITY_SETS_FOLDER);
             }
-            var txts = Directory.EnumerateFiles(PRIORITY_SETS_FOLDER, "*.txt").ToList();
+            var txts = Directory.EnumerateFiles(PRIORITY_SETS_FOLDER, "*.xml").ToList();
             var tagPrioritySets = new ObservableCollection<TagPrioritySetViewModel>(txts.Select(filename => TagPrioritySetViewModel.CreateFromFile(filename)));
             Dispatcher.UIThread.Post(() =>
             {
@@ -218,11 +218,11 @@ namespace StableDiffusionTagManager.Views
         }
 
         [RelayCommand]
-        public void DeletePrioritySetEntry(TagPrioritySetViewModel toDelete)
+        public void DeletePrioritySetEntry(string toDelete)
         {
             if (SelectedPrioritySet != null)
             {
-                SelectedPrioritySet.RemoveEntry(toDelete);
+               // SelectedPrioritySet.RemoveEntry(toDelete);
             }
         }
 
@@ -231,7 +231,7 @@ namespace StableDiffusionTagManager.Views
         {
             if (SelectedPrioritySet != null)
             {
-                SelectedPrioritySet.AddEntry();
+                SelectedPrioritySet.AddCategory();
             }
         }
 
@@ -240,7 +240,7 @@ namespace StableDiffusionTagManager.Views
         {
             if (SelectedChildSet != null)
             {
-                SelectedChildSet.RemoveEntry(toDelete);
+                //SelectedChildSet.RemoveEntry(toDelete);
             }
         }
 
@@ -249,7 +249,7 @@ namespace StableDiffusionTagManager.Views
         {
             if (SelectedChildSet != null)
             {
-                SelectedChildSet.AddEntry();
+                SelectedChildSet.AddCategory();
             }
         }
         #endregion

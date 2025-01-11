@@ -1,48 +1,44 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using Avalonia.Metadata;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using StableDiffusionTagManager.Extensions;
+using StableDiffusionTagManager.Models;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace StableDiffusionTagManager.ViewModels
 {
+    public partial class TagCategoryViewModel : ViewModelBase
+    {
+        [ObservableProperty]
+        private string name;
+
+        [ObservableProperty]
+        private bool isSelected;
+
+        [ObservableProperty]
+        private ObservableCollection<string> tags = new ObservableCollection<string>();
+    }
+
     public partial class TagPrioritySetViewModel : ViewModelBase
     {
-        public string? Name
-        {
-            get => name;
-            set
-            {
-                name = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsSubset { get => entries.Count > 0; }
-
-        private ObservableCollection<TagPrioritySetViewModel> entries = new ObservableCollection<TagPrioritySetViewModel>();
-        private string? name;
-
         public static TagPrioritySetViewModel CreateFromFile(string filename)
         {
-            var lines = File.ReadLines(filename);
+            var doc = XDocument.Load(filename);
             var i = 0;
-            var name = Path.GetFileNameWithoutExtension(filename);
-            var viewModels = lines.Select(line =>
-            {
-                if (line.StartsWith("###"))
-                {
-                    var directory = Path.GetDirectoryName(filename);
-                    var subsetname = Path.Combine(new string[] { directory, name, line.Substring(3).Trim() });
-                    return CreateFromFile(subsetname);
-                }
-                else
-                {
-                    return new TagPrioritySetViewModel(line);
-                }
-            }).ToObservableCollection();
+            
+            var categories = TagPrioritySet.ReadCategories(doc);
 
-            return new TagPrioritySetViewModel(name)
+            var viewModels = categories.Select(category =>
+                new TagCategoryViewModel
+                {
+                    Name = category.CategoryName,
+                    Tags = category.Tags.ToObservableCollection()
+                }).ToObservableCollection();
+
+            return new TagPrioritySetViewModel(filename)
             {
                 entries = viewModels
             };
@@ -53,45 +49,42 @@ namespace StableDiffusionTagManager.ViewModels
             this.name = name;
         }
 
-        public ReadOnlyObservableCollection<TagPrioritySetViewModel> Entries { get => new ReadOnlyObservableCollection<TagPrioritySetViewModel>(entries); }
+        [ObservableProperty]
+        private string name;
+
+
+        private ObservableCollection<TagCategoryViewModel> entries = new ObservableCollection<TagCategoryViewModel>();
+        public ReadOnlyObservableCollection<TagCategoryViewModel> Entries { get => new ReadOnlyObservableCollection<TagCategoryViewModel>(entries); }
 
         [RelayCommand]
-        public void AddEntry()
+        public void AddCategory()
         {
-            entries.Add(new TagPrioritySetViewModel(""));
-            OnPropertyChanged(nameof(IsSubset));
+            entries.Add(new TagCategoryViewModel());
         }
 
         [RelayCommand]
-        public void RemoveEntry(TagPrioritySetViewModel target)
+        public void RemoveCategory(TagCategoryViewModel target)
         {
             entries.Remove(target);
-            OnPropertyChanged(nameof(IsSubset));
         }
 
         public void Save(string directory)
         {
-            var filename = Path.Combine(directory, $"{name}.txt");
-            using var destFile = File.Create(filename);
-            using var fw = new StreamWriter(destFile);
-            foreach (var entry in entries)
-            {
-
-                if (entry.entries.Count > 0)
-                {
-                    fw.WriteLine($"### {entry.Name}.txt");
-                    entry.Save(Path.Combine(directory, name));
-                }
-                else
-                {
-                    fw.WriteLine(entry.name);
-                }
-            }
+            var filename = Path.Combine(directory, $"{name}.xml");
+            var doc = new XDocument(
+                entries.Select(entry =>
+                    new XElement("TagCategory",
+                        new XAttribute("Name", entry.Name),
+                        entry.Tags.Select(tag => new XElement("Tag", tag))
+                    )
+                )
+            );
+            doc.Save(filename);
         }
 
-        internal void MovePrioritySet(TagPrioritySetViewModel vm, TagPrioritySetViewModel destvm)
+        internal void MovePrioritySet(TagCategoryViewModel vm, TagCategoryViewModel destvm)
         {
-            if(vm == destvm) return;
+            if (vm == destvm) return;
 
             var index = entries.IndexOf(destvm);
             entries.Remove(vm);

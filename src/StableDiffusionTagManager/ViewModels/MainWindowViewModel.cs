@@ -1625,15 +1625,31 @@ namespace StableDiffusionTagManager.ViewModels
 
         public void UpdateTagPrioritySets()
         {
-            if (Directory.Exists(TAG_PRIORITY_SETS_FOLDER))
+            try
             {
-                var txts = Directory.EnumerateFiles(TAG_PRIORITY_SETS_FOLDER, "*.txt").ToList();
-                TagPrioritySets = txts.Select(filename =>
-                                                new TagPrioritySetButtonViewModel(
-                                                        Path.GetFileNameWithoutExtension(filename),
-                                                        new TagPrioritySet(filename)))
-                                  .ToObservableCollection();
+                if (Directory.Exists(TAG_PRIORITY_SETS_FOLDER))
+                {
+                    if (Directory.Exists(TAG_PRIORITY_SETS_FOLDER))
+                    {
+                        var txts = Directory.EnumerateFiles(TAG_PRIORITY_SETS_FOLDER, "*.xml").ToList();
+                        TagPrioritySets = txts.Select(filename =>
+                                                        new TagPrioritySetButtonViewModel(
+                                                                Path.GetFileNameWithoutExtension(filename),
+                                                                new TagPrioritySet(filename)))
+                                          .ToObservableCollection();
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                var messageBoxStandardWindow = MessageBoxManager
+                            .GetMessageBoxStandard("Error",
+                                                         $"Failed to load tag priority sets. Error message: {ex.Message}",
+                                                         ButtonEnum.Ok,
+                                                         Icon.Warning);
+                ShowDialog(messageBoxStandardWindow);
+            }
+            
         }
 
         public Bitmap ConvertImageAlphaToColor(Bitmap sourceImage, Color color)
