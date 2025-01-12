@@ -104,10 +104,11 @@ namespace StableDiffusionTagManager
 
                 MainWindow window = new();
                 desktop.MainWindow = window;
-
+                
                 // Register all the services needed for the application to run
                 var collection = new ServiceCollection();
                 collection.AddCommonServices();
+                collection.AddSingleton(new DialogHandler(window));
                 collection.AddSingleton(new Settings(SETTINGS_FILE));
                 // Creates a ServiceProvider containing services from the provided IServiceCollection
                 var services = collection.BuildServiceProvider();

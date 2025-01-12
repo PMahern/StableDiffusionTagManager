@@ -29,7 +29,7 @@ namespace StableDiffusionTagManager.ViewModels
             var doc = XDocument.Load(filename);
             var i = 0;
             
-            var categories = TagPrioritySet.ReadCategories(doc);
+            var categories = TagCategorySet.ReadCategories(doc);
 
             var viewModels = categories.Select(category =>
                 new TagCategoryViewModel

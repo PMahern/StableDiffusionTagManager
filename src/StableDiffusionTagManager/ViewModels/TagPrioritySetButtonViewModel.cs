@@ -4,7 +4,7 @@ namespace StableDiffusionTagManager.ViewModels
 {
     public class TagPrioritySetButtonViewModel : ViewModelBase
     {
-        public TagPrioritySetButtonViewModel(string name, TagPrioritySet prioritySet)
+        public TagPrioritySetButtonViewModel(string name, TagCategorySet prioritySet)
         {
             this.name = name;
             PrioritySet = prioritySet;
@@ -22,6 +22,6 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
-        public TagPrioritySet PrioritySet { get; }
+        public TagCategorySet PrioritySet { get; }
     }
 }

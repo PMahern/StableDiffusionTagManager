@@ -15,8 +15,9 @@ namespace StableDiffusionTagManager.Models
         private const string BACKED_UP_IMAGE_ELEMENT = "BackedUpImage";
         private const string BACKED_UP_IMAGE_OLD_ATTRIBUTE = "OldImage";
         private const string BACKED_UP_IMAGE_NEW_ATTRIBUTE = "NewImage";
-        private const string TAG_COLLECTIONS_ELEMENTS = "TagCollections";
+        private const string TAG_COLLECTIONS_ELEMENT = "TagCollections";
         private const string TAG_COLLECTION_ELEMENT = "TagCollection";
+        private const string TAG_CATEGORIES_ELEMENT = "TagCategories";
         private const string TAG_COLLECTION_NAME_ATTRIBUTE = "Name";
         private const string TAG_ELEMENT = "Tag";
         private const string TARGET_IMAGE_WIDTH_ATTRIBUTE = "TargetImageWidth";
@@ -135,7 +136,6 @@ namespace StableDiffusionTagManager.Models
             }
         }
 
-
         public void LoadDefaultPromptSettings(XDocument doc)
         {
             DefaultPromptPrefix = LoadSetting(doc, DEFAULT_PROMPT_PREFIX_ATTRIBUTE);
@@ -216,7 +216,7 @@ namespace StableDiffusionTagManager.Models
             var root = doc.Root;
             if (root != null)
             {
-                var tagCollections = root.Element(TAG_COLLECTIONS_ELEMENTS);
+                var tagCollections = root.Element(TAG_COLLECTIONS_ELEMENT);
                 if (tagCollections != null)
                 {
                     var collections = tagCollections.Elements(TAG_COLLECTION_ELEMENT).ToList();
@@ -232,7 +232,7 @@ namespace StableDiffusionTagManager.Models
 
         public void SaveTagCollections(XDocument doc)
         {
-            var collectionsElement = new XElement(TAG_COLLECTIONS_ELEMENTS);
+            var collectionsElement = new XElement(TAG_COLLECTIONS_ELEMENT);
             foreach (var collection in TagCollections)
             {
                 var collectionElement = new XElement(TAG_COLLECTION_ELEMENT);

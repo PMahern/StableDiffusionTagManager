@@ -10,15 +10,11 @@ using System.IO;
 using StableDiffusionTagManager.Models;
 using System.Collections.Generic;
 using StableDiffusionTagManager.Views;
-using Avalonia.Controls;
-using SdWebUiApi.Api;
 using Newtonsoft.Json.Linq;
 using StableDiffusionTagManager.Extensions;
 using Avalonia.Media;
-using StableDiffusionTagManager.Controls;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
-using MsBox.Avalonia.Base;
 using System.Collections.Specialized;
 using ImageUtil;
 using Avalonia.Platform.Storage;
@@ -40,11 +36,19 @@ namespace StableDiffusionTagManager.ViewModels
         private readonly ViewModelFactory viewModelFactory;
         private readonly ComicPanelExtractor comicPanelExtractorService;
         private readonly Settings settings;
+        private readonly DialogHandler dialogHandler;
+        private readonly WebApiFactory webApiFactory;
 
-        public MainWindowViewModel(ViewModelFactory viewModelFactory, ComicPanelExtractor comicPanelExtractorService, Settings settings)
+        public MainWindowViewModel(ViewModelFactory viewModelFactory, 
+            ComicPanelExtractor comicPanelExtractorService, 
+            Settings settings,
+            DialogHandler dialogHandler,
+            WebApiFactory webApiFactory)
         {
             UpdateTagPrioritySets();
             this.settings = settings;
+            this.dialogHandler = dialogHandler;
+            this.webApiFactory = webApiFactory;
             this.viewModelFactory = viewModelFactory;
             this.comicPanelExtractorService = comicPanelExtractorService;
         }
@@ -230,7 +234,6 @@ namespace StableDiffusionTagManager.ViewModels
         private string? openFolder = null;
 
         #region Callbacks and Events
-        public DialogHandler? ShowDialogHandler { get; set; }
 
         public Func<Task<IReadOnlyList<IStorageFolder>>> ShowFolderDialogCallback { get; set; }
 
@@ -240,45 +243,6 @@ namespace StableDiffusionTagManager.ViewModels
 
         public Func<Bitmap, bool>? ImageDirtyCallback { get; set; }
         public Func<Bitmap, bool, Bitmap>? GetModifiedImageDataCallback { get; set; }
-        #endregion
-
-        #region Dialog Handling
-        private Task<TResult> ShowDialog<TResult>(IMsBox<TResult> mbox) where TResult : struct
-        {
-            if (ShowDialogHandler != null)
-            {
-                return ShowDialogHandler.ShowDialog(mbox);
-            }
-            return Task.FromResult(default(TResult));
-        }
-
-        private async Task<TResult?> ShowDialog<TResult>(IDialogWithResultAsync<TResult> dialog)
-        {
-            if (ShowDialogHandler != null)
-            {
-                return await ShowDialogHandler.ShowDialog(dialog);
-            }
-            return default;
-        }
-
-        private Task<TResult> ShowDialog<TResult>(Window dialog) where TResult : struct
-        {
-            if (ShowDialogHandler != null)
-            {
-                return ShowDialogHandler.ShowDialog<TResult>(dialog);
-            }
-            return Task.FromResult(default(TResult));
-        }
-
-        private Task ShowDialog(Window dialog)
-        {
-            if (ShowDialogHandler != null)
-            {
-                return ShowDialogHandler.ShowDialog(dialog);
-            }
-            return Task.CompletedTask;
-        }
-
         #endregion
 
         public async Task CheckForAndConvertUnspportedImageFormats(string folder)
@@ -293,7 +257,7 @@ namespace StableDiffusionTagManager.ViewModels
                                                          "This tool only supports JPG and PNG image file formats, webp images can be automatically converted and the originals moved to the archive subdirectory, would you like to convert all webp images to png now?",
                                                          ButtonEnum.YesNo,
                                                          Icon.Question);
-                if ((await ShowDialog(messageBoxStandardWindow)) == ButtonResult.Yes)
+                if ((await dialogHandler.ShowDialog(messageBoxStandardWindow)) == ButtonResult.Yes)
                 {
                     var currentIndicatorStatus = ShowProgressIndicator;
                     ShowProgressIndicator = true;
@@ -365,7 +329,7 @@ namespace StableDiffusionTagManager.ViewModels
                                                  "It appears you haven't created a project for this folder. Creating a project will back up all the current existing images and tag sets into a folder named .sdtmproj so you can restore them and will also let you set some properties on the project. Would you like to create a project now?",
                                                  ButtonEnum.YesNo,
                                                  Icon.Question);
-                if ((await ShowDialog(messageBoxStandardWindow)) == ButtonResult.Yes)
+                if ((await dialogHandler.ShowDialog(messageBoxStandardWindow)) == ButtonResult.Yes)
                 {
                     projFolder = true;
 
@@ -375,7 +339,7 @@ namespace StableDiffusionTagManager.ViewModels
                                                      ButtonEnum.YesNo,
                                                      Icon.Question);
 
-                    var renameImages = (await ShowDialog(messageBoxStandardWindow) == ButtonResult.Yes);
+                    var renameImages = (await dialogHandler.ShowDialog(messageBoxStandardWindow) == ButtonResult.Yes);
 
                     var jpegs = Directory.EnumerateFiles(folder, "*.jpg").ToList();
                     var pngs = Directory.EnumerateFiles(folder, "*.png").ToList();
@@ -639,7 +603,7 @@ namespace StableDiffusionTagManager.ViewModels
                 var dialog = new TagSearchDialog();
                 dialog.DialogTitle = "Add Tag to End of All Images";
 
-                var tagResult = await ShowDialog<string?>(dialog);
+                var tagResult = await dialogHandler.ShowDialog<string?>(dialog);
 
                 if (tagResult != null)
                 {
@@ -664,7 +628,7 @@ namespace StableDiffusionTagManager.ViewModels
                 var dialog = new TagSearchDialog();
                 dialog.DialogTitle = "Add Tag to Start of All Images";
 
-                var tagResult = await ShowDialog<string?>(dialog);
+                var tagResult = await dialogHandler.ShowDialog<string?>(dialog);
 
                 if (tagResult != null)
                 {
@@ -691,7 +655,7 @@ namespace StableDiffusionTagManager.ViewModels
                 var dialog = new TagSearchDialog();
                 dialog.DialogTitle = $"Replace all instances of tag {target} with new tag";
 
-                var tagResult = await ShowDialog<string?>(dialog);
+                var tagResult = await dialogHandler.ShowDialog<string?>(dialog);
 
                 if (tagResult != null)
                 {
@@ -713,7 +677,7 @@ namespace StableDiffusionTagManager.ViewModels
                 var dialog = new TagSearchDialog();
                 dialog.DialogTitle = "Remove tag from all images";
 
-                var tagResult = await ShowDialog<string?>(dialog);
+                var tagResult = await dialogHandler.ShowDialog<string?>(dialog);
 
                 if (tagResult != null)
                 {
@@ -1044,7 +1008,7 @@ namespace StableDiffusionTagManager.ViewModels
                                                          ButtonEnum.YesNo,
                                                          Icon.Warning);
 
-                var result = await ShowDialog(messageBoxStandardWindow);
+                var result = await dialogHandler.ShowDialog(messageBoxStandardWindow);
 
                 if (result == ButtonResult.Yes)
                 {
@@ -1082,7 +1046,7 @@ namespace StableDiffusionTagManager.ViewModels
                 dialog.Tags = SelectedImage.Tags.Select(t => t.Tag).ToList();
                 dialog.Image = image;
                 dialog.OpenProject = this.OpenProject;
-                await ShowDialog(dialog);
+                await dialogHandler.ShowWindowAsDialog(dialog);
 
                 if (dialog.Success)
                 {
@@ -1097,7 +1061,7 @@ namespace StableDiffusionTagManager.ViewModels
         {
             var dialog = new SettingsDialog(settings);
 
-            await ShowDialog(dialog);
+            await dialogHandler.ShowWindowAsDialog(dialog);
         }
 
         [RelayCommand]
@@ -1109,7 +1073,7 @@ namespace StableDiffusionTagManager.ViewModels
 
                 dialog.Project = OpenProject;
 
-                await ShowDialog(dialog);
+                await dialogHandler.ShowWindowAsDialog(dialog);
             }
         }
 
@@ -1133,7 +1097,7 @@ namespace StableDiffusionTagManager.ViewModels
                                                                  ButtonEnum.YesNo,
                                                                  Icon.Warning);
 
-                var result = await ShowDialog(dialog);
+                var result = await dialogHandler.ShowDialog(dialog);
 
                 if (result == ButtonResult.Yes)
                 {
@@ -1157,7 +1121,7 @@ namespace StableDiffusionTagManager.ViewModels
                                                                  ButtonEnum.YesNoCancel,
                                                                  Icon.Warning);
 
-                    var result = (await ShowDialog(dialog));
+                    var result = (await dialogHandler.ShowDialog(dialog));
                     if (result == ButtonResult.Yes)
                     {
                         SaveChanges();
@@ -1181,7 +1145,7 @@ namespace StableDiffusionTagManager.ViewModels
                 var vm = viewModelFactory.CreateViewModel<InterrogationDialogViewModel>();
                 dialog.DataContext = vm;
 
-                await ShowDialog(dialog);
+                await dialogHandler.ShowWindowAsDialog(dialog);
                 if (vm.Success)
                 {
                     //Cache the selected image in case it's changed during async operation
@@ -1226,7 +1190,7 @@ namespace StableDiffusionTagManager.ViewModels
                                                  $"Failed to interrogate the image. The error returned was: {ex.Message}",
                                                  ButtonEnum.Ok,
                                                  Icon.Warning);
-                await ShowDialog(messageBoxStandardWindow);
+                await dialogHandler.ShowDialog(messageBoxStandardWindow);
             }
             finally
             {
@@ -1239,37 +1203,38 @@ namespace StableDiffusionTagManager.ViewModels
         {
             //Cache the selected image in case it's changed during async operation
             var selectedImage = SelectedImage;
-
-            var api = new DefaultApi(settings.WebUiAddress);
-
-            using var uploadStream = new MemoryStream();
-            bitmap.Save(uploadStream);
-            var imagebase64 = Convert.ToBase64String(uploadStream.ToArray());
-
-            var result = await api.RembgRemoveRembgPostAsync(new SdWebUiApi.Model.BodyRembgRemoveRembgPost
+            var api = webApiFactory.GetWebApi();
+            if (selectedImage != null && api != null)
             {
-                Model = RembgModels.U2NetHumanSeg,
-                InputImage = imagebase64,
-            });
+                using var uploadStream = new MemoryStream();
+                bitmap.Save(uploadStream);
+                var imagebase64 = Convert.ToBase64String(uploadStream.ToArray());
 
-            var jtokResult = result as JToken;
-            var convertedresult = jtokResult?.ToObject<RemBgResult>();
-            if (convertedresult != null)
-            {
-                using (var mstream = new MemoryStream(Convert.FromBase64String(convertedresult.image)))
+                var result = await api.RembgRemoveRembgPostAsync(new SdWebUiApi.Model.BodyRembgRemoveRembgPost
                 {
-                    var imageResult = new Bitmap(mstream);
+                    Model = RembgModels.U2NetHumanSeg,
+                    InputImage = imagebase64,
+                });
 
-                    var viewer = new ImageReviewDialog();
-                    viewer.Title = "Review image with removed background";
-                    viewer.Images = new ObservableCollection<ImageReviewViewModel>() { new ImageReviewViewModel(imageResult) };
-                    viewer.ReviewMode = ImageReviewDialogMode.SingleSelect;
-                    await ShowDialog(viewer);
-
-                    if (viewer.Success)
+                var jtokResult = result as JToken;
+                var convertedresult = jtokResult?.ToObject<RemBgResult>();
+                if (convertedresult != null)
+                {
+                    using (var mstream = new MemoryStream(Convert.FromBase64String(convertedresult.image)))
                     {
-                        selectedImage.ImageSource = imageResult;
-                        selectedImage.ImageSource.Save(Path.Combine(this.openFolder, selectedImage.Filename));
+                        var imageResult = new Bitmap(mstream);
+
+                        var viewer = new ImageReviewDialog();
+                        viewer.Title = "Review image with removed background";
+                        viewer.Images = new ObservableCollection<ImageReviewViewModel>() { new ImageReviewViewModel(imageResult) };
+                        viewer.ReviewMode = ImageReviewDialogMode.SingleSelect;
+                        await dialogHandler.ShowWindowAsDialog(viewer);
+
+                        if (viewer.Success)
+                        {
+                            selectedImage.ImageSource = imageResult;
+                            selectedImage.ImageSource.Save(Path.Combine(this.openFolder, selectedImage.Filename));
+                        }
                     }
                 }
             }
@@ -1300,7 +1265,7 @@ namespace StableDiffusionTagManager.ViewModels
                 ProgressIndicatorMessage = "Executing image interrogation...";
                 ProgressIndicatorMax = 0;
                 ConsoleText = $"Initializing...{Environment.NewLine}";
-                tags = await tagInterrrogator.InterrogateOperation  (image.ToByteArray(), message => ProgressIndicatorMessage = message, AddConsoleText);
+                tags = await tagInterrrogator.InterrogateOperation(image.ToByteArray(), message => ProgressIndicatorMessage = message, AddConsoleText);
             }
             return (description: description, tags: tags);
         }
@@ -1314,14 +1279,14 @@ namespace StableDiffusionTagManager.ViewModels
                 var vm = viewModelFactory.CreateViewModel<InterrogationDialogViewModel>();
                 dialog.DataContext = vm;
 
-                await ShowDialog(dialog);
+                await dialogHandler.ShowWindowAsDialog(dialog);
                 if (vm.Success)
                 {
                     _updateTagCounts = false;
 
                     ShowProgressIndicator = true;
                     ProgressIndicatorMax = 0;
-                    if(vm.SelectedNaturalLanguageSettingsViewModel != null)
+                    if (vm.SelectedNaturalLanguageSettingsViewModel != null)
                         ProgressIndicatorMax += ImagesWithTags.Count();
                     if (vm.SelectedTagSettingsViewModel != null)
                         ProgressIndicatorMax += ImagesWithTags.Count();
@@ -1344,7 +1309,7 @@ namespace StableDiffusionTagManager.ViewModels
                                 image.Description = await NLinterrogator.InterrogateOperation(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
 
                                 ++ProgressIndicatorProgress;
-                            }                            
+                            }
                         }
 
                         if (vm.SelectedTagSettingsViewModel != null)
@@ -1354,7 +1319,7 @@ namespace StableDiffusionTagManager.ViewModels
                             ProgressIndicatorMessage = "Executing tag interrogation...";
                             ConsoleText = $"Initializing...{Environment.NewLine}";
                             await taginterrogator.InitializeOperation(message => ProgressIndicatorMessage = message, AddConsoleText);
-                            
+
                             foreach (var image in ImagesWithTags)
                             {
                                 var imageData = image.ImageSource.ToByteArray();
@@ -1377,7 +1342,7 @@ namespace StableDiffusionTagManager.ViewModels
                                                              ButtonEnum.Ok,
                                                              Icon.Warning);
 
-                        await ShowDialog(messageBoxStandardWindow);
+                        await dialogHandler.ShowDialog(messageBoxStandardWindow);
                     }
                     UpdateTagCounts();
                 }
@@ -1456,7 +1421,7 @@ namespace StableDiffusionTagManager.ViewModels
                 dialog.ReviewMode = ImageReviewDialogMode.MultiSelect;
                 dialog.Title = "Select Images to Keep";
 
-                await ShowDialog(dialog);
+                await dialogHandler.ShowWindowAsDialog(dialog);
 
                 if (dialog.Success)
                 {
@@ -1502,7 +1467,7 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 dialog.ComputeExpansionNeededForTargetAspectRatio(image.PixelSize.Width, image.PixelSize.Height, OpenProject.TargetImageSize.Value.Width, OpenProject.TargetImageSize.Value.Height);
             }
-            await ShowDialog(dialog);
+            await dialogHandler.ShowWindowAsDialog(dialog);
             if (dialog.Success)
             {
                 var finalSize = new PixelSize(image.PixelSize.Width + dialog.ExpandLeft + dialog.ExpandRight, image.PixelSize.Height + dialog.ExpandUp + dialog.ExpandDown);
@@ -1574,7 +1539,7 @@ namespace StableDiffusionTagManager.ViewModels
         {
             var dialog = new TagPrioritySetManagerDialog();
 
-            await ShowDialog(dialog);
+            await dialogHandler.ShowWindowAsDialog(dialog);
 
             if (dialog.Success)
             {
@@ -1590,7 +1555,7 @@ namespace StableDiffusionTagManager.ViewModels
                 var dialog = new TagPrioritySelectDialog();
                 dialog.TagPrioritySets = tagPrioritySets.ToList();
 
-                var result = await ShowDialog<TagPrioritySetButtonViewModel?>(dialog);
+                var result = await dialogHandler.ShowDialog<TagPrioritySetButtonViewModel?>(dialog);
                 if (result != null)
                 {
                     foreach (var image in ImagesWithTags)
@@ -1635,7 +1600,7 @@ namespace StableDiffusionTagManager.ViewModels
                         TagPrioritySets = txts.Select(filename =>
                                                         new TagPrioritySetButtonViewModel(
                                                                 Path.GetFileNameWithoutExtension(filename),
-                                                                new TagPrioritySet(filename)))
+                                                                new TagCategorySet(filename)))
                                           .ToObservableCollection();
                     }
                 }
@@ -1647,9 +1612,9 @@ namespace StableDiffusionTagManager.ViewModels
                                                          $"Failed to load tag priority sets. Error message: {ex.Message}",
                                                          ButtonEnum.Ok,
                                                          Icon.Warning);
-                ShowDialog(messageBoxStandardWindow);
+                dialogHandler.ShowDialog(messageBoxStandardWindow);
             }
-            
+
         }
 
         public Bitmap ConvertImageAlphaToColor(Bitmap sourceImage, Color color)
@@ -1672,7 +1637,7 @@ namespace StableDiffusionTagManager.ViewModels
             if (openFolder != null && ImagesWithTags != null)
             {
                 var dialog = new ColorPickerDialog();
-                await ShowDialog<Color?>(dialog);
+                await dialogHandler.ShowDialog<Color?>(dialog);
                 if (dialog.Success)
                 {
                     ShowProgressIndicator = true;
@@ -1732,7 +1697,7 @@ namespace StableDiffusionTagManager.ViewModels
             var selectedImage = SelectedImage;
 
             var dialog = new ColorPickerDialog();
-            await ShowDialog<Color?>(dialog);
+            await dialogHandler.ShowDialog<Color?>(dialog);
             if (dialog.Success)
             {
                 var imageResult = ConvertImageAlphaToColor(bitmap, dialog.SelectedColor);
@@ -1740,7 +1705,7 @@ namespace StableDiffusionTagManager.ViewModels
                 viewer.Title = "Review converted image";
                 viewer.Images = new ObservableCollection<ImageReviewViewModel>() { new ImageReviewViewModel(imageResult) };
                 viewer.ReviewMode = ImageReviewDialogMode.SingleSelect;
-                await ShowDialog(viewer);
+                await dialogHandler.ShowWindowAsDialog(viewer);
 
                 if (viewer.Success)
                 {
@@ -1777,7 +1742,7 @@ namespace StableDiffusionTagManager.ViewModels
         {
             var editor = new ImageTouchupDialog(settings);
             editor.IsStandalone = true;
-            await ShowDialog(editor);
+            await dialogHandler.ShowWindowAsDialog(editor);
         }
         #endregion
 
@@ -1807,7 +1772,7 @@ namespace StableDiffusionTagManager.ViewModels
                         viewer.Title = "Review image after lama removal";
                         viewer.Images = new ObservableCollection<ImageReviewViewModel>() { new ImageReviewViewModel(imageResult) };
                         viewer.ReviewMode = ImageReviewDialogMode.SingleSelect;
-                        await ShowDialog(viewer);
+                        await dialogHandler.ShowWindowAsDialog(viewer);
 
                         if (viewer.Success)
                         {
@@ -1825,7 +1790,7 @@ namespace StableDiffusionTagManager.ViewModels
                                                      ButtonEnum.Ok,
                                                      Icon.Warning);
 
-                await ShowDialog(messageBoxStandardWindow);
+                await dialogHandler.ShowDialog(messageBoxStandardWindow);
             }
             ShowProgressIndicator = false;
         }
@@ -1836,7 +1801,7 @@ namespace StableDiffusionTagManager.ViewModels
             var dialog = new YOLOModelSelectorDialog();
             dialog.DataContext = viewModelFactory.CreateViewModel<YOLOModelSelectorDialogViewModel>();
 
-            var dialogResult = await ShowDialog<(string, float, int)?>(dialog);
+            var dialogResult = await dialogHandler.ShowDialog<(string, float, int)?>(dialog);
 
             if (dialogResult != null)
             {
@@ -1861,7 +1826,7 @@ namespace StableDiffusionTagManager.ViewModels
                         viewer.Title = "Review generated mask";
                         viewer.Images = new ObservableCollection<ImageReviewViewModel>() { new ImageReviewViewModel(imageResult) };
                         viewer.ReviewMode = ImageReviewDialogMode.SingleSelect;
-                        await ShowDialog(viewer);
+                        await dialogHandler.ShowWindowAsDialog(viewer);
 
                         if (viewer.Success)
                         {
@@ -1876,7 +1841,7 @@ namespace StableDiffusionTagManager.ViewModels
                                                         ButtonEnum.Ok,
                                                         Icon.Info);
 
-                        await ShowDialog(messageBoxStandardWindow);
+                        await dialogHandler.ShowDialog(messageBoxStandardWindow);
                     }
                 }
                 catch (Exception ex)
@@ -1887,7 +1852,7 @@ namespace StableDiffusionTagManager.ViewModels
                                                          ButtonEnum.Ok,
                                                          Icon.Warning);
 
-                    await ShowDialog(messageBoxStandardWindow);
+                    await dialogHandler.ShowDialog(messageBoxStandardWindow);
                 }
             }
             ShowProgressIndicator = false;
@@ -1899,7 +1864,7 @@ namespace StableDiffusionTagManager.ViewModels
             var dialog = new YOLOModelSelectorDialog();
             dialog.DataContext = viewModelFactory.CreateViewModel<YOLOModelSelectorDialogViewModel>();
 
-            var dialogResult = await ShowDialog<(string, float, int)?>(dialog);
+            var dialogResult = await dialogHandler.ShowDialog<(string, float, int)?>(dialog);
 
             if (dialogResult != null)
             {
@@ -1938,7 +1903,7 @@ namespace StableDiffusionTagManager.ViewModels
                                                          ButtonEnum.Ok,
                                                          Icon.Warning);
 
-                    await ShowDialog(messageBoxStandardWindow);
+                    await dialogHandler.ShowDialog(messageBoxStandardWindow);
                 }
             }
             ShowProgressIndicator = false;

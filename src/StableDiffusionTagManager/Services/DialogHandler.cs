@@ -4,7 +4,7 @@ using StableDiffusionTagManager.Controls;
 using StableDiffusionTagManager.Views;
 using System.Threading.Tasks;
 
-namespace StableDiffusionTagManager
+namespace StableDiffusionTagManager.Services
 {
     public class DialogHandler
     {
@@ -30,12 +30,12 @@ namespace StableDiffusionTagManager
             return dialogWithResult.ShowWithResult(window);
         }
 
-        public Task<TResultType> ShowDialog<TResultType>(Window dialog)
+        public Task<TResultType> ShowWindowAsDialog<TResultType>(Window dialog)
         {
             return dialog.ShowDialog<TResultType>(window);
         }
 
-        public Task ShowDialog(Window dialog)
+        public Task ShowWindowAsDialog(Window dialog)
         {
             return dialog.ShowDialog(window);
         }

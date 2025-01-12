@@ -3,8 +3,13 @@ using System.Xml.Linq;
 
 namespace StableDiffusionTagManager.Models
 {
-    public class TagPrioritySet
+    public class TagCategorySet
     {
+        public const string TAG_CATEGORY_SET_ELEMENT = "TagCategories";
+        public const string TAG_CATEGORY_NAME_ATTRIUTE = "Name";
+        public const string TAG_CATEGORY_ELEMENT = "TagCategory";
+        public const string TAG_ELEMENT = "Tag";
+
         public List<(string CategoryName, List<string> Tags)> Categories { get; } = new List<(string CategoryName, List<string> Tags)>();
 
         private Dictionary<string, int> tagPriorities = new Dictionary<string, int>();
@@ -13,7 +18,7 @@ namespace StableDiffusionTagManager.Models
 
         public static List<(string CategoryName, List<string> Tags)> ReadCategories(XDocument doc)
         {
-            if(doc.Root == null || doc.Root.Name != "TagCategories")
+            if(doc.Root == null || doc.Root.Name != TAG_CATEGORY_SET_ELEMENT)
             {
                 throw new System.Exception("Invalid Tag Priority Set Format.");
             }
@@ -25,13 +30,13 @@ namespace StableDiffusionTagManager.Models
         {
             var categories = new List<(string CategoryName, List<string> Tags)>();
             
-            foreach (var tagCategory in categoriesNode.Descendants("TagCategory"))
+            foreach (var tagCategory in categoriesNode.Descendants(TAG_CATEGORY_ELEMENT))
             {
-                var categoryName = tagCategory.Attribute("Name")?.Value;
+                var categoryName = tagCategory.Attribute(TAG_CATEGORY_NAME_ATTRIUTE)?.Value;
                 if(categoryName != null)
                 {
                     var tags = new List<string>();
-                    foreach (var tagElement in tagCategory.Descendants("Tag"))
+                    foreach (var tagElement in tagCategory.Descendants(TAG_ELEMENT))
                     {
                         var tag = tagElement.Value;
                         tags.Add(tag);
@@ -42,7 +47,7 @@ namespace StableDiffusionTagManager.Models
             return categories;
         }
 
-        public TagPrioritySet(string filename)
+        public TagCategorySet(string filename)
         {
             var doc = XDocument.Load(filename);
             var i = 0;

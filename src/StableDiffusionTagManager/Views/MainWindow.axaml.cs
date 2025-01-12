@@ -56,7 +56,6 @@ namespace StableDiffusionTagManager.Views
                         this.FocusTagAutoComplete(tag);
                     };
                  
-                viewModel.ShowDialogHandler = new DialogHandler(this);
                 viewModel.ExitCallback = () =>
                 {
                     //Remove the handler to prevent an infinite loop, if the vm says to close we KNOW we're closing.
