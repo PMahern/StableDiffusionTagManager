@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using LibGit2Sharp;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace ImageUtil.Interrogation
@@ -121,6 +122,12 @@ namespace ImageUtil.Interrogation
             await pythonImageEngine.SendImage(imageData, consoleCallBack);
 
             var results = await pythonImageEngine.WaitForGenerationResultString(consoleCallBack);
+
+            //It's returning some tags with capital letters. Tags are always lowercase.
+            if(TaggingPrompts.Contains(args.CaptionType))
+            {
+                results = results.ToLower();
+            }
             return results.Split(", ").ToList();
         }
 
