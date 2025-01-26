@@ -9,6 +9,7 @@ from huggingface_hub import hf_hub_download
 from torchvision.transforms.functional import to_pil_image
 import torch
 import numpy as np
+from rembg import remove
 
 def mask_to_pil(masks: torch.Tensor, shape: tuple[int, int]) -> list[Image.Image]:
     """
@@ -147,7 +148,18 @@ def main():
                 else:
                     print("NO RESULTS")
                     sys.stdout.flush()
-                
+        elif operation == "rembg":
+            print("Executing rembg")
+            sys.stdout.flush()
+            
+            imagedata = sys.stdin.readline().strip()
+            binary_data = base64.b64decode(imagedata)
+            bgremoved_binary = remove(binary_data)
+            img_base64 = base64.b64encode(bgremoved_binary).decode('utf-8')
+            print("GENERATION START")
+            print(img_base64)
+            print("GENERATION END")
+            sys.stdout.flush()
 
 
 if __name__ == "__main__":

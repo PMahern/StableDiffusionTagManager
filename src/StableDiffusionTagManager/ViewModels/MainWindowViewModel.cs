@@ -10,7 +10,6 @@ using System.IO;
 using StableDiffusionTagManager.Models;
 using System.Collections.Generic;
 using StableDiffusionTagManager.Views;
-using Newtonsoft.Json.Linq;
 using StableDiffusionTagManager.Extensions;
 using Avalonia.Media;
 using MsBox.Avalonia;
@@ -19,7 +18,6 @@ using System.Collections.Specialized;
 using ImageUtil;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SdWebUiApi;
 using StableDiffusionTagManager.Collections;
 using Avalonia.Threading;
 using StableDiffusionTagManager.Services;
@@ -1201,26 +1199,24 @@ namespace StableDiffusionTagManager.ViewModels
         #region Image Interrogation
         public async Task ReviewRemoveBackground(Bitmap bitmap)
         {
+            ShowProgressIndicator = true;
+            ProgressIndicatorMax = 0;
+            ProgressIndicatorMessage = "Initializing Python Utilities...";
+            ConsoleText = $"Initializing...{Environment.NewLine}";
+
             //Cache the selected image in case it's changed during async operation
             var selectedImage = SelectedImage;
             var api = webApiFactory.GetWebApi();
             if (selectedImage != null && api != null)
             {
-                using var uploadStream = new MemoryStream();
-                bitmap.Save(uploadStream);
-                var imagebase64 = Convert.ToBase64String(uploadStream.ToArray());
-
-                var result = await api.RembgRemoveRembgPostAsync(new SdWebUiApi.Model.BodyRembgRemoveRembgPost
+                using var utilities = new PythonUtilities();
+                try
                 {
-                    Model = RembgModels.U2NetHumanSeg,
-                    InputImage = imagebase64,
-                });
+                    await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
 
-                var jtokResult = result as JToken;
-                var convertedresult = jtokResult?.ToObject<RemBgResult>();
-                if (convertedresult != null)
-                {
-                    using (var mstream = new MemoryStream(Convert.FromBase64String(convertedresult.image)))
+                    var bytes = await utilities.RunRemBG(SelectedImage.ImageSource.ToByteArray(), AddConsoleText);
+
+                    using (var mstream = new MemoryStream(bytes))
                     {
                         var imageResult = new Bitmap(mstream);
 
@@ -1236,6 +1232,16 @@ namespace StableDiffusionTagManager.ViewModels
                             selectedImage.ImageSource.Save(Path.Combine(this.openFolder, selectedImage.Filename));
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    var messageBoxStandardWindow = MessageBoxManager
+                            .GetMessageBoxStandard("Rembg Failed",
+                                                         $"Failed to execute rembg. Error message: {ex.Message}",
+                                                         ButtonEnum.Ok,
+                                                         Icon.Warning);
+
+                    await dialogHandler.ShowDialog(messageBoxStandardWindow);
                 }
             }
         }
