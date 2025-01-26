@@ -1244,6 +1244,8 @@ namespace StableDiffusionTagManager.ViewModels
                     await dialogHandler.ShowDialog(messageBoxStandardWindow);
                 }
             }
+
+            ShowProgressIndicator = false;
         }
 
         public Task<TResult> Interrogate<TResult>(ConfiguredInterrogationContext<TResult> interrogator, byte[] imageData)
