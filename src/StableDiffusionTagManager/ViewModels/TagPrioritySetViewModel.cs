@@ -1,10 +1,8 @@
-﻿using Avalonia.Metadata;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using StableDiffusionTagManager.Extensions;
 using StableDiffusionTagManager.Models;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -20,6 +18,11 @@ namespace StableDiffusionTagManager.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<string> tags = new ObservableCollection<string>();
+
+        public void RemoveTag(string tag)
+        {
+            tags.Remove(tag);
+        }
     }
 
     public partial class TagPrioritySetViewModel : ViewModelBase
@@ -27,7 +30,6 @@ namespace StableDiffusionTagManager.ViewModels
         public static TagPrioritySetViewModel CreateFromFile(string filename)
         {
             var doc = XDocument.Load(filename);
-            var i = 0;
             
             var categories = TagCategorySet.ReadCategories(doc);
 
@@ -38,41 +40,36 @@ namespace StableDiffusionTagManager.ViewModels
                     Tags = category.Tags.ToObservableCollection()
                 }).ToObservableCollection();
 
-            return new TagPrioritySetViewModel(filename)
+            return new TagPrioritySetViewModel()
             {
-                entries = viewModels
+                categories = viewModels
             };
         }
 
-        public TagPrioritySetViewModel(string name)
+        public TagPrioritySetViewModel()
         {
-            this.name = name;
         }
 
+
         [ObservableProperty]
-        private string name;
-
-
-        private ObservableCollection<TagCategoryViewModel> entries = new ObservableCollection<TagCategoryViewModel>();
-        public ReadOnlyObservableCollection<TagCategoryViewModel> Entries { get => new ReadOnlyObservableCollection<TagCategoryViewModel>(entries); }
+        private ObservableCollection<TagCategoryViewModel> categories = new ObservableCollection<TagCategoryViewModel>();
 
         [RelayCommand]
-        public void AddCategory()
+        public void AddCategory(string name)
         {
-            entries.Add(new TagCategoryViewModel());
+            categories.Add(new TagCategoryViewModel() {  Name = name });
         }
 
         [RelayCommand]
         public void RemoveCategory(TagCategoryViewModel target)
         {
-            entries.Remove(target);
+            categories.Remove(target);
         }
 
-        public void Save(string directory)
+        public void Save(string filename)
         {
-            var filename = Path.Combine(directory, $"{name}.xml");
             var doc = new XDocument(
-                entries.Select(entry =>
+                categories.Select(entry =>
                     new XElement("TagCategory",
                         new XAttribute("Name", entry.Name),
                         entry.Tags.Select(tag => new XElement("Tag", tag))
@@ -82,13 +79,13 @@ namespace StableDiffusionTagManager.ViewModels
             doc.Save(filename);
         }
 
-        internal void MovePrioritySet(TagCategoryViewModel vm, TagCategoryViewModel destvm)
+        internal void MoveTagCategory(TagCategoryViewModel vm, TagCategoryViewModel destvm)
         {
             if (vm == destvm) return;
 
-            var index = entries.IndexOf(destvm);
-            entries.Remove(vm);
-            entries.Insert(index, vm);
+            var index = categories.IndexOf(destvm);
+            categories.Remove(vm);
+            categories.Insert(index, vm);
         }
     }
 }

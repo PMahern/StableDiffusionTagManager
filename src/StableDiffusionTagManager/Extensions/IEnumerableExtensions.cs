@@ -1,6 +1,9 @@
 ﻿using StableDiffusionTagManager.Collections;
+using StableDiffusionTagManager.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace StableDiffusionTagManager.Extensions
 {
@@ -19,6 +22,11 @@ namespace StableDiffusionTagManager.Extensions
                 toReturn.Add(item);
             }
             return toReturn;
+        }
+
+        public static List<DropdownSelectItem> ToDropdownSelectItems<T>(this IEnumerable<T> items, Func<T, string> nameSelector)
+        {
+            return items.Select(item => (DropdownSelectItem)new DropdownSelectItem<T>(nameSelector(item), item)).ToList();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace StableDiffusionTagManager.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        
         public TagCategorySet PrioritySet { get; }
     }
 }

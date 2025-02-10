@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Width="200"
         Height="140"
-        x:Class="StableDiffusionTagManager.Views.TagPrioritySelectDialog"
+        x:Class="StableDiffusionTagManager.Views.DropdownSelectDialog"
         CanResize="False"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="4"
@@ -19,7 +19,7 @@
         KeyDown="WindowKeyDown">
   <controls:HeaderControl DataContext="{Binding ElementName=ThisControl}" Title="Select Tag Priority Set" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="5" CloseCommand="{Binding CancelCommand}">
     <Grid RowDefinitions="Auto,Auto">
-      <ComboBox ItemsSource="{Binding TagPrioritySets}" SelectedItem="{Binding SelectedTagPrioritySet}" HorizontalAlignment="Stretch">
+      <ComboBox ItemsSource="{Binding DropdownItems}" SelectedItem="{Binding SelectedItem}" HorizontalAlignment="Stretch">
         <ComboBox.ItemTemplate>
           <DataTemplate>
             <TextBlock Text="{Binding Name}"/>

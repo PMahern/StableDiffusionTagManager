@@ -1552,15 +1552,15 @@ namespace StableDiffusionTagManager.ViewModels
         {
             if (tagPrioritySets != null && ImagesWithTags != null)
             {
-                var dialog = new TagPrioritySelectDialog();
-                dialog.TagPrioritySets = tagPrioritySets.ToList();
-
-                var result = await dialogHandler.ShowDialog<TagPrioritySetButtonViewModel?>(dialog);
+                var dialog = new DropdownSelectDialog();
+                dialog.DropdownItems = tagPrioritySets.ToDropdownSelectItems(tps => tps.Name);
+                var dialogResult = await dialogHandler.ShowDialog<DropdownSelectItem?>(dialog);
+                var result = dialogResult as DropdownSelectItem<TagPrioritySetButtonViewModel>;
                 if (result != null)
                 {
                     foreach (var image in ImagesWithTags)
                     {
-                        image.ApplyTagOrdering(t => result.PrioritySet.GetTagPriority(t));
+                        image.ApplyTagOrdering(t => result.Value.PrioritySet.GetTagPriority(t));
                     }
                 }
             }

@@ -1,12 +1,11 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Threading;
-using Avalonia.VisualTree;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using StableDiffusionTagManager.Controls;
+using StableDiffusionTagManager.Extensions;
 using StableDiffusionTagManager.ViewModels;
-using System.Collections.ObjectModel;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,29 +18,32 @@ namespace StableDiffusionTagManager.Views
 
         private static readonly string PRIORITY_SETS_FOLDER = "TagPrioritySets";
 
+        public static string GetPrioritySetFolderPath()
+        {
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PRIORITY_SETS_FOLDER);
+        }
+
         public TagPrioritySetManagerDialog()
         {
             InitializeComponent();
 
-            SetValue(TagPrioritySetsProperty, new ObservableCollection<TagPrioritySetViewModel>());
             AddHandler(DragDrop.DropEvent, PrioritySetDropped);
             AddHandler(PointerPressedEvent, InitiateDrag, handledEventsToo: true);
             Opened += TagPriortySetManagerDialog_Opened;
+            PropertyChanged += TagPrioritySetManagerDialog_OnPropertyChanged;
         }
 
-        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        private void TagPrioritySetManagerDialog_OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
         {
-            base.OnPropertyChanged(change);
-
-            if (change.Property == SelectedPrioritySetProperty)
+            if (e.Property == SelectedCategoryProperty)
             {
-                SelectedChildSet = null;
+                AddTagCommand.NotifyCanExecuteChanged();
             }
         }
+
         private void TagPriortySetManagerDialog_Opened(object? sender, System.EventArgs e)
         {
-            Loading = true;
-            LoadTagPrioritySets();
+            //LoadTagPrioritySets();
         }
 
         private async Task InitiateDrag(object sender, PointerPressedEventArgs args)
@@ -65,7 +67,7 @@ namespace StableDiffusionTagManager.Views
 
         public void PrioritySetDropped(object? sender, DragEventArgs args)
         {
-            var targetDataSet = IsDraggingParent ? SelectedPrioritySet : SelectedChildSet;
+            //var targetDataSet = IsDraggingParent ? PrioritySet : SelectedCategory;
             //if (targetDataSet != null)
             //{
             //    var vm = args.Data.Get(CUSTOM_DRAG_FORMAT) as TagPrioritySetViewModel;
@@ -84,63 +86,44 @@ namespace StableDiffusionTagManager.Views
             //}
         }
 
-        public async void LoadTagPrioritySets()
+        //public void LoadTagPrioritySets()
+        //{
+        //    if (!Directory.Exists(PRIORITY_SETS_FOLDER))
+        //    {
+        //        Directory.CreateDirectory(PRIORITY_SETS_FOLDER);
+        //    }
+        //    var txts = Directory.EnumerateFiles(PRIORITY_SETS_FOLDER, "*.xml").ToList();
+        //    var tagPrioritySets = new ObservableCollection<TagPrioritySetViewModel>(txts.Select(filename => TagPrioritySetViewModel.CreateFromFile(filename)));
+        //    SetValue(TagPrioritySetsProperty, tagPrioritySets);
+        //}
+
+        public static readonly StyledProperty<TagPrioritySetViewModel> PrioritySetProperty =
+            AvaloniaProperty.Register<TagPrioritySetManagerDialog, TagPrioritySetViewModel>(nameof(PrioritySet), new TagPrioritySetViewModel());
+
+        /// <summary>
+        /// The tag priority set being edited.
+        /// </summary>
+        public TagPrioritySetViewModel PrioritySet
         {
-            if (!Directory.Exists(PRIORITY_SETS_FOLDER))
+            get => GetValue(PrioritySetProperty);
+            set => SetValue(PrioritySetProperty, value);
+        }
+
+
+        public static readonly StyledProperty<TagCategoryViewModel?> SelectedCategoryProperty =
+        AvaloniaProperty.Register<TagPrioritySetManagerDialog, TagCategoryViewModel?>(nameof(SelectedCategory), null);
+
+        /// <summary>
+        /// The selected tag category to edit.
+        /// </summary>
+        public TagCategoryViewModel? SelectedCategory
+        {
+            get => GetValue(SelectedCategoryProperty);
+            set
             {
-                Directory.CreateDirectory(PRIORITY_SETS_FOLDER);
+                SetValue(SelectedCategoryProperty, value);
             }
-            var txts = Directory.EnumerateFiles(PRIORITY_SETS_FOLDER, "*.xml").ToList();
-            var tagPrioritySets = new ObservableCollection<TagPrioritySetViewModel>(txts.Select(filename => TagPrioritySetViewModel.CreateFromFile(filename)));
-            Dispatcher.UIThread.Post(() =>
-            {
-                SetValue(TagPrioritySetsProperty, tagPrioritySets);
-            });
         }
-
-        public static readonly StyledProperty<ObservableCollection<TagPrioritySetViewModel>> TagPrioritySetsProperty =
-            AvaloniaProperty.Register<TagPrioritySetManagerDialog, ObservableCollection<TagPrioritySetViewModel>>(nameof(TagPrioritySets), null);
-
-
-
-        /// <summary>
-        /// Gets or sets the image to be displayed
-        /// </summary>
-        public ReadOnlyObservableCollection<TagPrioritySetViewModel> TagPrioritySets
-        {
-
-            get
-            {
-                return new ReadOnlyObservableCollection<TagPrioritySetViewModel>(GetValue(TagPrioritySetsProperty));
-            }
-        }
-
-        public static readonly StyledProperty<TagPrioritySetViewModel?> SelectedPrioritySetProperty =
-            AvaloniaProperty.Register<TagPrioritySetManagerDialog, TagPrioritySetViewModel?>(nameof(SelectedPrioritySet), null);
-
-        /// <summary>
-        /// Gets or sets the image to be displayed
-        /// </summary>
-        public TagPrioritySetViewModel? SelectedPrioritySet
-        {
-            get => GetValue(SelectedPrioritySetProperty);
-            set => SetValue(SelectedPrioritySetProperty, value);
-        }
-
-
-
-        public static readonly StyledProperty<TagPrioritySetViewModel?> SelectedChildSetProperty =
-        AvaloniaProperty.Register<TagPrioritySetManagerDialog, TagPrioritySetViewModel?>(nameof(SelectedChildSet), null);
-
-        /// <summary>
-        /// Gets or sets the image to be displayed
-        /// </summary>
-        public TagPrioritySetViewModel? SelectedChildSet
-        {
-            get => GetValue(SelectedChildSetProperty);
-            set => SetValue(SelectedChildSetProperty, value);
-        }
-
 
         public static readonly DirectProperty<TagPrioritySetManagerDialog, bool> IsDraggingChildProperty =
             AvaloniaProperty.RegisterDirect<TagPrioritySetManagerDialog, bool>(
@@ -149,7 +132,7 @@ namespace StableDiffusionTagManager.Views
 
         private bool _isDraggingChild = false;
         /// <summary>
-        /// Gets or sets if control can render the image
+        /// Indicates if a tag is being dragged.
         /// </summary>
         public bool IsDraggingChild
         {
@@ -167,7 +150,7 @@ namespace StableDiffusionTagManager.Views
 
         private bool _isDraggingParent = false;
         /// <summary>
-        /// Gets or sets if control can render the image
+        /// Indicates if a category is being dragged.
         /// </summary>
         public bool IsDraggingParent
         {
@@ -177,38 +160,49 @@ namespace StableDiffusionTagManager.Views
                 SetAndRaise(IsDraggingParentProperty, ref _isDraggingParent, value);
             }
         }
-
-        //private ObservableCollection<TagPrioritySetViewModel> tagPrioritySets;
-        //public ReadOnlyObservableCollection<TagPrioritySetViewModel> TagPrioritySets { get => new ReadOnlyObservableCollection<TagPrioritySetViewModel>(TagPrioritySets); }
         public bool Loading { get; set; } = false;
 
         public bool Success { get; set; }
 
-        #region Commands
-        [RelayCommand]
-        public async Task AddTagPrioritySetCommand()
+        public static readonly DirectProperty<TagPrioritySetManagerDialog, string?> CurrentOpenFileProperty =
+            AvaloniaProperty.RegisterDirect<TagPrioritySetManagerDialog, string?>(
+                nameof(CurrentOpenFile),
+                o => o.CurrentOpenFile);
+
+        private string? _CurrentOpenFile = null;
+        /// <summary>
+        /// Indicates if a category is being dragged.
+        /// </summary>
+        public string? CurrentOpenFile
         {
-            var dialog = new NewItemNameDialog();
-            dialog.Title = "New Tag Priority Set Name";
-
-            await dialog.ShowDialog(this);
-
-            if (dialog.Success && dialog.Name != null)
+            get => _CurrentOpenFile;
+            set
             {
-                var collection = GetValue(TagPrioritySetsProperty);
-                collection.Add(new TagPrioritySetViewModel(dialog.NewItemName));
+                SetAndRaise(CurrentOpenFileProperty, ref _CurrentOpenFile, value);
             }
         }
 
+        #region Commands
+
         [RelayCommand]
-        public void Save()
+        public async Task Save()
         {
-            this.Success = true;
-            foreach (var item in TagPrioritySets)
+            if (_CurrentOpenFile != null)
             {
-                item.Save(PRIORITY_SETS_FOLDER);
+                PrioritySet.Save(Path.Combine(GetPrioritySetFolderPath(), $"{CurrentOpenFile}.xml"));
             }
-            Close();
+            else
+            {
+                SaveTagCollectionAs();
+                var textEntryDialog = new TextInputDialog();
+                textEntryDialog.DialogTitle = "Enter Name for Priority Set";
+                var result = await textEntryDialog.ShowWithResult(this);
+                if (result != null)
+                {
+                    CurrentOpenFile = result;
+                    PrioritySet.AddCategory(result);
+                }
+            }
         }
 
         [RelayCommand]
@@ -218,38 +212,86 @@ namespace StableDiffusionTagManager.Views
         }
 
         [RelayCommand]
-        public void DeletePrioritySetEntry(string toDelete)
+        public void DeleteCategory(TagCategoryViewModel toDelete)
         {
-            if (SelectedPrioritySet != null)
+            if (PrioritySet != null)
             {
-               // SelectedPrioritySet.RemoveEntry(toDelete);
+               PrioritySet.RemoveCategory(toDelete);
+            }
+        }
+
+        public bool CanAddTag()
+        {
+            return SelectedCategory != null;
+        }
+
+        [RelayCommand]
+        public async Task AddCategory()
+        {
+            var textEntryDialog = new TextInputDialog();
+            textEntryDialog.DialogTitle = "New Tag Collection Name";
+            var result = await textEntryDialog.ShowWithResult(this);
+            if (result != null)
+            {
+                PrioritySet.AddCategory(result);
             }
         }
 
         [RelayCommand]
-        public void AddPrioritySetEntry()
+        public void DeleteTag(string toDelete)
         {
-            if (SelectedPrioritySet != null)
+            if (SelectedCategory != null)
             {
-                SelectedPrioritySet.AddCategory();
+                SelectedCategory.RemoveTag(toDelete);
+            }
+        }
+
+        [RelayCommand(CanExecute = nameof(CanAddTag))]
+        public async Task AddTag()
+        {
+            if (SelectedCategory!= null)
+            {
+                var textEntryDialog = new TextInputDialog();
+                textEntryDialog.DialogTitle = "New Tag Collection Name";
+                var result = await textEntryDialog.ShowWithResult(this);
+                if (result != null)
+                {
+                    SelectedCategory.Tags.Add(result);
+                }
             }
         }
 
         [RelayCommand]
-        public void DeleteChildSetEntry(TagPrioritySetViewModel toDelete)
+        public async Task CreateTagCollection()
         {
-            if (SelectedChildSet != null)
-            {
-                //SelectedChildSet.RemoveEntry(toDelete);
-            }
         }
 
         [RelayCommand]
-        public void AddChildSetEntry()
+        public async Task SaveTagCollection()
+        {         
+        }
+
+        [RelayCommand]
+        public async Task SaveTagCollectionAs()
         {
-            if (SelectedChildSet != null)
+        }
+
+        [RelayCommand]
+        public async Task LoadTagCollection()
+        {
+            if (!Directory.Exists(PRIORITY_SETS_FOLDER))
             {
-                SelectedChildSet.AddCategory();
+                Directory.CreateDirectory(PRIORITY_SETS_FOLDER);
+            }
+            var dialog = new DropdownSelectDialog();
+            var xmls = Directory.EnumerateFiles(PRIORITY_SETS_FOLDER, "*.xml").ToList();
+            dialog.DropdownItems = xmls.ToDropdownSelectItems(xml => Path.GetFileNameWithoutExtension(xml));
+
+            var result = await dialog.ShowWithResult(this);
+            var itemResult = result as DropdownSelectItem<string>;
+            if(itemResult != null)
+            {
+                PrioritySet = TagPrioritySetViewModel.CreateFromFile(itemResult.Value);
             }
         }
         #endregion
