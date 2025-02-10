@@ -1,11 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using ImageUtil.Interrogation;
 using StableDiffusionTagManager.Extensions;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace StableDiffusionTagManager.ViewModels
 {

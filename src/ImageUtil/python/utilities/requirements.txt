@@ -6,3 +6,5 @@ torchvision
 requests
 dill
 numpy
+onnxruntime
+rembg

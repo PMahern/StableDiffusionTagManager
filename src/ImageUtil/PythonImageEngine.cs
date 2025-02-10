@@ -19,9 +19,14 @@ namespace ImageUtil
             var absoluteWorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, workingdirectory);
             if (isvenv)
             {
-                pythonExe = Path.Join(absoluteWorkingDirectory, (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ?
-                                Path.Join("venv", "Scripts", "python.exe") :
-                                Path.Join("venv", "bin", "python")));
+                pythonExe = Path.Join(absoluteWorkingDirectory, "venv", "bin", "python");
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    var pythonExePath = Path.Join(absoluteWorkingDirectory, "venv", "Scripts");
+                    pythonExe = Path.Join(pythonExePath, "python.exe");
+                    if(!File.Exists(pythonExe))
+                        pythonExe = Path.Join(pythonExePath, "python311.exe");
+                }
             }
 
             info.FileName = pythonExe;
