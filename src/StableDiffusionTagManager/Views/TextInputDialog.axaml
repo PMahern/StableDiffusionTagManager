@@ -1,0 +1,34 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="using:StableDiffusionTagManager.Controls"
+        mc:Ignorable="d"
+        x:Class="StableDiffusionTagManager.TextInputDialog"
+        MinWidth="200"
+        Height="130"
+        CanResize="False"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="4"
+        ExtendClientAreaToDecorationsHint="True"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="Width"
+        Focusable="False"
+        Icon="/Assets/logo.ico"
+        KeyDown="DialogKeyDown"
+        >
+  <controls:HeaderControl Title="{Binding DialogTitle}" CloseCommand="{Binding HeaderCloseCommand}" HorizontalAlignment="" VerticalAlignment="Stretch">
+    <Grid Margin="5">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+      <TextBox Name="UserInputField" KeyDown="TextInputKeyDown"/>
+      <StackPanel Classes="footer" Grid.Row="2">
+        <Button Click="Ok_Clicked">Ok</Button>
+        <Button Click="Cancel_Clicked">Cancel</Button>
+      </StackPanel>
+    </Grid>
+  </controls:HeaderControl>
+</Window>

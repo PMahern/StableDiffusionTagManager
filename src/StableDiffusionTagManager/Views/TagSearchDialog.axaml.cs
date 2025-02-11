@@ -22,8 +22,12 @@ namespace StableDiffusionTagManager.Views
 
             Title = "SearchTags";
             this.DataContext = this;
-            //This is a hack but just calling Focus here doesn't do anything unless the app loses focus and gains it back... very strange
-            TagAutoComplete.AttachedToVisualTree += (s, e) => Dispatcher.UIThread.Post(() => TagAutoComplete.Focus());     
+            Opened += TagSearchDialog_Opened;
+        }
+
+        private void TagSearchDialog_Opened(object? sender, EventArgs e)
+        {
+            TagAutoComplete.Focus();
         }
 
         private bool success = false;
@@ -70,22 +74,27 @@ namespace StableDiffusionTagManager.Views
             Close();
         }
 
-        public void AutoCompleteKeyDown(object sender, KeyEventArgs e)
+        private void KeyDownHandler(KeyEventArgs e)
         {
-            if(e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
             {
                 this.success = true;
                 Close();
             }
+            if(e.Key == Key.Escape) {
+                this.success = false;
+                Close();
+            }
+        }
+
+        public void AutoCompleteKeyDown(object sender, KeyEventArgs e)
+        {
+            KeyDownHandler(e);
         }
 
         public void DialogKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
-            {
-                this.success = false;
-                Close();
-            }
+            KeyDownHandler(e);
         }
     }
 }

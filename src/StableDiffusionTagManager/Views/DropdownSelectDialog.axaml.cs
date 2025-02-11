@@ -4,40 +4,41 @@ using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using StableDiffusionTagManager.Controls;
 using StableDiffusionTagManager.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace StableDiffusionTagManager.Views
 {
-    public partial class TagPrioritySelectDialog : Window, IDialogWithResultAsync<TagPrioritySetButtonViewModel?>
+    public partial class DropdownSelectDialog : Window, IDialogWithResultAsync<DropdownSelectItem?>
     {
-        public TagPrioritySelectDialog()
+        public DropdownSelectDialog()
         {
             InitializeComponent();
         }
 
-        public static readonly StyledProperty<List<TagPrioritySetButtonViewModel>> TagPrioritySetsProperty =
-            AvaloniaProperty.Register<TagPrioritySelectDialog, List<TagPrioritySetButtonViewModel>>(nameof(TagPrioritySets), new List<TagPrioritySetButtonViewModel>());
+        public static readonly StyledProperty<List<DropdownSelectItem>> DropdownItemsProperty =
+            AvaloniaProperty.Register<DropdownSelectDialog, List<DropdownSelectItem>>(nameof(DropdownItems), new List<DropdownSelectItem>());
 
         /// <summary>
         /// Gets or sets the image to be displayed
         /// </summary>
-        public List<TagPrioritySetButtonViewModel> TagPrioritySets
+        public List<DropdownSelectItem> DropdownItems
         {
-            get => GetValue(TagPrioritySetsProperty);
-            set => SetValue(TagPrioritySetsProperty, value);
+            get => GetValue(DropdownItemsProperty);
+            set => SetValue(DropdownItemsProperty, value);
         }
 
-        public static readonly StyledProperty<TagPrioritySetButtonViewModel?> SelectedTagPrioritySetProperty =
-            AvaloniaProperty.Register<TagPrioritySelectDialog, TagPrioritySetButtonViewModel?>(nameof(SelectedTagPrioritySet));
+        public static readonly StyledProperty<DropdownSelectItem?> SelectedItemProperty =
+            AvaloniaProperty.Register<DropdownSelectDialog, DropdownSelectItem?>(nameof(SelectedItem));
 
         /// <summary>
         /// Gets or sets the image to be displayed
         /// </summary>
-        public TagPrioritySetButtonViewModel? SelectedTagPrioritySet
+        public DropdownSelectItem? SelectedItem
         {
-            get => GetValue(SelectedTagPrioritySetProperty);
-            set => SetValue(SelectedTagPrioritySetProperty, value);
+            get => GetValue(SelectedItemProperty);
+            set => SetValue(SelectedItemProperty, value);
         }
 
         public bool Success { get; set; } = false;
@@ -55,13 +56,13 @@ namespace StableDiffusionTagManager.Views
             Close();
         }
 
-        public async Task<TagPrioritySetButtonViewModel?> ShowWithResult(Window parent)
+        public async Task<DropdownSelectItem?> ShowWithResult(Window parent)
         {
             await ShowDialog(parent);
 
             if (this.Success)
             {
-                return SelectedTagPrioritySet;
+                return SelectedItem;
             }
             else
             {

@@ -1509,7 +1509,8 @@ namespace UVtools.AvaloniaControls
                     var offset = Offset;
                     var opacityBrush = new ImageBrush(maskHistoryBuffer[toDraw].Peek());
                     opacityBrush.SourceRect = new RelativeRect(sourceImageRegion, RelativeUnit.Absolute);
-                    opacityBrush.DestinationRect = new RelativeRect(imageViewPort, RelativeUnit.Absolute);
+                    var scale = GetWindowScale();
+                    opacityBrush.DestinationRect = new RelativeRect(new Rect(imageViewPort.Position, imageViewPort.Size * scale), RelativeUnit.Absolute);
                     using (context.PushOpacityMask(opacityBrush, new Rect(0, 0, viewPortSize.Width, viewPortSize.Height)))
                     {
                         var whiteBrush = new SolidColorBrush(MaskColor);
@@ -1565,6 +1566,16 @@ namespace UVtools.AvaloniaControls
                 var color = Color.FromArgb(255, selectionColor.Color.R, selectionColor.Color.G, selectionColor.Color.B);
                 context.DrawRectangle(new Pen(color.ToUint32()), rect);
             }
+        }
+
+        private float GetWindowScale()
+        {
+            var topLevel =  TopLevel.GetTopLevel(this);
+            if (topLevel is Window window)
+            {
+                return (float)window.DesktopScaling;
+            }
+            return 1.0f;
         }
 
         private bool UpdateViewPort()

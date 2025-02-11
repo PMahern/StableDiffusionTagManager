@@ -9,62 +9,61 @@
         x:Class="StableDiffusionTagManager.Views.TagPrioritySetManagerDialog"
         Title="Manage Tag Priority Sets"
         Name="ThisControl">
-  <Grid RowDefinitions="Auto,Auto,*,5,Auto" Margin="5" DataContext="{Binding ElementName=ThisControl}" Name="GridControl">
-    <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
-      <Border>
-        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding TagPrioritySets}" SelectedItem="{Binding SelectedPrioritySet}">
-          <ComboBox.ItemTemplate>
-            <DataTemplate>
-              <TextBlock Text="{Binding Name}"></TextBlock>
-            </DataTemplate>
-          </ComboBox.ItemTemplate>
-        </ComboBox>
-      </Border>
-      <Border  Grid.Column="1">
-        <Button Margin="5,0,0,0" Command="{Binding AddTagPrioritySetCommand}">
-          <mi:MaterialIcon Kind="Add"/>
-        </Button>
-      </Border>
-    </Grid>
-    <StackPanel Grid.Row="1">
-      <Grid ColumnDefinitions="*,*">
-        <Button Margin="5,0,0,0" Command="{Binding AddPrioritySetEntryCommand}" >
-          <mi:MaterialIcon Kind="Add"/>
-        </Button>
-        <Button Grid.Column="1" Margin="5,0,0,0" Command="{Binding AddChildSetEntryCommand}">
-          <mi:MaterialIcon Kind="Add"/>
-        </Button>
+  <DockPanel DataContext="{Binding ElementName=ThisControl}">
+    <Menu DockPanel.Dock="Top" Name="MainMenu">
+      <MenuItem  Header="_File">
+        <MenuItem  Header="_New..." Command="{Binding CreateTagCollectionCommand}" />
+        <MenuItem  Header="_Load..." Command="{Binding LoadTagCollectionCommand}" />
+        <MenuItem  Header="_Save..." Command="{Binding SaveTagCollectionCommand}" />
+        <MenuItem  Header="Save _As..." Command="{Binding SaveTagCollectionAsCommand}" />
+      </MenuItem>
+    </Menu>
+    <Grid RowDefinitions="*,5,Auto" Margin="5" Name="GridControl">
+      <Grid Grid.Row="0" Margin="0,5,0,0" ColumnDefinitions="*,5,*">
+        <controls:HeaderControl Title="Categories">
+          <DockPanel>
+            <StackPanel DockPanel.Dock="Top" Classes="toolbar">
+              <Button Margin="5,0,0,0" Command="{Binding AddCategoryCommand}" >
+                <mi:MaterialIcon Kind="Add"/>
+              </Button>
+            </StackPanel>
+            <ListBox DragDrop.AllowDrop="{Binding IsDraggingParent}" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding PrioritySet.Categories}" SelectedItem="{Binding DataContext.SelectedCategory, ElementName=GridControl}" >
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <Grid ColumnDefinitions="*,Auto,Auto">
+                    <Label Content="{Binding Name}"></Label>
+                    <Label Content=""></Label>
+                    <Button Grid.Column="1" Command="{Binding DataContext.DeleteCategoryCommand, ElementName=GridControl}" CommandParameter="{Binding}">
+                      <mi:MaterialIcon Kind="Delete"/>
+                    </Button>
+                  </Grid>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </DockPanel>
+        </controls:HeaderControl>
+        <controls:HeaderControl  Grid.Column="2" Title="Tags in Selected Category">
+          <DockPanel>
+            <StackPanel DockPanel.Dock="Top" Classes="toolbar">
+              <Button Margin="5,0,0,0" Command="{Binding AddTagCommand}" >
+                <mi:MaterialIcon Kind="Add"/>
+              </Button>
+            </StackPanel>
+            <ListBox  DragDrop.AllowDrop="{Binding IsDraggingChild}" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding SelectedCategory.Tags}">
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <Grid ColumnDefinitions="*, Auto">
+                    <controls:TagAutoCompleteBox Text="{Binding}" />
+                    <Button Grid.Column="1" Command="{Binding DataContext.DeleteTagCommand, ElementName=GridControl}" CommandParameter="{Binding}">
+                      <mi:MaterialIcon Kind="Delete"/>
+                    </Button>
+                  </Grid>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </DockPanel>
+        </controls:HeaderControl>
       </Grid>
-    </StackPanel>
-    <Grid Grid.Row="2" Margin="0,5,0,0" ColumnDefinitions="*,5,*">
-      <ListBox DragDrop.AllowDrop="{Binding IsDraggingParent}" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding SelectedPrioritySet.Entries}" SelectedItem="{Binding SelectedChildSet}" >
-        <ListBox.ItemTemplate>
-          <DataTemplate>
-            <Grid ColumnDefinitions="*, Auto">
-              <controls:TagAutoCompleteBox Text="{Binding Name}" />
-                <Button Grid.Column="1" Command="{Binding DataContext.DeletePrioritySetEntryCommand, ElementName=GridControl}" CommandParameter="{Binding}">
-              <mi:MaterialIcon Kind="Delete"/>
-            </Button>
-          </Grid>
-          </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
-      <ListBox Grid.Column="2" DragDrop.AllowDrop="{Binding IsDraggingChild}" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding SelectedChildSet.Entries}">
-        <ListBox.ItemTemplate>
-        <DataTemplate>
-          <Grid ColumnDefinitions="*, Auto">
-            <controls:TagAutoCompleteBox Text="{Binding Name}" />
-            <Button Grid.Column="1" Command="{Binding DataContext.DeleteChildSetEntryCommand, ElementName=GridControl}" CommandParameter="{Binding}">
-              <mi:MaterialIcon Kind="Delete"/>
-            </Button>
-          </Grid>
-        </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
     </Grid>
-    <StackPanel Classes="footer" Orientation="Horizontal" Grid.Row="4">
-      <Button Command="{Binding SaveCommand}">Save</Button>
-      <Button Command="{Binding CancelCommand}">Cancel</Button>
-    </StackPanel>
-  </Grid>
+  </DockPanel>
 </Window>
