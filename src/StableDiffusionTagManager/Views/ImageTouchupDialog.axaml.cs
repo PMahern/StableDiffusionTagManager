@@ -307,7 +307,8 @@ namespace StableDiffusionTagManager.Views
                             SamplerName = SelectedSampler ?? "Euler a",
                             Steps = SamplingSteps,
                             MaskBlur = MaskBlur,
-                            CfgScale = CFGScale
+                            CfgScale = CFGScale,
+                            Seed = -1
                         });
 
                         var bitmaps = r.Images.Select(imageData =>
