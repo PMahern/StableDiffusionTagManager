@@ -127,7 +127,8 @@ namespace ImageUtil.Interrogation
         public void Dispose()
         {
             disposed = true;
-            pythonImageEngine.Dispose();
+            pythonImageEngine?.Dispose();
+            pythonImageEngine = null;
         }
 
         public bool Disposed => disposed;

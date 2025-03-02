@@ -123,7 +123,7 @@ namespace ImageUtil
                         {
                             if (match.Value != "3.11")
                             {
-                                throw new Exception("Python version is not 3.11. Please install Python 3.11.");
+                                throw new Exception("Python version is not 3.11. Please install Python 3.11. If you're already using a different version of Python globally, you can still install 3.11 and add a symlink to it with a different name (eg python311) to your PATH, then change the python path setting in this application to the shortcut name.");
                             }
                         }
                         else
