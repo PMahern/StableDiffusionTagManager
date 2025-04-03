@@ -173,6 +173,9 @@ namespace StableDiffusionTagManager.ViewModels
         [ObservableProperty]
         private ObservableCollection<ImageAspectRatioSet?> imageAspectRatioSets;
 
+        [ObservableProperty]
+        private ImageAspectRatioSet? selectedImageAspectRatioSet;
+
         #region Tag Collections
         private TagCollectionViewModel? editTagCollectionTarget;
 

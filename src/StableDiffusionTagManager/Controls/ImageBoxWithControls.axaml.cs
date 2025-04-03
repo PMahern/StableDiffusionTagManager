@@ -484,7 +484,15 @@ namespace StableDiffusionTagManager.Controls
         {
             if (SelectionRegion.Width > 0 && SelectionRegion.Height > 0 && Image != null)
             {
-                CropImageRegionAndCreateNewImage(SelectionRegion, TargetImageSize);
+                if (SelectedImageAspectRatioSet == null)
+                {
+                    CropImageRegionAndCreateNewImage(SelectionRegion, TargetImageSize);
+                }
+                else
+                {
+                    CropImageRegionAndCreateNewImage(SelectionRegion, SelectedImageAspectRatioSet.GetClosesResolution((double)SelectionRegion.Width / (double)SelectionRegion.Height));
+                }
+                
             }
         }
 
@@ -524,6 +532,7 @@ namespace StableDiffusionTagManager.Controls
             {
                 finalSize = targetSize.Value;
             }
+
             var newImage = ImageBox.CreateNewImageWithLayersFromRegion(region, finalSize);
             if (newImage != null)
             {

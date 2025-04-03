@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia;
+using CommunityToolkit.Mvvm.ComponentModel;
 using StableDiffusionTagManager.ViewModels;
 using System;
 using System.Collections.ObjectModel;
@@ -13,7 +14,7 @@ namespace StableDiffusionTagManager.Views
         [ObservableProperty]
         private ObservableCollection<ImageResolution> resolutions = new();
 
-        public double GetClosestAspectRatio(double aspect)
+        private ImageResolution? FindClosest(double aspect)
         {
             ImageResolution closestResolution = null;
             double closestDifference = double.MaxValue;
@@ -30,7 +31,23 @@ namespace StableDiffusionTagManager.Views
                 }
             }
 
-            return closestResolution?.ImageAspectRatio ?? 0.0;
+            return closestResolution;
+        }
+        public double GetClosestAspectRatio(double aspect)
+        {
+            return FindClosest(aspect)?.ImageAspectRatio ?? 0.0;
+        }
+
+        internal PixelSize? GetClosesResolution(double aspect)
+        {
+            var closest = FindClosest(aspect);
+
+            if (closest != null)
+            {
+                return new PixelSize(closest.X, closest.Y);
+            }
+
+            return null;
         }
     }
 }
