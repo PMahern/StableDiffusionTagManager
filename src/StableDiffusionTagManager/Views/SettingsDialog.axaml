@@ -2,9 +2,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         mc:Ignorable="d"
-        Height="160"
-        Width="300"
+        Height="400"
+        Width="400"
         xmlns:controls="using:StableDiffusionTagManager.Controls"
         x:Class="StableDiffusionTagManager.Views.SettingsDialog"
         CanResize="False"
@@ -20,12 +21,59 @@
     </Style>
   </Window.Styles>
   <controls:HeaderControl Title="Application Settings" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="5" CloseCommand="{Binding HeaderCloseCommand}">
-    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
       <Label>Web UI URL</Label>
       <TextBox Grid.Column="1" Text="{Binding WebUIAddress}" />
       <Label Grid.Row="1">Python Path</Label>
       <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding PythonPath}" />
-      <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Classes="footer">
+
+      <Label Grid.Row="2">Image Aspect Ratios</Label>
+      <Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="*,Auto,Auto">
+        <ComboBox  ItemsSource="{Binding ImageAspectRatioSets}" HorizontalAlignment="Stretch" SelectedItem="{Binding SelectedImageAspectRatioSet}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Button Grid.Column="1" Command="{Binding AddAspectRatioSetCommand}" ToolTip.Tip="Add Resolution Set">
+          <mi:MaterialIcon Kind="Add"/>
+        </Button>
+        <Button Grid.Column="2" Command="{Binding DeleteAspectRatioSetCommand}" ToolTip.Tip="Delete Selected Resolution Set">
+          <mi:MaterialIcon Kind="Delete"/>
+        </Button>
+      </Grid>
+
+      <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+        <Button Command="{Binding AddResolutionCommand}" ToolTip.Tip="Add Resolution">
+          <mi:MaterialIcon Kind="Add"/>
+        </Button>
+      </StackPanel>
+
+      <ScrollViewer Grid.Row="4" Grid.ColumnSpan="2"  Height="150" HorizontalScrollBarVisibility="Auto">
+        <ItemsControl ItemsSource="{Binding SelectedImageAspectRatioSet.Resolutions}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel Orientation="Vertical"/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <StackPanel Orientation="Horizontal">
+                <TextBox Text="{Binding X}" Width="100" />
+                <TextBox Text="{Binding Y}" Width="100"/>
+                <Button Command="{Binding DataContext.DeleteResolutionCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" ToolTip.Tip="Delete Resolution">
+                  <mi:MaterialIcon Kind="Delete"/>
+                </Button>
+              </StackPanel>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+
+
+
+      <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Classes="footer">
         <Button Command="{Binding SaveCommand}">Save</Button>
         <Button Command="{Binding CancelCommand}">Cancel</Button>
       </StackPanel>

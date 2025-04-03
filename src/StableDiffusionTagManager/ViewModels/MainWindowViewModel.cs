@@ -47,6 +47,18 @@ namespace StableDiffusionTagManager.ViewModels
             this.settings = settings;
             this.viewModelFactory = viewModelFactory;
             this.comicPanelExtractorService = comicPanelExtractorService;
+            UpdateImageAspectRatioSets();
+            
+        }
+
+        private void UpdateImageAspectRatioSets()
+        {
+            this.ImageAspectRatioSets = settings.ImageAspectRatioSets.Select(t => new ImageAspectRatioSet()
+            {
+                Name = t.Item1,
+                Resolutions = t.Item2.Select(r => new ImageResolution() { X = r.Item1, Y = r.Item2 }).ToObservableCollection()
+            }).ToObservableCollection();
+            this.ImageAspectRatioSets.Insert(0, null);
         }
 
         private List<string>? _CopiedTags = null;
@@ -155,6 +167,11 @@ namespace StableDiffusionTagManager.ViewModels
                 }
             }
         }
+
+
+
+        [ObservableProperty]
+        private ObservableCollection<ImageAspectRatioSet?> imageAspectRatioSets;
 
         #region Tag Collections
         private TagCollectionViewModel? editTagCollectionTarget;
@@ -1098,6 +1115,8 @@ namespace StableDiffusionTagManager.ViewModels
             var dialog = new SettingsDialog(settings);
 
             await ShowDialog(dialog);
+
+            UpdateImageAspectRatioSets();
         }
 
         [RelayCommand]
