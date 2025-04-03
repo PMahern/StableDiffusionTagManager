@@ -71,6 +71,13 @@
           <NumericUpDown Value="{Binding SelectionWidth, Mode=TwoWay}"/>
           <Label>h</Label>
           <NumericUpDown Value="{Binding SelectionHeight, Mode=TwoWay}"/>
+          <ComboBox ItemsSource="{Binding ImageAspectRatioSets}" SelectedItem="{Binding SelectedImageAspectRatioSet, Mode=TwoWay}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}"/>
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
           <ToggleButton IsChecked="{Binding IsAspectRatioLocked}">
             <PathIcon Data="{StaticResource lock_regular}" />
           </ToggleButton>
@@ -121,7 +128,9 @@
                                     PaintBrushColor="{Binding PaintBrushColor, Mode=TwoWay}"
                                     MaskColor="{Binding MaskColor, Mode=TwoWay}"
                                     SelectionRegion="{Binding SelectionRegion, Mode=TwoWay}"
-                                    IsAspectRatioLocked="{Binding IsAspectRatioLocked, Mode=TwoWay}"/>
+                                    IsAspectRatioLocked="{Binding IsAspectRatioLocked, Mode=TwoWay}"
+                                    SelectedImageAspectRatioSet="{Binding SelectedImageAspectRatioSet}"
+                                />
     </DockPanel>
     <Border IsVisible="{Binding IsChoosingPaintColor}" Background="#40000000">
       <controls:HeaderControl Title="Select Paint Color" CloseCommand="{Binding ClosePaintColorSelectorCommand}" Height="450" Width="400">

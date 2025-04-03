@@ -5,6 +5,7 @@ using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
 using StableDiffusionTagManager.Extensions;
 using StableDiffusionTagManager.Models;
+using StableDiffusionTagManager.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -79,6 +80,25 @@ namespace StableDiffusionTagManager.Controls
             get => GetValue(AdditionalMaskButtonsContentProperty);
             set => SetValue(AdditionalMaskButtonsContentProperty, value);
         }
+
+        public static readonly StyledProperty<ObservableCollection<ImageAspectRatioSet>> ImageAspectRatioSetsProperty =
+             AvaloniaProperty.Register<ImageBoxWithControls, ObservableCollection<ImageAspectRatioSet>>(nameof(ImageAspectRatioSets), defaultValue: new ObservableCollection<ImageAspectRatioSet>());
+
+        public ObservableCollection<ImageAspectRatioSet> ImageAspectRatioSets
+        {
+            get => GetValue(ImageAspectRatioSetsProperty);
+            set => SetValue(ImageAspectRatioSetsProperty, value);
+        }
+
+        public static readonly StyledProperty<ImageAspectRatioSet?> SelectedImageAspectRatioSetProperty =
+             AvaloniaProperty.Register<ImageBoxWithControls, ImageAspectRatioSet?>(nameof(SelectedImageAspectRatioSet));
+
+        public ImageAspectRatioSet? SelectedImageAspectRatioSet
+        {
+            get => GetValue(SelectedImageAspectRatioSetProperty);
+            set => SetValue(SelectedImageAspectRatioSetProperty, value);
+        }
+
 
         public static readonly StyledProperty<bool> ShowEditImageButtonProperty =
             AvaloniaProperty.Register<ImageBoxWithControls, bool>(nameof(ShowEditImageButton), true);

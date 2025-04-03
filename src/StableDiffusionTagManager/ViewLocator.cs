@@ -17,11 +17,14 @@ namespace StableDiffusionTagManager
             if(param != null)
             {
                 var name = param.GetType().FullName!.Replace("ViewModel", "View");
-                var type = Type.GetType(name);
-
-                if (type != null)
+                if (name != param.GetType().FullName)
                 {
-                    return (Control)Activator.CreateInstance(type)!;
+                    var type = Type.GetType(name);
+
+                    if (type != null)
+                    {
+                        return (Control)Activator.CreateInstance(type)!;
+                    }
                 }
             }
             

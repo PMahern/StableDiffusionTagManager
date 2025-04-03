@@ -1,30 +1,13 @@
 using Avalonia;
 using Avalonia.Controls;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using StableDiffusionTagManager.Extensions;
 using StableDiffusionTagManager.Models;
-using StableDiffusionTagManager.ViewModels;
 using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace StableDiffusionTagManager.Views
 {
-    public partial class ImageResolution : ViewModelBase {
-        [ObservableProperty]
-        private int x;
-
-        [ObservableProperty] 
-        private int y;
-    }
-    public partial class ImageAspectRatioSet : ViewModelBase
-    {
-        [ObservableProperty]
-        private string name;
-
-        [ObservableProperty]
-        private ObservableCollection<ImageResolution> resolutions = new();
-    }
 
     public partial class SettingsDialog : Window
     {
