@@ -37,8 +37,8 @@ namespace StableDiffusionTagManager.ViewModels
         private readonly DialogHandler dialogHandler;
         private readonly WebApiFactory webApiFactory;
 
-        public MainWindowViewModel(ViewModelFactory viewModelFactory, 
-            ComicPanelExtractor comicPanelExtractorService, 
+        public MainWindowViewModel(ViewModelFactory viewModelFactory,
+            ComicPanelExtractor comicPanelExtractorService,
             Settings settings,
             DialogHandler dialogHandler,
             WebApiFactory webApiFactory)
@@ -50,7 +50,7 @@ namespace StableDiffusionTagManager.ViewModels
             this.viewModelFactory = viewModelFactory;
             this.comicPanelExtractorService = comicPanelExtractorService;
             UpdateImageAspectRatioSets();
-            
+
         }
 
         private void UpdateImageAspectRatioSets()
@@ -1932,6 +1932,52 @@ namespace StableDiffusionTagManager.ViewModels
                                                          $"Failed to run mask find and remove process. Error message: {ex.Message}",
                                                          ButtonEnum.Ok,
                                                          Icon.Warning);
+
+                    await dialogHandler.ShowDialog(messageBoxStandardWindow);
+                }
+            }
+            ShowProgressIndicator = false;
+        }
+
+        [RelayCommand]
+        public async Task RemoveBackgroundFromAllImages()
+        {
+            var messageBoxStandardWindow = MessageBoxManager
+                                .GetMessageBoxStandard("RemBG Batch",
+                                                            "Run RemBG on and save all images?",
+                                                            ButtonEnum.YesNo,
+                                                            Icon.Question);
+
+            if ((await dialogHandler.ShowDialog(messageBoxStandardWindow)) == ButtonResult.Yes)
+            {
+                ShowProgressIndicator = true;
+                ProgressIndicatorProgress = 0;
+                ProgressIndicatorMax = ImagesWithTags.Count;
+                ProgressIndicatorMessage = "Initializing Python Utilities...";
+                ConsoleText = $"Initializing...{Environment.NewLine}";
+
+                using var utilities = new PythonUtilities();
+                await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
+
+                try
+                {
+                    foreach (var image in ImagesWithTags)
+                    {
+                        ProgressIndicatorProgress++;
+                        AddConsoleText("Processing image " + image.Filename);
+                        var bytes = await utilities.RunRemBG(image.ImageSource.ToByteArray(), AddConsoleText);
+                        ArchiveImage(openFolder, image.Filename, image.GetTagsFileName());
+                        image.ImageSource = bytes.ToBitmap();
+                        image.ImageSource.Save(Path.Combine(this.openFolder, image.Filename));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    messageBoxStandardWindow = MessageBoxManager
+                            .GetMessageBoxStandard("RemBG failed",
+                                                            $"RemBG batch process failed. Error message: {ex.Message}",
+                                                            ButtonEnum.Ok,
+                                                            Icon.Warning);
 
                     await dialogHandler.ShowDialog(messageBoxStandardWindow);
                 }

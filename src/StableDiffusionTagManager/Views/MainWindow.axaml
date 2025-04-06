@@ -62,6 +62,7 @@
           <MenuItem Header="_Interrogate All Images" Command="{Binding InterrogateAllImagesCommand}"/>
           <MenuItem Header="_Remove Metatags" Command="{Binding RemoveMetaTagsCommand}"/>
           <MenuItem Header="_Generate Masks Then Remove From All Images" Command="{Binding GenerateMaskThenRemoveFromAllImagesCommand}"/>
+          <MenuItem Header="Remove _Background from All Images" Command="{Binding RemoveBackgroundFromAllImagesCommand}"/>
         </MenuItem>
       </Menu>
       <Grid RowDefinitions="100,2,*">
