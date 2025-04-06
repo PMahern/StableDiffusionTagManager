@@ -16,7 +16,6 @@ Keep in mind that for many of these features the application will need to create
 
 Additionally the following features also have external dependencies:
 - Touchup via stable diffusion rely on a running instance of [Automatic1111's](https://github.com/AUTOMATIC1111) [stable diffusion webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) or [lllyasviel's](https://github.com/lllyasviel) [Forge](https://github.com/lllyasviel/stable-diffusion-webui-forge) that can be reached from the local system.
-- RemBG requires having the rembg extension inside of the stable diffusion webui instance you're pointing to. I intend to remove this dependency eventually and just run it locally through python.
 
 ## Building the project
 

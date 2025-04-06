@@ -33,6 +33,8 @@ using StableDiffusionTagManager.Extensions;
 using System.Diagnostics;
 using SkiaSharp;
 using Polly;
+using StableDiffusionTagManager.Controls;
+using StableDiffusionTagManager.Views;
 
 namespace UVtools.AvaloniaControls
 {
@@ -883,6 +885,15 @@ namespace UVtools.AvaloniaControls
             {
                 SetValue(IsAspectRatioLockedProperty, value);
             }
+        }
+
+        public static readonly StyledProperty<ImageAspectRatioSet?> SelectedImageAspectRatioSetProperty =
+             AvaloniaProperty.Register<AdvancedImageBox, ImageAspectRatioSet?>(nameof(SelectedImageAspectRatioSet));
+
+        public ImageAspectRatioSet? SelectedImageAspectRatioSet
+        {
+            get => GetValue(SelectedImageAspectRatioSetProperty);
+            set => SetValue(SelectedImageAspectRatioSetProperty, value);
         }
 
         /// <summary>
@@ -1908,54 +1919,58 @@ namespace UVtools.AvaloniaControls
                     if (draggingMode == DraggingMode.TopLeft)
                     {
                         newTopLeft = new Point(Math.Floor(imagePoint.X), Math.Ceiling(imagePoint.Y));
-                        if (IsAspectRatioLocked)
+                        var curWidth = Math.Abs(newTopLeft.X - newBottomRight.X);
+                        var curheight = Math.Abs(newTopLeft.Y - newBottomRight.Y);
+                        var newAspectRatio = curWidth / curheight;
+                        var targetAspectionRatio = IsAspectRatioLocked ? _lockedAspectRatio :
+                                                   SelectedImageAspectRatioSet?.GetClosestAspectRatio(newAspectRatio);
+                        if (targetAspectionRatio.HasValue)
                         {
-                            var curWidth = Math.Abs(newTopLeft.X - newBottomRight.X);
-                            var curheight = Math.Abs(newTopLeft.Y - newBottomRight.Y);
-                            var newAspectRatio = curWidth / curheight;
-                            if (newAspectRatio > _lockedAspectRatio)
+                            if (newAspectRatio > targetAspectionRatio)
                             {
-                                newTopLeft = new Point(newTopLeft.X, newBottomRight.Y - Math.Floor(curWidth / _lockedAspectRatio));
+                                newTopLeft = new Point(newTopLeft.X, newBottomRight.Y - Math.Floor(curWidth / targetAspectionRatio.Value));
                                 if (newTopLeft.Y < 0)
                                 {
-                                    newTopLeft = new Point(newBottomRight.X - Math.Floor(newBottomRight.Y * _lockedAspectRatio), 0);
+                                    newTopLeft = new Point(newBottomRight.X - Math.Floor(newBottomRight.Y * targetAspectionRatio.Value), 0);
                                 }
                             }
                             else
                             {
-                                newTopLeft = new Point(newBottomRight.X - Math.Floor(curheight * _lockedAspectRatio), newTopLeft.Y);
+                                newTopLeft = new Point(newBottomRight.X - Math.Floor(curheight * targetAspectionRatio.Value), newTopLeft.Y);
                                 if (newTopLeft.X < 0)
                                 {
-                                    newTopLeft = new Point(0, newBottomRight.Y - Math.Floor(newBottomRight.X / _lockedAspectRatio));
+                                    newTopLeft = new Point(0, newBottomRight.Y - Math.Floor(newBottomRight.X / targetAspectionRatio.Value));
                                 }
                             }
-                        }
+                        } 
                     }
                     else if (draggingMode == DraggingMode.TopRight)
                     {
                         newTopLeft = new Point(newTopLeft.X, Math.Ceiling(imagePoint.Y));
                         newBottomRight = new Point(Math.Floor(imagePoint.X), newBottomRight.Y);
-                        if (IsAspectRatioLocked)
+                        var curWidth = Math.Abs(newTopLeft.X - newBottomRight.X);
+                        var curheight = Math.Abs(newTopLeft.Y - newBottomRight.Y);
+                        var newAspectRatio = curWidth / curheight;
+                        var targetAspectionRatio = IsAspectRatioLocked ? _lockedAspectRatio :
+                                                   SelectedImageAspectRatioSet?.GetClosestAspectRatio(newAspectRatio);
+                        if (targetAspectionRatio.HasValue)
                         {
-                            var curWidth = Math.Abs(newTopLeft.X - newBottomRight.X);
-                            var curheight = Math.Abs(newTopLeft.Y - newBottomRight.Y);
-                            var newAspectRatio = curWidth / curheight;
                             if (newAspectRatio < _lockedAspectRatio)
                             {
-                                newBottomRight = new Point(newTopLeft.X + Math.Floor(curheight * _lockedAspectRatio), newBottomRight.Y);
+                                newBottomRight = new Point(newTopLeft.X + Math.Floor(curheight * targetAspectionRatio.Value), newBottomRight.Y);
                                 if (newBottomRight.X >= Image.PixelSize.Width)
                                 {
                                     newBottomRight = new Point(Image.PixelSize.Width - 1, newBottomRight.Y);
-                                    newTopLeft = new Point(newTopLeft.X, newBottomRight.Y - Math.Floor((newBottomRight.X - newTopLeft.X) / _lockedAspectRatio));
+                                    newTopLeft = new Point(newTopLeft.X, newBottomRight.Y - Math.Floor((newBottomRight.X - newTopLeft.X) / targetAspectionRatio.Value));
                                 }
                             }
                             else
                             {
-                                newTopLeft = new Point(newTopLeft.X, newBottomRight.Y - Math.Floor(curWidth / _lockedAspectRatio));
+                                newTopLeft = new Point(newTopLeft.X, newBottomRight.Y - Math.Floor(curWidth / targetAspectionRatio.Value));
                                 if (newTopLeft.Y < 0)
                                 {
                                     newTopLeft = new Point(newTopLeft.X, 0);
-                                    newBottomRight = new Point(newTopLeft.X + Math.Floor((newBottomRight.Y - newTopLeft.Y) * _lockedAspectRatio), newBottomRight.Y);
+                                    newBottomRight = new Point(newTopLeft.X + Math.Floor((newBottomRight.Y - newTopLeft.Y) * targetAspectionRatio.Value), newBottomRight.Y);
                                 }
                             }
                         }
@@ -1964,27 +1979,29 @@ namespace UVtools.AvaloniaControls
                     {
                         newTopLeft = new Point(imagePoint.X, newTopLeft.Y);
                         newBottomRight = new Point(newBottomRight.X, imagePoint.Y);
-                        if (IsAspectRatioLocked)
+                        var curWidth = Math.Abs(newTopLeft.X - newBottomRight.X);
+                        var curheight = Math.Abs(newTopLeft.Y - newBottomRight.Y);
+                        var newAspectRatio = curWidth / curheight;
+                        var targetAspectionRatio = IsAspectRatioLocked ? _lockedAspectRatio :
+                                                   SelectedImageAspectRatioSet?.GetClosestAspectRatio(newAspectRatio);
+                        if (targetAspectionRatio.HasValue)
                         {
-                            var curWidth = Math.Abs(newTopLeft.X - newBottomRight.X);
-                            var curheight = Math.Abs(newTopLeft.Y - newBottomRight.Y);
-                            var newAspectRatio = curWidth / curheight;
-                            if (newAspectRatio < _lockedAspectRatio)
+                            if (newAspectRatio < targetAspectionRatio)
                             {
-                                newTopLeft = new Point(newBottomRight.X - Math.Floor(curheight * _lockedAspectRatio), newTopLeft.Y);
+                                newTopLeft = new Point(newBottomRight.X - Math.Floor(curheight * targetAspectionRatio.Value), newTopLeft.Y);
                                 if (newTopLeft.X < 0)
                                 {
                                     newTopLeft = new Point(0, newTopLeft.Y);
-                                    newBottomRight = new Point(newBottomRight.X, newTopLeft.Y + Math.Floor(newBottomRight.X / _lockedAspectRatio));
+                                    newBottomRight = new Point(newBottomRight.X, newTopLeft.Y + Math.Floor(newBottomRight.X / targetAspectionRatio.Value));
                                 }
                             }
                             else
                             {
-                                newBottomRight = new Point(newBottomRight.X, newTopLeft.Y + Math.Floor(curWidth / _lockedAspectRatio));
+                                newBottomRight = new Point(newBottomRight.X, newTopLeft.Y + Math.Floor(curWidth / targetAspectionRatio.Value));
                                 if (newBottomRight.Y >= Image.PixelSize.Height)
                                 {
                                     newBottomRight = new Point(newBottomRight.X, Image.PixelSize.Height - 1);
-                                    newTopLeft = new Point(newBottomRight.X - Math.Floor((newBottomRight.Y - newTopLeft.Y) * _lockedAspectRatio), newTopLeft.Y);
+                                    newTopLeft = new Point(newBottomRight.X - Math.Floor((newBottomRight.Y - newTopLeft.Y) * targetAspectionRatio.Value), newTopLeft.Y);
                                 }
                             }
                         }
@@ -1992,27 +2009,29 @@ namespace UVtools.AvaloniaControls
                     else if (draggingMode == DraggingMode.BottomRight)
                     {
                         newBottomRight = imagePoint;
-                        if (IsAspectRatioLocked)
+                        var curWidth = Math.Abs(newTopLeft.X - newBottomRight.X);
+                        var curheight = Math.Abs(newTopLeft.Y - newBottomRight.Y);
+                        var newAspectRatio = curWidth / curheight;
+                        var targetAspectionRatio = IsAspectRatioLocked ? _lockedAspectRatio :
+                                                   SelectedImageAspectRatioSet?.GetClosestAspectRatio(newAspectRatio);
+                        if (targetAspectionRatio.HasValue)
                         {
-                            var curWidth = Math.Abs(newTopLeft.X - newBottomRight.X);
-                            var curheight = Math.Abs(newTopLeft.Y - newBottomRight.Y);
-                            var newAspectRatio = curWidth / curheight;
-                            if (newAspectRatio < _lockedAspectRatio)
+                            if (newAspectRatio < targetAspectionRatio)
                             {
-                                newBottomRight = new Point(newTopLeft.X + Math.Floor(curheight * _lockedAspectRatio), newBottomRight.Y);
+                                newBottomRight = new Point(newTopLeft.X + Math.Floor(curheight * targetAspectionRatio.Value), newBottomRight.Y);
                                 if (newBottomRight.X >= Image.PixelSize.Width)
                                 {
                                     var xpos = Image.PixelSize.Width - 1;
-                                    newBottomRight = new Point(xpos, newTopLeft.Y + Math.Floor((xpos - newTopLeft.X) / _lockedAspectRatio));
+                                    newBottomRight = new Point(xpos, newTopLeft.Y + Math.Floor((xpos - newTopLeft.X) / targetAspectionRatio.Value));
                                 }
                             }
                             else
                             {
-                                newBottomRight = new Point(newBottomRight.X, newTopLeft.Y + Math.Floor(curWidth / _lockedAspectRatio));
+                                newBottomRight = new Point(newBottomRight.X, newTopLeft.Y + Math.Floor(curWidth / targetAspectionRatio.Value));
                                 if (newBottomRight.Y >= Image.PixelSize.Height)
                                 {
                                     var ypos = Image.PixelSize.Height - 1;
-                                    newBottomRight = new Point(newTopLeft.X + Math.Floor((ypos - newTopLeft.Y) * _lockedAspectRatio), ypos);
+                                    newBottomRight = new Point(newTopLeft.X + Math.Floor((ypos - newTopLeft.Y) * targetAspectionRatio.Value), ypos);
                                 }
                             }
                         }
