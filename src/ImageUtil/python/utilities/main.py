@@ -10,6 +10,7 @@ from torchvision.transforms.functional import to_pil_image
 import torch
 import numpy as np
 from rembg import remove
+from transparent_background import Remover
 
 def mask_to_pil(masks: torch.Tensor, shape: tuple[int, int]) -> list[Image.Image]:
     """
@@ -160,6 +161,20 @@ def main():
             print(img_base64)
             print("GENERATION END")
             sys.stdout.flush()
+        elif operation == "transparent-background":
+            print("Executing Inspyre Transparent Background")
+            sys.stdout.flush()
+            
+            imagedata = sys.stdin.readline().strip()
+            binary_data = base64.b64decode(imagedata)
+            image_bytes = BytesIO(binary_data)
+            with Image.open(image_bytes).convert("RGB") as img:
+                remover = Remover() 
+                result = remover.process(img)
+                print("GENERATION START")
+                print(img2base64(result))
+                print("GENERATION END")
+                sys.stdout.flush()
 
 
 if __name__ == "__main__":

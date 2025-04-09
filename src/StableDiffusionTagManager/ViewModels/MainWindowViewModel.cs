@@ -22,6 +22,7 @@ using StableDiffusionTagManager.Collections;
 using Avalonia.Threading;
 using StableDiffusionTagManager.Services;
 using ImageUtil.Interrogation;
+using Avalonia.Controls;
 
 namespace StableDiffusionTagManager.ViewModels
 {
@@ -1228,30 +1229,34 @@ namespace StableDiffusionTagManager.ViewModels
 
             //Cache the selected image in case it's changed during async operation
             var selectedImage = SelectedImage;
-            var api = webApiFactory.GetWebApi();
-            if (selectedImage != null && api != null)
+            if (selectedImage != null)
             {
                 using var utilities = new PythonUtilities();
                 try
                 {
-                    await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
+                    var method = await ShowBackgroundRemovalDialog();
 
-                    var bytes = await utilities.RunRemBG(SelectedImage.ImageSource.ToByteArray(), AddConsoleText);
-
-                    using (var mstream = new MemoryStream(bytes))
+                    if (method != null)
                     {
-                        var imageResult = new Bitmap(mstream);
+                        await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
 
-                        var viewer = new ImageReviewDialog();
-                        viewer.Title = "Review image with removed background";
-                        viewer.Images = new ObservableCollection<ImageReviewViewModel>() { new ImageReviewViewModel(imageResult) };
-                        viewer.ReviewMode = ImageReviewDialogMode.SingleSelect;
-                        await dialogHandler.ShowWindowAsDialog(viewer);
+                        var bytes = method == "RemBG" ? await utilities.RunRemBG(selectedImage.ImageSource.ToByteArray(), AddConsoleText) : await utilities.RunInsypreTransparentBG(selectedImage.ImageSource.ToByteArray(), AddConsoleText);
 
-                        if (viewer.Success)
+                        using (var mstream = new MemoryStream(bytes))
                         {
-                            selectedImage.ImageSource = imageResult;
-                            selectedImage.ImageSource.Save(Path.Combine(this.openFolder, selectedImage.Filename));
+                            var imageResult = new Bitmap(mstream);
+
+                            var viewer = new ImageReviewDialog();
+                            viewer.Title = "Review image with removed background";
+                            viewer.Images = new ObservableCollection<ImageReviewViewModel>() { new ImageReviewViewModel(imageResult) };
+                            viewer.ReviewMode = ImageReviewDialogMode.SingleSelect;
+                            await dialogHandler.ShowWindowAsDialog(viewer);
+
+                            if (viewer.Success)
+                            {
+                                selectedImage.ImageSource = imageResult;
+                                selectedImage.ImageSource.Save(Path.Combine(this.openFolder, selectedImage.Filename));
+                            }
                         }
                     }
                 }
@@ -1939,16 +1944,29 @@ namespace StableDiffusionTagManager.ViewModels
             ShowProgressIndicator = false;
         }
 
+
+        private async Task<string?> ShowBackgroundRemovalDialog()
+        {
+            var dialog = new DropdownSelectDialog();
+            dialog.Title = "Select Model";
+            dialog.Width = 300;
+            dialog.DropdownItems = new List<DropdownSelectItem>() {
+                new DropdownSelectItem<string>("RemBG", "RemBG"),
+                new DropdownSelectItem<string>("Inspyre Transparent Background", "Transparent-Background"),
+            };
+
+            var dialogResult = await dialogHandler.ShowDialog<DropdownSelectItem?>(dialog);
+            var result = dialogResult as DropdownSelectItem<string>;
+
+            return result?.Value;
+        }
+
         [RelayCommand]
         public async Task RemoveBackgroundFromAllImages()
         {
-            var messageBoxStandardWindow = MessageBoxManager
-                                .GetMessageBoxStandard("RemBG Batch",
-                                                            "Run RemBG on and save all images?",
-                                                            ButtonEnum.YesNo,
-                                                            Icon.Question);
+            var method = await ShowBackgroundRemovalDialog();
 
-            if ((await dialogHandler.ShowDialog(messageBoxStandardWindow)) == ButtonResult.Yes)
+            if (method != null)
             {
                 ShowProgressIndicator = true;
                 ProgressIndicatorProgress = 0;
@@ -1965,7 +1983,7 @@ namespace StableDiffusionTagManager.ViewModels
                     {
                         ProgressIndicatorProgress++;
                         AddConsoleText("Processing image " + image.Filename);
-                        var bytes = await utilities.RunRemBG(image.ImageSource.ToByteArray(), AddConsoleText);
+                        var bytes = method == "RemBG" ? await utilities.RunRemBG(image.ImageSource.ToByteArray(), AddConsoleText) : await utilities.RunInsypreTransparentBG(image.ImageSource.ToByteArray(), AddConsoleText);
                         ArchiveImage(openFolder, image.Filename, image.GetTagsFileName());
                         image.ImageSource = bytes.ToBitmap();
                         image.ImageSource.Save(Path.Combine(this.openFolder, image.Filename));
@@ -1973,7 +1991,7 @@ namespace StableDiffusionTagManager.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    messageBoxStandardWindow = MessageBoxManager
+                    var messageBoxStandardWindow = MessageBoxManager
                             .GetMessageBoxStandard("RemBG failed",
                                                             $"RemBG batch process failed. Error message: {ex.Message}",
                                                             ButtonEnum.Ok,

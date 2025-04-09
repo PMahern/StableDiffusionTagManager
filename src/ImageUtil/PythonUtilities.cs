@@ -73,6 +73,20 @@ namespace ImageUtil
             return res != null ? Convert.FromBase64String(res) : null;
         }
 
+        public async Task<byte[]?> RunInsypreTransparentBG(byte[] imageData, Action<string> consoleCallBack)
+        {
+            if (!initialized)
+                throw new InvalidOperationException("Tried to access an uninitialized Python Utilities Engine.");
+
+            if (disposed)
+                throw new ObjectDisposedException("Tried to access a disposed Python Utilities Engine.");
+
+            await pythonImageEngine.SendString("transparent-background");
+            await pythonImageEngine.SendImage(imageData, consoleCallBack);
+            var res = await pythonImageEngine.WaitForGenerationResultImage(consoleCallBack);
+            return res != null ? Convert.FromBase64String(res) : null;
+        }
+
         public void Dispose()
         {
             if (!disposed)

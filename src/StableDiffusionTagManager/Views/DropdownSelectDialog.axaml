@@ -17,7 +17,7 @@
         Icon="/Assets/logo.ico"
         Name="ThisControl"
         KeyDown="WindowKeyDown">
-  <controls:HeaderControl DataContext="{Binding ElementName=ThisControl}" Title="Select Tag Priority Set" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="5" CloseCommand="{Binding CancelCommand}">
+  <controls:HeaderControl DataContext="{Binding ElementName=ThisControl}" Title="{Binding Title}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="5" CloseCommand="{Binding CancelCommand}">
     <Grid RowDefinitions="Auto,Auto">
       <ComboBox ItemsSource="{Binding DropdownItems}" SelectedItem="{Binding SelectedItem}" HorizontalAlignment="Stretch">
         <ComboBox.ItemTemplate>

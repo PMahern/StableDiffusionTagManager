@@ -1,4 +1,4 @@
-$versionsuffix = "0.21.0-b1"
+$versionsuffix = "0.21.0-b2"
 $projectpath = "src/StableDiffusionTagManager/StableDiffusionTagManager.csproj"
 $platforms = "win10-x64", "linux-x64", "osx-x64"
 
