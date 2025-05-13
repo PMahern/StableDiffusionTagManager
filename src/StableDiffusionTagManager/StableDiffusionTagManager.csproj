@@ -85,8 +85,14 @@
     <Compile Update="Views\ImageTouchupDialog.axaml.cs">
       <DependentUpon>ImageTouchupDialog.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\JoyCaptionBetaOneNaturalLanguageInterrogationView.axaml.cs">
+      <DependentUpon>JoyCaptionBetaOneNaturalLanguageInterrogationView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\JoyCaptionAlphaTwoNaturalLanguageInterrogationView.axaml.cs">
       <DependentUpon>JoyCaptionAlphaTwoNaturalLanguageInterrogationView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\JoyCaptionBetaOneTagInterrogationView.axaml.cs">
+      <DependentUpon>JoyCaptionBetaOneTagInterrogationView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\JoyCaptionAlphaTwoTagInterrogationView.axaml.cs">
       <DependentUpon>JoyCaptionAlphaTwoTagInterrogationView.axaml</DependentUpon>

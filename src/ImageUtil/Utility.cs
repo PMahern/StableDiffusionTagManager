@@ -169,11 +169,6 @@ namespace ImageUtil
                     arguments.Append($"-c \"{PythonPath} -m venv venv && source venv/bin/activate");
                 }
 
-                if (requirementsFile != null)
-                {
-                    arguments.Append($" && pip install -r {requirementsFile}");
-                }
-
                 if (additionalDependencies != null)
                 {
                     foreach (var dependency in additionalDependencies)
@@ -182,6 +177,12 @@ namespace ImageUtil
                     }
                 }
 
+                if (requirementsFile != null)
+                {
+                    arguments.Append($" && pip install -r {requirementsFile}");
+                }
+
+                
                 arguments.Append(" && exit\"");
                 info.Arguments = arguments.ToString();
 
