@@ -28,6 +28,7 @@ namespace StableDiffusionTagManager.ViewModels
         public List<OSPlatform> SupportedPlatforms => new List<OSPlatform> { OSPlatform.Linux };
     }
 
+
     public class JoyCaptionPreAlphaViewModelFactory : INaturalLanguageInterrogatorViewModelFactory
     {
         public string Name => "Joy Caption Pre-Alpha";
@@ -55,6 +56,16 @@ namespace StableDiffusionTagManager.ViewModels
         public InterrogatorViewModel<string> CreateViewModel()
         {
             return new JoyCaptionAlphaTwoNaturalLanguageInterrogationViewModel();
+        }
+    }
+
+    public class JoyCaptionBetaOneNaturalLanguageViewModelFactory : INaturalLanguageInterrogatorViewModelFactory
+    {
+        public string Name => "Joy Caption Beta One";
+
+        public InterrogatorViewModel<string> CreateViewModel()
+        {
+            return new JoyCaptionBetaOneNaturalLanguageInterrogationViewModel();
         }
     }
 }

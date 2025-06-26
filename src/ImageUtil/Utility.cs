@@ -179,9 +179,22 @@ namespace ImageUtil
                     arguments.Append($" && pip install {dependency}");
                 }
             }
+                if (additionalDependencies != null)
+                {
+                    foreach (var dependency in additionalDependencies)
+                    {
+                        arguments.Append($" && pip install {dependency}");
+                    }
+                }
 
-            arguments.Append(" && exit\"");
-            info.Arguments = arguments.ToString();
+                if (requirementsFile != null)
+                {
+                    arguments.Append($" && pip install -r {requirementsFile}");
+                }
+
+                
+                arguments.Append(" && exit\"");
+                info.Arguments = arguments.ToString();
 
             info.RedirectStandardOutput = true;
             info.UseShellExecute = false;

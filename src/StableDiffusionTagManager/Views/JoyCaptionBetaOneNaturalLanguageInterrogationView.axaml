@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StableDiffusionTagManager.Views.JoyCaptionBetaOneNaturalLanguageInterrogationView"
+             xmlns:viewmodels="using:StableDiffusionTagManager.ViewModels"
+             xmlns:imageutil="using:ImageUtil.Interrogation">
+
+  <StackPanel Classes="inputform">
+    <Panel>
+      <Label Content="Prompt"/>
+      <ComboBox ItemsSource="{x:Static imageutil:JoyCaptionBetaOne.NaturalLanguagePrompts}" SelectedItem="{Binding SelectedPrompt, Mode=TwoWay}" />
+    </Panel>
+    <Panel>
+      <Label Content="Length"/>
+      <ComboBox ItemsSource="{x:Static imageutil:JoyCaptionBetaOne.LengthChoices}" SelectedItem="{Binding SelectedLength, Mode=TwoWay}" />
+    </Panel>
+    <Panel>
+      <Label Content="Character Name"/>
+      <TextBox Text="{Binding CharacterName}"/>
+    </Panel>
+    <Panel>
+      <Label Classes="controlgroup">Extra Options</Label>
+    </Panel>
+    <ScrollViewer HorizontalScrollBarVisibility="Visible" Height="200" Background="#111111" BorderBrush="White" Margin="5" BorderThickness="3">
+      <ItemsControl ItemsSource="{Binding ExtraOptions}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <CheckBox Content="{Binding Text}" IsChecked="{Binding IsChecked}" ToolTip.Tip="{Binding Text}" />
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+  </StackPanel>
+</UserControl>

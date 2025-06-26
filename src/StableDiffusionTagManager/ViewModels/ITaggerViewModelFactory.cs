@@ -9,6 +9,16 @@ namespace StableDiffusionTagManager.ViewModels
         InterrogatorViewModel<List<string>> CreateViewModel();
     }
 
+    public class JoyCaptionBetaOneTaggerViewModelFactory : ITaggerViewModelFactory
+    {
+        public string Name => "Joy Caption Beta One";
+
+        public InterrogatorViewModel<List<string>> CreateViewModel()
+        {
+            return new JoyCaptionBetaOneTagInterrogationViewModel();
+        }
+    }
+
     public class JoyCaptionAlphaTwoTaggerViewModelFactory : ITaggerViewModelFactory
     {
 
@@ -117,4 +127,6 @@ namespace StableDiffusionTagManager.ViewModels
             return new DefaultTagInterrogationViewModel(() => new SWTagger(Name));
         }
     }
+
+    
 }
