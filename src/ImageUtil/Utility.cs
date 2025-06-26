@@ -150,61 +150,58 @@ namespace ImageUtil
 
             await CheckPythonVersionAsync();
 
-            if (!Directory.Exists(venvPathPath))
+            updateCallBack("Creating virtual environment and downloading model dependencies...");
+
+            Process p = new Process();
+            ProcessStartInfo info = new ProcessStartInfo();
+
+            info.FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "cmd.exe" : "/bin/bash"; ;
+            var arguments = new StringBuilder();
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                updateCallBack("Creating virtual environment and downloading model dependencies...");
-
-                Process p = new Process();
-                ProcessStartInfo info = new ProcessStartInfo();
-
-                info.FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "cmd.exe" : "/bin/bash"; ;
-                var arguments = new StringBuilder();
-
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    arguments.Append($"/k \"{PythonPath} -m venv venv && venv\\Scripts\\activate.bat");
-                }
-                else
-                {
-                    arguments.Append($"-c \"{PythonPath} -m venv venv && source venv/bin/activate");
-                }
-
-                if (requirementsFile != null)
-                {
-                    arguments.Append($" && pip install -r {requirementsFile}");
-                }
-
-                if (additionalDependencies != null)
-                {
-                    foreach (var dependency in additionalDependencies)
-                    {
-                        arguments.Append($" && pip install {dependency}");
-                    }
-                }
-
-                arguments.Append(" && exit\"");
-                info.Arguments = arguments.ToString();
-
-                info.RedirectStandardOutput = true;
-                info.UseShellExecute = false;
-                info.CreateNoWindow = true;
-                info.WorkingDirectory = absoluteWorkingDirectory;
-
-                p.OutputDataReceived += (sender, args) =>
-                {
-                    if (args.Data != null && !string.IsNullOrWhiteSpace(args.Data))
-                        consoleCallback(args.Data);
-                };
-
-                p.StartInfo = info;
-                p.Start();
-
-                p.BeginOutputReadLine();
-
-                await p.WaitForExitAsync();
-
-                return true;
+                arguments.Append($"/k \"{PythonPath} -m venv venv && venv\\Scripts\\activate.bat");
             }
+            else
+            {
+                arguments.Append($"-c \"{PythonPath} -m venv venv && source venv/bin/activate");
+            }
+
+            if (requirementsFile != null)
+            {
+                arguments.Append($" && pip install -r {requirementsFile}");
+            }
+
+            if (additionalDependencies != null)
+            {
+                foreach (var dependency in additionalDependencies)
+                {
+                    arguments.Append($" && pip install {dependency}");
+                }
+            }
+
+            arguments.Append(" && exit\"");
+            info.Arguments = arguments.ToString();
+
+            info.RedirectStandardOutput = true;
+            info.UseShellExecute = false;
+            info.CreateNoWindow = true;
+            info.WorkingDirectory = absoluteWorkingDirectory;
+
+            p.OutputDataReceived += (sender, args) =>
+            {
+                if (args.Data != null && !string.IsNullOrWhiteSpace(args.Data))
+                    consoleCallback(args.Data);
+            };
+
+            p.StartInfo = info;
+            p.Start();
+
+            p.BeginOutputReadLine();
+
+            await p.WaitForExitAsync();
+
+            return true;
 
             return false;
         }
@@ -277,6 +274,11 @@ namespace ImageUtil
                     }
                 }
             }
+        }
+
+        public static string ConvertToUnixPath(string path)
+        {
+            return path.Replace(Path.DirectorySeparatorChar, '/');
         }
     }
 }

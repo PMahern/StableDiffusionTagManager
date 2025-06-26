@@ -406,9 +406,9 @@ namespace StableDiffusionTagManager.Views
 
             if (files.Count > 0)
             {
-                var file = files[0].Path.AbsolutePath;
+                var file = files[0].Path.UnescapedAbsolutePath();
 
-                Image = new Bitmap(files.First().Path.AbsolutePath);
+                Image = new Bitmap(file);
 
                 //assumes each image has one and only one text chunk which is true for all images from StableDiffustion
                 if (file.EndsWith(".png"))
