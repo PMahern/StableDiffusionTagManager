@@ -17,6 +17,7 @@ namespace ImageUtil.Interrogation
     {
         public static readonly List<string> ExtraOptionText = new List<string>
         {
+            "If there is a person/character in the image you must refer to them as {name}.",
             "Do NOT include information about people/characters that cannot be changed (like ethnicity, gender, etc), but do still include changeable attributes (like hair style).",
             "Include information about lighting.",
             "Include information about camera angle.",
@@ -58,7 +59,7 @@ namespace ImageUtil.Interrogation
             "Descriptive",
             "Descriptive (Casual)",
             "Straightforward",
-            "Training Prompt",
+            "Stable Diffusion Prompt",
             "MidJourney",
             "Art Critic",
             "Product Listing",

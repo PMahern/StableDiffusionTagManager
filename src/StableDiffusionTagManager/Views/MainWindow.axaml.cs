@@ -66,7 +66,7 @@ namespace StableDiffusionTagManager.Views
                 viewModel.ImageDirtyCallback = (image) => ImageBox.ImageBox.ImageHasPaint(image);
                 viewModel.GetModifiedImageDataCallback = (originalBitmap, clear) =>
                 {
-                    var bitmap = ImageBox.ImageBox.CreateNewImageWithLayersFromRegion();
+                    var bitmap = ImageBox.ImageBox.CreateNewImageWithLayersFromRegion(originalBitmap);
                     if (clear)
                     {
                         ImageBox.ImageBox.ClearPaintAndMask(originalBitmap);

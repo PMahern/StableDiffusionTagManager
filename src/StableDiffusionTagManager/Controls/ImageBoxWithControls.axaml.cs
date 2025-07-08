@@ -533,7 +533,7 @@ namespace StableDiffusionTagManager.Controls
                 finalSize = targetSize.Value;
             }
 
-            var newImage = ImageBox.CreateNewImageWithLayersFromRegion(region, finalSize);
+            var newImage = ImageBox.CreateNewImageWithLayersFromRegion(null, region, finalSize);
             if (newImage != null)
             {
                 ImageCropped?.Invoke(this, newImage);

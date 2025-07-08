@@ -35,6 +35,7 @@ using SkiaSharp;
 using Polly;
 using StableDiffusionTagManager.Controls;
 using StableDiffusionTagManager.Views;
+using System.Runtime.Intrinsics.X86;
 
 namespace UVtools.AvaloniaControls
 {
@@ -2954,12 +2955,16 @@ namespace UVtools.AvaloniaControls
 
         public Bitmap? CreateNewImageWithLayersFromSelection(PixelSize? targetSize = null)
         {
-            return CreateNewImageWithLayersFromRegion(SelectionRegion, targetSize);
+            return CreateNewImageWithLayersFromRegion(null, SelectionRegion, targetSize);
         }
 
-        public Bitmap? CreateNewImageWithLayersFromRegion(Rect? region = null, PixelSize? targetSize = null)
+        public Bitmap? CreateNewImageWithLayersFromRegion(Bitmap? bitmap = null, Rect? region = null, PixelSize? targetSize = null)
         {
-            return Image?.CreateNewImageFromRegion(region, targetSize, GetImagePaint(Image));
+            if(bitmap == null)
+            {
+                bitmap = Image;
+            }
+            return bitmap?.CreateNewImageFromRegion(region, targetSize, GetImagePaint(bitmap));
         }
 
         public Bitmap? CreateNewImageFromMask()
