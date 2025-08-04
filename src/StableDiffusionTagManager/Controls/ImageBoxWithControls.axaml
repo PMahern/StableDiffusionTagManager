@@ -8,6 +8,7 @@
              xmlns:controls="using:StableDiffusionTagManager.Controls"
              xmlns:cp="clr-namespace:ThemeEditor.Controls.ColorPicker;assembly=ThemeEditor.Controls.ColorPicker"
              xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:bitmapExtensions="using:StableDiffusionTagManager.Extensions"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="StableDiffusionTagManager.Controls.ImageBoxWithControls">
   <UserControl.Resources>
@@ -60,6 +61,13 @@
           <Button Command="{Binding CropSelectionToTargetImageSize}" ToolTip.Tip="Crop Selection To Target Size">
             <mi:MaterialIcon Kind="CropSquare" />
           </Button>
+          <ComboBox ItemsSource="{Binding Resamplers}" SelectedItem="{Binding SelectedImageResampler, Mode=TwoWay}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding}"/>
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
           <Button Command="{Binding CropSelectionCommand}" ToolTip.Tip="Crop Selection">
             <PathIcon Data="{StaticResource crop_regular}" />
           </Button>

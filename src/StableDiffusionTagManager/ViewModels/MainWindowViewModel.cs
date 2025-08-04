@@ -179,6 +179,9 @@ namespace StableDiffusionTagManager.ViewModels
         [ObservableProperty]
         private ImageAspectRatioSet? selectedImageAspectRatioSet;
 
+        [ObservableProperty]
+        private Resampler selectedImageResampler = Resampler.Lanczos8;
+
         #region Tag Collections
         private TagCollectionViewModel? editTagCollectionTarget;
 

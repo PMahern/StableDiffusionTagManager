@@ -1,21 +1,55 @@
-﻿using Avalonia.Media.Imaging;
-using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp;
-using System.IO;
-using SixLabors.ImageSharp.PixelFormats;
-using Avalonia;
-using System.Collections.Generic;
-using System;
-using ImageUtil;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Avalonia;
 using Avalonia.Media;
-using Polly;
+using Avalonia.Media.Imaging;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Processing.Processors.Transforms;
+using System;
+using System.IO;
 
 namespace StableDiffusionTagManager.Extensions
 {
+    public enum Resampler : int
+    {
+        Bicubic,
+        Box,
+        CatmullRom,
+        Hermite,
+        Lanczos2,
+        Lanczos3,
+        Lanczos5,
+        Lanczos8,
+        MitchellNetravali,
+        NearestNeighbor,
+        Robidoux,
+        RobidouxSharp,
+        Spline,
+        Triangle,
+        Welch
+    }
+    
     public static class BitmapExtensions
     {
+        public static IResampler ToResampler(this Resampler resampler) => resampler switch
+        {
+            Resampler.Bicubic => KnownResamplers.Bicubic,
+            Resampler.Box => KnownResamplers.Box,
+            Resampler.CatmullRom => KnownResamplers.CatmullRom,
+            Resampler.Lanczos2 => KnownResamplers.Lanczos2,
+            Resampler.Lanczos3 => KnownResamplers.Lanczos3,
+            Resampler.Lanczos5 => KnownResamplers.Lanczos5,
+            Resampler.Lanczos8 => KnownResamplers.Lanczos8,
+            Resampler.MitchellNetravali => KnownResamplers.MitchellNetravali,
+            Resampler.NearestNeighbor => KnownResamplers.NearestNeighbor,
+            Resampler.Robidoux => KnownResamplers.Robidoux,
+            Resampler.RobidouxSharp => KnownResamplers.RobidouxSharp,
+            Resampler.Spline => KnownResamplers.Spline,
+            Resampler.Triangle => KnownResamplers.Triangle,
+            Resampler.Welch => KnownResamplers.Welch,
+            _ => throw new ArgumentOutOfRangeException(nameof(resampler), $"Not expected resampler value: {resampler}"),
+        };
+
 
         public static Bitmap Copy(this Bitmap source)
         {
@@ -118,10 +152,10 @@ namespace StableDiffusionTagManager.Extensions
             };
         }
 
-        public static Bitmap CreateNewImageFromRegion(this Bitmap bitmap, Rect? region = null, PixelSize? targetSize = null, RenderTargetBitmap? paint = null)
+        public static Bitmap CreateNewImageFromRegion(this Bitmap bitmap, Rect? region = null, PixelSize? targetSize = null, RenderTargetBitmap? paint = null, Resampler resampler = Resampler.Lanczos8)
         {
             var finalRegion = region ?? new Rect(0, 0, bitmap.PixelSize.Width, bitmap.PixelSize.Height);
-            var finalSize = targetSize ?? new PixelSize(Convert.ToInt32(finalRegion.Width), Convert.ToInt32(finalRegion.Height));
+            var finalSize = new PixelSize(Convert.ToInt32(finalRegion.Width), Convert.ToInt32(finalRegion.Height));
             var newImage = new RenderTargetBitmap(finalSize);
             using (var drawingContext = newImage.CreateDrawingContext())
             {
@@ -134,7 +168,18 @@ namespace StableDiffusionTagManager.Extensions
                     }
                 }
             }
+            
+            if(targetSize.HasValue)
+            {
+                if(targetSize.Value.Width != finalSize.Width || targetSize.Value.Height != finalSize.Height)
+                {
+                    var sixLabors = newImage.CreateSixLaborsImage();
 
+                    var rescaled = sixLabors.Clone(ctx => ctx.Resize(targetSize.Value.Width, targetSize.Value.Height, resampler.ToResampler()));
+                    return rescaled.CreateBitmap();
+                }
+            }
+           
             return newImage;
         }
 

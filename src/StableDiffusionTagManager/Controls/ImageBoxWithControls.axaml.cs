@@ -72,6 +72,8 @@ namespace StableDiffusionTagManager.Controls
             }
         }
 
+        public Array Resamplers => Enum.GetValues(typeof(Resampler));
+
         public static readonly StyledProperty<object> AdditionalMaskButtonsContentProperty =
              AvaloniaProperty.Register<ImageBoxWithControls, object>(nameof(AdditionalMaskButtonsContent));
 
@@ -80,6 +82,16 @@ namespace StableDiffusionTagManager.Controls
             get => GetValue(AdditionalMaskButtonsContentProperty);
             set => SetValue(AdditionalMaskButtonsContentProperty, value);
         }
+
+        public static readonly StyledProperty<Resampler> SelectedImageResamplerProperty =
+             AvaloniaProperty.Register<ImageBoxWithControls, Resampler>(nameof(SelectedImageResampler), defaultValue: Resampler.Lanczos8);
+
+        public Resampler SelectedImageResampler
+        {
+            get => GetValue(SelectedImageResamplerProperty);
+            set => SetValue(SelectedImageResamplerProperty, value);
+        }
+
 
         public static readonly StyledProperty<ObservableCollection<ImageAspectRatioSet>> ImageAspectRatioSetsProperty =
              AvaloniaProperty.Register<ImageBoxWithControls, ObservableCollection<ImageAspectRatioSet>>(nameof(ImageAspectRatioSets), defaultValue: new ObservableCollection<ImageAspectRatioSet>());
@@ -490,7 +502,7 @@ namespace StableDiffusionTagManager.Controls
                 }
                 else
                 {
-                    CropImageRegionAndCreateNewImage(SelectionRegion, SelectedImageAspectRatioSet.GetClosesResolution((double)SelectionRegion.Width / (double)SelectionRegion.Height));
+                    CropImageRegionAndCreateNewImage(SelectionRegion, SelectedImageAspectRatioSet.GetClosestResolution((double)SelectionRegion.Width / (double)SelectionRegion.Height));
                 }
                 
             }
@@ -533,7 +545,7 @@ namespace StableDiffusionTagManager.Controls
                 finalSize = targetSize.Value;
             }
 
-            var newImage = ImageBox.CreateNewImageWithLayersFromRegion(null, region, finalSize);
+            var newImage = ImageBox.CreateNewImageWithLayersFromRegion(null, region, finalSize, SelectedImageResampler);
             if (newImage != null)
             {
                 ImageCropped?.Invoke(this, newImage);

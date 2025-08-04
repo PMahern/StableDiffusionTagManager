@@ -38,7 +38,7 @@ namespace StableDiffusionTagManager.Views
             return FindClosest(aspect)?.ImageAspectRatio ?? 0.0;
         }
 
-        internal PixelSize? GetClosesResolution(double aspect)
+        internal PixelSize? GetClosestResolution(double aspect)
         {
             var closest = FindClosest(aspect);
 

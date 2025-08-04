@@ -102,7 +102,8 @@
                                     ShowSaveButton="True"
                                     ShowMaskModeButton="True"
                                     ImageAspectRatioSets="{Binding ImageAspectRatioSets}"
-                                    SelectedImageAspectRatioSet="{Binding SelectedImageAspectRatioSet, Mode=OneWay}">
+                                    SelectedImageAspectRatioSet="{Binding SelectedImageAspectRatioSet, Mode=OneWay}"
+                                    SelectedImageResampler="{Binding SelectedImageResampler, Mode=OneWay}">
                 <controls:ImageBoxWithControls.AdditionalMaskButtonsContent>
                   <StackPanel Orientation="Horizontal">
                     <Button Command="{Binding ElementName=mainWindow, Path=DataContext.RemoveFromSelectedImageWithLamaCommand}" ToolTip.Tip="Remove Masked Content With Lama">

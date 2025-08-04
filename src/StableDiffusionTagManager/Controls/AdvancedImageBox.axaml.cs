@@ -1572,11 +1572,27 @@ namespace UVtools.AvaloniaControls
 
             if (SelectionRegion.Width > 0 && SelectionRegion.Height > 0)
             {
-                var rect = GetOffsetRectangle(SelectionRegion);
+                var aspectRatio = (double)SelectionRegion.Width / (double)SelectionRegion.Height;
+                var selectedAspectRatioSetResolution = SelectedImageAspectRatioSet?.GetClosestResolution(aspectRatio);
                 var selectionColor = SelectionColor;
+                if (selectedAspectRatioSetResolution != null)
+                {
+                    var targetArea = selectedAspectRatioSetResolution.Value.Width * SelectionRegion.Height;
+                    var curArea = SelectionRegion.Width * SelectionRegion.Height;
+                    if (curArea < targetArea)
+                    {
+                        selectionColor = new SolidColorBrush(new Color(255, 128, 0, 0), 0.5);
+                    }
+                    else if (curArea > targetArea)
+                    {
+                        selectionColor = new SolidColorBrush(new Color(255, 0, 128, 0), 0.5);
+                    }
+                }
+                var rect = GetOffsetRectangle(SelectionRegion);
+                
                 context.FillRectangle(selectionColor, rect);
                 var color = Color.FromArgb(255, selectionColor.Color.R, selectionColor.Color.G, selectionColor.Color.B);
-                context.DrawRectangle(new Pen(color.ToUint32()), rect);
+                context.DrawRectangle(new Pen(color.ToUInt32()), rect);
             }
         }
 
@@ -1885,6 +1901,7 @@ namespace UVtools.AvaloniaControls
                     Point newTopLeft = SelectionRegion.TopLeft;
                     Point newBottomRight = SelectionRegion.BottomRight;
                     var draggingMode = CurrentDraggingMode;
+
                     if (_isSelecting)
                     {
                         var originImagePoint = PointToImage(_startMousePosition, true);
@@ -2953,18 +2970,18 @@ namespace UVtools.AvaloniaControls
             return newBitmap;
         }
 
-        public Bitmap? CreateNewImageWithLayersFromSelection(PixelSize? targetSize = null)
+        public Bitmap? CreateNewImageWithLayersFromSelection(PixelSize? targetSize = null, Resampler resampler = Resampler.Lanczos8)
         {
-            return CreateNewImageWithLayersFromRegion(null, SelectionRegion, targetSize);
+            return CreateNewImageWithLayersFromRegion(null, SelectionRegion, targetSize, resampler);
         }
 
-        public Bitmap? CreateNewImageWithLayersFromRegion(Bitmap? bitmap = null, Rect? region = null, PixelSize? targetSize = null)
+        public Bitmap? CreateNewImageWithLayersFromRegion(Bitmap? bitmap = null, Rect? region = null, PixelSize? targetSize = null, Resampler resampler = Resampler.Lanczos8)
         {
             if(bitmap == null)
             {
                 bitmap = Image;
             }
-            return bitmap?.CreateNewImageFromRegion(region, targetSize, GetImagePaint(bitmap));
+            return bitmap?.CreateNewImageFromRegion(region, targetSize, GetImagePaint(bitmap), resampler);
         }
 
         public Bitmap? CreateNewImageFromMask()
