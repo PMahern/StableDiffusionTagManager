@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "StableDiffusionTagManager (Debug)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/StableDiffusionTagManager/bin/Debug/net10.0/StableDiffusionTagManager.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/StableDiffusionTagManager",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
+            "name": "StableDiffusionTagManager (Release)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/StableDiffusionTagManager/bin/Release/net10.0/StableDiffusionTagManager.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/StableDiffusionTagManager",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        }
+    ]
+}

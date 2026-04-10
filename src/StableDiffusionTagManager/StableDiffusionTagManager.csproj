@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -115,10 +115,16 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="xcopy /e /i /y /s $(ProjectDir)..\..\submodules\kumiko $(ProjectDir)$(OutDir)Assets\kumiko" />
+    <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))"
+          Command="xcopy /e /i /y /s &quot;$(ProjectDir)..\..\submodules\kumiko&quot; &quot;$(ProjectDir)$(OutDir)Assets\kumiko&quot;" />
+    <Exec Condition="$([MSBuild]::IsOSPlatform('Linux')) Or $([MSBuild]::IsOSPlatform('OSX'))"
+          Command="mkdir -p &quot;$(ProjectDir)$(OutDir)Assets/kumiko&quot; &amp;&amp; cp -rp &quot;$(ProjectDir)../../submodules/kumiko/.&quot; &quot;$(ProjectDir)$(OutDir)Assets/kumiko&quot;" />
   </Target>
 
   <Target Name="AddPayloadsFolder" AfterTargets="Publish">
-    <Exec Command="xcopy /e /i /y /s $(ProjectDir)..\..\submodules\kumiko $(PublishDir)Assets\kumiko" />
+    <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))"
+          Command="xcopy /e /i /y /s &quot;$(ProjectDir)..\..\submodules\kumiko&quot; &quot;$(PublishDir)Assets\kumiko&quot;" />
+    <Exec Condition="$([MSBuild]::IsOSPlatform('Linux')) Or $([MSBuild]::IsOSPlatform('OSX'))"
+          Command="mkdir -p &quot;$(PublishDir)Assets/kumiko&quot; &amp;&amp; cp -rp &quot;$(ProjectDir)../../submodules/kumiko/.&quot; &quot;$(PublishDir)Assets/kumiko&quot;" />
   </Target>
 </Project>
