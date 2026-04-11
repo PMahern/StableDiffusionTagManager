@@ -34,7 +34,7 @@
         <Button Command="{Binding CancelCommand}">Cancel</Button>
       </StackPanel>
 
-      <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,*" ColumnDefinitions="*,Auto">
+      <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,*,5,*,5,*,5,*" ColumnDefinitions="*,Auto">
         <Label>Default Prompt Prefix</Label>
         <TextBox Width="200" Grid.Column="1" Text="{Binding DefaultPromptPrefix}" />
 
@@ -57,22 +57,36 @@
         <Label Grid.Row="5">Interrogation Endpoint URL</Label>
         <TextBox Width="200" Grid.Row="5" Grid.Column="1" Text="{Binding DefaultInterrogationEndpointUrl}" Watermark="http://localhost:11434" />
 
-        <Label Grid.Row="6" Grid.ColumnSpan="2">Default NL Interrogation Prompt</Label>
-        <TextBox Grid.Row="7" Grid.ColumnSpan="2"
-                 Text="{Binding DefaultNaturalLanguageInterrogationPrompt}"
-                 Watermark="Describe this image in detail."
-                 AcceptsReturn="True" TextWrapping="Wrap"
-                 Height="60" VerticalContentAlignment="Top" />
+        <!-- NL Prompt section (row 6, *) -->
+        <Grid Grid.Row="6" Grid.ColumnSpan="2" RowDefinitions="Auto,*" Margin="0,4,0,0">
+          <Label Grid.Row="0" FontWeight="SemiBold">Default NL Interrogation Prompt</Label>
+          <TextBox Grid.Row="1"
+                   Text="{Binding DefaultNaturalLanguageInterrogationPrompt}"
+                   Watermark="Describe this image in detail."
+                   AcceptsReturn="True" TextWrapping="Wrap" MinHeight="60"
+                   VerticalContentAlignment="Top" />
+        </Grid>
 
-        <Label Grid.Row="8" Grid.ColumnSpan="2">Default Tag Interrogation Prompt</Label>
-        <TextBox Grid.Row="9" Grid.ColumnSpan="2"
-                 Text="{Binding DefaultTagInterrogationPrompt}"
-                 Watermark="List tags for this image, comma separated."
-                 AcceptsReturn="True" TextWrapping="Wrap"
-                 Height="60" VerticalContentAlignment="Top" />
+        <GridSplitter Grid.Row="7" Grid.ColumnSpan="2" ResizeDirection="Rows" Height="5"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      Cursor="SizeNorthSouth" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"/>
 
-        <!-- Concepts editor -->
-        <Grid Grid.Row="10" Grid.ColumnSpan="2" RowDefinitions="Auto,*" Margin="0,6,0,0" MinHeight="80">
+        <!-- Tag Prompt section (row 8, *) -->
+        <Grid Grid.Row="8" Grid.ColumnSpan="2" RowDefinitions="Auto,*" Margin="0,4,0,0">
+          <Label Grid.Row="0" FontWeight="SemiBold">Default Tag Interrogation Prompt</Label>
+          <TextBox Grid.Row="1"
+                   Text="{Binding DefaultTagInterrogationPrompt}"
+                   Watermark="List tags for this image, comma separated."
+                   AcceptsReturn="True" TextWrapping="Wrap" MinHeight="60"
+                   VerticalContentAlignment="Top" />
+        </Grid>
+
+        <GridSplitter Grid.Row="9" Grid.ColumnSpan="2" ResizeDirection="Rows" Height="5"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      Cursor="SizeNorthSouth" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"/>
+
+        <!-- Concepts editor (row 10, *) -->
+        <Grid Grid.Row="10" Grid.ColumnSpan="2" RowDefinitions="Auto,*" Margin="0,4,0,0">
           <DockPanel Grid.Row="0">
             <Label FontWeight="SemiBold">Concepts</Label>
             <Button DockPanel.Dock="Right" Command="{Binding AddConceptCommand}"
@@ -98,8 +112,13 @@
             </ItemsControl>
           </ScrollViewer>
         </Grid>
-        <!-- Response strip pairs editor -->
-        <Grid Grid.Row="11" Grid.ColumnSpan="2" RowDefinitions="Auto,*" Margin="0,6,0,0" MinHeight="80">
+
+        <GridSplitter Grid.Row="11" Grid.ColumnSpan="2" ResizeDirection="Rows" Height="5"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      Cursor="SizeNorthSouth" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"/>
+
+        <!-- Response strip pairs editor (row 12, *) -->
+        <Grid Grid.Row="12" Grid.ColumnSpan="2" RowDefinitions="Auto,*" Margin="0,4,0,0">
           <DockPanel Grid.Row="0">
             <Label FontWeight="SemiBold">Response Strip Pairs</Label>
             <Button DockPanel.Dock="Right" Command="{Binding ElementName=ThisControl, Path=AddStripPairCommand}"

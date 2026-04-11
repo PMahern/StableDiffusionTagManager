@@ -7,7 +7,8 @@
         xmlns:behaviors="clr-namespace:StableDiffusionTagManager.Behaviors;assembly=StableDiffusionTagManager"
         xmlns:ia="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="500"
-        Height="500"
+        Height="600"
+        MinHeight="400"
         Width="800"
         x:Class="StableDiffusionTagManager.Views.InterrogationDialog"
         Title="Image Interrogation"
@@ -16,7 +17,7 @@
         ExtendClientAreaToDecorationsHint="True"
         WindowStartupLocation="CenterOwner"
         Icon="/Assets/logo.ico"
-        CanResize="False">
+        CanResize="True">
   <ia:Interaction.Behaviors>
     <behaviors:CloseWindowOnEventBehavior EventName="RequestClose" />
   </ia:Interaction.Behaviors>
@@ -25,35 +26,39 @@
       <TabControl>
         <TabItem>
           <TabItem.Header>Natural Language</TabItem.Header>
-          <StackPanel Classes="inputform">
-            <Panel>
-              <Label>Model</Label>
-              <ComboBox ItemsSource="{Binding NaturalLanguageInterrogators}" SelectedItem="{Binding SelectedNaturalLanguageInterrogator, Mode=TwoWay}">
-                <ComboBox.ItemTemplate>
-                  <DataTemplate>
-                    <TextBlock Text="{Binding Name}" />
-                  </DataTemplate>
-                </ComboBox.ItemTemplate>
-              </ComboBox>
-            </Panel>
-            <ContentControl Content="{Binding SelectedNaturalLanguageSettingsViewModel}" Height="400"/>
+          <Grid RowDefinitions="Auto,*">
+            <StackPanel Grid.Row="0" Classes="inputform">
+              <Panel>
+                <Label>Model</Label>
+                <ComboBox ItemsSource="{Binding NaturalLanguageInterrogators}" SelectedItem="{Binding SelectedNaturalLanguageInterrogator, Mode=TwoWay}">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+              </Panel>
             </StackPanel>
-          </TabItem>
+            <ContentControl Grid.Row="1" Content="{Binding SelectedNaturalLanguageSettingsViewModel}" MinHeight="150"/>
+          </Grid>
+        </TabItem>
         <TabItem>
           <TabItem.Header>Tags</TabItem.Header>
-          <StackPanel Classes="inputform">
-            <Panel>
-              <Label>Model</Label>
-              <ComboBox ItemsSource="{Binding Taggers}" SelectedItem="{Binding SelectedTagInterrogator, Mode=TwoWay}">
-                <ComboBox.ItemTemplate>
-                  <DataTemplate>
-                    <TextBlock Text="{Binding Name}" />
-                  </DataTemplate>
-                </ComboBox.ItemTemplate>
-              </ComboBox>
-            </Panel>
-            <ContentControl Content="{Binding SelectedTagSettingsViewModel}" Height="400" />
-          </StackPanel>
+          <Grid RowDefinitions="Auto,*">
+            <StackPanel Grid.Row="0" Classes="inputform">
+              <Panel>
+                <Label>Model</Label>
+                <ComboBox ItemsSource="{Binding Taggers}" SelectedItem="{Binding SelectedTagInterrogator, Mode=TwoWay}">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+              </Panel>
+            </StackPanel>
+            <ContentControl Grid.Row="1" Content="{Binding SelectedTagSettingsViewModel}" MinHeight="150"/>
+          </Grid>
         </TabItem>
       </TabControl>
       <StackPanel Grid.Row="1" Classes="footer">
