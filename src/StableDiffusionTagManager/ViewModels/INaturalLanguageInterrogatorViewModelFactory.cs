@@ -1,6 +1,7 @@
 ﻿using ImageUtil;
 using ImageUtil.Interrogation;
 using StableDiffusionTagManager.Attributes;
+using StableDiffusionTagManager.Services;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -66,6 +67,28 @@ namespace StableDiffusionTagManager.ViewModels
         public InterrogatorViewModel<string> CreateViewModel()
         {
             return new JoyCaptionBetaOneNaturalLanguageInterrogationViewModel();
+        }
+    }
+
+    public class RemoteNaturalLanguageInterrogatorViewModelFactory : INaturalLanguageInterrogatorViewModelFactory
+    {
+        private readonly ICurrentProjectDefaults projectDefaults;
+
+        public RemoteNaturalLanguageInterrogatorViewModelFactory(ICurrentProjectDefaults projectDefaults)
+        {
+            this.projectDefaults = projectDefaults;
+        }
+
+        public string Name => "Ollama / KoboldCpp";
+
+        public InterrogatorViewModel<string> CreateViewModel()
+        {
+            var vm = new RemoteNaturalLanguageInterrogationViewModel();
+            if (!string.IsNullOrWhiteSpace(projectDefaults.NaturalLanguageInterrogationPrompt))
+                vm.Prompt = projectDefaults.NaturalLanguageInterrogationPrompt;
+            if (!string.IsNullOrWhiteSpace(projectDefaults.InterrogationEndpointUrl))
+                vm.EndpointUrl = projectDefaults.InterrogationEndpointUrl;
+            return vm;
         }
     }
 }

@@ -65,6 +65,20 @@
           <MenuItem Header="Remove _Background from All Images" Command="{Binding RemoveBackgroundFromAllImagesCommand}"/>
         </MenuItem>
       </Menu>
+      <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="6" Margin="4,2"
+                  IsVisible="{Binding AvailableSubfolders.Count, Converter={x:Static ObjectConverters.IsNotNull}}">
+        <Label VerticalAlignment="Center" Content="Folder:"/>
+        <ComboBox ItemsSource="{Binding AvailableSubfolders}"
+                  SelectedItem="{Binding SelectedSubfolder, Mode=TwoWay}"
+                  MinWidth="180"
+                  VerticalAlignment="Center">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding DisplayName}"/>
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </StackPanel>
       <Grid RowDefinitions="100,2,*">
         <ListBox Name="ImageList" ItemsSource="{Binding FilteredImageSet}"  VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.AllowAutoHide="False" SelectedItem="{Binding SelectedImage}">
           <ListBox.ItemsPanel>

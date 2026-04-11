@@ -28,7 +28,7 @@ namespace StableDiffusionTagManager.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
-        private static readonly string PROJECT_FOLDER_NAME = ".sdtmproj";
+        private static readonly string BACKUP_FOLDER_NAME = ".sdtmproj";
         private static readonly string PROJECT_FILE_NAME = "_project.xml";
         private static readonly string ARCHIVE_FOLDER = "archive";
         private static readonly string TAG_PRIORITY_SETS_FOLDER = "TagPrioritySets";
@@ -37,12 +37,14 @@ namespace StableDiffusionTagManager.ViewModels
         private readonly Settings settings;
         private readonly DialogHandler dialogHandler;
         private readonly WebApiFactory webApiFactory;
+        private readonly ICurrentProjectDefaults currentProjectDefaults;
 
         public MainWindowViewModel(ViewModelFactory viewModelFactory,
             ComicPanelExtractor comicPanelExtractorService,
             Settings settings,
             DialogHandler dialogHandler,
-            WebApiFactory webApiFactory)
+            WebApiFactory webApiFactory,
+            ICurrentProjectDefaults currentProjectDefaults)
         {
             UpdateTagPrioritySets();
             this.settings = settings;
@@ -50,6 +52,7 @@ namespace StableDiffusionTagManager.ViewModels
             this.webApiFactory = webApiFactory;
             this.viewModelFactory = viewModelFactory;
             this.comicPanelExtractorService = comicPanelExtractorService;
+            this.currentProjectDefaults = currentProjectDefaults;
             UpdateImageAspectRatioSets();
 
         }
@@ -253,7 +256,309 @@ namespace StableDiffusionTagManager.ViewModels
 
         public bool IsProject { get => OpenProject != null; }
 
+        // Root folder of the loaded project; never changes after LoadFolder()
         private string? openFolder = null;
+
+        // The folder images are currently loaded from (root or a selected subfolder)
+        private string? currentImagesFolder = null;
+
+        [ObservableProperty]
+        private ObservableCollection<SubfolderViewModel> availableSubfolders = new ObservableCollection<SubfolderViewModel>();
+
+        private SubfolderViewModel? selectedSubfolder;
+        public SubfolderViewModel? SelectedSubfolder
+        {
+            get => selectedSubfolder;
+            set
+            {
+                if (selectedSubfolder != value)
+                {
+                    selectedSubfolder = value;
+                    OnPropertyChanged();
+                    _ = SwitchToSubfolder(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// The project file owned directly by the current folder.
+        /// Null when viewing a subfolder that has no _project.xml yet.
+        /// </summary>
+        public Project? CurrentFolderProject =>
+            (currentImagesFolder == null || string.Equals(currentImagesFolder, openFolder, StringComparison.OrdinalIgnoreCase))
+                ? OpenProject
+                : selectedSubfolder?.SubProject;
+
+        /// <summary>
+        /// Walk the folder ancestry from root down to the current folder, yielding
+        /// each level's own project (null for levels with no _project.xml).
+        /// </summary>
+        private IEnumerable<Project?> GetAncestryProjects()
+        {
+            if (openFolder == null || currentImagesFolder == null) yield break;
+
+            // Build ordered chain: root first, current folder last
+            var chain = new List<string>();
+            var path = currentImagesFolder;
+            while (path != null)
+            {
+                chain.Insert(0, path);
+                if (string.Equals(path, openFolder, StringComparison.OrdinalIgnoreCase)) break;
+                path = Path.GetDirectoryName(path);
+            }
+
+            foreach (var folder in chain)
+            {
+                if (string.Equals(folder, openFolder, StringComparison.OrdinalIgnoreCase))
+                    yield return OpenProject;
+                else
+                {
+                    var sf = AvailableSubfolders.FirstOrDefault(s =>
+                        string.Equals(s.FolderPath, folder, StringComparison.OrdinalIgnoreCase));
+                    yield return sf?.SubProject;
+                }
+            }
+        }
+
+        /// <summary>Returns the deepest (most-specific) non-null value for a reference-type project setting.</summary>
+        private T? GetEffectiveSetting<T>(Func<Project, T?> selector) where T : class
+        {
+            T? result = null;
+            foreach (var p in GetAncestryProjects())
+                if (p != null) { var v = selector(p); if (v != null) result = v; }
+            return result;
+        }
+
+        /// <summary>Returns the deepest (most-specific) non-null value for a value-type project setting.</summary>
+        private T? GetEffectiveSettingValue<T>(Func<Project, T?> selector) where T : struct
+        {
+            T? result = null;
+            foreach (var p in GetAncestryProjects())
+                if (p != null) { var v = selector(p); if (v.HasValue) result = v; }
+            return result;
+        }
+
+        /// <summary>
+        /// Returns the deepest non-null value for a reference-type setting resolved for
+        /// an arbitrary <paramref name="folderPath"/> instead of the currently loaded folder.
+        /// </summary>
+        private T? GetEffectiveSettingForFolder<T>(string folderPath, Func<Project, T?> selector) where T : class
+        {
+            if (openFolder == null) return null;
+            var chain = BuildFolderChain(folderPath);
+            T? result = null;
+            foreach (var folder in chain)
+            {
+                var project = GetProjectForFolder(folder);
+                if (project != null) { var v = selector(project); if (v != null) result = v; }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Returns merged concepts for an arbitrary <paramref name="folderPath"/>,
+        /// with deeper folders overriding ancestor values for the same key.
+        /// </summary>
+        private Dictionary<string, string> GetEffectiveConceptsForFolder(string folderPath)
+        {
+            var merged = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            if (openFolder == null) return merged;
+            foreach (var folder in BuildFolderChain(folderPath))
+            {
+                var project = GetProjectForFolder(folder);
+                if (project != null)
+                    foreach (var kv in project.Concepts)
+                        merged[kv.Key] = kv.Value;
+            }
+            return merged;
+        }
+
+        /// <summary>Builds the ancestry chain from root down to <paramref name="folderPath"/>.</summary>
+        private List<string> BuildFolderChain(string folderPath)
+        {
+            var chain = new List<string>();
+            var path = folderPath;
+            while (path != null)
+            {
+                chain.Insert(0, path);
+                if (string.Equals(path, openFolder, StringComparison.OrdinalIgnoreCase)) break;
+                path = Path.GetDirectoryName(path);
+            }
+            return chain;
+        }
+
+        /// <summary>Returns the Project for a specific folder (root or subfolder), or null.</summary>
+        private Project? GetProjectForFolder(string folder)
+        {
+            if (string.Equals(folder, openFolder, StringComparison.OrdinalIgnoreCase))
+                return OpenProject;
+            var sf = AvailableSubfolders?.FirstOrDefault(s =>
+                string.Equals(s.FolderPath, folder, StringComparison.OrdinalIgnoreCase));
+            return sf?.SubProject;
+        }
+
+        /// <summary>
+        /// Applies concept key/value substitution to a prompt string.
+        /// Replaces <c>{{key}}</c> tokens with their concept values.
+        /// </summary>
+        private static string ApplyConceptSubstitution(string prompt, Dictionary<string, string> concepts)
+        {
+            foreach (var kv in concepts)
+                prompt = prompt.Replace("{{" + kv.Key + "}}", kv.Value, StringComparison.OrdinalIgnoreCase);
+            return prompt;
+        }
+
+        /// <summary>
+        /// Accumulates response strip pairs from root down to <paramref name="folderPath"/>,
+        /// so parent folders can define global rules and child folders add more.
+        /// </summary>
+        private List<(string Open, string Close)> GetEffectiveStripPairsForFolder(string folderPath)
+        {
+            var result = new List<(string Open, string Close)>();
+            if (openFolder == null) return result;
+            foreach (var folder in BuildFolderChain(folderPath))
+            {
+                var project = GetProjectForFolder(folder);
+                if (project != null)
+                    result.AddRange(project.ResponseStripPairs);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Removes paired tag content (e.g. thinking blocks) from a string.
+        /// For each pair, removes the open tag, everything between it and the matching
+        /// close tag, and the close tag. Orphaned open or close tags are also removed.
+        /// </summary>
+        private static string ApplyResponseStripping(string text, List<(string Open, string Close)> pairs)
+        {
+            foreach (var (open, close) in pairs)
+            {
+                if (string.IsNullOrEmpty(open)) continue;
+                // Remove paired spans first
+                int start;
+                while ((start = text.IndexOf(open, StringComparison.Ordinal)) >= 0)
+                {
+                    if (!string.IsNullOrEmpty(close))
+                    {
+                        var end = text.IndexOf(close, start + open.Length, StringComparison.Ordinal);
+                        if (end >= 0)
+                        {
+                            text = text.Remove(start, end + close.Length - start);
+                            continue;
+                        }
+                    }
+                    // No matching close found — just remove the open tag
+                    text = text.Remove(start, open.Length);
+                }
+                // Remove any orphaned close tags
+                if (!string.IsNullOrEmpty(close))
+                    text = text.Replace(close, string.Empty, StringComparison.Ordinal);
+            }
+            return text.Trim();
+        }
+
+        /// <summary>
+        /// Applies response stripping to a tag list by joining, stripping, then re-splitting.
+        /// This correctly handles thinking blocks that span comma boundaries.
+        /// </summary>
+        private static List<string> ApplyResponseStrippingToTags(List<string> tags, List<(string Open, string Close)> pairs)
+        {
+            if (pairs.Count == 0) return tags;
+            var joined = string.Join(", ", tags);
+            var stripped = ApplyResponseStripping(joined, pairs);
+            return stripped.Split(',')
+                .Select(t => t.Trim())
+                .Where(t => !string.IsNullOrWhiteSpace(t))
+                .ToList();
+        }
+
+        /// <summary>
+        /// Enumerates every (folderPath, image, isCurrentFolder) triple across the entire
+        /// project tree. Images in the currently-loaded folder come from the in-memory
+        /// <see cref="ImagesWithTags"/> collection; images in all other folders are loaded
+        /// fresh from disk and must be saved explicitly after modification.
+        /// </summary>
+        private IEnumerable<(string Folder, ImageWithTagsViewModel Image, bool IsCurrentFolder)> GetAllProjectImages()
+        {
+            if (openFolder == null) yield break;
+
+            // Currently-loaded folder — use the in-memory collection.
+            if (ImagesWithTags != null && currentImagesFolder != null)
+                foreach (var img in ImagesWithTags)
+                    yield return (currentImagesFolder, img, true);
+
+            // All other subfolders — load from disk on the fly.
+            if (AvailableSubfolders == null) yield break;
+            foreach (var sf in AvailableSubfolders)
+            {
+                if (string.Equals(sf.FolderPath, currentImagesFolder, StringComparison.OrdinalIgnoreCase))
+                    continue;
+                FolderTagSets folderTagSets;
+                try { folderTagSets = new FolderTagSets(sf.FolderPath); }
+                catch { continue; }
+                foreach (var (imageFile, tagSet) in folderTagSets.TagsSets)
+                    yield return (sf.FolderPath, new ImageWithTagsViewModel(imageFile, tagSet, ImageDirtyHandler), false);
+            }
+        }
+
+        /// <summary>Saves a single image's tags to disk immediately.</summary>
+        private static void SaveImageToDisk(string folder, ImageWithTagsViewModel image)
+        {
+            var set = new TagSet(Path.Combine(folder, image.GetTagsFileName()), image.Description, image.Tags.Select(t => t.Tag));
+            set.WriteFile();
+        }
+
+        /// <summary>
+        /// Gets the current folder's own project, creating a new _project.xml for it
+        /// if none exists yet. Used when editing settings or toggling completion.
+        /// </summary>
+        private Project GetOrCreateCurrentFolderProject()
+        {
+            var folder = currentImagesFolder ?? openFolder
+                ?? throw new InvalidOperationException("No folder is loaded.");
+
+            if (string.Equals(folder, openFolder, StringComparison.OrdinalIgnoreCase))
+            {
+                if (OpenProject == null)
+                {
+                    var projFile = Path.Combine(folder, PROJECT_FILE_NAME);
+                    OpenProject = new Project(projFile);
+                    OpenProject.ProjectUpdated = UpdateProjectSettings;
+                }
+                return OpenProject!;
+            }
+
+            if (selectedSubfolder != null)
+            {
+                if (selectedSubfolder.SubProject == null)
+                {
+                    var projFile = Path.Combine(folder, PROJECT_FILE_NAME);
+                    var newProj = new Project(projFile);
+                    newProj.ProjectUpdated = UpdateProjectSettings;
+                    selectedSubfolder.SubProject = newProj;
+                }
+                return selectedSubfolder.SubProject!;
+            }
+
+            throw new InvalidOperationException("No subfolder is selected.");
+        }
+
+        /// <summary>
+        /// Merged concepts walking from root → current folder; child keys override parents.
+        /// </summary>
+        public Dictionary<string, string> EffectiveConcepts
+        {
+            get
+            {
+                var merged = new Dictionary<string, string>();
+                foreach (var p in GetAncestryProjects())
+                    if (p != null)
+                        foreach (var kv in p.Concepts)
+                            merged[kv.Key] = kv.Value;
+                return merged;
+            }
+        }
 
         #region Callbacks and Events
 
@@ -340,9 +645,17 @@ namespace StableDiffusionTagManager.ViewModels
 
             await CheckForAndConvertUnspportedImageFormats(folder);
 
-            var projectPath = Path.Combine(folder, PROJECT_FOLDER_NAME);
-            var projFolder = Directory.Exists(projectPath);
-            var projFile = Path.Combine(projectPath, PROJECT_FILE_NAME);
+            var backupPath = Path.Combine(folder, BACKUP_FOLDER_NAME);
+            var projFolder = Directory.Exists(backupPath);
+
+            // Project file now lives directly in the folder root (_project.xml).
+            // Migrate from the old location inside .sdtmproj/ if needed.
+            var projFile = Path.Combine(folder, PROJECT_FILE_NAME);
+            var oldProjFile = Path.Combine(backupPath, PROJECT_FILE_NAME);
+            if (!File.Exists(projFile) && File.Exists(oldProjFile))
+            {
+                File.Move(oldProjFile, projFile);
+            }
 
             if (!projFolder)
             {
@@ -367,7 +680,7 @@ namespace StableDiffusionTagManager.ViewModels
                     var pngs = Directory.EnumerateFiles(folder, "*.png").ToList();
                     var txts = Directory.EnumerateFiles(folder, "*.txt").ToList();
 
-                    Directory.CreateDirectory(projectPath);
+                    Directory.CreateDirectory(backupPath);
 
                     var project = new Project(projFile);
                     project.ProjectUpdated = UpdateProjectSettings;
@@ -386,14 +699,14 @@ namespace StableDiffusionTagManager.ViewModels
                         {
                             await Task.Run(() =>
                             {
-                                File.Move(file, Path.Combine(projectPath, Path.GetFileName(file)));
+                                File.Move(file, Path.Combine(backupPath, Path.GetFileName(file)));
                                 ProgressIndicatorProgress++;
                             });
                         }
 
-                        var movedjpegs = Directory.EnumerateFiles(projectPath, "*.jpg").ToList();
-                        var movedpngs = Directory.EnumerateFiles(projectPath, "*.png").ToList();
-                        var movedtxts = Directory.EnumerateFiles(projectPath, "*.txt").ToList();
+                        var movedjpegs = Directory.EnumerateFiles(backupPath, "*.jpg").ToList();
+                        var movedpngs = Directory.EnumerateFiles(backupPath, "*.png").ToList();
+                        var movedtxts = Directory.EnumerateFiles(backupPath, "*.txt").ToList();
                         var imagesToCopy = movedjpegs.Concat(movedpngs).ToList();
 
                         int i = 1;
@@ -437,7 +750,7 @@ namespace StableDiffusionTagManager.ViewModels
                         {
                             await Task.Run(() =>
                             {
-                                File.Copy(file, Path.Combine(projectPath, Path.GetFileName(file)));
+                                File.Copy(file, Path.Combine(backupPath, Path.GetFileName(file)));
                                 ProgressIndicatorProgress++;
                             });
                         }
@@ -482,37 +795,150 @@ namespace StableDiffusionTagManager.ViewModels
                 UpdateProjectSettings();
             }
 
-            if (OpenProject != null)
+            openFolder = folder;
+            currentImagesFolder = folder;
+
+            // Build subfolder list — scan all non-hidden subdirectories recursively.
+            // Empty folders are included so they can hold their own project settings.
+            var subfolderEntries = new ObservableCollection<SubfolderViewModel>();
+            var rootEntry = new SubfolderViewModel("(Root)", folder, OpenProject);
+            subfolderEntries.Add(rootEntry);
+
+            foreach (var sf in ScanSubfolders(folder, folder, null))
+                subfolderEntries.Add(sf);
+
+            AvailableSubfolders = subfolderEntries;
+
+            // Set root entry as the selected subfolder (no event side-effects; backing field only)
+            selectedSubfolder = rootEntry;
+            OnPropertyChanged(nameof(SelectedSubfolder));
+
+            // Load tag collections from the current folder's own project (or root as fallback)
+            var tagSource = CurrentFolderProject ?? OpenProject;
+            if (tagSource != null)
             {
-                TagCollections = new ObservableCollection<TagCollectionViewModel>(OpenProject.TagCollections.Select(c => new TagCollectionViewModel(this, c.Name, c.Tags)));
+                TagCollections = new ObservableCollection<TagCollectionViewModel>(tagSource.TagCollections.Select(c => new TagCollectionViewModel(this, c.Name, c.Tags)));
             }
 
-            openFolder = folder;
             UpdateTagCounts();
 
             ShowProgressIndicator = false;
         }
 
+        private async Task SwitchToSubfolder(SubfolderViewModel? subfolder)
+        {
+            if (openFolder == null || subfolder == null)
+                return;
+
+            var targetFolder = subfolder.FolderPath;
+
+            ShowProgressIndicator = true;
+            ProgressIndicatorMax = 100;
+            ProgressIndicatorProgress = 0;
+            ProgressIndicatorMessage = "Loading folder...";
+
+            var folderTagSets = new FolderTagSets(targetFolder);
+
+            await Task.Run(() =>
+            {
+                ProgressIndicatorMax = folderTagSets.TagsSets.Count();
+                ProgressIndicatorProgress = 0;
+                ProgressIndicatorMessage = "Loading images...";
+            });
+
+            var accum = new List<ImageWithTagsViewModel>();
+            foreach (var tagSet in folderTagSets.TagsSets)
+            {
+                await Task.Run(() =>
+                {
+                    ProgressIndicatorProgress++;
+                    accum.Add(new ImageWithTagsViewModel(tagSet.ImageFile, tagSet.TagSet, ImageDirtyHandler));
+                });
+            }
+
+            ImagesWithTags = accum
+                .OrderBy(iwt => iwt.FirstNumberedChunk)
+                .ThenBy(iwt => iwt.SecondNumberedChunk)
+                .ToObservableCollection();
+
+            foreach (var item in ImagesWithTags)
+            {
+                item.TagEntered += TagAdded;
+                item.TagRemoved += TagRemoved;
+            }
+
+            currentImagesFolder = targetFolder;
+            UpdateProjectSettings();
+            OnPropertyChanged(nameof(CurrentFolderProject));
+            OnPropertyChanged(nameof(EffectiveConcepts));
+
+            var tagSource = CurrentFolderProject ?? OpenProject;
+            if (tagSource != null)
+            {
+                TagCollections = new ObservableCollection<TagCollectionViewModel>(tagSource.TagCollections.Select(c => new TagCollectionViewModel(this, c.Name, c.Tags)));
+            }
+
+            SelectedImage = ImagesWithTags.FirstOrDefault();
+            UpdateTagCounts();
+
+            ShowProgressIndicator = false;
+        }
+
+        /// <summary>
+        /// Recursively scans subdirectories under <paramref name="parentFolder"/>,
+        /// skipping hidden directories and the backup folder.
+        /// All non-hidden subdirs are included regardless of whether they contain images,
+        /// so that "container" folders (e.g. "Characters") can hold their own settings.
+        /// </summary>
+        private IEnumerable<SubfolderViewModel> ScanSubfolders(string rootFolder, string parentFolder, string? relativePrefix)
+        {
+            var dirs = Directory.GetDirectories(parentFolder)
+                .Where(d =>
+                {
+                    var name = Path.GetFileName(d);
+                    return !string.IsNullOrEmpty(name)
+                        && !name.StartsWith('.')
+                        && !string.Equals(name, BACKUP_FOLDER_NAME, StringComparison.OrdinalIgnoreCase)
+                        && !string.Equals(name, ARCHIVE_FOLDER, StringComparison.OrdinalIgnoreCase);
+                })
+                .OrderBy(d => d);
+
+            foreach (var dir in dirs)
+            {
+                var name = Path.GetFileName(dir);
+                var displayName = relativePrefix != null ? $"{relativePrefix}/{name}" : name;
+                var projFile = Path.Combine(dir, PROJECT_FILE_NAME);
+                Project? subProject = File.Exists(projFile) ? new Project(projFile) : null;
+
+                yield return new SubfolderViewModel(displayName, dir, subProject);
+
+                foreach (var nested in ScanSubfolders(rootFolder, dir, displayName))
+                    yield return nested;
+            }
+        }
+
         private void UpdateProjectSettings()
         {
-            TargetImageSize = OpenProject?.TargetImageSize;
-            if (OpenProject != null && ImagesWithTags != null)
+            TargetImageSize = GetEffectiveSettingValue(p => p.TargetImageSize);
+            currentProjectDefaults.NaturalLanguageInterrogationPrompt = GetEffectiveSetting(p => p.DefaultNaturalLanguageInterrogationPrompt);
+            currentProjectDefaults.TagInterrogationPrompt = GetEffectiveSetting(p => p.DefaultTagInterrogationPrompt);
+            currentProjectDefaults.InterrogationEndpointUrl = GetEffectiveSetting(p => p.DefaultInterrogationEndpointUrl);
+            var ownProject = CurrentFolderProject;
+            if (ownProject != null && ImagesWithTags != null)
             {
                 foreach (var image in ImagesWithTags)
-                {
-                    image.IsComplete = OpenProject.CompletedImages.Contains(image.Filename);
-                }
+                    image.IsComplete = ownProject.CompletedImages.Contains(image.Filename);
             }
         }
 
         [RelayCommand]
         public void SaveChanges()
         {
-            if (ImagesWithTags != null && openFolder != null)
+            if (ImagesWithTags != null && currentImagesFolder != null)
             {
                 foreach (var image in ImagesWithTags)
                 {
-                    var set = new TagSet(Path.Combine(openFolder, image.GetTagsFileName()), image.Description, image.Tags.Select(t => t.Tag));
+                    var set = new TagSet(Path.Combine(currentImagesFolder, image.GetTagsFileName()), image.Description, image.Tags.Select(t => t.Tag));
                     set.WriteFile();
 
                     image.ClearTagsDirty();
@@ -524,11 +950,12 @@ namespace StableDiffusionTagManager.ViewModels
                     }
                 }
 
-                if (OpenProject != null)
+                var ownProject = CurrentFolderProject;
+                if (ownProject != null)
                 {
                     if (TagCollections != null)
                     {
-                        OpenProject.TagCollections = TagCollections.Select(tc => new TagCollection()
+                        ownProject.TagCollections = TagCollections.Select(tc => new TagCollection()
                         {
                             Name = tc.Name,
                             Tags = tc.Tags.Select(t => t.Tag).ToList()
@@ -536,10 +963,10 @@ namespace StableDiffusionTagManager.ViewModels
                     }
                     else
                     {
-                        OpenProject.TagCollections.Clear();
+                        ownProject.TagCollections.Clear();
                     }
 
-                    OpenProject.Save();
+                    ownProject.Save();
                 }
             }
         }
@@ -620,72 +1047,60 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async Task AddTagToEndOfAllImages()
         {
-            if (ImagesWithTags != null)
+            var dialog = new TagSearchDialog();
+            dialog.DialogTitle = "Add Tag to End of All Images";
+            var tagResult = await dialogHandler.ShowDialog<string?>(dialog);
+            if (tagResult == null) return;
+
+            _updateTagCounts = false;
+            foreach (var (folder, image, isCurrentFolder) in GetAllProjectImages())
             {
-                var dialog = new TagSearchDialog();
-                dialog.DialogTitle = "Add Tag to End of All Images";
-
-                var tagResult = await dialogHandler.ShowDialog<string?>(dialog);
-
-                if (tagResult != null)
+                if (!image.Tags.Any(t => t.Tag == tagResult))
                 {
-                    foreach (var image in ImagesWithTags)
-                    {
-                        if (!image.Tags.Any(t => t.Tag == tagResult))
-                        {
-                            image.AddTag(new TagViewModel(tagResult));
-                        }
-                    }
+                    image.AddTag(new TagViewModel(tagResult));
+                    if (!isCurrentFolder)
+                        SaveImageToDisk(folder, image);
                 }
             }
+            _updateTagCounts = true;
+            UpdateTagCounts();
         }
 
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async Task AddTagToStartOfAllImages()
         {
+            var dialog = new TagSearchDialog();
+            dialog.DialogTitle = "Add Tag to Start of All Images";
+            var tagResult = await dialogHandler.ShowDialog<string?>(dialog);
+            if (tagResult == null) return;
+
             _updateTagCounts = false;
-
-            if (ImagesWithTags != null)
+            foreach (var (folder, image, isCurrentFolder) in GetAllProjectImages())
             {
-                var dialog = new TagSearchDialog();
-                dialog.DialogTitle = "Add Tag to Start of All Images";
-
-                var tagResult = await dialogHandler.ShowDialog<string?>(dialog);
-
-                if (tagResult != null)
+                if (!image.Tags.Any(t => t.Tag == tagResult))
                 {
-                    foreach (var image in ImagesWithTags)
-                    {
-                        if (!image.Tags.Any(t => t.Tag == tagResult))
-                        {
-                            image.InsertTag(0, new TagViewModel(tagResult));
-                        }
-                    }
+                    image.InsertTag(0, new TagViewModel(tagResult));
+                    if (!isCurrentFolder)
+                        SaveImageToDisk(folder, image);
                 }
             }
-
             _updateTagCounts = true;
-
             UpdateTagCounts();
         }
 
         public async void ReplaceTagInAllImages(string target)
         {
+            var dialog = new TagSearchDialog();
+            dialog.DialogTitle = $"Replace all instances of tag {target} with new tag";
+            var tagResult = await dialogHandler.ShowDialog<string?>(dialog);
+            if (tagResult == null) return;
+
             _updateTagCounts = false;
-            if (ImagesWithTags != null)
+            foreach (var (folder, image, isCurrentFolder) in GetAllProjectImages())
             {
-                var dialog = new TagSearchDialog();
-                dialog.DialogTitle = $"Replace all instances of tag {target} with new tag";
-
-                var tagResult = await dialogHandler.ShowDialog<string?>(dialog);
-
-                if (tagResult != null)
-                {
-                    foreach (var image in ImagesWithTags)
-                    {
-                        image.ReplaceTagIfExists(target, tagResult);
-                    }
-                }
+                image.ReplaceTagIfExists(target, tagResult);
+                if (!isCurrentFolder)
+                    SaveImageToDisk(folder, image);
             }
             _updateTagCounts = true;
             UpdateTagCounts();
@@ -694,39 +1109,27 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async Task RemoveTagFromAllImages()
         {
-            if (ImagesWithTags != null)
-            {
-                var dialog = new TagSearchDialog();
-                dialog.DialogTitle = "Remove tag from all images";
-
-                var tagResult = await dialogHandler.ShowDialog<string?>(dialog);
-
-                if (tagResult != null)
-                {
-                    RemoveTagFromAllImages(tagResult);
-                }
-            }
+            var dialog = new TagSearchDialog();
+            dialog.DialogTitle = "Remove tag from all images";
+            var tagResult = await dialogHandler.ShowDialog<string?>(dialog);
+            if (tagResult != null)
+                RemoveTagFromAllImages(tagResult);
         }
 
         public void RemoveTagFromAllImages(string tag)
         {
-            if (ImagesWithTags != null)
+            _updateTagCounts = false;
+            foreach (var (folder, image, isCurrentFolder) in GetAllProjectImages())
             {
-                _updateTagCounts = false;
-
-                foreach (var image in ImagesWithTags)
-                {
-                    var toRemove = image.Tags.Where(t => t.Tag == tag).ToList();
-                    foreach (var tagToRemove in toRemove)
-                    {
-                        image.RemoveTag(tagToRemove);
-                    }
-                }
-
-                _updateTagCounts = true;
-
-                UpdateTagCounts();
+                var toRemove = image.Tags.Where(t => t.Tag == tag).ToList();
+                if (toRemove.Count == 0) continue;
+                foreach (var tagToRemove in toRemove)
+                    image.RemoveTag(tagToRemove);
+                if (!isCurrentFolder)
+                    SaveImageToDisk(folder, image);
             }
+            _updateTagCounts = true;
+            UpdateTagCounts();
         }
 
         [RelayCommand()]
@@ -935,15 +1338,36 @@ namespace StableDiffusionTagManager.ViewModels
 
         public void UpdateTagCounts()
         {
-            if (ImagesWithTags != null)
-            {
-                TagCountDictionary = ImagesWithTags.SelectMany(i => i.Tags.Select(t => t.Tag).Where(t => t != ""))
-                        .GroupBy(t => t)
-                        .OrderBy(t => t.Key)
-                        .ToDictionary(g => g.Key, g => g.Count());
+            if (ImagesWithTags == null) return;
 
-                UpdateTagCountsObservable();
+            // Start with in-memory tags for the currently loaded folder.
+            var allTags = ImagesWithTags
+                .SelectMany(i => i.Tags.Select(t => t.Tag).Where(t => t != ""))
+                .ToList();
+
+            // Add tags from every other subfolder by reading their .txt files directly
+            // (no image loading needed).
+            if (AvailableSubfolders != null)
+            {
+                foreach (var sf in AvailableSubfolders)
+                {
+                    if (string.Equals(sf.FolderPath, currentImagesFolder, StringComparison.OrdinalIgnoreCase))
+                        continue;
+                    try
+                    {
+                        var folderTagSets = new FolderTagSets(sf.FolderPath);
+                        allTags.AddRange(folderTagSets.TagsSets.SelectMany(ts => ts.TagSet.Tags.Where(t => t != "")));
+                    }
+                    catch { /* skip folders that can't be read */ }
+                }
             }
+
+            TagCountDictionary = allTags
+                .GroupBy(t => t)
+                .OrderBy(t => t.Key)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            UpdateTagCountsObservable();
         }
 
         public void UpdateTagCountsObservable()
@@ -1053,7 +1477,7 @@ namespace StableDiffusionTagManager.ViewModels
                         SelectedImage = null;
                     }
 
-                    ArchiveImage(openFolder, imageToDelete.Filename, imageToDelete.GetTagsFileName());
+                    ArchiveImage(currentImagesFolder!, imageToDelete.Filename, imageToDelete.GetTagsFileName());
                 }
             }
         }
@@ -1073,7 +1497,7 @@ namespace StableDiffusionTagManager.ViewModels
                 if (dialog.Success)
                 {
                     SelectedImage.ImageSource = dialog.Image;
-                    SelectedImage.ImageSource.Save(Path.Combine(this.openFolder, SelectedImage.Filename));
+                    SelectedImage.ImageSource.Save(Path.Combine(this.currentImagesFolder!, SelectedImage.Filename));
                 }
             }
         }
@@ -1091,14 +1515,11 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public async Task ProjectSettings()
         {
-            if (OpenProject != null)
-            {
-                var dialog = new ProjectSettingsDialog();
-
-                dialog.Project = OpenProject;
-
-                await dialogHandler.ShowWindowAsDialog(dialog);
-            }
+            if (openFolder == null) return;
+            var proj = GetOrCreateCurrentFolderProject();
+            var dialog = new ProjectSettingsDialog();
+            dialog.Project = proj;
+            await dialogHandler.ShowWindowAsDialog(dialog);
         }
 
         [RelayCommand]
@@ -1181,28 +1602,62 @@ namespace StableDiffusionTagManager.ViewModels
 
                         var imageData = bitmap.ToByteArray();
 
+                        var folder = currentImagesFolder ?? openFolder ?? "";
+                        var concepts = GetEffectiveConceptsForFolder(folder);
+                        var stripPairs = GetEffectiveStripPairsForFolder(folder);
+
                         if (vm.SelectedNaturalLanguageSettingsViewModel != null)
                         {
-                            using var NLinterrogator = vm.SelectedNaturalLanguageSettingsViewModel.CreateInterrogationContext();
+                            var nlVm = vm.SelectedNaturalLanguageSettingsViewModel;
+                            using var NLinterrogator = nlVm.CreateInterrogationContext();
                             ProgressIndicatorMax = 0;
                             ProgressIndicatorMessage = "Executing natural language interrogation...";
                             ConsoleText = $"Initializing...{Environment.NewLine}";
                             await NLinterrogator.InitializeOperation(message => ProgressIndicatorMessage = message, AddConsoleText);
-                            selectedImage.Description = await NLinterrogator.InterrogateOperation(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
+
+                            Func<byte[], Action<string>, Action<string>, Task<string>> nlOp;
+                            if (nlVm is IFolderAwareInterrogationViewModel<string> folderAwareNl)
+                            {
+                                var rawPrompt = GetEffectiveSettingForFolder(folder, p => p.DefaultNaturalLanguageInterrogationPrompt);
+                                var effectivePrompt = rawPrompt != null ? ApplyConceptSubstitution(rawPrompt, concepts) : null;
+                                var effectiveUrl = GetEffectiveSettingForFolder(folder, p => p.DefaultInterrogationEndpointUrl);
+                                nlOp = folderAwareNl.GetFolderInterrogateOperation(effectivePrompt, effectiveUrl);
+                            }
+                            else
+                            {
+                                nlOp = NLinterrogator.InterrogateOperation;
+                            }
+
+                            var nlResult = await nlOp(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
+                            selectedImage.Description = ApplyResponseStripping(nlResult, stripPairs);
                         }
 
                         if (vm.SelectedTagSettingsViewModel != null)
                         {
-                            using var taginterrogator = vm.SelectedTagSettingsViewModel.CreateInterrogationContext();
+                            var tagVm = vm.SelectedTagSettingsViewModel;
+                            using var taginterrogator = tagVm.CreateInterrogationContext();
                             ProgressIndicatorMax = 0;
                             ProgressIndicatorMessage = "Executing tag interrogation...";
                             ConsoleText = $"Initializing...{Environment.NewLine}";
                             await taginterrogator.InitializeOperation(message => ProgressIndicatorMessage = message, AddConsoleText);
-                            var tags = await taginterrogator.InterrogateOperation(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
-                            foreach (var tag in tags)
+
+                            Func<byte[], Action<string>, Action<string>, Task<List<string>>> tagOp;
+                            if (tagVm is IFolderAwareInterrogationViewModel<List<string>> folderAwareTag)
                             {
-                                selectedImage.AddTagIfNotExists(new TagViewModel(tag));
+                                var rawPrompt = GetEffectiveSettingForFolder(folder, p => p.DefaultTagInterrogationPrompt);
+                                var effectivePrompt = rawPrompt != null ? ApplyConceptSubstitution(rawPrompt, concepts) : null;
+                                var effectiveUrl = GetEffectiveSettingForFolder(folder, p => p.DefaultInterrogationEndpointUrl);
+                                tagOp = folderAwareTag.GetFolderInterrogateOperation(effectivePrompt, effectiveUrl);
                             }
+                            else
+                            {
+                                tagOp = taginterrogator.InterrogateOperation;
+                            }
+
+                            var tags = await tagOp(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
+                            var strippedTags = ApplyResponseStrippingToTags(tags, stripPairs);
+                            foreach (var tag in strippedTags)
+                                selectedImage.AddTagIfNotExists(new TagViewModel(tag));
                         }
                     }
                 }
@@ -1258,7 +1713,7 @@ namespace StableDiffusionTagManager.ViewModels
                             if (viewer.Success)
                             {
                                 selectedImage.ImageSource = imageResult;
-                                selectedImage.ImageSource.Save(Path.Combine(this.openFolder, selectedImage.Filename));
+                                selectedImage.ImageSource.Save(Path.Combine(this.currentImagesFolder!, selectedImage.Filename));
                             }
                         }
                     }
@@ -1311,81 +1766,137 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async Task InterrogateAllImages()
         {
-            if (ImagesWithTags != null && ImagesWithTags.Count > 0)
+            if (ImagesWithTags == null || ImagesWithTags.Count == 0)
+                return;
+
+            var dialog = new InterrogationDialog();
+            var vm = viewModelFactory.CreateViewModel<InterrogationDialogViewModel>();
+            dialog.DataContext = vm;
+
+            await dialogHandler.ShowWindowAsDialog(dialog);
+            if (!vm.Success)
+                return;
+
+            _updateTagCounts = false;
+            ShowProgressIndicator = true;
+            ProgressIndicatorProgress = 0;
+            ProgressIndicatorMax = 0;
+
+            // Collect all images across every folder so we can set the total count.
+            var allImages = GetAllProjectImages().ToList();
+
+            if (vm.SelectedNaturalLanguageSettingsViewModel != null)
+                ProgressIndicatorMax += allImages.Count;
+            if (vm.SelectedTagSettingsViewModel != null)
+                ProgressIndicatorMax += allImages.Count;
+
+            try
             {
-                var dialog = new InterrogationDialog();
-                var vm = viewModelFactory.CreateViewModel<InterrogationDialogViewModel>();
-                dialog.DataContext = vm;
+                var nlVm = vm.SelectedNaturalLanguageSettingsViewModel;
+                var tagVm = vm.SelectedTagSettingsViewModel;
 
-                await dialogHandler.ShowWindowAsDialog(dialog);
-                if (vm.Success)
+                if (nlVm != null)
                 {
-                    _updateTagCounts = false;
+                    using var nlContext = nlVm.CreateInterrogationContext();
+                    ProgressIndicatorMessage = "Initializing natural language interrogator...";
+                    ConsoleText = $"Initializing...{Environment.NewLine}";
+                    await nlContext.InitializeOperation(message => ProgressIndicatorMessage = message, AddConsoleText);
 
-                    ShowProgressIndicator = true;
-                    ProgressIndicatorMax = 0;
-                    if (vm.SelectedNaturalLanguageSettingsViewModel != null)
-                        ProgressIndicatorMax += ImagesWithTags.Count();
-                    if (vm.SelectedTagSettingsViewModel != null)
-                        ProgressIndicatorMax += ImagesWithTags.Count();
-                    ImagesWithTags.Count();
-                    ProgressIndicatorProgress = 0;
-                    ProgressIndicatorMessage = "Interrogating all images...";
+                    var folderAwareNl = nlVm as IFolderAwareInterrogationViewModel<string>;
 
-                    try
+                    string? currentFolder = null;
+                    Func<byte[], Action<string>, Action<string>, Task<string>>? interrogateOp = null;
+                    List<(string Open, string Close)> currentStripPairs = new();
+
+                    foreach (var (folder, image, isCurrentFolder) in allImages)
                     {
-                        if (vm.SelectedNaturalLanguageSettingsViewModel != null)
+                        // Recompute the interrogate operation whenever we enter a new folder.
+                        if (!string.Equals(folder, currentFolder, StringComparison.OrdinalIgnoreCase))
                         {
-                            using var NLinterrogator = vm.SelectedNaturalLanguageSettingsViewModel.CreateInterrogationContext();
-                            ProgressIndicatorMessage = "Executing natural language interrogation...";
-                            ConsoleText = $"Initializing...{Environment.NewLine}";
-                            await NLinterrogator.InitializeOperation(message => ProgressIndicatorMessage = message, AddConsoleText);
-
-                            foreach (var image in ImagesWithTags)
+                            currentFolder = folder;
+                            currentStripPairs = GetEffectiveStripPairsForFolder(folder);
+                            if (folderAwareNl != null)
                             {
-                                var imageData = image.ImageSource.ToByteArray();
-                                image.Description = await NLinterrogator.InterrogateOperation(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
-
-                                ++ProgressIndicatorProgress;
+                                var concepts = GetEffectiveConceptsForFolder(folder);
+                                var rawPrompt = GetEffectiveSettingForFolder(folder, p => p.DefaultNaturalLanguageInterrogationPrompt);
+                                var effectivePrompt = rawPrompt != null ? ApplyConceptSubstitution(rawPrompt, concepts) : null;
+                                var effectiveUrl = GetEffectiveSettingForFolder(folder, p => p.DefaultInterrogationEndpointUrl);
+                                interrogateOp = folderAwareNl.GetFolderInterrogateOperation(effectivePrompt, effectiveUrl);
+                            }
+                            else
+                            {
+                                interrogateOp = nlContext.InterrogateOperation;
                             }
                         }
 
-                        if (vm.SelectedTagSettingsViewModel != null)
-                        {
-                            using var taginterrogator = vm.SelectedTagSettingsViewModel.CreateInterrogationContext();
-                            ProgressIndicatorMax = 0;
-                            ProgressIndicatorMessage = "Executing tag interrogation...";
-                            ConsoleText = $"Initializing...{Environment.NewLine}";
-                            await taginterrogator.InitializeOperation(message => ProgressIndicatorMessage = message, AddConsoleText);
+                        ProgressIndicatorMessage = $"NL interrogating {image.Filename}...";
+                        var imageData = image.ImageSource.ToByteArray();
+                        var nlResult = await interrogateOp!(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
+                        image.Description = ApplyResponseStripping(nlResult, currentStripPairs);
 
-                            foreach (var image in ImagesWithTags)
-                            {
-                                var imageData = image.ImageSource.ToByteArray();
-                                var tags = await taginterrogator.InterrogateOperation(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
-                                foreach (var tag in tags)
-                                {
-                                    image.AddTagIfNotExists(new TagViewModel(tag));
-                                }
-                                ++ProgressIndicatorProgress;
-                            }
-                        }
-
-                        _updateTagCounts = true;
+                        SaveImageToDisk(folder, image);
+                        ++ProgressIndicatorProgress;
                     }
-                    catch (Exception ex)
-                    {
-                        var messageBoxStandardWindow = MessageBoxManager
-                                .GetMessageBoxStandard("Interrogate Failed",
-                                                             $"Failed to interrogate the image. Error message: {ex.Message}",
-                                                             ButtonEnum.Ok,
-                                                             Icon.Warning);
-
-                        await dialogHandler.ShowDialog(messageBoxStandardWindow);
-                    }
-                    UpdateTagCounts();
                 }
-                ShowProgressIndicator = false;
+
+                if (tagVm != null)
+                {
+                    using var tagContext = tagVm.CreateInterrogationContext();
+                    ProgressIndicatorMessage = "Initializing tag interrogator...";
+                    ConsoleText = $"Initializing...{Environment.NewLine}";
+                    await tagContext.InitializeOperation(message => ProgressIndicatorMessage = message, AddConsoleText);
+
+                    var folderAwareTag = tagVm as IFolderAwareInterrogationViewModel<List<string>>;
+
+                    string? currentFolder = null;
+                    Func<byte[], Action<string>, Action<string>, Task<List<string>>>? interrogateOp = null;
+                    List<(string Open, string Close)> currentStripPairs = new();
+
+                    foreach (var (folder, image, isCurrentFolder) in allImages)
+                    {
+                        if (!string.Equals(folder, currentFolder, StringComparison.OrdinalIgnoreCase))
+                        {
+                            currentFolder = folder;
+                            currentStripPairs = GetEffectiveStripPairsForFolder(folder);
+                            if (folderAwareTag != null)
+                            {
+                                var concepts = GetEffectiveConceptsForFolder(folder);
+                                var rawPrompt = GetEffectiveSettingForFolder(folder, p => p.DefaultTagInterrogationPrompt);
+                                var effectivePrompt = rawPrompt != null ? ApplyConceptSubstitution(rawPrompt, concepts) : null;
+                                var effectiveUrl = GetEffectiveSettingForFolder(folder, p => p.DefaultInterrogationEndpointUrl);
+                                interrogateOp = folderAwareTag.GetFolderInterrogateOperation(effectivePrompt, effectiveUrl);
+                            }
+                            else
+                            {
+                                interrogateOp = tagContext.InterrogateOperation;
+                            }
+                        }
+
+                        ProgressIndicatorMessage = $"Tag interrogating {image.Filename}...";
+                        var imageData = image.ImageSource.ToByteArray();
+                        var tags = await interrogateOp!(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
+                        var strippedTags = ApplyResponseStrippingToTags(tags, currentStripPairs);
+                        foreach (var tag in strippedTags)
+                            image.AddTagIfNotExists(new TagViewModel(tag));
+
+                        SaveImageToDisk(folder, image);
+                        ++ProgressIndicatorProgress;
+                    }
+                }
+
+                _updateTagCounts = true;
             }
+            catch (Exception ex)
+            {
+                var messageBoxStandardWindow = MessageBoxManager
+                    .GetMessageBoxStandard("Interrogate Failed",
+                        $"Failed to interrogate the image. Error message: {ex.Message}",
+                        ButtonEnum.Ok, Icon.Warning);
+                await dialogHandler.ShowDialog(messageBoxStandardWindow);
+            }
+
+            UpdateTagCounts();
+            ShowProgressIndicator = false;
         }
 
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
@@ -1422,7 +1933,7 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 newFilename = $"{withoutExtension}__{++i:00}";
             }
-            newFilename = Path.Combine(openFolder, $"{newFilename}.png");
+            newFilename = Path.Combine(currentImagesFolder!, $"{newFilename}.png");
             image.Save(newFilename);
             var newImageViewModel = new ImageWithTagsViewModel(image, newFilename, ImageDirtyHandler, description, tags);
             newImageViewModel.TagEntered += this.TagAdded;
@@ -1430,7 +1941,7 @@ namespace StableDiffusionTagManager.ViewModels
 
             if (description != null || tags != null)
             {
-                var set = new TagSet(Path.Combine(openFolder, newImageViewModel.GetTagsFileName()), description, tags);
+                var set = new TagSet(Path.Combine(currentImagesFolder!, newImageViewModel.GetTagsFileName()), description, tags);
                 set.WriteFile();
             }
 
@@ -1473,7 +1984,7 @@ namespace StableDiffusionTagManager.ViewModels
 
         public Task SaveCurrentImage(Bitmap image)
         {
-            if (openFolder != null && SelectedImage != null)
+            if (currentImagesFolder != null && SelectedImage != null)
             {
                 SaveUpdatedImage(SelectedImage, image);
             }
@@ -1483,14 +1994,14 @@ namespace StableDiffusionTagManager.ViewModels
 
         public Task SaveUpdatedImage(ImageWithTagsViewModel targetImageWithTags, Bitmap image)
         {
-            if (openFolder != null)
+            if (currentImagesFolder != null)
             {
                 if (Path.GetExtension(targetImageWithTags.Filename) != ".png")
                 {
-                    image.Save(Path.Combine(openFolder, targetImageWithTags.Filename));
+                    image.Save(Path.Combine(currentImagesFolder!, targetImageWithTags.Filename));
                     targetImageWithTags.Filename = $"{Path.GetFileNameWithoutExtension(targetImageWithTags.Filename)}.png";
                 }
-                image.Save(Path.Combine(openFolder, targetImageWithTags.Filename));
+                image.Save(Path.Combine(currentImagesFolder!, targetImageWithTags.Filename));
                 targetImageWithTags.ImageSource = image;
                 targetImageWithTags.UpdateThumbnail();
             }
@@ -1501,9 +2012,10 @@ namespace StableDiffusionTagManager.ViewModels
         public async Task ExpandImage(Bitmap image)
         {
             var dialog = new ExpandImageDialog();
-            if (OpenProject != null && OpenProject.TargetImageSize.HasValue && OpenProject.TargetImageSize.Value.Width > 0 && OpenProject.TargetImageSize.Value.Height > 0)
+            var effectiveSize = GetEffectiveSettingValue(p => p.TargetImageSize);
+            if (effectiveSize.HasValue && effectiveSize.Value.Width > 0 && effectiveSize.Value.Height > 0)
             {
-                dialog.ComputeExpansionNeededForTargetAspectRatio(image.PixelSize.Width, image.PixelSize.Height, OpenProject.TargetImageSize.Value.Width, OpenProject.TargetImageSize.Value.Height);
+                dialog.ComputeExpansionNeededForTargetAspectRatio(image.PixelSize.Width, image.PixelSize.Height, effectiveSize.Value.Width, effectiveSize.Value.Height);
             }
             await dialogHandler.ShowWindowAsDialog(dialog);
             if (dialog.Success)
@@ -1613,11 +2125,12 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public void ToggleImageComplete()
         {
-            if (SelectedImage != null && OpenProject != null)
+            if (SelectedImage != null && openFolder != null)
             {
                 SelectedImage.IsComplete = !SelectedImage.IsComplete;
-                OpenProject.SetImageCompletionStatus(SelectedImage.Filename, SelectedImage.IsComplete);
-                OpenProject.Save();
+                var proj = GetOrCreateCurrentFolderProject();
+                proj.SetImageCompletionStatus(SelectedImage.Filename, SelectedImage.IsComplete);
+                proj.Save();
 
                 if (CurrentImageFilterMode != ImageFilterMode.None && FilteredImageSet != null)
                 {
@@ -1672,7 +2185,7 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async Task ConvertAllImageAlphasToColor()
         {
-            if (openFolder != null && ImagesWithTags != null)
+            if (currentImagesFolder != null && ImagesWithTags != null)
             {
                 var dialog = new ColorPickerDialog();
                 await dialogHandler.ShowDialog<Color?>(dialog);
@@ -1689,7 +2202,7 @@ namespace StableDiffusionTagManager.ViewModels
                         var newImage = ConvertImageAlphaToColor(sourceImage, dialog.SelectedColor);
 
                         image.ImageSource = newImage;
-                        image.ImageSource.Save(Path.Combine(this.openFolder, image.Filename));
+                        image.ImageSource.Save(Path.Combine(this.currentImagesFolder!, image.Filename));
                         ProgressIndicatorProgress++;
 
                         //Can't use Task.Run because ConvertImageAlphaToColor is using stuff that requires the Avalonia UI thread.
@@ -1704,7 +2217,7 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async Task ExtractAllPanels()
         {
-            if (openFolder != null && ImagesWithTags != null)
+            if (currentImagesFolder != null && ImagesWithTags != null)
             {
                 ShowProgressIndicator = true;
                 ProgressIndicatorMax = ImagesWithTags.Count();
@@ -1748,7 +2261,7 @@ namespace StableDiffusionTagManager.ViewModels
                 if (viewer.Success)
                 {
                     selectedImage.ImageSource = imageResult;
-                    selectedImage.ImageSource.Save(Path.Combine(this.openFolder, selectedImage.Filename));
+                    selectedImage.ImageSource.Save(Path.Combine(this.currentImagesFolder!, selectedImage.Filename));
                 }
             }
         }
@@ -1815,7 +2328,7 @@ namespace StableDiffusionTagManager.ViewModels
                         if (viewer.Success)
                         {
                             selectedImage.ImageSource = imageResult;
-                            selectedImage.ImageSource.Save(Path.Combine(this.openFolder, selectedImage.Filename));
+                            selectedImage.ImageSource.Save(Path.Combine(this.currentImagesFolder!, selectedImage.Filename));
                         }
                     }
                 }
@@ -1927,9 +2440,9 @@ namespace StableDiffusionTagManager.ViewModels
                         {
                             bytes = expandMask != 0 ? bytes.ToBitmap().ExpandMask(expandMask).ToByteArray() : bytes;
                             var result = await utilities.RunLama(image.ImageSource.ToByteArray(), bytes, AddConsoleText);
-                            ArchiveImage(openFolder, image.Filename, image.GetTagsFileName());
+                            ArchiveImage(currentImagesFolder!, image.Filename, image.GetTagsFileName());
                             image.ImageSource = result.ToBitmap();
-                            image.ImageSource.Save(Path.Combine(this.openFolder, image.Filename));
+                            image.ImageSource.Save(Path.Combine(this.currentImagesFolder!, image.Filename));
                         }
                     }
                 }
@@ -1987,9 +2500,9 @@ namespace StableDiffusionTagManager.ViewModels
                         ProgressIndicatorProgress++;
                         AddConsoleText("Processing image " + image.Filename);
                         var bytes = method == "RemBG" ? await utilities.RunRemBG(image.ImageSource.ToByteArray(), AddConsoleText) : await utilities.RunInsypreTransparentBG(image.ImageSource.ToByteArray(), AddConsoleText);
-                        ArchiveImage(openFolder, image.Filename, image.GetTagsFileName());
+                        ArchiveImage(currentImagesFolder!, image.Filename, image.GetTagsFileName());
                         image.ImageSource = bytes.ToBitmap();
-                        image.ImageSource.Save(Path.Combine(this.openFolder, image.Filename));
+                        image.ImageSource.Save(Path.Combine(this.currentImagesFolder!, image.Filename));
                     }
                 }
                 catch (Exception ex)

@@ -52,6 +52,7 @@ namespace StableDiffusionTagManager
                .WithTransientLifetime());
 
             collection.AddTransient<ViewModelFactory>();
+            collection.AddSingleton<ICurrentProjectDefaults, CurrentProjectDefaults>();
         }
     }
 }

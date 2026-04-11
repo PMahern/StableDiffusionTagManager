@@ -1,4 +1,5 @@
 ﻿using ImageUtil;
+using StableDiffusionTagManager.Services;
 using System.Collections.Generic;
 
 namespace StableDiffusionTagManager.ViewModels
@@ -128,5 +129,27 @@ namespace StableDiffusionTagManager.ViewModels
         }
     }
 
-    
+    public class RemoteTaggerViewModelFactory : ITaggerViewModelFactory
+    {
+        private readonly ICurrentProjectDefaults projectDefaults;
+
+        public RemoteTaggerViewModelFactory(ICurrentProjectDefaults projectDefaults)
+        {
+            this.projectDefaults = projectDefaults;
+        }
+
+        public string Name => "Ollama / KoboldCpp";
+
+        public InterrogatorViewModel<List<string>> CreateViewModel()
+        {
+            var vm = new RemoteTagInterrogationViewModel();
+            if (!string.IsNullOrWhiteSpace(projectDefaults.TagInterrogationPrompt))
+                vm.Prompt = projectDefaults.TagInterrogationPrompt;
+            if (!string.IsNullOrWhiteSpace(projectDefaults.InterrogationEndpointUrl))
+                vm.EndpointUrl = projectDefaults.InterrogationEndpointUrl;
+            return vm;
+        }
+    }
+
+
 }

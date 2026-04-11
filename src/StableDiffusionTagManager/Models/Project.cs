@@ -28,15 +28,31 @@ namespace StableDiffusionTagManager.Models
         private const string ACTIVATION_KEYWORD_ATTRIBUTE = "ActivationKeyword";
         private const string COMPLETED_IMAGES_ELEMENT = "CompletedImages";
         private const string COMPLETED_IMAGE_ELEMENT = "Image";
+        private const string CONCEPTS_ELEMENT = "Concepts";
+        private const string CONCEPT_ELEMENT = "Concept";
+        private const string CONCEPT_KEY_ATTRIBUTE = "Key";
+        private const string CONCEPT_VALUE_ATTRIBUTE = "Value";
+        private const string DEFAULT_NL_INTERROGATION_PROMPT_ATTRIBUTE = "DefaultNaturalLanguageInterrogationPrompt";
+        private const string DEFAULT_TAG_INTERROGATION_PROMPT_ATTRIBUTE = "DefaultTagInterrogationPrompt";
+        private const string DEFAULT_INTERROGATION_ENDPOINT_URL_ATTRIBUTE = "DefaultInterrogationEndpointUrl";
+        private const string RESPONSE_STRIP_PAIRS_ELEMENT = "ResponseStripPairs";
+        private const string RESPONSE_STRIP_PAIR_ELEMENT = "StripPair";
+        private const string STRIP_PAIR_OPEN_ATTRIBUTE = "Open";
+        private const string STRIP_PAIR_CLOSE_ATTRIBUTE = "Close";
 
         private string? defaultPromptPrefix = null;
         private string? defaultNegativePrompt = null;
         private decimal? defaultDenoiseStrength = 0.5M;
         private string? activationKeyword = null;
         private PixelSize? targetImageSize = null;
+        private string? defaultNaturalLanguageInterrogationPrompt = null;
+        private string? defaultTagInterrogationPrompt = null;
+        private string? defaultInterrogationEndpointUrl = null;
+        private List<(string Open, string Close)> responseStripPairs = new List<(string, string)>();
         private List<TagCollection> tagCollections = new List<TagCollection>();
         private List<(string oldfile, string newfile)> backedUpFileMaps = new List<(string, string)>();
         private List<string> completedImages = new List<string>();
+        private Dictionary<string, string> concepts = new Dictionary<string, string>();
 
         public Action? ProjectUpdated { get; set; }
 
@@ -49,6 +65,8 @@ namespace StableDiffusionTagManager.Models
             LoadTagCollections(doc);
             LoadDefaultPromptSettings(doc);
             LoadCompletedImages(doc);
+            LoadConcepts(doc);
+            LoadResponseStripPairs(doc);
         }
 
         protected override void AddSettings(XDocument doc)
@@ -58,6 +76,8 @@ namespace StableDiffusionTagManager.Models
             SaveBackedUpFileMaps(doc);
             SaveTagCollections(doc);
             SaveCompletedImages(doc);
+            SaveConcepts(doc);
+            SaveResponseStripPairs(doc);
         }
 
         public string? DefaultPromptPrefix
@@ -107,6 +127,46 @@ namespace StableDiffusionTagManager.Models
             }
         }
 
+        public string? DefaultNaturalLanguageInterrogationPrompt
+        {
+            get => defaultNaturalLanguageInterrogationPrompt;
+            set
+            {
+                defaultNaturalLanguageInterrogationPrompt = value;
+                ProjectUpdated?.Invoke();
+            }
+        }
+
+        public string? DefaultTagInterrogationPrompt
+        {
+            get => defaultTagInterrogationPrompt;
+            set
+            {
+                defaultTagInterrogationPrompt = value;
+                ProjectUpdated?.Invoke();
+            }
+        }
+
+        public string? DefaultInterrogationEndpointUrl
+        {
+            get => defaultInterrogationEndpointUrl;
+            set
+            {
+                defaultInterrogationEndpointUrl = value;
+                ProjectUpdated?.Invoke();
+            }
+        }
+
+        public List<(string Open, string Close)> ResponseStripPairs
+        {
+            get => responseStripPairs;
+            set
+            {
+                responseStripPairs = value;
+                ProjectUpdated?.Invoke();
+            }
+        }
+
         public List<TagCollection> TagCollections
         {
             get => tagCollections; 
@@ -136,12 +196,25 @@ namespace StableDiffusionTagManager.Models
             }
         }
 
+        public Dictionary<string, string> Concepts
+        {
+            get => concepts;
+            set
+            {
+                concepts = value;
+                ProjectUpdated?.Invoke();
+            }
+        }
+
         public void LoadDefaultPromptSettings(XDocument doc)
         {
             DefaultPromptPrefix = LoadSetting(doc, DEFAULT_PROMPT_PREFIX_ATTRIBUTE);
             DefaultNegativePrompt = LoadSetting(doc, DEFAULT_NEGATIVE_PROMPT_ATTRIBUTE);
             DefaultDenoiseStrength = LoadSetting<decimal>(doc, DEFAULT_DENOISE_STRENGTH_ATTRIBUTE);
             ActivationKeyword = LoadSetting(doc, ACTIVATION_KEYWORD_ATTRIBUTE);
+            DefaultNaturalLanguageInterrogationPrompt = LoadSetting(doc, DEFAULT_NL_INTERROGATION_PROMPT_ATTRIBUTE);
+            DefaultTagInterrogationPrompt = LoadSetting(doc, DEFAULT_TAG_INTERROGATION_PROMPT_ATTRIBUTE);
+            DefaultInterrogationEndpointUrl = LoadSetting(doc, DEFAULT_INTERROGATION_ENDPOINT_URL_ATTRIBUTE);
         }
 
         public void SaveDefaultPromptSettings(XDocument doc)
@@ -150,6 +223,9 @@ namespace StableDiffusionTagManager.Models
             SaveSetting(doc, DEFAULT_NEGATIVE_PROMPT_ATTRIBUTE, DefaultNegativePrompt);
             SaveSetting(doc, DEFAULT_DENOISE_STRENGTH_ATTRIBUTE, DefaultDenoiseStrength);
             SaveSetting(doc, ACTIVATION_KEYWORD_ATTRIBUTE, ActivationKeyword);
+            SaveSetting(doc, DEFAULT_NL_INTERROGATION_PROMPT_ATTRIBUTE, DefaultNaturalLanguageInterrogationPrompt);
+            SaveSetting(doc, DEFAULT_TAG_INTERROGATION_PROMPT_ATTRIBUTE, DefaultTagInterrogationPrompt);
+            SaveSetting(doc, DEFAULT_INTERROGATION_ENDPOINT_URL_ATTRIBUTE, DefaultInterrogationEndpointUrl);
         }
 
 
@@ -284,6 +360,65 @@ namespace StableDiffusionTagManager.Models
             }
 
             doc.Root?.Add(imagesElement);
+        }
+
+        public void LoadResponseStripPairs(XDocument doc)
+        {
+            var root = doc.Root;
+            if (root == null) return;
+            var el = root.Element(RESPONSE_STRIP_PAIRS_ELEMENT);
+            if (el == null) return;
+            ResponseStripPairs = el.Elements(RESPONSE_STRIP_PAIR_ELEMENT)
+                .Select(e => (
+                    e.Attribute(STRIP_PAIR_OPEN_ATTRIBUTE)?.Value ?? string.Empty,
+                    e.Attribute(STRIP_PAIR_CLOSE_ATTRIBUTE)?.Value ?? string.Empty))
+                .Where(p => !string.IsNullOrEmpty(p.Item1))
+                .ToList();
+        }
+
+        public void SaveResponseStripPairs(XDocument doc)
+        {
+            var el = new XElement(RESPONSE_STRIP_PAIRS_ELEMENT);
+            foreach (var (open, close) in responseStripPairs)
+            {
+                var pair = new XElement(RESPONSE_STRIP_PAIR_ELEMENT);
+                pair.SetAttributeValue(STRIP_PAIR_OPEN_ATTRIBUTE, open);
+                pair.SetAttributeValue(STRIP_PAIR_CLOSE_ATTRIBUTE, close);
+                el.Add(pair);
+            }
+            doc.Root?.Add(el);
+        }
+
+        public void LoadConcepts(XDocument doc)
+        {
+            var root = doc.Root;
+            if (root != null)
+            {
+                var conceptsElement = root.Element(CONCEPTS_ELEMENT);
+                if (conceptsElement != null)
+                {
+                    Concepts = conceptsElement.Elements(CONCEPT_ELEMENT)
+                        .Where(e => e.Attribute(CONCEPT_KEY_ATTRIBUTE)?.Value != null)
+                        .ToDictionary(
+                            e => e.Attribute(CONCEPT_KEY_ATTRIBUTE)!.Value,
+                            e => e.Attribute(CONCEPT_VALUE_ATTRIBUTE)?.Value ?? string.Empty
+                        );
+                }
+            }
+        }
+
+        public void SaveConcepts(XDocument doc)
+        {
+            var conceptsElement = new XElement(CONCEPTS_ELEMENT);
+            foreach (var concept in concepts)
+            {
+                var conceptElement = new XElement(CONCEPT_ELEMENT);
+                conceptElement.SetAttributeValue(CONCEPT_KEY_ATTRIBUTE, concept.Key);
+                conceptElement.SetAttributeValue(CONCEPT_VALUE_ATTRIBUTE, concept.Value);
+                conceptsElement.Add(conceptElement);
+            }
+
+            doc.Root?.Add(conceptsElement);
         }
     }
 }

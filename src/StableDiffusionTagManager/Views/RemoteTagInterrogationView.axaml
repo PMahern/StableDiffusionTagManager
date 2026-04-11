@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewmodels="using:StableDiffusionTagManager.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StableDiffusionTagManager.Views.RemoteTagInterrogationView">
+
+  <StackPanel Classes="inputform">
+    <Panel>
+      <Label Content="Endpoint Type"/>
+      <ComboBox ItemsSource="{x:Static viewmodels:RemoteTagInterrogationViewModel.EndpointTypes}"
+                SelectedItem="{Binding SelectedEndpointType, Mode=TwoWay}" />
+    </Panel>
+    <Panel>
+      <Label Content="Endpoint URL"/>
+      <TextBox Text="{Binding EndpointUrl}" Watermark="http://localhost:11434" Width="300"/>
+    </Panel>
+    <Panel>
+      <Label Content="Model"/>
+      <TextBox Text="{Binding Model}" Watermark="llava:13b (Ollama only)" Width="200"/>
+    </Panel>
+    <Panel>
+      <Label Content="Prompt"/>
+      <TextBox Text="{Binding Prompt}" AcceptsReturn="True" TextWrapping="Wrap"
+               Height="80" Width="300" VerticalContentAlignment="Top"/>
+    </Panel>
+  </StackPanel>
+</UserControl>

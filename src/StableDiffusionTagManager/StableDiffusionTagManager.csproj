@@ -103,6 +103,12 @@
     <Compile Update="Views\ProjectSettingsDialog.axaml.cs">
       <DependentUpon>ProjectSettingsDialog.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\RemoteNaturalLanguageInterrogationView.axaml.cs">
+      <DependentUpon>RemoteNaturalLanguageInterrogationView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\RemoteTagInterrogationView.axaml.cs">
+      <DependentUpon>RemoteTagInterrogationView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\TagPrioritySetManagerDialog.axaml.cs">
       <DependentUpon>TagPrioritySetManagerDialog.axaml</DependentUpon>
     </Compile>
