@@ -904,6 +904,10 @@ namespace StableDiffusionTagManager.ViewModels
                 item.TagRemoved += TagRemoved;
             }
 
+            // Re-link any pending queue items that target this folder to the freshly loaded
+            // ImageWithTagsViewModel instances, so their thumbnails show the pending indicator.
+            BatchQueue.SyncPendingIndicatorsForFolder(targetFolder, ImagesWithTags);
+
             currentImagesFolder = targetFolder;
             UpdateProjectSettings();
             OnPropertyChanged(nameof(CurrentFolderProject));
@@ -1879,10 +1883,18 @@ namespace StableDiffusionTagManager.ViewModels
                 items.Add(new BatchQueueItem(
                     BatchQueue,
                     isCurrentFolder ? image : null,
+                    image.Filename,
                     capturedFolder,
                     $"{opLabel}: {image.Filename}",
                     async () =>
                     {
+                        // Compute results on whatever thread the async operations resume on.
+                        // Mutations to ObservableObject properties and ObservableCollection
+                        // must happen on the UI thread, so we collect results here and apply
+                        // them in a single Dispatcher.UIThread.InvokeAsync at the end.
+                        string? computedDescription = null;
+                        List<string>? computedTags = null;
+
                         if (nlVm != null)
                         {
                             if (!nlInitialized)
@@ -1900,7 +1912,7 @@ namespace StableDiffusionTagManager.ViewModels
 
                             var imageData = capturedImage.ImageSource.ToByteArray();
                             var nlResult = await nlOp(imageData, _ => { }, _ => { });
-                            capturedImage.Description = ApplyResponseStripping(nlResult, capturedStripPairs);
+                            computedDescription = ApplyResponseStripping(nlResult, capturedStripPairs);
                         }
 
                         if (tagVm != null)
@@ -1920,13 +1932,20 @@ namespace StableDiffusionTagManager.ViewModels
 
                             var imageData = capturedImage.ImageSource.ToByteArray();
                             var tags = await tagOp(imageData, _ => { }, _ => { });
-                            var strippedTags = ApplyResponseStrippingToTags(tags, capturedStripPairs);
-                            foreach (var tag in strippedTags)
-                                capturedImage.AddTagIfNotExists(new TagViewModel(tag));
+                            computedTags = ApplyResponseStrippingToTags(tags, capturedStripPairs);
                         }
 
-                        SaveImageToDisk(capturedFolder, capturedImage);
-                        UpdateTagCounts();
+                        // Apply all mutations on the UI thread so bindings update correctly.
+                        await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                        {
+                            if (computedDescription != null)
+                                capturedImage.Description = computedDescription;
+                            if (computedTags != null)
+                                foreach (var tag in computedTags)
+                                    capturedImage.AddTagIfNotExists(new TagViewModel(tag));
+                            SaveImageToDisk(capturedFolder, capturedImage);
+                            UpdateTagCounts();
+                        });
                     }
                 ));
             }
@@ -2234,6 +2253,7 @@ namespace StableDiffusionTagManager.ViewModels
                 items.Add(new BatchQueueItem(
                     BatchQueue,
                     image,
+                    image.Filename,
                     folder,
                     $"Convert alpha: {image.Filename}",
                     async () =>
@@ -2266,6 +2286,7 @@ namespace StableDiffusionTagManager.ViewModels
                 items.Add(new BatchQueueItem(
                     BatchQueue,
                     image,
+                    image.Filename,
                     folder,
                     $"Extract panels: {image.Filename}",
                     async () =>
@@ -2481,6 +2502,7 @@ namespace StableDiffusionTagManager.ViewModels
                 items.Add(new BatchQueueItem(
                     BatchQueue,
                     image,
+                    image.Filename,
                     folder,
                     $"Mask + remove: {image.Filename}",
                     async () =>
@@ -2505,9 +2527,14 @@ namespace StableDiffusionTagManager.ViewModels
                                 ? bytes.ToBitmap().ExpandMask(expandMask).ToByteArray()
                                 : bytes;
                             var result = await utilities.RunLama(capturedImage.ImageSource.ToByteArray(), bytes, _ => { });
-                            ArchiveImage(folder, capturedImage.Filename, capturedImage.GetTagsFileName());
-                            capturedImage.ImageSource = result.ToBitmap();
-                            capturedImage.ImageSource.Save(Path.Combine(folder, capturedImage.Filename));
+                            var resultBitmap = result.ToBitmap();
+                            await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                            {
+                                ArchiveImage(folder, capturedImage.Filename, capturedImage.GetTagsFileName());
+                                capturedImage.ImageSource = resultBitmap;
+                                capturedImage.UpdateThumbnail();
+                                capturedImage.ImageSource.Save(Path.Combine(folder, capturedImage.Filename));
+                            });
                         }
                     }
                 ));
@@ -2555,6 +2582,7 @@ namespace StableDiffusionTagManager.ViewModels
                 items.Add(new BatchQueueItem(
                     BatchQueue,
                     image,
+                    image.Filename,
                     folder,
                     $"Remove background: {image.Filename}",
                     async () =>
@@ -2572,9 +2600,14 @@ namespace StableDiffusionTagManager.ViewModels
                             : await utilities!.RunInsypreTransparentBG(capturedImage.ImageSource.ToByteArray(), _ => { });
 
                         if (bytes == null) return;
-                        ArchiveImage(folder, capturedImage.Filename, capturedImage.GetTagsFileName());
-                        capturedImage.ImageSource = bytes.ToBitmap();
-                        capturedImage.ImageSource.Save(Path.Combine(folder, capturedImage.Filename));
+                        var resultBitmap = bytes.ToBitmap();
+                        await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                        {
+                            ArchiveImage(folder, capturedImage.Filename, capturedImage.GetTagsFileName());
+                            capturedImage.ImageSource = resultBitmap;
+                            capturedImage.UpdateThumbnail();
+                            capturedImage.ImageSource.Save(Path.Combine(folder, capturedImage.Filename));
+                        });
                     }
                 ));
             }

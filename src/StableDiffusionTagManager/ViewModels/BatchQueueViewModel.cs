@@ -129,6 +129,36 @@ namespace StableDiffusionTagManager.ViewModels
             });
         }
 
+        /// <summary>
+        /// Called whenever a folder's images are loaded into the UI. Finds any pending or
+        /// running queue items targeting this folder, re-links their Image reference to the
+        /// freshly-created ImageWithTagsViewModel, and sets HasPendingOperation so thumbnails
+        /// show the clock indicator. This handles both switching to a new folder that has
+        /// queued work and switching back to a folder the user previously left.
+        /// </summary>
+        public void SyncPendingIndicatorsForFolder(string folder, IEnumerable<ImageWithTagsViewModel> loadedImages)
+        {
+            var activeItems = Items
+                .Where(i => i.IsPending || i.IsRunning)
+                .Where(i => string.Equals(i.Folder, folder, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            if (activeItems.Count == 0) return;
+
+            var byFilename = loadedImages.ToDictionary(
+                img => img.Filename,
+                StringComparer.OrdinalIgnoreCase);
+
+            foreach (var item in activeItems)
+            {
+                if (!byFilename.TryGetValue(item.ImageFilename, out var loadedImage))
+                    continue;
+
+                item.Image = loadedImage;
+                loadedImage.SetHasPendingOperation(true, item.OperationDescription);
+            }
+        }
+
         [RelayCommand(CanExecute = nameof(CanPause))]
         public void Pause()
         {

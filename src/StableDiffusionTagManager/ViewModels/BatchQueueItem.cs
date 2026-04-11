@@ -12,12 +12,14 @@ namespace StableDiffusionTagManager.ViewModels
         public BatchQueueItem(
             BatchQueueViewModel queue,
             ImageWithTagsViewModel? image,
+            string imageFilename,
             string folder,
             string operationDescription,
             Func<Task> operation)
         {
             this.queue = queue;
             Image = image;
+            ImageFilename = imageFilename;
             Folder = folder;
             OperationDescription = operationDescription;
             Operation = operation;
@@ -25,8 +27,15 @@ namespace StableDiffusionTagManager.ViewModels
 
         /// <summary>
         /// The image this operation targets, or null if the image is not in the currently loaded folder.
+        /// Updated by BatchQueueViewModel.SyncPendingIndicatorsForFolder when the folder is loaded.
         /// </summary>
-        public ImageWithTagsViewModel? Image { get; }
+        public ImageWithTagsViewModel? Image { get; internal set; }
+
+        /// <summary>
+        /// The filename (not full path) of the target image. Always set, even when Image is null,
+        /// so the queue can re-link to freshly loaded ImageWithTagsViewModel instances on folder switch.
+        /// </summary>
+        public string ImageFilename { get; }
 
         public string Folder { get; }
         public string OperationDescription { get; }
