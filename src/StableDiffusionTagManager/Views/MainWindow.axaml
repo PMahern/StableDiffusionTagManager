@@ -413,7 +413,7 @@
                 MinWidth="280" MaxWidth="480">
           <StackPanel>
 
-            <!-- Compact header (always visible when queue has items) -->
+            <!-- Compact header (always visible) -->
             <Grid ColumnDefinitions="24,*,Auto,Auto,Auto" Margin="8,6">
               <!-- Status icon -->
               <Panel Grid.Column="0" Width="20" Height="20" VerticalAlignment="Center">
@@ -436,7 +436,13 @@
               <TextBlock Grid.Column="1" Margin="8,0"
                          Text="{Binding BatchQueue.CurrentOrRecentItem.OperationDescription}"
                          TextTrimming="CharacterEllipsis"
-                         VerticalAlignment="Center" FontSize="12"/>
+                         VerticalAlignment="Center" FontSize="12"
+                         IsVisible="{Binding BatchQueue.HasItems}"/>
+              <TextBlock Grid.Column="1" Margin="8,0"
+                         Text="Queue Empty"
+                         VerticalAlignment="Center" FontSize="12"
+                         Foreground="{DynamicResource SystemBaseMediumColor}"
+                         IsVisible="{Binding !BatchQueue.HasItems}"/>
 
               <!-- Pending count badge -->
               <Border Grid.Column="2"
