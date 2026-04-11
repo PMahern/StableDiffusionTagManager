@@ -1509,6 +1509,62 @@ namespace StableDiffusionTagManager.ViewModels
                                           }).ToOrderedSetObservableCollection((l, r) => l.Letter.CompareTo(r.Letter));
         }
 
+        /// <summary>
+        /// Async version of <see cref="UpdateTagCounts"/> — safe to call from any thread.
+        /// Snapshots UI collections on the UI thread, reads subfolder tag files on a
+        /// background thread, then updates the observable on the UI thread, so the caller
+        /// never blocks the UI.
+        /// </summary>
+        public async Task UpdateTagCountsAsync()
+        {
+            if (ImagesWithTags == null) return;
+
+            // Snapshot the in-memory collections on the UI thread (fast, no I/O).
+            var (allTags, subfolderPaths) = await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                var tags = ImagesWithTags
+                    .SelectMany(i => i.Tags.Select(t => t.Tag).Where(t => t != ""))
+                    .ToList();
+                var paths = AvailableSubfolders?
+                    .Where(sf => !string.Equals(sf.FolderPath, currentImagesFolder, StringComparison.OrdinalIgnoreCase))
+                    .Select(sf => sf.FolderPath)
+                    .ToList();
+                return (tags, paths);
+            });
+
+            // Read subfolder tag files on a background thread to avoid blocking the UI.
+            if (subfolderPaths != null && subfolderPaths.Count > 0)
+            {
+                var subfolderTags = await Task.Run(() =>
+                {
+                    var result = new List<string>();
+                    foreach (var path in subfolderPaths)
+                    {
+                        try
+                        {
+                            var folderTagSets = new FolderTagSets(path);
+                            result.AddRange(folderTagSets.TagsSets.SelectMany(ts => ts.TagSet.Tags.Where(t => t != "")));
+                        }
+                        catch { /* skip folders that can't be read */ }
+                    }
+                    return result;
+                });
+                allTags.AddRange(subfolderTags);
+            }
+
+            var newDictionary = allTags
+                .GroupBy(t => t)
+                .OrderBy(t => t.Key)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            // Push the updated counts back to the UI thread.
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                TagCountDictionary = newDictionary;
+                UpdateTagCountsObservable();
+            });
+        }
+
         public void MoveTagLeft(TagViewModel tag)
         {
             if (SelectedImage != null)
@@ -2010,17 +2066,37 @@ namespace StableDiffusionTagManager.ViewModels
                             computedTags = ApplyResponseStrippingToTags(tags, capturedStripPairs);
                         }
 
-                        // Apply all mutations on the UI thread so bindings update correctly.
-                        await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                        // Stage 1: Apply UI mutations on the UI thread.
+                        // _updateTagCounts is suppressed so that each AddTagIfNotExists call
+                        // does not trigger an incremental TagCounts rebuild per tag; we do a
+                        // single async rebuild in stage 3 instead.
+                        await Dispatcher.UIThread.InvokeAsync(() =>
                         {
                             if (computedDescription != null)
                                 capturedImage.Description = computedDescription;
                             if (computedTags != null)
-                                foreach (var tag in computedTags)
-                                    capturedImage.AddTagIfNotExists(new TagViewModel(tag));
-                            SaveImageToDisk(capturedFolder, capturedImage);
-                            UpdateTagCounts();
+                            {
+                                _updateTagCounts = false;
+                                try
+                                {
+                                    foreach (var tag in computedTags)
+                                        capturedImage.AddTagIfNotExists(new TagViewModel(tag));
+                                }
+                                finally
+                                {
+                                    _updateTagCounts = true;
+                                }
+                            }
                         });
+
+                        // Stage 2: Persist to disk off the UI thread (InvokeAsync returned us
+                        // to the background thread).
+                        SaveImageToDisk(capturedFolder, capturedImage);
+
+                        // Stage 3: Rebuild tag counts — snapshots UI collections on UI thread,
+                        // reads subfolder files on a background thread, then pushes the new
+                        // dictionary to the observable on the UI thread.
+                        await UpdateTagCountsAsync();
                     }
                 ));
             }
