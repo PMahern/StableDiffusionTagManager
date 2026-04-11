@@ -39,6 +39,8 @@ namespace StableDiffusionTagManager.ViewModels
         private readonly WebApiFactory webApiFactory;
         private readonly ICurrentProjectDefaults currentProjectDefaults;
 
+        public BatchQueueViewModel BatchQueue { get; } = new BatchQueueViewModel();
+
         public MainWindowViewModel(ViewModelFactory viewModelFactory,
             ComicPanelExtractor comicPanelExtractorService,
             Settings settings,
@@ -106,10 +108,12 @@ namespace StableDiffusionTagManager.ViewModels
                 RebuildFilteredImageSet();
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(ImagesLoaded));
+                OnPropertyChanged(nameof(AnyImagesLoaded));
                 AddTagToEndOfAllImagesCommand.NotifyCanExecuteChanged();
                 AddTagToStartOfAllImagesCommand.NotifyCanExecuteChanged();
                 RemoveTagFromAllImagesCommand.NotifyCanExecuteChanged();
                 RemoveMetaTagsCommand.NotifyCanExecuteChanged();
+                InterrogateAllImagesCommand.NotifyCanExecuteChanged();
             }
         }
 
@@ -164,15 +168,38 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 if (selectedImage != value)
                 {
+                    if (selectedImage != null)
+                        selectedImage.PropertyChanged -= OnSelectedImagePropertyChanged;
+
                     selectedImage = value;
+
+                    if (selectedImage != null)
+                        selectedImage.PropertyChanged += OnSelectedImagePropertyChanged;
 
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(IsImageSelected));
+                    OnPropertyChanged(nameof(IsSelectedImageEditable));
+                    OnPropertyChanged(nameof(SelectedImageHasPendingOperation));
                     AddTagToEndCommand?.NotifyCanExecuteChanged();
                     AddTagToFrontCommand?.NotifyCanExecuteChanged();
                 }
             }
         }
+
+        private void OnSelectedImagePropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ImageWithTagsViewModel.HasPendingOperation))
+            {
+                OnPropertyChanged(nameof(IsSelectedImageEditable));
+                OnPropertyChanged(nameof(SelectedImageHasPendingOperation));
+            }
+        }
+
+        /// <summary>True when an image is selected and has no pending batch operation.</summary>
+        public bool IsSelectedImageEditable => SelectedImage != null && !SelectedImage.HasPendingOperation;
+
+        /// <summary>True only when an image is selected AND it has a pending batch operation.</summary>
+        public bool SelectedImageHasPendingOperation => SelectedImage?.HasPendingOperation ?? false;
 
 
 
@@ -264,6 +291,16 @@ namespace StableDiffusionTagManager.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<SubfolderViewModel> availableSubfolders = new ObservableCollection<SubfolderViewModel>();
+
+        partial void OnAvailableSubfoldersChanged(ObservableCollection<SubfolderViewModel> value)
+        {
+            OnPropertyChanged(nameof(AnyImagesLoaded));
+            InterrogateAllImagesCommand.NotifyCanExecuteChanged();
+            AddTagToEndOfAllImagesCommand.NotifyCanExecuteChanged();
+            AddTagToStartOfAllImagesCommand.NotifyCanExecuteChanged();
+            RemoveTagFromAllImagesCommand.NotifyCanExecuteChanged();
+            RemoveMetaTagsCommand.NotifyCanExecuteChanged();
+        }
 
         private SubfolderViewModel? selectedSubfolder;
         public SubfolderViewModel? SelectedSubfolder
@@ -1044,7 +1081,17 @@ namespace StableDiffusionTagManager.ViewModels
 
         public bool ImagesLoaded => this.ImagesWithTags?.Any() ?? false;
 
-        [RelayCommand(CanExecute = nameof(ImagesLoaded))]
+        /// <summary>
+        /// True when any images exist anywhere in the project — either in the currently loaded
+        /// folder or in any other subfolder.  Used as CanExecute for operations that iterate
+        /// across the whole project via GetAllProjectImages().
+        /// </summary>
+        public bool AnyImagesLoaded =>
+            (ImagesWithTags?.Any() ?? false) ||
+            (AvailableSubfolders?.Any(sf =>
+                !string.Equals(sf.FolderPath, currentImagesFolder, StringComparison.OrdinalIgnoreCase)) ?? false);
+
+        [RelayCommand(CanExecute = nameof(AnyImagesLoaded))]
         public async Task AddTagToEndOfAllImages()
         {
             var dialog = new TagSearchDialog();
@@ -1066,7 +1113,7 @@ namespace StableDiffusionTagManager.ViewModels
             UpdateTagCounts();
         }
 
-        [RelayCommand(CanExecute = nameof(ImagesLoaded))]
+        [RelayCommand(CanExecute = nameof(AnyImagesLoaded))]
         public async Task AddTagToStartOfAllImages()
         {
             var dialog = new TagSearchDialog();
@@ -1106,7 +1153,7 @@ namespace StableDiffusionTagManager.ViewModels
             UpdateTagCounts();
         }
 
-        [RelayCommand(CanExecute = nameof(ImagesLoaded))]
+        [RelayCommand(CanExecute = nameof(AnyImagesLoaded))]
         public async Task RemoveTagFromAllImages()
         {
             var dialog = new TagSearchDialog();
@@ -1763,11 +1810,9 @@ namespace StableDiffusionTagManager.ViewModels
             return (description: description, tags: tags);
         }
 
-        [RelayCommand(CanExecute = nameof(ImagesLoaded))]
+        [RelayCommand(CanExecute = nameof(AnyImagesLoaded))]
         public async Task InterrogateAllImages()
         {
-            if (ImagesWithTags == null || ImagesWithTags.Count == 0)
-                return;
 
             var dialog = new InterrogationDialog();
             var vm = viewModelFactory.CreateViewModel<InterrogationDialogViewModel>();
@@ -1777,137 +1822,124 @@ namespace StableDiffusionTagManager.ViewModels
             if (!vm.Success)
                 return;
 
-            _updateTagCounts = false;
-            ShowProgressIndicator = true;
-            ProgressIndicatorProgress = 0;
-            ProgressIndicatorMax = 0;
+            var nlVm = vm.SelectedNaturalLanguageSettingsViewModel;
+            var tagVm = vm.SelectedTagSettingsViewModel;
+            if (nlVm == null && tagVm == null)
+                return;
 
-            // Collect all images across every folder so we can set the total count.
+            // Pre-compute per-folder settings now (on the UI thread), then build queue items.
             var allImages = GetAllProjectImages().ToList();
+            var items = new List<BatchQueueItem>();
 
-            if (vm.SelectedNaturalLanguageSettingsViewModel != null)
-                ProgressIndicatorMax += allImages.Count;
-            if (vm.SelectedTagSettingsViewModel != null)
-                ProgressIndicatorMax += allImages.Count;
+            // Shared interrogation contexts, lazily initialized inside the first item that runs.
+            // Closures below capture these references so all items in this batch share the same
+            // initialized models, while each item can be retried independently.
+            ConfiguredInterrogationContext<string>? nlCtx = null;
+            ConfiguredInterrogationContext<List<string>>? tagCtx = null;
+            bool nlInitialized = false;
+            bool tagInitialized = false;
 
-            try
+            foreach (var (folder, image, isCurrentFolder) in allImages)
             {
-                var nlVm = vm.SelectedNaturalLanguageSettingsViewModel;
-                var tagVm = vm.SelectedTagSettingsViewModel;
+                var concepts = GetEffectiveConceptsForFolder(folder);
+                var stripPairs = GetEffectiveStripPairsForFolder(folder);
+
+                string? nlPrompt = null;
+                string? tagPrompt = null;
+                string? endpointUrl = null;
 
                 if (nlVm != null)
                 {
-                    using var nlContext = nlVm.CreateInterrogationContext();
-                    ProgressIndicatorMessage = "Initializing natural language interrogator...";
-                    ConsoleText = $"Initializing...{Environment.NewLine}";
-                    await nlContext.InitializeOperation(message => ProgressIndicatorMessage = message, AddConsoleText);
-
-                    var folderAwareNl = nlVm as IFolderAwareInterrogationViewModel<string>;
-
-                    string? currentFolder = null;
-                    Func<byte[], Action<string>, Action<string>, Task<string>>? interrogateOp = null;
-                    List<(string Open, string Close)> currentStripPairs = new();
-
-                    foreach (var (folder, image, isCurrentFolder) in allImages)
-                    {
-                        // Recompute the interrogate operation whenever we enter a new folder.
-                        if (!string.Equals(folder, currentFolder, StringComparison.OrdinalIgnoreCase))
-                        {
-                            currentFolder = folder;
-                            currentStripPairs = GetEffectiveStripPairsForFolder(folder);
-                            if (folderAwareNl != null)
-                            {
-                                var concepts = GetEffectiveConceptsForFolder(folder);
-                                var rawPrompt = GetEffectiveSettingForFolder(folder, p => p.DefaultNaturalLanguageInterrogationPrompt);
-                                var effectivePrompt = rawPrompt != null ? ApplyConceptSubstitution(rawPrompt, concepts) : null;
-                                var effectiveUrl = GetEffectiveSettingForFolder(folder, p => p.DefaultInterrogationEndpointUrl);
-                                interrogateOp = folderAwareNl.GetFolderInterrogateOperation(effectivePrompt, effectiveUrl);
-                            }
-                            else
-                            {
-                                interrogateOp = nlContext.InterrogateOperation;
-                            }
-                        }
-
-                        ProgressIndicatorMessage = $"NL interrogating {image.Filename}...";
-                        var imageData = image.ImageSource.ToByteArray();
-                        var nlResult = await interrogateOp!(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
-                        image.Description = ApplyResponseStripping(nlResult, currentStripPairs);
-
-                        SaveImageToDisk(folder, image);
-                        ++ProgressIndicatorProgress;
-                    }
+                    var raw = GetEffectiveSettingForFolder(folder, p => p.DefaultNaturalLanguageInterrogationPrompt);
+                    nlPrompt = raw != null ? ApplyConceptSubstitution(raw, concepts) : null;
+                    endpointUrl = GetEffectiveSettingForFolder(folder, p => p.DefaultInterrogationEndpointUrl);
                 }
-
                 if (tagVm != null)
                 {
-                    using var tagContext = tagVm.CreateInterrogationContext();
-                    ProgressIndicatorMessage = "Initializing tag interrogator...";
-                    ConsoleText = $"Initializing...{Environment.NewLine}";
-                    await tagContext.InitializeOperation(message => ProgressIndicatorMessage = message, AddConsoleText);
+                    var raw = GetEffectiveSettingForFolder(folder, p => p.DefaultTagInterrogationPrompt);
+                    tagPrompt = raw != null ? ApplyConceptSubstitution(raw, concepts) : null;
+                    endpointUrl ??= GetEffectiveSettingForFolder(folder, p => p.DefaultInterrogationEndpointUrl);
+                }
 
-                    var folderAwareTag = tagVm as IFolderAwareInterrogationViewModel<List<string>>;
+                // Capture loop variables for the closure
+                var capturedFolder = folder;
+                var capturedImage = image;
+                var capturedIsCurrentFolder = isCurrentFolder;
+                var capturedStripPairs = stripPairs;
+                var capturedNlPrompt = nlPrompt;
+                var capturedTagPrompt = tagPrompt;
+                var capturedUrl = endpointUrl;
 
-                    string? currentFolder = null;
-                    Func<byte[], Action<string>, Action<string>, Task<List<string>>>? interrogateOp = null;
-                    List<(string Open, string Close)> currentStripPairs = new();
+                string opLabel = (nlVm != null && tagVm != null) ? "NL + Tag interrogate"
+                    : (nlVm != null ? "NL interrogate" : "Tag interrogate");
 
-                    foreach (var (folder, image, isCurrentFolder) in allImages)
+                if (isCurrentFolder)
+                    image.SetHasPendingOperation(true, opLabel);
+
+                items.Add(new BatchQueueItem(
+                    BatchQueue,
+                    isCurrentFolder ? image : null,
+                    capturedFolder,
+                    $"{opLabel}: {image.Filename}",
+                    async () =>
                     {
-                        if (!string.Equals(folder, currentFolder, StringComparison.OrdinalIgnoreCase))
+                        if (nlVm != null)
                         {
-                            currentFolder = folder;
-                            currentStripPairs = GetEffectiveStripPairsForFolder(folder);
-                            if (folderAwareTag != null)
+                            if (!nlInitialized)
                             {
-                                var concepts = GetEffectiveConceptsForFolder(folder);
-                                var rawPrompt = GetEffectiveSettingForFolder(folder, p => p.DefaultTagInterrogationPrompt);
-                                var effectivePrompt = rawPrompt != null ? ApplyConceptSubstitution(rawPrompt, concepts) : null;
-                                var effectiveUrl = GetEffectiveSettingForFolder(folder, p => p.DefaultInterrogationEndpointUrl);
-                                interrogateOp = folderAwareTag.GetFolderInterrogateOperation(effectivePrompt, effectiveUrl);
+                                nlCtx?.Dispose();
+                                nlCtx = nlVm.CreateInterrogationContext();
+                                await nlCtx.InitializeOperation(_ => { }, _ => { });
+                                nlInitialized = true;
                             }
-                            else
-                            {
-                                interrogateOp = tagContext.InterrogateOperation;
-                            }
+
+                            Func<byte[], Action<string>, Action<string>, Task<string>> nlOp =
+                                nlVm is IFolderAwareInterrogationViewModel<string> faVm
+                                    ? faVm.GetFolderInterrogateOperation(capturedNlPrompt, capturedUrl)
+                                    : nlCtx!.InterrogateOperation;
+
+                            var imageData = capturedImage.ImageSource.ToByteArray();
+                            var nlResult = await nlOp(imageData, _ => { }, _ => { });
+                            capturedImage.Description = ApplyResponseStripping(nlResult, capturedStripPairs);
                         }
 
-                        ProgressIndicatorMessage = $"Tag interrogating {image.Filename}...";
-                        var imageData = image.ImageSource.ToByteArray();
-                        var tags = await interrogateOp!(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
-                        var strippedTags = ApplyResponseStrippingToTags(tags, currentStripPairs);
-                        foreach (var tag in strippedTags)
-                            image.AddTagIfNotExists(new TagViewModel(tag));
+                        if (tagVm != null)
+                        {
+                            if (!tagInitialized)
+                            {
+                                tagCtx?.Dispose();
+                                tagCtx = tagVm.CreateInterrogationContext();
+                                await tagCtx.InitializeOperation(_ => { }, _ => { });
+                                tagInitialized = true;
+                            }
 
-                        SaveImageToDisk(folder, image);
-                        ++ProgressIndicatorProgress;
+                            Func<byte[], Action<string>, Action<string>, Task<List<string>>> tagOp =
+                                tagVm is IFolderAwareInterrogationViewModel<List<string>> faVm
+                                    ? faVm.GetFolderInterrogateOperation(capturedTagPrompt, capturedUrl)
+                                    : tagCtx!.InterrogateOperation;
+
+                            var imageData = capturedImage.ImageSource.ToByteArray();
+                            var tags = await tagOp(imageData, _ => { }, _ => { });
+                            var strippedTags = ApplyResponseStrippingToTags(tags, capturedStripPairs);
+                            foreach (var tag in strippedTags)
+                                capturedImage.AddTagIfNotExists(new TagViewModel(tag));
+                        }
+
+                        SaveImageToDisk(capturedFolder, capturedImage);
+                        UpdateTagCounts();
                     }
-                }
-
-                _updateTagCounts = true;
-            }
-            catch (Exception ex)
-            {
-                var messageBoxStandardWindow = MessageBoxManager
-                    .GetMessageBoxStandard("Interrogate Failed",
-                        $"Failed to interrogate the image. Error message: {ex.Message}",
-                        ButtonEnum.Ok, Icon.Warning);
-                await dialogHandler.ShowDialog(messageBoxStandardWindow);
+                ));
             }
 
-            UpdateTagCounts();
-            ShowProgressIndicator = false;
+            BatchQueue.EnqueueRange(items);
         }
 
-        [RelayCommand(CanExecute = nameof(ImagesLoaded))]
+        [RelayCommand(CanExecute = nameof(AnyImagesLoaded))]
         public async Task RemoveMetaTags()
         {
-            if (ImagesWithTags != null && ImagesWithTags.Count > 0)
+            foreach (var tag in MetaTags.Tags)
             {
-                foreach (var tag in MetaTags.Tags)
-                {
-                    RemoveTagFromAllImages(tag);
-                }
+                RemoveTagFromAllImages(tag);
             }
         }
 
@@ -2185,61 +2217,75 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
         public async Task ConvertAllImageAlphasToColor()
         {
-            if (currentImagesFolder != null && ImagesWithTags != null)
+            if (currentImagesFolder == null || ImagesWithTags == null) return;
+
+            var dialog = new ColorPickerDialog();
+            await dialogHandler.ShowDialog<Color?>(dialog);
+            if (!dialog.Success) return;
+
+            var selectedColor = dialog.SelectedColor;
+            var folder = currentImagesFolder;
+
+            var items = new List<BatchQueueItem>();
+            foreach (var image in ImagesWithTags)
             {
-                var dialog = new ColorPickerDialog();
-                await dialogHandler.ShowDialog<Color?>(dialog);
-                if (dialog.Success)
-                {
-                    ShowProgressIndicator = true;
-                    ProgressIndicatorMax = ImagesWithTags.Count();
-                    ProgressIndicatorProgress = 0;
-                    ProgressIndicatorMessage = "Converting image alpha channels...";
-
-                    foreach (var image in ImagesWithTags)
+                var capturedImage = image;
+                image.SetHasPendingOperation(true, "Convert alpha to color");
+                items.Add(new BatchQueueItem(
+                    BatchQueue,
+                    image,
+                    folder,
+                    $"Convert alpha: {image.Filename}",
+                    async () =>
                     {
-                        var sourceImage = image.ImageSource;
-                        var newImage = ConvertImageAlphaToColor(sourceImage, dialog.SelectedColor);
-
-                        image.ImageSource = newImage;
-                        image.ImageSource.Save(Path.Combine(this.currentImagesFolder!, image.Filename));
-                        ProgressIndicatorProgress++;
-
-                        //Can't use Task.Run because ConvertImageAlphaToColor is using stuff that requires the Avalonia UI thread.
-                        await Task.Delay(1);
+                        // ConvertImageAlphaToColor needs the UI thread
+                        await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                        {
+                            var newImage = ConvertImageAlphaToColor(capturedImage.ImageSource, selectedColor);
+                            capturedImage.ImageSource = newImage;
+                            capturedImage.ImageSource.Save(Path.Combine(folder, capturedImage.Filename));
+                        });
                     }
-
-                    ShowProgressIndicator = false;
-                }
+                ));
             }
+
+            BatchQueue.EnqueueRange(items);
         }
 
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
-        public async Task ExtractAllPanels()
+        public Task ExtractAllPanels()
         {
-            if (currentImagesFolder != null && ImagesWithTags != null)
+            if (currentImagesFolder == null || ImagesWithTags == null) return Task.CompletedTask;
+
+            var folder = currentImagesFolder;
+            var items = new List<BatchQueueItem>();
+            foreach (var image in ImagesWithTags.ToList())
             {
-                ShowProgressIndicator = true;
-                ProgressIndicatorMax = ImagesWithTags.Count();
-                ProgressIndicatorProgress = 0;
-                ProgressIndicatorMessage = "Extracting all comic panels...";
-
-                foreach (var image in ImagesWithTags.ToList())
-                {
-                    var panels = await comicPanelExtractorService.ExtractComicPanels(image.ImageSource);
-                    foreach (var panel in panels)
+                var capturedImage = image;
+                image.SetHasPendingOperation(true, "Extract comic panels");
+                items.Add(new BatchQueueItem(
+                    BatchQueue,
+                    image,
+                    folder,
+                    $"Extract panels: {image.Filename}",
+                    async () =>
                     {
-                        AddNewImage(panel, image);
-                        panel.Save(image.Filename);
+                        var panels = await comicPanelExtractorService.ExtractComicPanels(capturedImage.ImageSource);
+                        if (panels == null) return;
+                        await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                        {
+                            foreach (var panel in panels)
+                            {
+                                AddNewImage(panel, capturedImage);
+                                panel.Save(capturedImage.Filename);
+                            }
+                        });
                     }
-
-                    ProgressIndicatorProgress++;
-
-                    await Task.Delay(1);
-                }
-
-                ShowProgressIndicator = false;
+                ));
             }
+
+            BatchQueue.EnqueueRange(items);
+            return Task.CompletedTask;
         }
 
         public async Task ReviewConvertAlpha(Bitmap bitmap)
@@ -2412,52 +2458,62 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public async Task GenerateMaskThenRemoveFromAllImages()
         {
+            if (currentImagesFolder == null || ImagesWithTags == null) return;
+
             var dialog = new YOLOModelSelectorDialog();
             dialog.DataContext = viewModelFactory.CreateViewModel<YOLOModelSelectorDialogViewModel>();
 
             var dialogResult = await dialogHandler.ShowDialog<(string, float, int)?>(dialog);
+            if (dialogResult == null) return;
 
-            if (dialogResult != null)
+            var (selectedYoloModelPath, threshold, expandMask) = dialogResult.Value;
+            var folder = currentImagesFolder;
+
+            // Shared Python utilities, lazily initialized inside the first queue item.
+            PythonUtilities? utilities = null;
+            bool utilitiesInitialized = false;
+
+            var items = new List<BatchQueueItem>();
+            foreach (var image in ImagesWithTags.ToList())
             {
-                var (selectedYoloModelPath, threshold, expandMask) = dialogResult.Value;
-                ShowProgressIndicator = true;
-                ProgressIndicatorProgress = 0;
-                ProgressIndicatorMax = ImagesWithTags.Count;
-                ProgressIndicatorMessage = "Initializing Python Utilities...";
-                ConsoleText = $"Initializing...{Environment.NewLine}";
-
-                using var utilities = new PythonUtilities();
-                await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
-
-                try
-                {
-                    foreach (var image in ImagesWithTags)
+                var capturedImage = image;
+                image.SetHasPendingOperation(true, "Generate mask + remove");
+                items.Add(new BatchQueueItem(
+                    BatchQueue,
+                    image,
+                    folder,
+                    $"Mask + remove: {image.Filename}",
+                    async () =>
                     {
-                        ProgressIndicatorProgress++;
-                        AddConsoleText("Processing image " + image.Filename);
-                        var bytes = await utilities.GenerateYoloMask(selectedYoloModelPath, image.ImageSource.ToByteArray(), threshold, AddConsoleText);
+                        if (!utilitiesInitialized)
+                        {
+                            utilities?.Dispose();
+                            utilities = new PythonUtilities();
+                            await utilities.Initialize(_ => { }, _ => { });
+                            utilitiesInitialized = true;
+                        }
+
+                        var bytes = await utilities!.GenerateYoloMask(
+                            selectedYoloModelPath,
+                            capturedImage.ImageSource.ToByteArray(),
+                            threshold,
+                            _ => { });
+
                         if (bytes != null)
                         {
-                            bytes = expandMask != 0 ? bytes.ToBitmap().ExpandMask(expandMask).ToByteArray() : bytes;
-                            var result = await utilities.RunLama(image.ImageSource.ToByteArray(), bytes, AddConsoleText);
-                            ArchiveImage(currentImagesFolder!, image.Filename, image.GetTagsFileName());
-                            image.ImageSource = result.ToBitmap();
-                            image.ImageSource.Save(Path.Combine(this.currentImagesFolder!, image.Filename));
+                            bytes = expandMask != 0
+                                ? bytes.ToBitmap().ExpandMask(expandMask).ToByteArray()
+                                : bytes;
+                            var result = await utilities.RunLama(capturedImage.ImageSource.ToByteArray(), bytes, _ => { });
+                            ArchiveImage(folder, capturedImage.Filename, capturedImage.GetTagsFileName());
+                            capturedImage.ImageSource = result.ToBitmap();
+                            capturedImage.ImageSource.Save(Path.Combine(folder, capturedImage.Filename));
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    var messageBoxStandardWindow = MessageBoxManager
-                            .GetMessageBoxStandard("Mask then remove failed",
-                                                         $"Failed to run mask find and remove process. Error message: {ex.Message}",
-                                                         ButtonEnum.Ok,
-                                                         Icon.Warning);
-
-                    await dialogHandler.ShowDialog(messageBoxStandardWindow);
-                }
+                ));
             }
-            ShowProgressIndicator = false;
+
+            BatchQueue.EnqueueRange(items);
         }
 
 
@@ -2480,43 +2536,50 @@ namespace StableDiffusionTagManager.ViewModels
         [RelayCommand]
         public async Task RemoveBackgroundFromAllImages()
         {
+            if (currentImagesFolder == null || ImagesWithTags == null) return;
+
             var method = await ShowBackgroundRemovalDialog();
+            if (method == null) return;
 
-            if (method != null)
+            var folder = currentImagesFolder;
+
+            // Shared Python utilities, lazily initialized in the first queue item.
+            PythonUtilities? utilities = null;
+            bool utilitiesInitialized = false;
+
+            var items = new List<BatchQueueItem>();
+            foreach (var image in ImagesWithTags.ToList())
             {
-                ShowProgressIndicator = true;
-                ProgressIndicatorProgress = 0;
-                ProgressIndicatorMax = ImagesWithTags.Count;
-                ProgressIndicatorMessage = "Initializing Python Utilities...";
-                ConsoleText = $"Initializing...{Environment.NewLine}";
-
-                using var utilities = new PythonUtilities();
-                await utilities.Initialize(message => ProgressIndicatorMessage = message, AddConsoleText);
-
-                try
-                {
-                    foreach (var image in ImagesWithTags)
+                var capturedImage = image;
+                image.SetHasPendingOperation(true, "Remove background");
+                items.Add(new BatchQueueItem(
+                    BatchQueue,
+                    image,
+                    folder,
+                    $"Remove background: {image.Filename}",
+                    async () =>
                     {
-                        ProgressIndicatorProgress++;
-                        AddConsoleText("Processing image " + image.Filename);
-                        var bytes = method == "RemBG" ? await utilities.RunRemBG(image.ImageSource.ToByteArray(), AddConsoleText) : await utilities.RunInsypreTransparentBG(image.ImageSource.ToByteArray(), AddConsoleText);
-                        ArchiveImage(currentImagesFolder!, image.Filename, image.GetTagsFileName());
-                        image.ImageSource = bytes.ToBitmap();
-                        image.ImageSource.Save(Path.Combine(this.currentImagesFolder!, image.Filename));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    var messageBoxStandardWindow = MessageBoxManager
-                            .GetMessageBoxStandard("RemBG failed",
-                                                            $"RemBG batch process failed. Error message: {ex.Message}",
-                                                            ButtonEnum.Ok,
-                                                            Icon.Warning);
+                        if (!utilitiesInitialized)
+                        {
+                            utilities?.Dispose();
+                            utilities = new PythonUtilities();
+                            await utilities.Initialize(_ => { }, _ => { });
+                            utilitiesInitialized = true;
+                        }
 
-                    await dialogHandler.ShowDialog(messageBoxStandardWindow);
-                }
+                        var bytes = method == "RemBG"
+                            ? await utilities!.RunRemBG(capturedImage.ImageSource.ToByteArray(), _ => { })
+                            : await utilities!.RunInsypreTransparentBG(capturedImage.ImageSource.ToByteArray(), _ => { });
+
+                        if (bytes == null) return;
+                        ArchiveImage(folder, capturedImage.Filename, capturedImage.GetTagsFileName());
+                        capturedImage.ImageSource = bytes.ToBitmap();
+                        capturedImage.ImageSource.Save(Path.Combine(folder, capturedImage.Filename));
+                    }
+                ));
             }
-            ShowProgressIndicator = false;
+
+            BatchQueue.EnqueueRange(items);
         }
     }
 }

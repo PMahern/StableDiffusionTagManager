@@ -157,6 +157,26 @@ namespace StableDiffusionTagManager.ViewModels
 
         public int FirstNumberedChunk => firstNumberedChunk;
 
+        private bool hasPendingOperation;
+        public bool HasPendingOperation
+        {
+            get => hasPendingOperation;
+            private set => SetProperty(ref hasPendingOperation, value);
+        }
+
+        private string? pendingOperationDescription;
+        public string? PendingOperationDescription
+        {
+            get => pendingOperationDescription;
+            private set => SetProperty(ref pendingOperationDescription, value);
+        }
+
+        internal void SetHasPendingOperation(bool value, string? description = null)
+        {
+            HasPendingOperation = value;
+            PendingOperationDescription = value ? description : null;
+        }
+
         //Tag handling
         private TagViewModel? _tagBeingDragged = null;
 
