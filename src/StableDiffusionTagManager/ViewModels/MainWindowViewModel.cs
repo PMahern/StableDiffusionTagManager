@@ -1012,6 +1012,81 @@ namespace StableDiffusionTagManager.ViewModels
             }
         }
 
+        [RelayCommand(CanExecute = nameof(AnyImagesLoaded))]
+        public async Task ExportToFlatFolder()
+        {
+            // Save any pending changes for the currently loaded folder first.
+            SaveChanges();
+
+            if (ShowFolderDialogCallback == null) return;
+
+            var folderPickResult = await ShowFolderDialogCallback();
+            if (!folderPickResult.Any()) return;
+
+            var destFolder = folderPickResult.First().TryGetLocalPath();
+            if (destFolder == null) return;
+
+            // Collect all source folders: root folder plus every subfolder.
+            var sourceFolders = new List<string>();
+            if (openFolder != null)
+                sourceFolders.Add(openFolder);
+            foreach (var subfolder in AvailableSubfolders)
+                sourceFolders.Add(subfolder.FolderPath);
+
+            // Gather every image/txt pair across all source folders.
+            var pairs = new List<(string imageFile, string baseName)>();
+            var imagePatterns = new[] { "*.jpg", "*.png" };
+            foreach (var folder in sourceFolders)
+            {
+                foreach (var pattern in imagePatterns)
+                {
+                    foreach (var imageFile in Directory.EnumerateFiles(folder, pattern))
+                    {
+                        pairs.Add((imageFile, Path.GetFileName(imageFile)));
+                    }
+                }
+            }
+
+            // Resolve filename conflicts by prepending the parent folder name.
+            var usedNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var resolved = new List<(string src, string destName)>();
+            foreach (var (imageFile, baseName) in pairs)
+            {
+                var destName = baseName;
+                if (!usedNames.Add(destName))
+                {
+                    var prefix = Path.GetFileName(Path.GetDirectoryName(imageFile)) + "_";
+                    destName = prefix + baseName;
+                    usedNames.Add(destName);
+                }
+                resolved.Add((imageFile, destName));
+            }
+
+            ShowProgressIndicator = true;
+            ProgressIndicatorMax = resolved.Count;
+            ProgressIndicatorProgress = 0;
+            ProgressIndicatorMessage = "Exporting to flat folder...";
+
+            await Task.Run(() =>
+            {
+                foreach (var (src, destName) in resolved)
+                {
+                    File.Copy(src, Path.Combine(destFolder, destName), overwrite: true);
+
+                    var srcTxt = Path.ChangeExtension(src, ".txt");
+                    if (File.Exists(srcTxt))
+                    {
+                        var destTxtName = Path.ChangeExtension(destName, ".txt");
+                        File.Copy(srcTxt, Path.Combine(destFolder, destTxtName), overwrite: true);
+                    }
+
+                    ProgressIndicatorProgress++;
+                }
+            });
+
+            ShowProgressIndicator = false;
+        }
+
         //Tag Drag handling
         public void BeginTagDrag(TagViewModel tagViewModel)
         {

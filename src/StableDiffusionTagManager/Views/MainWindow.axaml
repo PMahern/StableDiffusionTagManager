@@ -31,6 +31,7 @@
           <MenuItem  Header="_Application Settings..." Command="{Binding ApplicationSettingsCommand}" />
           <MenuItem Header="_Load Folder..." Command="{Binding LoadFolderCommand}"/>
           <MenuItem Header="_Save" Command="{Binding SaveChangesCommand}"/>
+          <MenuItem Header="_Export to Flat Folder..." Command="{Binding ExportToFlatFolderCommand}"/>
           <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
         </MenuItem>
         <MenuItem  Header="_Project" IsVisible="{Binding IsProject}">
