@@ -19,6 +19,8 @@ namespace StableDiffusionTagManager.ViewModels
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(PauseCommand))]
         [NotifyCanExecuteChangedFor(nameof(ResumeCommand))]
+        [NotifyPropertyChangedFor(nameof(ShowQueueProcessingIcon))]
+        [NotifyPropertyChangedFor(nameof(ShowQueueDoneIcon))]
         private bool isPaused;
 
         [ObservableProperty]
@@ -28,12 +30,24 @@ namespace StableDiffusionTagManager.ViewModels
         [ObservableProperty]
         private bool isVisible;
 
+        [ObservableProperty]
+        private bool isExpanded;
+
         private bool CanPause() => IsProcessing && !IsPaused;
         private bool CanResume() => IsPaused;
 
         public bool HasItems => Items.Count > 0;
         public int PendingCount => Items.Count(i => i.IsPending || i.IsRunning);
         public int FailedCount => Items.Count(i => i.IsFailed);
+        public bool HasPendingItems => PendingCount > 0;
+        public bool HasFailedItems => FailedCount > 0;
+
+        /// <summary>The currently running item, or the most recently added item if none is running.</summary>
+        public BatchQueueItem? CurrentOrRecentItem =>
+            Items.FirstOrDefault(i => i.IsRunning) ?? Items.LastOrDefault();
+
+        public bool ShowQueueProcessingIcon => IsProcessing && !IsPaused;
+        public bool ShowQueueDoneIcon => !IsProcessing && !IsPaused && !HasPendingItems;
 
         public void EnqueueRange(IEnumerable<BatchQueueItem> items)
         {
@@ -42,6 +56,8 @@ namespace StableDiffusionTagManager.ViewModels
 
             OnPropertyChanged(nameof(HasItems));
             OnPropertyChanged(nameof(PendingCount));
+            OnPropertyChanged(nameof(HasPendingItems));
+            OnPropertyChanged(nameof(CurrentOrRecentItem));
             IsVisible = true;
             TriggerProcessing();
         }
@@ -91,6 +107,10 @@ namespace StableDiffusionTagManager.ViewModels
                 {
                     nextItem.Status = BatchQueueItemStatus.Running;
                     OnPropertyChanged(nameof(PendingCount));
+                    OnPropertyChanged(nameof(HasPendingItems));
+                    OnPropertyChanged(nameof(CurrentOrRecentItem));
+                    OnPropertyChanged(nameof(ShowQueueProcessingIcon));
+                    OnPropertyChanged(nameof(ShowQueueDoneIcon));
                 });
 
                 try
@@ -102,6 +122,8 @@ namespace StableDiffusionTagManager.ViewModels
                         nextItem.Status = BatchQueueItemStatus.Completed;
                         nextItem.Image?.SetHasPendingOperation(false);
                         OnPropertyChanged(nameof(PendingCount));
+                        OnPropertyChanged(nameof(HasPendingItems));
+                        OnPropertyChanged(nameof(CurrentOrRecentItem));
                     });
                 }
                 catch (Exception ex)
@@ -113,6 +135,9 @@ namespace StableDiffusionTagManager.ViewModels
                         nextItem.Image?.SetHasPendingOperation(false);
                         OnPropertyChanged(nameof(PendingCount));
                         OnPropertyChanged(nameof(FailedCount));
+                        OnPropertyChanged(nameof(HasPendingItems));
+                        OnPropertyChanged(nameof(HasFailedItems));
+                        OnPropertyChanged(nameof(CurrentOrRecentItem));
 
                         // Auto-pause: next loop iteration will wait on this TCS
                         resumeTcs = new TaskCompletionSource<bool>();
@@ -126,6 +151,9 @@ namespace StableDiffusionTagManager.ViewModels
                 IsProcessing = false;
                 processingActive = false;
                 OnPropertyChanged(nameof(PendingCount));
+                OnPropertyChanged(nameof(HasPendingItems));
+                OnPropertyChanged(nameof(ShowQueueProcessingIcon));
+                OnPropertyChanged(nameof(ShowQueueDoneIcon));
             });
         }
 
@@ -158,6 +186,9 @@ namespace StableDiffusionTagManager.ViewModels
                 loadedImage.SetHasPendingOperation(true, item.OperationDescription);
             }
         }
+
+        [RelayCommand]
+        public void ToggleExpanded() => IsExpanded = !IsExpanded;
 
         [RelayCommand(CanExecute = nameof(CanPause))]
         public void Pause()

@@ -24,8 +24,8 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <vm:MainWindowViewModel/>
   </Design.DataContext>
-  <Grid ColumnDefinitions="1*, Auto">
-    <DockPanel Grid.Column="0">
+  <Grid>
+    <DockPanel>
       <Menu DockPanel.Dock="Top" Name="MainMenu">
         <MenuItem  Header="_File">
           <MenuItem  Header="_Application Settings..." Command="{Binding ApplicationSettingsCommand}" />
@@ -80,7 +80,8 @@
           </ComboBox.ItemTemplate>
         </ComboBox>
       </StackPanel>
-      <Grid RowDefinitions="100,2,*">
+      <Grid>
+        <Grid RowDefinitions="100,2,*">
         <ListBox Name="ImageList" ItemsSource="{Binding FilteredImageSet}"  VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.AllowAutoHide="False" SelectedItem="{Binding SelectedImage}">
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
@@ -399,136 +400,184 @@
             </Border>
           </Grid>
         </Grid>
+        </Grid>
+
+        <!-- Queue popover overlay — top-right corner, floats above main content -->
+        <Border ZIndex="100"
+                HorizontalAlignment="Right" VerticalAlignment="Top"
+                Margin="0,4,8,0"
+                CornerRadius="6"
+                Background="{DynamicResource SystemChromeMediumColor}"
+                BorderBrush="{DynamicResource SystemBaseMediumColor}"
+                BorderThickness="1"
+                MinWidth="280" MaxWidth="480">
+          <StackPanel>
+
+            <!-- Compact header (always visible when queue has items) -->
+            <Grid ColumnDefinitions="24,*,Auto,Auto,Auto" Margin="8,6">
+              <!-- Status icon -->
+              <Panel Grid.Column="0" Width="20" Height="20" VerticalAlignment="Center">
+                <mi:MaterialIcon Kind="CheckAll" Width="18" Height="18"
+                                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                                 Foreground="#27AE60"
+                                 IsVisible="{Binding BatchQueue.ShowQueueDoneIcon}"/>
+                <progRing:ProgressRing Width="18" Height="18"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       IsActive="{Binding BatchQueue.ShowQueueProcessingIcon}"
+                                       IsVisible="{Binding BatchQueue.ShowQueueProcessingIcon}"
+                                       Foreground="{DynamicResource SystemAccentColor}"/>
+                <mi:MaterialIcon Kind="AlertCircleOutline" Width="18" Height="18"
+                                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                                 Foreground="#E67E22"
+                                 IsVisible="{Binding BatchQueue.IsPaused}"/>
+              </Panel>
+
+              <!-- Current / most recent operation description -->
+              <TextBlock Grid.Column="1" Margin="8,0"
+                         Text="{Binding BatchQueue.CurrentOrRecentItem.OperationDescription}"
+                         TextTrimming="CharacterEllipsis"
+                         VerticalAlignment="Center" FontSize="12"/>
+
+              <!-- Pending count badge -->
+              <Border Grid.Column="2"
+                      Background="{DynamicResource SystemAccentColor}"
+                      CornerRadius="10" Padding="5,1" Margin="2,0"
+                      IsVisible="{Binding BatchQueue.HasPendingItems}">
+                <TextBlock Text="{Binding BatchQueue.PendingCount}"
+                           Foreground="White" FontSize="11" FontWeight="SemiBold"/>
+              </Border>
+
+              <!-- Failed count badge -->
+              <Border Grid.Column="3"
+                      Background="#C0392B"
+                      CornerRadius="10" Padding="5,1" Margin="2,0"
+                      IsVisible="{Binding BatchQueue.HasFailedItems}">
+                <TextBlock Text="{Binding BatchQueue.FailedCount}"
+                           Foreground="White" FontSize="11" FontWeight="SemiBold"/>
+              </Border>
+
+              <!-- Expand / collapse toggle -->
+              <Button Grid.Column="4" Padding="2" Margin="4,0,0,0" VerticalAlignment="Center"
+                      Command="{Binding BatchQueue.ToggleExpandedCommand}"
+                      ToolTip.Tip="Show / hide queue">
+                <Panel Width="16" Height="16">
+                  <mi:MaterialIcon Kind="ChevronDown" Width="16" Height="16"
+                                   IsVisible="{Binding !BatchQueue.IsExpanded}"/>
+                  <mi:MaterialIcon Kind="ChevronUp" Width="16" Height="16"
+                                   IsVisible="{Binding BatchQueue.IsExpanded}"/>
+                </Panel>
+              </Button>
+            </Grid>
+
+            <!-- Divider + expanded content -->
+            <StackPanel IsVisible="{Binding BatchQueue.IsExpanded}">
+              <Border Height="1" Background="{DynamicResource SystemBaseLowColor}"/>
+
+              <!-- Toolbar -->
+              <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*" Margin="4,4">
+                <Button Grid.Column="0" Margin="0,0,4,0"
+                        Command="{Binding BatchQueue.PauseCommand}"
+                        ToolTip.Tip="Pause queue after current item">
+                  <mi:MaterialIcon Kind="Pause"/>
+                </Button>
+                <Button Grid.Column="1" Margin="0,0,4,0"
+                        Command="{Binding BatchQueue.ResumeCommand}"
+                        ToolTip.Tip="Resume queue">
+                  <mi:MaterialIcon Kind="Play"/>
+                </Button>
+                <Button Grid.Column="2" Margin="0,0,4,0"
+                        Command="{Binding BatchQueue.ClearCompletedCommand}"
+                        ToolTip.Tip="Clear completed items">
+                  <mi:MaterialIcon Kind="CheckAll"/>
+                </Button>
+                <Button Grid.Column="3"
+                        Command="{Binding BatchQueue.CancelPendingCommand}"
+                        ToolTip.Tip="Cancel all pending and failed items">
+                  <mi:MaterialIcon Kind="Cancel"/>
+                </Button>
+              </Grid>
+
+              <!-- Paused banner -->
+              <Border IsVisible="{Binding BatchQueue.IsPaused}"
+                      Background="{DynamicResource SystemAccentColor}"
+                      Padding="8,5">
+                <TextBlock Text="Queue paused — retry the failed item, then click Resume (▶)"
+                           Foreground="White" FontSize="11" HorizontalAlignment="Center"
+                           TextWrapping="Wrap"/>
+              </Border>
+
+              <!-- Queue item list -->
+              <ScrollViewer MaxHeight="350" VerticalScrollBarVisibility="Visible">
+                <ItemsControl ItemsSource="{Binding BatchQueue.Items}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Grid Margin="4,2">
+                        <Border CornerRadius="4" BorderThickness="1"
+                                IsVisible="{Binding IsPending}"
+                                BorderBrush="{DynamicResource SystemBaseMediumColor}"/>
+                        <Border CornerRadius="4" BorderThickness="1"
+                                IsVisible="{Binding IsRunning}"
+                                BorderBrush="{DynamicResource SystemAccentColor}"
+                                Background="#18007AFF"/>
+                        <Border CornerRadius="4" BorderThickness="1"
+                                IsVisible="{Binding IsCompleted}"
+                                BorderBrush="{DynamicResource SystemBaseMediumLowColor}"
+                                Background="#14007F00"/>
+                        <Border CornerRadius="4" BorderThickness="1"
+                                IsVisible="{Binding IsFailed}"
+                                BorderBrush="#C0392B"
+                                Background="#14C0392B"/>
+                        <Grid ColumnDefinitions="32,*,Auto" Margin="8,6">
+                          <Panel Grid.Column="0" Width="24" Height="24" VerticalAlignment="Center">
+                            <mi:MaterialIcon Kind="ClockOutline" Width="20" Height="20"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"
+                                             IsVisible="{Binding IsPending}"/>
+                            <progRing:ProgressRing Width="22" Height="22"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                   IsActive="{Binding IsRunning}"
+                                                   IsVisible="{Binding IsRunning}"
+                                                   Foreground="{DynamicResource SystemAccentColor}"/>
+                            <mi:MaterialIcon Kind="CheckCircleOutline" Width="20" Height="20"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"
+                                             Foreground="#27AE60"
+                                             IsVisible="{Binding IsCompleted}"/>
+                            <mi:MaterialIcon Kind="AlertCircleOutline" Width="20" Height="20"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"
+                                             Foreground="#C0392B"
+                                             IsVisible="{Binding IsFailed}"/>
+                          </Panel>
+                          <StackPanel Grid.Column="1" Margin="8,0" VerticalAlignment="Center" Spacing="2">
+                            <TextBlock Text="{Binding OperationDescription}"
+                                       TextTrimming="CharacterEllipsis"
+                                       FontSize="12"/>
+                            <TextBlock Text="{Binding ErrorMessage}"
+                                       IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                       Foreground="#C0392B"
+                                       TextWrapping="Wrap"
+                                       FontSize="11"/>
+                          </StackPanel>
+                          <Button Grid.Column="2" VerticalAlignment="Center"
+                                  IsVisible="{Binding IsFailed}"
+                                  Command="{Binding RetryCommand}"
+                                  ToolTip.Tip="Retry this item">
+                            <mi:MaterialIcon Kind="Refresh"/>
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </ScrollViewer>
+            </StackPanel>
+
+          </StackPanel>
+        </Border>
+
       </Grid>
     </DockPanel>
 
-    <!-- Batch operation queue side panel -->
-    <Border Grid.Column="1"
-            IsVisible="{Binding BatchQueue.IsVisible}"
-            BorderBrush="{DynamicResource SystemBaseMediumColor}"
-            BorderThickness="1,0,0,0"
-            MinWidth="320" MaxWidth="480">
-      <Grid RowDefinitions="Auto,Auto,*">
-        <!-- Queue header with controls -->
-        <Border Grid.Row="0" Padding="8,6">
-          <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
-            <StackPanel Grid.Column="0" VerticalAlignment="Center">
-              <TextBlock FontWeight="SemiBold" FontSize="13" Text="Operation Queue"/>
-              <TextBlock FontSize="11" Foreground="{DynamicResource SystemBaseMediumColor}">
-                <TextBlock.Text>
-                  <MultiBinding StringFormat="{}{0} pending • {1} failed">
-                    <Binding Path="BatchQueue.PendingCount"/>
-                    <Binding Path="BatchQueue.FailedCount"/>
-                  </MultiBinding>
-                </TextBlock.Text>
-              </TextBlock>
-            </StackPanel>
-            <Button Grid.Column="1" Margin="4,0,0,0" VerticalAlignment="Center"
-                    Command="{Binding BatchQueue.PauseCommand}"
-                    ToolTip.Tip="Pause queue after current item">
-              <mi:MaterialIcon Kind="Pause"/>
-            </Button>
-            <Button Grid.Column="2" Margin="4,0,0,0" VerticalAlignment="Center"
-                    Command="{Binding BatchQueue.ResumeCommand}"
-                    ToolTip.Tip="Resume queue">
-              <mi:MaterialIcon Kind="Play"/>
-            </Button>
-            <Button Grid.Column="3" Margin="4,0,0,0" VerticalAlignment="Center"
-                    Command="{Binding BatchQueue.ClearCompletedCommand}"
-                    ToolTip.Tip="Clear completed items">
-              <mi:MaterialIcon Kind="CheckAll"/>
-            </Button>
-            <Button Grid.Column="4" Margin="4,0,0,0" VerticalAlignment="Center"
-                    Command="{Binding BatchQueue.CancelPendingCommand}"
-                    ToolTip.Tip="Cancel all pending and failed items (so you can re-queue with corrected settings)">
-              <mi:MaterialIcon Kind="Cancel"/>
-            </Button>
-          </Grid>
-        </Border>
-
-        <!-- Paused banner -->
-        <Border Grid.Row="1"
-                IsVisible="{Binding BatchQueue.IsPaused}"
-                Background="{DynamicResource SystemAccentColor}"
-                Padding="8,5">
-          <TextBlock Text="Queue paused — retry the failed item, then click Resume (▶)"
-                     Foreground="White" FontSize="11" HorizontalAlignment="Center"
-                     TextWrapping="Wrap"/>
-        </Border>
-
-        <!-- Queue item list -->
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Visible">
-          <ItemsControl ItemsSource="{Binding BatchQueue.Items}">
-            <ItemsControl.ItemTemplate>
-              <DataTemplate>
-                <!-- Stack background borders for each status, then the content on top -->
-                <Grid Margin="4,2">
-                  <Border CornerRadius="4" BorderThickness="1"
-                          IsVisible="{Binding IsPending}"
-                          BorderBrush="{DynamicResource SystemBaseMediumColor}"/>
-                  <Border CornerRadius="4" BorderThickness="1"
-                          IsVisible="{Binding IsRunning}"
-                          BorderBrush="{DynamicResource SystemAccentColor}"
-                          Background="#18007AFF"/>
-                  <Border CornerRadius="4" BorderThickness="1"
-                          IsVisible="{Binding IsCompleted}"
-                          BorderBrush="{DynamicResource SystemBaseMediumLowColor}"
-                          Background="#14007F00"/>
-                  <Border CornerRadius="4" BorderThickness="1"
-                          IsVisible="{Binding IsFailed}"
-                          BorderBrush="#C0392B"
-                          Background="#14C0392B"/>
-                  <!-- Content -->
-                  <Grid ColumnDefinitions="32,*,Auto" Margin="8,6">
-                    <!-- Status icon -->
-                    <Panel Grid.Column="0" Width="24" Height="24" VerticalAlignment="Center">
-                      <mi:MaterialIcon Kind="ClockOutline" Width="20" Height="20"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                                       IsVisible="{Binding IsPending}"/>
-                      <progRing:ProgressRing Width="22" Height="22"
-                                             HorizontalAlignment="Center" VerticalAlignment="Center"
-                                             IsActive="{Binding IsRunning}"
-                                             IsVisible="{Binding IsRunning}"
-                                             Foreground="{DynamicResource SystemAccentColor}"/>
-                      <mi:MaterialIcon Kind="CheckCircleOutline" Width="20" Height="20"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                                       Foreground="#27AE60"
-                                       IsVisible="{Binding IsCompleted}"/>
-                      <mi:MaterialIcon Kind="AlertCircleOutline" Width="20" Height="20"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                                       Foreground="#C0392B"
-                                       IsVisible="{Binding IsFailed}"/>
-                    </Panel>
-                    <!-- Description + error -->
-                    <StackPanel Grid.Column="1" Margin="8,0" VerticalAlignment="Center" Spacing="2">
-                      <TextBlock Text="{Binding OperationDescription}"
-                                 TextTrimming="CharacterEllipsis"
-                                 FontSize="12"/>
-                      <TextBlock Text="{Binding ErrorMessage}"
-                                 IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                 Foreground="#C0392B"
-                                 TextWrapping="Wrap"
-                                 FontSize="11"/>
-                    </StackPanel>
-                    <!-- Retry button (only when failed) -->
-                    <Button Grid.Column="2" VerticalAlignment="Center"
-                            IsVisible="{Binding IsFailed}"
-                            Command="{Binding RetryCommand}"
-                            ToolTip.Tip="Retry this item">
-                      <mi:MaterialIcon Kind="Refresh"/>
-                    </Button>
-                  </Grid>
-                </Grid>
-              </DataTemplate>
-            </ItemsControl.ItemTemplate>
-          </ItemsControl>
-        </ScrollViewer>
-      </Grid>
-    </Border>
-
     <!-- Progress overlay for single-image operations (spans full window) -->
-    <Border Grid.Column="0" Grid.ColumnSpan="2"
-            IsVisible="{Binding ShowProgressIndicator}" Classes="progressoverlay">
+    <Border IsVisible="{Binding ShowProgressIndicator}" Classes="progressoverlay">
       <controls:HeaderControl Title="{Binding ProgressIndicatorMessage}">
         <StackPanel>
           <ProgressBar IsVisible="{Binding ShowDeterminateProgressIndicator}" Height="10" Grid.Row="1" Minimum="0" Maximum="{Binding ProgressIndicatorMax}" Value="{Binding ProgressIndicatorProgress}" />
