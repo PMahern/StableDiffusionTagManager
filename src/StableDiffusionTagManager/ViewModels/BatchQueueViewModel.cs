@@ -217,6 +217,37 @@ namespace StableDiffusionTagManager.ViewModels
         }
 
         /// <summary>
+        /// Moves all pending queue items for the specified image to the front of the queue,
+        /// immediately after any currently running item, so they are processed next.
+        /// </summary>
+        public void MoveToFront(string imageFilename, string folder)
+        {
+            var itemsToMove = Items
+                .Where(i => i.IsPending &&
+                       string.Equals(i.ImageFilename, imageFilename, StringComparison.OrdinalIgnoreCase) &&
+                       string.Equals(i.Folder, folder, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            if (itemsToMove.Count == 0) return;
+
+            // Insert right after the last running item (or at index 0 if none)
+            int insertAt = 0;
+            for (int i = 0; i < Items.Count; i++)
+            {
+                if (Items[i].IsRunning)
+                    insertAt = i + 1;
+            }
+
+            foreach (var item in itemsToMove)
+                Items.Remove(item);
+
+            for (int i = 0; i < itemsToMove.Count; i++)
+                Items.Insert(insertAt + i, itemsToMove[i]);
+
+            OnPropertyChanged(nameof(CurrentOrRecentItem));
+        }
+
+        /// <summary>
         /// Removes all Pending and Failed items from the queue and clears their pending status
         /// on the associated image. The currently-running item (if any) is allowed to finish.
         /// Use this when the user wants to cancel a batch and re-queue with corrected settings.

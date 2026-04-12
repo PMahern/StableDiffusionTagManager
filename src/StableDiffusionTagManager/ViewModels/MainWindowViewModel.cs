@@ -192,6 +192,7 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 OnPropertyChanged(nameof(IsSelectedImageEditable));
                 OnPropertyChanged(nameof(SelectedImageHasPendingOperation));
+                MoveSelectedImageToFrontCommand.NotifyCanExecuteChanged();
             }
         }
 
@@ -200,6 +201,13 @@ namespace StableDiffusionTagManager.ViewModels
 
         /// <summary>True only when an image is selected AND it has a pending batch operation.</summary>
         public bool SelectedImageHasPendingOperation => SelectedImage?.HasPendingOperation ?? false;
+
+        [RelayCommand(CanExecute = nameof(SelectedImageHasPendingOperation))]
+        private void MoveSelectedImageToFront()
+        {
+            if (SelectedImage != null && currentImagesFolder != null)
+                BatchQueue.MoveToFront(SelectedImage.Filename, currentImagesFolder);
+        }
 
 
 

@@ -396,6 +396,14 @@
                            HorizontalAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
                 <TextBlock Text="{Binding SelectedImage.PendingOperationDescription}"
                            Foreground="#CCCCCC" HorizontalAlignment="Center" FontSize="12"/>
+                <Button HorizontalAlignment="Center" Margin="0,4,0,0"
+                        Command="{Binding MoveSelectedImageToFrontCommand}"
+                        ToolTip.Tip="Move this image's pending operations to the front of the queue">
+                  <StackPanel Orientation="Horizontal" Spacing="4">
+                    <mi:MaterialIcon Kind="ChevronDoubleUp" Width="16" Height="16"/>
+                    <TextBlock Text="Prioritize"/>
+                  </StackPanel>
+                </Button>
               </StackPanel>
             </Border>
           </Grid>
