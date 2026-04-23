@@ -620,7 +620,11 @@ namespace StableDiffusionTagManager.ViewModels
         public async Task CheckForAndConvertUnspportedImageFormats(string folder)
         {
 
-            var webps = Directory.EnumerateFiles(folder, "*.webp");
+            var webps = Directory.EnumerateFiles(folder, "*.webp", SearchOption.AllDirectories)
+                .Where(f => !Path.GetDirectoryName(f)!
+                    .Split(Path.DirectorySeparatorChar)
+                    .Any(part => string.Equals(part, ARCHIVE_FOLDER, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
 
             if (webps.Any())
             {
@@ -633,23 +637,16 @@ namespace StableDiffusionTagManager.ViewModels
                 {
                     var currentIndicatorStatus = ShowProgressIndicator;
                     ShowProgressIndicator = true;
-                    ProgressIndicatorMax = webps.Count();
+                    ProgressIndicatorMax = webps.Count;
                     ProgressIndicatorProgress = 0;
                     ProgressIndicatorMessage = "Converting webps...";
-                    await Task.Run(() =>
-                    {
-                        ShowProgressIndicator = true;
-                        ProgressIndicatorMax = webps.Count();
-                        ProgressIndicatorProgress = 0;
-                        ProgressIndicatorMessage = "Converting webps...";
-                    });
 
                     foreach (var webp in webps)
                     {
                         await Task.Run(() =>
                         {
                             ImageConverter.ConvertImageFileToPng(webp);
-                            ArchiveImage(folder, webp);
+                            ArchiveImage(Path.GetDirectoryName(webp)!, Path.GetFileName(webp));
                         });
                         ProgressIndicatorProgress++;
                     }
@@ -1846,6 +1843,8 @@ namespace StableDiffusionTagManager.ViewModels
 
                             var tags = await tagOp(imageData, message => ProgressIndicatorMessage = message, AddConsoleText);
                             var strippedTags = ApplyResponseStrippingToTags(tags, stripPairs);
+                            if (vm.RemoveAllTagsBeforeInterrogation)
+                                selectedImage.ClearTags();
                             foreach (var tag in strippedTags)
                                 selectedImage.AddTagIfNotExists(new TagViewModel(tag));
                         }
@@ -2012,6 +2011,7 @@ namespace StableDiffusionTagManager.ViewModels
                 var capturedNlPrompt = nlPrompt;
                 var capturedTagPrompt = tagPrompt;
                 var capturedUrl = endpointUrl;
+                var capturedRemoveAllTags = vm.RemoveAllTagsBeforeInterrogation;
 
                 string opLabel = (nlVm != null && tagVm != null) ? "NL + Tag interrogate"
                     : (nlVm != null ? "NL interrogate" : "Tag interrogate");
@@ -2087,6 +2087,8 @@ namespace StableDiffusionTagManager.ViewModels
                                 _updateTagCounts = false;
                                 try
                                 {
+                                    if (capturedRemoveAllTags)
+                                        capturedImage.ClearTags();
                                     foreach (var tag in computedTags)
                                         capturedImage.AddTagIfNotExists(new TagViewModel(tag));
                                 }
@@ -2168,23 +2170,31 @@ namespace StableDiffusionTagManager.ViewModels
             AddNewImage(image, SelectedImage, SelectedImage.Description, SelectedImage.Tags.Select(t => t.Tag));
         }
 
-        public async Task ExtractAndReviewComicPanels(Bitmap baseImage, RenderTargetBitmap? paint)
+        public async Task SegmentAndReviewImage(Bitmap baseImage, RenderTargetBitmap? paint)
         {
-            var panels = await comicPanelExtractorService.ExtractComicPanels(baseImage, paint);
-            if (panels != null)
+            var configDialog = new ImageSegmentationDialog();
+            await dialogHandler.ShowWindowAsDialog(configDialog);
+            if (!configDialog.ViewModel.Success) return;
+
+            List<Bitmap>? segments;
+            if (configDialog.ViewModel.UseLlm)
+                segments = await comicPanelExtractorService.ExtractSegmentsViaLlm(baseImage, configDialog.ViewModel.GetLlmArgs());
+            else
+                segments = await comicPanelExtractorService.ExtractComicPanels(baseImage, paint);
+
+            if (segments != null)
             {
-                ImageReviewDialog dialog = new ImageReviewDialog();
-                dialog.Images = panels.Select(p => new ImageReviewViewModel(p))
-                                      .ToObservableCollection();
+                var reviewDialog = new ImageReviewDialog();
+                reviewDialog.Images = segments.Select(p => new ImageReviewViewModel(p))
+                                              .ToObservableCollection();
+                reviewDialog.ReviewMode = ImageReviewDialogMode.MultiSelect;
+                reviewDialog.Title = "Select Segments to Keep";
 
-                dialog.ReviewMode = ImageReviewDialogMode.MultiSelect;
-                dialog.Title = "Select Images to Keep";
+                await dialogHandler.ShowWindowAsDialog(reviewDialog);
 
-                await dialogHandler.ShowWindowAsDialog(dialog);
-
-                if (dialog.Success)
+                if (reviewDialog.Success)
                 {
-                    foreach (var image in dialog.SelectedImages)
+                    foreach (var image in reviewDialog.SelectedImages)
                     {
                         AddNewImage(image, SelectedImage);
                     }
@@ -2432,40 +2442,51 @@ namespace StableDiffusionTagManager.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(ImagesLoaded))]
-        public Task ExtractAllPanels()
+        public async Task SegmentAllImages()
         {
-            if (currentImagesFolder == null || ImagesWithTags == null) return Task.CompletedTask;
+            if (currentImagesFolder == null || ImagesWithTags == null) return;
+
+            var configDialog = new ImageSegmentationDialog();
+            await dialogHandler.ShowWindowAsDialog(configDialog);
+            if (!configDialog.ViewModel.Success) return;
+
+            var useLlm = configDialog.ViewModel.UseLlm;
+            var llmArgs = useLlm ? configDialog.ViewModel.GetLlmArgs() : null;
 
             var folder = currentImagesFolder;
             var items = new List<BatchQueueItem>();
             foreach (var image in ImagesWithTags.ToList())
             {
                 var capturedImage = image;
-                image.SetHasPendingOperation(true, "Extract comic panels");
+                image.SetHasPendingOperation(true, "Segment image");
                 items.Add(new BatchQueueItem(
                     BatchQueue,
                     image,
                     image.Filename,
                     folder,
-                    $"Extract panels: {image.Filename}",
+                    $"Segment: {image.Filename}",
                     async () =>
                     {
-                        var panels = await comicPanelExtractorService.ExtractComicPanels(capturedImage.ImageSource);
-                        if (panels == null) return;
+                        List<Bitmap>? segments;
+                        if (useLlm)
+                            segments = await comicPanelExtractorService.ExtractSegmentsViaLlm(capturedImage.ImageSource, llmArgs!);
+                        else
+                            segments = await comicPanelExtractorService.ExtractComicPanels(capturedImage.ImageSource);
+
+                        if (segments == null) return;
                         await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
                         {
-                            foreach (var panel in panels)
-                            {
-                                AddNewImage(panel, capturedImage);
-                                panel.Save(capturedImage.Filename);
-                            }
+                            foreach (var segment in segments)
+                                AddNewImage(segment, capturedImage);
+
+                            ImagesWithTags.Remove(capturedImage);
+                            ArchiveImage(folder, capturedImage.Filename, capturedImage.GetTagsFileName());
                         });
                     }
                 ));
             }
 
             BatchQueue.EnqueueRange(items);
-            return Task.CompletedTask;
         }
 
         public async Task ReviewConvertAlpha(Bitmap bitmap)

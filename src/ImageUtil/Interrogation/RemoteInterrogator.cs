@@ -7,7 +7,8 @@ namespace ImageUtil.Interrogation
     public enum RemoteEndpointType
     {
         Ollama,
-        KoboldCpp
+        KoboldCpp,
+        OpenAI
     }
 
     public class RemoteInterrogatorArgs

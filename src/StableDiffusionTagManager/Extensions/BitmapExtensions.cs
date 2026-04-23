@@ -6,7 +6,9 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Processors.Transforms;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace StableDiffusionTagManager.Extensions
 {
@@ -184,6 +186,42 @@ namespace StableDiffusionTagManager.Extensions
         }
 
 
+
+        public static Bitmap CreateNewImageFromPolygon(this Bitmap bitmap, IReadOnlyList<(double X, double Y)> points)
+        {
+            if (points.Count < 3)
+                return bitmap.CreateNewImageFromRegion();
+
+            var minX = (int)Math.Floor(points.Min(p => p.X));
+            var minY = (int)Math.Floor(points.Min(p => p.Y));
+            var maxX = (int)Math.Ceiling(points.Max(p => p.X));
+            var maxY = (int)Math.Ceiling(points.Max(p => p.Y));
+
+            minX = Math.Max(0, minX);
+            minY = Math.Max(0, minY);
+            maxX = Math.Min(bitmap.PixelSize.Width, maxX);
+            maxY = Math.Min(bitmap.PixelSize.Height, maxY);
+
+            var width = maxX - minX;
+            var height = maxY - minY;
+
+            if (width <= 0 || height <= 0)
+                return bitmap.CreateNewImageFromRegion();
+
+            var localPoints = points.Select(p => new Avalonia.Point(p.X - minX, p.Y - minY)).ToList();
+            var geometry = new PolylineGeometry(localPoints, true);
+
+            var result = new RenderTargetBitmap(new PixelSize(width, height));
+            using (var ctx = result.CreateDrawingContext())
+            {
+                using (ctx.PushRenderOptions(new RenderOptions { BitmapInterpolationMode = BitmapInterpolationMode.None }))
+                using (ctx.PushGeometryClip(geometry))
+                {
+                    ctx.DrawImage(bitmap, new Rect(minX, minY, width, height), new Rect(0, 0, width, height));
+                }
+            }
+            return result;
+        }
 
         public static byte[] ToByteArray(this Bitmap image)
         {

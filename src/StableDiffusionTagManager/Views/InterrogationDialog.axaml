@@ -44,7 +44,7 @@
         </TabItem>
         <TabItem>
           <TabItem.Header>Tags</TabItem.Header>
-          <Grid RowDefinitions="Auto,*">
+          <Grid RowDefinitions="Auto,*,Auto">
             <StackPanel Grid.Row="0" Classes="inputform">
               <Panel>
                 <Label>Model</Label>
@@ -58,6 +58,7 @@
               </Panel>
             </StackPanel>
             <ContentControl Grid.Row="1" Content="{Binding SelectedTagSettingsViewModel}" MinHeight="150"/>
+            <CheckBox Grid.Row="2" IsChecked="{Binding RemoveAllTagsBeforeInterrogation, Mode=TwoWay}" Margin="8,4">Remove all existing tags before applying results</CheckBox>
           </Grid>
         </TabItem>
       </TabControl>

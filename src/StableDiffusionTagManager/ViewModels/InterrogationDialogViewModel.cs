@@ -66,6 +66,9 @@ namespace StableDiffusionTagManager.ViewModels
 
         public bool Success { get; set; } = false;
 
+        [ObservableProperty]
+        private bool removeAllTagsBeforeInterrogation = false;
+
         [RelayCommand]
         public void Interrogate()
         {

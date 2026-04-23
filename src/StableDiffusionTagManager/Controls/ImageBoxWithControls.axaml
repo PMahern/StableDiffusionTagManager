@@ -28,7 +28,7 @@
           <ToggleButton Command="{Binding SetMaskModeCommand}" IsVisible="{Binding ShowMaskModeButton}" IsChecked="{Binding CurrentMode, Converter={StaticResource ResourceKey=modeConverter}, ConverterParameter={x:Static controls:ImageViewerMode.Mask}, Mode=OneWay}" ToolTip.Tip="Mask Mode">
             <mi:MaterialIcon Kind="DominoMask"/>
           </ToggleButton>
-          <Button Command="{Binding ExtractComicPanelsCommand}" IsVisible="{Binding ShowExtractComicPanelsButton}" ToolTip.Tip="Extract Comic Panels">
+          <Button Command="{Binding SegmentImageCommand}" IsVisible="{Binding ShowExtractComicPanelsButton}" ToolTip.Tip="Segment Image">
             <mi:MaterialIcon Kind="PhotoLibrary"/>
           </Button>
           <Button Command="{Binding EditImageCommand}" IsVisible="{Binding ShowEditImageButton}" ToolTip.Tip="Touch Up Image">

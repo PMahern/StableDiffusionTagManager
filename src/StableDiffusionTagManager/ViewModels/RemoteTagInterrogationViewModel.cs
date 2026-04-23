@@ -26,6 +26,13 @@ namespace StableDiffusionTagManager.ViewModels
         [ObservableProperty]
         private string selectedEndpointType = nameof(RemoteEndpointType.Ollama);
 
+        partial void OnSelectedEndpointTypeChanged(string value)
+        {
+            EndpointUrl = value == nameof(RemoteEndpointType.KoboldCpp)
+                ? "http://localhost:5001"
+                : "http://localhost:11434";
+        }
+
         public override bool IsValid =>
             !string.IsNullOrWhiteSpace(EndpointUrl) && !string.IsNullOrWhiteSpace(Prompt);
 

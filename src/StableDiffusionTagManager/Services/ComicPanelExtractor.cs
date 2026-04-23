@@ -1,6 +1,7 @@
 ﻿using Avalonia.Media.Imaging;
 using Avalonia;
 using ImageUtil;
+using ImageUtil.Segmentation;
 using StableDiffusionTagManager.Models;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,17 @@ namespace StableDiffusionTagManager.Services
             var results = await kwrapper.GetImagePanels(tmpImage, App.GetTempFileDirectory());
 
             return results.Select(r => bitmap.CreateNewImageFromRegion(new Rect(r.TopLeftX, r.TopLeftY, r.Width, r.Height), null, paint)).ToList();
+        }
+
+        public async Task<List<Bitmap>?> ExtractSegmentsViaLlm(Bitmap bitmap, LlmSegmentationArgs args)
+        {
+            string tmpImage = Path.Combine(App.GetTempFileDirectory(), $"{Guid.NewGuid()}.png");
+            bitmap.Save(tmpImage);
+
+            var segmentor = new LlmImageSegmentor();
+            var results = await segmentor.GetImageSegments(tmpImage, args, bitmap.PixelSize.Width, bitmap.PixelSize.Height);
+
+            return results.Select(r => bitmap.CreateNewImageFromPolygon(r.Points)).ToList();
         }
     }
 }

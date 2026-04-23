@@ -51,7 +51,7 @@ namespace StableDiffusionTagManager.Controls
         public Func<Bitmap, Task>? RemoveBackgroundClicked;
         public Func<Bitmap, Task>? ConvertAlphaClicked;
         public Func<Bitmap, Task>? EditImageClicked;
-        public Func<(Bitmap baseImage, RenderTargetBitmap? paint), Task>? ComicPanelsExtracted;
+        public Func<(Bitmap baseImage, RenderTargetBitmap? paint), Task>? ImageSegmentationRequested;
         public Func<Bitmap, Task>? ExpandClicked;
 
 
@@ -509,28 +509,26 @@ namespace StableDiffusionTagManager.Controls
         }
 
         [RelayCommand]
-        public async Task ExtractComicPanels()
+        public async Task SegmentImage()
         {
             var window = this.VisualRoot as Window;
             if (Image != null)
             {
                 try
                 {
-                    ComicPanelsExtracted?.Invoke((Image, ImageBox.GetImagePaint(Image)));
+                    await (ImageSegmentationRequested?.Invoke((Image, ImageBox.GetImagePaint(Image))) ?? Task.CompletedTask);
                 }
                 catch (Exception e)
                 {
+                    if (window != null)
                     {
-                        if (window != null)
-                        {
-                            var messageBoxStandardWindow = MsBox.Avalonia.MessageBoxManager
-                                    .GetMessageBoxStandard(
-                                        "Panel Extraction Failed",
-                                        $"{e.Message}",
-                                        MsBox.Avalonia.Enums.ButtonEnum.Ok);
+                        var messageBoxStandardWindow = MsBox.Avalonia.MessageBoxManager
+                                .GetMessageBoxStandard(
+                                    "Image Segmentation Failed",
+                                    $"{e.Message}",
+                                    MsBox.Avalonia.Enums.ButtonEnum.Ok);
 
-                            await messageBoxStandardWindow.ShowWindowDialogAsync(window);
-                        }
+                        await messageBoxStandardWindow.ShowWindowDialogAsync(window);
                     }
                 }
             }
