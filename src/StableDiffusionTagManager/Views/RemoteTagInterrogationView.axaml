@@ -21,6 +21,10 @@
         <Label Content="Model"/>
         <TextBox Text="{Binding Model}" Watermark="llava:13b (Ollama only)" Width="200"/>
       </Panel>
+      <Panel IsVisible="{Binding IsOpenAiEndpoint}">
+        <Label Content="API Key"/>
+        <TextBox Text="{Binding ApiKey}" Watermark="sk-..." Width="300" PasswordChar="*"/>
+      </Panel>
     </StackPanel>
     <Label Grid.Row="1" Margin="2,6,2,2">Prompt</Label>
     <TextBox Grid.Row="2"

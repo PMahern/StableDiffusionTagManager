@@ -138,7 +138,7 @@ namespace StableDiffusionTagManager.ViewModels
             this.projectDefaults = projectDefaults;
         }
 
-        public string Name => "Ollama / KoboldCpp";
+        public string Name => "Ollama / KoboldCpp / OpenAI";
 
         public InterrogatorViewModel<List<string>> CreateViewModel()
         {

@@ -11,7 +11,8 @@ namespace StableDiffusionTagManager.ViewModels
         public static IReadOnlyList<string> EndpointTypes { get; } = new[]
         {
             nameof(RemoteEndpointType.Ollama),
-            nameof(RemoteEndpointType.KoboldCpp)
+            nameof(RemoteEndpointType.KoboldCpp),
+            nameof(RemoteEndpointType.OpenAI)
         };
 
         [ObservableProperty]
@@ -26,11 +27,21 @@ namespace StableDiffusionTagManager.ViewModels
         [ObservableProperty]
         private string selectedEndpointType = nameof(RemoteEndpointType.Ollama);
 
+        [ObservableProperty]
+        private string apiKey = "";
+
+        [ObservableProperty]
+        private bool isOpenAiEndpoint = false;
+
         partial void OnSelectedEndpointTypeChanged(string value)
         {
-            EndpointUrl = value == nameof(RemoteEndpointType.KoboldCpp)
-                ? "http://localhost:5001"
-                : "http://localhost:11434";
+            IsOpenAiEndpoint = value == nameof(RemoteEndpointType.OpenAI);
+            EndpointUrl = value switch
+            {
+                nameof(RemoteEndpointType.KoboldCpp) => "http://localhost:5001",
+                nameof(RemoteEndpointType.OpenAI) => "https://api.openai.com",
+                _ => "http://localhost:11434"
+            };
         }
 
         public override bool IsValid =>
@@ -51,9 +62,13 @@ namespace StableDiffusionTagManager.ViewModels
             EndpointUrl = endpointUrl,
             Model = Model,
             Prompt = prompt,
-            EndpointType = SelectedEndpointType == nameof(RemoteEndpointType.KoboldCpp)
-                ? RemoteEndpointType.KoboldCpp
-                : RemoteEndpointType.Ollama
+            ApiKey = ApiKey,
+            EndpointType = SelectedEndpointType switch
+            {
+                nameof(RemoteEndpointType.KoboldCpp) => RemoteEndpointType.KoboldCpp,
+                nameof(RemoteEndpointType.OpenAI) => RemoteEndpointType.OpenAI,
+                _ => RemoteEndpointType.Ollama
+            }
         };
 
         public override ConfiguredInterrogationContext<List<string>> CreateInterrogationContext()

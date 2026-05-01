@@ -17,6 +17,7 @@ namespace ImageUtil.Interrogation
         public string Model { get; set; } = "";
         public string Prompt { get; set; } = "Describe this image in detail.";
         public RemoteEndpointType EndpointType { get; set; } = RemoteEndpointType.Ollama;
+        public string ApiKey { get; set; } = "";
     }
 
     public class RemoteInterrogator : INaturalLanguageInterrogator<RemoteInterrogatorArgs>, ITagInterrogator<RemoteInterrogatorArgs>
@@ -48,9 +49,13 @@ namespace ImageUtil.Interrogation
 
         private Task<string> QueryRemote(RemoteInterrogatorArgs args, string base64Image, Action<string> consoleCallBack)
         {
-            return args.EndpointType == RemoteEndpointType.Ollama
-                ? QueryOllama(args, base64Image, consoleCallBack)
-                : QueryKoboldCpp(args, base64Image, consoleCallBack);
+            return args.EndpointType switch
+            {
+                RemoteEndpointType.Ollama => QueryOllama(args, base64Image, consoleCallBack),
+                RemoteEndpointType.KoboldCpp => QueryKoboldCpp(args, base64Image, consoleCallBack),
+                RemoteEndpointType.OpenAI => QueryOpenAI(args, base64Image, consoleCallBack),
+                _ => QueryOllama(args, base64Image, consoleCallBack)
+            };
         }
 
         private async Task<string> QueryOllama(RemoteInterrogatorArgs args, string base64Image, Action<string> consoleCallBack)
@@ -90,6 +95,40 @@ namespace ImageUtil.Interrogation
 
             var json = await response.Content.ReadFromJsonAsync<JsonElement>();
             return json.GetProperty("results")[0].GetProperty("text").GetString() ?? string.Empty;
+        }
+
+        private async Task<string> QueryOpenAI(RemoteInterrogatorArgs args, string base64Image, Action<string> consoleCallBack)
+        {
+            var url = args.EndpointUrl.TrimEnd('/') + "/v1/chat/completions";
+            consoleCallBack($"Sending request to OpenAI-compatible endpoint at {url}...");
+
+            using var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
+            if (!string.IsNullOrWhiteSpace(args.ApiKey))
+                requestMessage.Headers.Add("Authorization", $"Bearer {args.ApiKey}");
+
+            var requestBody = new
+            {
+                model = args.Model,
+                messages = new[]
+                {
+                    new
+                    {
+                        role = "user",
+                        content = new object[]
+                        {
+                            new { type = "image_url", image_url = new { url = $"data:image/png;base64,{base64Image}" } },
+                            new { type = "text", text = args.Prompt }
+                        }
+                    }
+                }
+            };
+
+            requestMessage.Content = JsonContent.Create(requestBody);
+            var response = await httpClient.SendAsync(requestMessage);
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadFromJsonAsync<JsonElement>();
+            return json.GetProperty("choices")[0].GetProperty("message").GetProperty("content").GetString() ?? string.Empty;
         }
 
         public void Dispose()
