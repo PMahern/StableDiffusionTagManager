@@ -40,6 +40,17 @@
           <Button Command="{Binding InterrogateCommand}" IsVisible="{Binding ShowInterrogateButton}" ToolTip.Tip="Interrogate SD Webui For Tags">
             <mi:MaterialIcon Kind="Eye"/>
           </Button>
+          <Button Command="{Binding InterrogateWithLastSettingsCommand}"
+                  IsVisible="{Binding ShowInterrogateButton}"
+                  IsEnabled="{Binding CanInterrogateWithLastSettings}"
+                  ToolTip.Tip="Interrogate with last settings">
+            <Panel Width="18" Height="18">
+              <mi:MaterialIcon Kind="Eye" Width="14" Height="14"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+              <mi:MaterialIcon Kind="Refresh" Width="10" Height="10"
+                               HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+            </Panel>
+          </Button>
           <Button Command="{Binding RemoveBackgroundCommand}" IsVisible="{Binding ShowRemoveBackgroundButton}" ToolTip.Tip="Remove background using SD Webui">
             <mi:MaterialIcon Kind="RemoveOutline"/>
           </Button>

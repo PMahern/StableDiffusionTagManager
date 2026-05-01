@@ -4,6 +4,7 @@ namespace StableDiffusionTagManager.ViewModels
     {
         Pending,
         Running,
+        AwaitingReview,
         Completed,
         Failed
     }

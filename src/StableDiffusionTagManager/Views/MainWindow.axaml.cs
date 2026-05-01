@@ -77,6 +77,7 @@ namespace StableDiffusionTagManager.Views
                 ImageBox.ImageSegmentationRequested = async (pair) => await viewModel.SegmentAndReviewImage(pair.baseImage, pair.paint);
                 ImageBox.ImageCropped += (source, image) => viewModel.ImageCropped(image);
                 ImageBox.InterrogateClicked = async (image) => await viewModel.InterrogateAndApplyToSelectedImage(image);
+                ImageBox.InterrogateWithLastSettingsClicked = async (image) => await viewModel.InterrogateWithLastSettings(image);
                 ImageBox.RemoveBackgroundClicked = async (image) => await viewModel.ReviewRemoveBackground(image);
                 ImageBox.ConvertAlphaClicked = async (image) => await viewModel.ReviewConvertAlpha(image);
                 ImageBox.ExpandClicked = async (image) => await viewModel.ExpandImage(image);

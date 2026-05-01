@@ -48,6 +48,7 @@ namespace StableDiffusionTagManager.Controls
         public event EventHandler<Bitmap>? ImageCropped;
         public Func<Bitmap, Task>? SaveClicked;
         public Func<Bitmap, Task>? InterrogateClicked;
+        public Func<Bitmap, Task>? InterrogateWithLastSettingsClicked;
         public Func<Bitmap, Task>? RemoveBackgroundClicked;
         public Func<Bitmap, Task>? ConvertAlphaClicked;
         public Func<Bitmap, Task>? EditImageClicked;
@@ -155,6 +156,15 @@ namespace StableDiffusionTagManager.Controls
         {
             get => GetValue(ShowInterrogateButtonProperty);
             set => SetValue(ShowInterrogateButtonProperty, value);
+        }
+
+        public static readonly StyledProperty<bool> CanInterrogateWithLastSettingsProperty =
+            AvaloniaProperty.Register<ImageBoxWithControls, bool>(nameof(CanInterrogateWithLastSettings), false);
+
+        public bool CanInterrogateWithLastSettings
+        {
+            get => GetValue(CanInterrogateWithLastSettingsProperty);
+            set => SetValue(CanInterrogateWithLastSettingsProperty, value);
         }
 
         public static readonly StyledProperty<bool> ShowRemoveBackgroundButtonProperty =
@@ -576,6 +586,19 @@ namespace StableDiffusionTagManager.Controls
                     {
                         await InterrogateClicked(image);
                     }
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async Task InterrogateWithLastSettings()
+        {
+            if (Image != null)
+            {
+                var image = ImageBox.CreateNewImageWithLayersFromRegion(null);
+                if (image != null && InterrogateWithLastSettingsClicked != null)
+                {
+                    await InterrogateWithLastSettingsClicked(image);
                 }
             }
         }

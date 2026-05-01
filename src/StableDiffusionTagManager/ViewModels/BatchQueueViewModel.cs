@@ -25,6 +25,8 @@ namespace StableDiffusionTagManager.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(PauseCommand))]
+        [NotifyPropertyChangedFor(nameof(ShowQueueProcessingIcon))]
+        [NotifyPropertyChangedFor(nameof(ShowQueueDoneIcon))]
         private bool isProcessing;
 
         [ObservableProperty]
@@ -39,15 +41,17 @@ namespace StableDiffusionTagManager.ViewModels
         public bool HasItems => Items.Count > 0;
         public int PendingCount => Items.Count(i => i.IsPending || i.IsRunning);
         public int FailedCount => Items.Count(i => i.IsFailed);
+        public int AwaitingReviewCount => Items.Count(i => i.IsAwaitingReview);
         public bool HasPendingItems => PendingCount > 0;
         public bool HasFailedItems => FailedCount > 0;
+        public bool HasAwaitingReviewItems => AwaitingReviewCount > 0;
 
         /// <summary>The currently running item, or the most recently added item if none is running.</summary>
         public BatchQueueItem? CurrentOrRecentItem =>
             Items.FirstOrDefault(i => i.IsRunning) ?? Items.LastOrDefault();
 
         public bool ShowQueueProcessingIcon => IsProcessing && !IsPaused;
-        public bool ShowQueueDoneIcon => !IsProcessing && !IsPaused && !HasPendingItems;
+        public bool ShowQueueDoneIcon => !IsProcessing && !IsPaused && !HasPendingItems && !HasAwaitingReviewItems;
 
         public void EnqueueRange(IEnumerable<BatchQueueItem> items)
         {
@@ -119,8 +123,19 @@ namespace StableDiffusionTagManager.ViewModels
 
                     await Dispatcher.UIThread.InvokeAsync(() =>
                     {
-                        nextItem.Status = BatchQueueItemStatus.Completed;
-                        nextItem.Image?.SetHasPendingOperation(false);
+                        if (nextItem.ReviewOperation != null)
+                        {
+                            // Processing done — wait for the user to trigger the review
+                            nextItem.Status = BatchQueueItemStatus.AwaitingReview;
+                            OnPropertyChanged(nameof(AwaitingReviewCount));
+                            OnPropertyChanged(nameof(HasAwaitingReviewItems));
+                            OnPropertyChanged(nameof(ShowQueueDoneIcon));
+                        }
+                        else
+                        {
+                            nextItem.Status = BatchQueueItemStatus.Completed;
+                            nextItem.Image?.SetHasPendingOperation(false);
+                        }
                         OnPropertyChanged(nameof(PendingCount));
                         OnPropertyChanged(nameof(HasPendingItems));
                         OnPropertyChanged(nameof(CurrentOrRecentItem));
@@ -157,6 +172,35 @@ namespace StableDiffusionTagManager.ViewModels
             });
         }
 
+        internal void OnItemReviewCompleted(BatchQueueItem item)
+        {
+            OnPropertyChanged(nameof(AwaitingReviewCount));
+            OnPropertyChanged(nameof(HasAwaitingReviewItems));
+            OnPropertyChanged(nameof(PendingCount));
+            OnPropertyChanged(nameof(HasPendingItems));
+            OnPropertyChanged(nameof(CurrentOrRecentItem));
+            OnPropertyChanged(nameof(ShowQueueDoneIcon));
+        }
+
+        internal void OnItemReviewFailed(BatchQueueItem item)
+        {
+            OnPropertyChanged(nameof(AwaitingReviewCount));
+            OnPropertyChanged(nameof(HasAwaitingReviewItems));
+            OnPropertyChanged(nameof(FailedCount));
+            OnPropertyChanged(nameof(HasFailedItems));
+            OnPropertyChanged(nameof(CurrentOrRecentItem));
+            OnPropertyChanged(nameof(ShowQueueDoneIcon));
+        }
+
+        internal void OnItemRetryReview(BatchQueueItem item)
+        {
+            OnPropertyChanged(nameof(AwaitingReviewCount));
+            OnPropertyChanged(nameof(HasAwaitingReviewItems));
+            OnPropertyChanged(nameof(FailedCount));
+            OnPropertyChanged(nameof(HasFailedItems));
+            OnPropertyChanged(nameof(ShowQueueDoneIcon));
+        }
+
         /// <summary>
         /// Called whenever a folder's images are loaded into the UI. Finds any pending or
         /// running queue items targeting this folder, re-links their Image reference to the
@@ -167,7 +211,7 @@ namespace StableDiffusionTagManager.ViewModels
         public void SyncPendingIndicatorsForFolder(string folder, IEnumerable<ImageWithTagsViewModel> loadedImages)
         {
             var activeItems = Items
-                .Where(i => i.IsPending || i.IsRunning)
+                .Where(i => i.IsPending || i.IsRunning || i.IsAwaitingReview)
                 .Where(i => string.Equals(i.Folder, folder, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 

@@ -15,7 +15,8 @@ namespace StableDiffusionTagManager.ViewModels
             string imageFilename,
             string folder,
             string operationDescription,
-            Func<Task> operation)
+            Func<Task> operation,
+            Func<Task>? reviewOperation = null)
         {
             this.queue = queue;
             Image = image;
@@ -23,6 +24,7 @@ namespace StableDiffusionTagManager.ViewModels
             Folder = folder;
             OperationDescription = operationDescription;
             Operation = operation;
+            ReviewOperation = reviewOperation;
         }
 
         /// <summary>
@@ -41,11 +43,21 @@ namespace StableDiffusionTagManager.ViewModels
         public string OperationDescription { get; }
         internal Func<Task> Operation { get; }
 
+        /// <summary>
+        /// Optional second phase shown when the user clicks "Review". When set, the item enters
+        /// AwaitingReview after the main operation completes rather than going straight to Completed.
+        /// </summary>
+        internal Func<Task>? ReviewOperation { get; }
+
+        public bool HasReviewOperation => ReviewOperation != null;
+
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsPending))]
         [NotifyPropertyChangedFor(nameof(IsRunning))]
+        [NotifyPropertyChangedFor(nameof(IsAwaitingReview))]
         [NotifyPropertyChangedFor(nameof(IsCompleted))]
         [NotifyPropertyChangedFor(nameof(IsFailed))]
+        [NotifyCanExecuteChangedFor(nameof(StartReviewCommand))]
         private BatchQueueItemStatus status;
 
         [ObservableProperty]
@@ -53,16 +65,47 @@ namespace StableDiffusionTagManager.ViewModels
 
         public bool IsPending => Status == BatchQueueItemStatus.Pending;
         public bool IsRunning => Status == BatchQueueItemStatus.Running;
+        public bool IsAwaitingReview => Status == BatchQueueItemStatus.AwaitingReview;
         public bool IsCompleted => Status == BatchQueueItemStatus.Completed;
         public bool IsFailed => Status == BatchQueueItemStatus.Failed;
+
+        [RelayCommand(CanExecute = nameof(IsAwaitingReview))]
+        public async Task StartReview()
+        {
+            if (ReviewOperation == null) return;
+            try
+            {
+                await ReviewOperation();
+                Status = BatchQueueItemStatus.Completed;
+                Image?.SetHasPendingOperation(false);
+                queue.OnItemReviewCompleted(this);
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+                Status = BatchQueueItemStatus.Failed;
+                Image?.SetHasPendingOperation(false);
+                queue.OnItemReviewFailed(this);
+            }
+        }
 
         [RelayCommand]
         public void Retry()
         {
             ErrorMessage = null;
-            Status = BatchQueueItemStatus.Pending;
-            Image?.SetHasPendingOperation(true);
-            queue.TriggerProcessing();
+            if (ReviewOperation != null)
+            {
+                // Failed during the review phase — re-enter awaiting review so user can try again
+                Status = BatchQueueItemStatus.AwaitingReview;
+                Image?.SetHasPendingOperation(true);
+                queue.OnItemRetryReview(this);
+            }
+            else
+            {
+                Status = BatchQueueItemStatus.Pending;
+                Image?.SetHasPendingOperation(true);
+                queue.TriggerProcessing();
+            }
         }
     }
 }

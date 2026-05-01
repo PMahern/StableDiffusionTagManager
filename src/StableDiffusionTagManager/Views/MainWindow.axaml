@@ -131,7 +131,8 @@
                                     ShowMaskModeButton="True"
                                     ImageAspectRatioSets="{Binding ImageAspectRatioSets}"
                                     SelectedImageAspectRatioSet="{Binding SelectedImageAspectRatioSet, Mode=OneWay}"
-                                    SelectedImageResampler="{Binding SelectedImageResampler, Mode=OneWay}">
+                                    SelectedImageResampler="{Binding SelectedImageResampler, Mode=OneWay}"
+                                    CanInterrogateWithLastSettings="{Binding HasLastInterrogationSettings}">
                 <controls:ImageBoxWithControls.AdditionalMaskButtonsContent>
                   <StackPanel Orientation="Horizontal">
                     <Button Command="{Binding ElementName=mainWindow, Path=DataContext.RemoveFromSelectedImageWithLamaCommand}" ToolTip.Tip="Remove Masked Content With Lama">
@@ -422,7 +423,7 @@
           <StackPanel>
 
             <!-- Compact header (always visible) -->
-            <Grid ColumnDefinitions="24,*,Auto,Auto,Auto" Margin="8,6">
+            <Grid ColumnDefinitions="24,*,Auto,Auto,Auto,Auto" Margin="8,6">
               <!-- Status icon -->
               <Panel Grid.Column="0" Width="20" Height="20" VerticalAlignment="Center">
                 <mi:MaterialIcon Kind="CheckAll" Width="18" Height="18"
@@ -438,6 +439,10 @@
                                  HorizontalAlignment="Center" VerticalAlignment="Center"
                                  Foreground="#E67E22"
                                  IsVisible="{Binding BatchQueue.IsPaused}"/>
+                <mi:MaterialIcon Kind="EyeOutline" Width="18" Height="18"
+                                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                                 Foreground="#8E44AD"
+                                 IsVisible="{Binding BatchQueue.HasAwaitingReviewItems}"/>
               </Panel>
 
               <!-- Current / most recent operation description -->
@@ -461,8 +466,17 @@
                            Foreground="White" FontSize="11" FontWeight="SemiBold"/>
               </Border>
 
-              <!-- Failed count badge -->
+              <!-- Awaiting review count badge -->
               <Border Grid.Column="3"
+                      Background="#8E44AD"
+                      CornerRadius="10" Padding="5,1" Margin="2,0"
+                      IsVisible="{Binding BatchQueue.HasAwaitingReviewItems}">
+                <TextBlock Text="{Binding BatchQueue.AwaitingReviewCount}"
+                           Foreground="White" FontSize="11" FontWeight="SemiBold"/>
+              </Border>
+
+              <!-- Failed count badge -->
+              <Border Grid.Column="4"
                       Background="#C0392B"
                       CornerRadius="10" Padding="5,1" Margin="2,0"
                       IsVisible="{Binding BatchQueue.HasFailedItems}">
@@ -471,7 +485,7 @@
               </Border>
 
               <!-- Expand / collapse toggle -->
-              <Button Grid.Column="4" Padding="2" Margin="4,0,0,0" VerticalAlignment="Center"
+              <Button Grid.Column="5" Padding="2" Margin="4,0,0,0" VerticalAlignment="Center"
                       Command="{Binding BatchQueue.ToggleExpandedCommand}"
                       ToolTip.Tip="Show / hide queue">
                 <Panel Width="16" Height="16">
@@ -520,6 +534,15 @@
                            TextWrapping="Wrap"/>
               </Border>
 
+              <!-- Awaiting review banner -->
+              <Border IsVisible="{Binding BatchQueue.HasAwaitingReviewItems}"
+                      Background="#8E44AD"
+                      Padding="8,5">
+                <TextBlock Text="Items ready to review — click the eye (👁) button on each item"
+                           Foreground="White" FontSize="11" HorizontalAlignment="Center"
+                           TextWrapping="Wrap"/>
+              </Border>
+
               <!-- Queue item list -->
               <ScrollViewer MaxHeight="350" VerticalScrollBarVisibility="Visible">
                 <ItemsControl ItemsSource="{Binding BatchQueue.Items}">
@@ -534,6 +557,10 @@
                                 BorderBrush="{DynamicResource SystemAccentColor}"
                                 Background="#18007AFF"/>
                         <Border CornerRadius="4" BorderThickness="1"
+                                IsVisible="{Binding IsAwaitingReview}"
+                                BorderBrush="#8E44AD"
+                                Background="#148E44AD"/>
+                        <Border CornerRadius="4" BorderThickness="1"
                                 IsVisible="{Binding IsCompleted}"
                                 BorderBrush="{DynamicResource SystemBaseMediumLowColor}"
                                 Background="#14007F00"/>
@@ -541,7 +568,7 @@
                                 IsVisible="{Binding IsFailed}"
                                 BorderBrush="#C0392B"
                                 Background="#14C0392B"/>
-                        <Grid ColumnDefinitions="32,*,Auto" Margin="8,6">
+                        <Grid ColumnDefinitions="32,*,Auto,Auto" Margin="8,6">
                           <Panel Grid.Column="0" Width="24" Height="24" VerticalAlignment="Center">
                             <mi:MaterialIcon Kind="ClockOutline" Width="20" Height="20"
                                              HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -551,6 +578,10 @@
                                                    IsActive="{Binding IsRunning}"
                                                    IsVisible="{Binding IsRunning}"
                                                    Foreground="{DynamicResource SystemAccentColor}"/>
+                            <mi:MaterialIcon Kind="EyeOutline" Width="20" Height="20"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"
+                                             Foreground="#8E44AD"
+                                             IsVisible="{Binding IsAwaitingReview}"/>
                             <mi:MaterialIcon Kind="CheckCircleOutline" Width="20" Height="20"
                                              HorizontalAlignment="Center" VerticalAlignment="Center"
                                              Foreground="#27AE60"
@@ -570,7 +601,13 @@
                                        TextWrapping="Wrap"
                                        FontSize="11"/>
                           </StackPanel>
-                          <Button Grid.Column="2" VerticalAlignment="Center"
+                          <Button Grid.Column="2" VerticalAlignment="Center" Margin="0,0,4,0"
+                                  IsVisible="{Binding IsAwaitingReview}"
+                                  Command="{Binding StartReviewCommand}"
+                                  ToolTip.Tip="Review result">
+                            <mi:MaterialIcon Kind="Eye" Foreground="#8E44AD"/>
+                          </Button>
+                          <Button Grid.Column="3" VerticalAlignment="Center"
                                   IsVisible="{Binding IsFailed}"
                                   Command="{Binding RetryCommand}"
                                   ToolTip.Tip="Retry this item">
