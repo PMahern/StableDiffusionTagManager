@@ -680,6 +680,19 @@ namespace StableDiffusionTagManager.ViewModels
 
         public async Task LoadFolder(string folder)
         {
+            var conflicts = FolderTagSets.GetConflicts(folder);
+            if (conflicts.Count > 0)
+            {
+                var fileList = string.Join("\n", conflicts.Select(f => $"  • {f}.jpg / {f}.png"));
+                var messageBox = MessageBoxManager.GetMessageBoxStandard(
+                    "Cannot Open Folder",
+                    $"The following filenames exist as both a .jpg and a .png. Rename or remove the duplicates before opening this folder:\n\n{fileList}",
+                    ButtonEnum.Ok,
+                    Icon.Error);
+                await dialogHandler.ShowDialog(messageBox);
+                return;
+            }
+
             ShowProgressIndicator = true;
             ProgressIndicatorMax = 100;
             ProgressIndicatorProgress = 0;
@@ -800,17 +813,17 @@ namespace StableDiffusionTagManager.ViewModels
                 }
             }
 
-            var FolderTagSets = new FolderTagSets(folder);
+            var folderTagSets = new FolderTagSets(folder);
 
             await Task.Run(() =>
             {
-                ProgressIndicatorMax = FolderTagSets.TagsSets.Count();
+                ProgressIndicatorMax = folderTagSets.TagsSets.Count();
                 ProgressIndicatorProgress = 0;
                 ProgressIndicatorMessage = "Loading images...";
             });
 
             var accum = new List<ImageWithTagsViewModel>();
-            foreach (var tagSet in FolderTagSets.TagsSets)
+            foreach (var tagSet in folderTagSets.TagsSets)
             {
                 await Task.Run(() =>
                 {
@@ -873,6 +886,19 @@ namespace StableDiffusionTagManager.ViewModels
                 return;
 
             var targetFolder = subfolder.FolderPath;
+
+            var conflicts = FolderTagSets.GetConflicts(targetFolder);
+            if (conflicts.Count > 0)
+            {
+                var fileList = string.Join("\n", conflicts.Select(f => $"  • {f}.jpg / {f}.png"));
+                var messageBox = MessageBoxManager.GetMessageBoxStandard(
+                    "Cannot Open Folder",
+                    $"The following filenames exist as both a .jpg and a .png. Rename or remove the duplicates before opening this folder:\n\n{fileList}",
+                    ButtonEnum.Ok,
+                    Icon.Error);
+                await dialogHandler.ShowDialog(messageBox);
+                return;
+            }
 
             ShowProgressIndicator = true;
             ProgressIndicatorMax = 100;

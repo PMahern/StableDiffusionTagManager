@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings WebuiAddress="http://localhost:7860" PythonPath="python3.11">
+  <ImageAspectRatios>
+    <ImageAspectRatioSet Name="SDXL">
+      <Resolution X="1024" Y="1024" />
+      <Resolution X="1152" Y="896" />
+      <Resolution X="896" Y="1152" />
+      <Resolution X="1216" Y="832" />
+      <Resolution X="832" Y="1216" />
+      <Resolution X="1344" Y="768" />
+      <Resolution X="768" Y="1344" />
+      <Resolution X="1536" Y="640" />
+      <Resolution X="640" Y="1536" />
+    </ImageAspectRatioSet>
+    <ImageAspectRatioSet Name="OneTrainer">
+      <Resolution X="1024" Y="1024" />
+      <Resolution X="1145" Y="916" />
+      <Resolution X="916" Y="1145" />
+      <Resolution X="1254" Y="836" />
+      <Resolution X="836" Y="1254" />
+      <Resolution X="1355" Y="774" />
+      <Resolution X="774" Y="1355" />
+      <Resolution X="1448" Y="724" />
+      <Resolution X="724" Y="1448" />
+      <Resolution X="1619" Y="648" />
+      <Resolution X="648" Y="1619" />
+      <Resolution X="1774" Y="591" />
+      <Resolution X="591" Y="1774" />
+      <Resolution X="1916" Y="547" />
+      <Resolution X="547" Y="1916" />
+      <Resolution X="2048" Y="512" />
+      <Resolution X="512" Y="2048" />
+    </ImageAspectRatioSet>
+  </ImageAspectRatios>
+</Settings>

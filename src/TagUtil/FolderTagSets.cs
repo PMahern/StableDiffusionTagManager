@@ -4,15 +4,23 @@ namespace TagUtil
 {
     public class FolderTagSets
     {
+        public static List<string> GetConflicts(string path)
+        {
+            var jpegFilenames = Directory.EnumerateFiles(path, "*.jpg")
+                .Select(f => Path.GetFileNameWithoutExtension(f)).ToHashSet();
+            return Directory.EnumerateFiles(path, "*.png")
+                .Select(f => Path.GetFileNameWithoutExtension(f))
+                .Where(png => jpegFilenames.Contains(png))
+                .ToList();
+        }
+
         public FolderTagSets(string path)
         {
-            //Ensure there's no jpgs or pngs with the same names
             var jpegs = Directory.EnumerateFiles(path, "*.jpg").ToList();
             var pngs = Directory.EnumerateFiles(path, "*.png").ToList();
             var jpegFilenames = jpegs.Select(f => Path.GetFileNameWithoutExtension(f)).ToHashSet();
             var pngFilenames = pngs.Select(f => Path.GetFileNameWithoutExtension(f)).ToList();
 
-            //Check for the existence of a project folder
             var pairs = pngFilenames.Where(png => jpegFilenames.Contains(png)).ToList();
             if(pairs.Any()) {
                 var aggregated = pairs.Aggregate((l, r) => $"{l}, {r}");
