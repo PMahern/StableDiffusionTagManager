@@ -22,7 +22,7 @@
     <behaviors:CloseWindowOnEventBehavior EventName="RequestClose" />
   </ia:Interaction.Behaviors>
   <controls:HeaderControl Title="Image Interrogation">
-    <Grid RowDefinitions="*,Auto" >
+    <Grid RowDefinitions="*,Auto,Auto" >
       <TabControl>
         <TabItem>
           <TabItem.Header>Natural Language</TabItem.Header>
@@ -62,7 +62,10 @@
           </Grid>
         </TabItem>
       </TabControl>
-      <StackPanel Grid.Row="1" Classes="footer">
+      <StackPanel Grid.Row="1" Margin="8,4">
+        <CheckBox IsChecked="{Binding SkipImagesWithExistingContent, Mode=TwoWay}">Skip images that already have tags or text</CheckBox>
+      </StackPanel>
+      <StackPanel Grid.Row="2" Classes="footer">
         <Button Command="{Binding InterrogateCommand}">Interrogate</Button>
         <Button Command="{Binding CancelCommand}">Cancel</Button>
       </StackPanel>

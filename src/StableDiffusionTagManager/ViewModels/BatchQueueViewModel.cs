@@ -13,6 +13,7 @@ namespace StableDiffusionTagManager.ViewModels
     {
         private TaskCompletionSource<bool>? resumeTcs;
         private bool processingActive = false;
+        private int consecutiveFailures = 0;
 
         public ObservableCollection<BatchQueueItem> Items { get; } = new();
 
@@ -74,6 +75,7 @@ namespace StableDiffusionTagManager.ViewModels
                 var tcs = resumeTcs;
                 resumeTcs = null;
                 IsPaused = false;
+                consecutiveFailures = 0;
                 tcs.SetResult(true);
             }
             else if (!processingActive && Items.Any(i => i.Status == BatchQueueItemStatus.Pending))
@@ -121,6 +123,8 @@ namespace StableDiffusionTagManager.ViewModels
                 {
                     await nextItem.Operation();
 
+                    consecutiveFailures = 0;
+
                     await Dispatcher.UIThread.InvokeAsync(() =>
                     {
                         if (nextItem.ReviewOperation != null)
@@ -143,6 +147,8 @@ namespace StableDiffusionTagManager.ViewModels
                 }
                 catch (Exception ex)
                 {
+                    consecutiveFailures++;
+
                     await Dispatcher.UIThread.InvokeAsync(() =>
                     {
                         nextItem.ErrorMessage = ex.Message;
@@ -154,9 +160,12 @@ namespace StableDiffusionTagManager.ViewModels
                         OnPropertyChanged(nameof(HasFailedItems));
                         OnPropertyChanged(nameof(CurrentOrRecentItem));
 
-                        // Auto-pause: next loop iteration will wait on this TCS
-                        resumeTcs = new TaskCompletionSource<bool>();
-                        IsPaused = true;
+                        if (consecutiveFailures >= 3)
+                        {
+                            // Auto-pause: next loop iteration will wait on this TCS
+                            resumeTcs = new TaskCompletionSource<bool>();
+                            IsPaused = true;
+                        }
                     });
                 }
             }

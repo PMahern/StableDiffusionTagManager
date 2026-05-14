@@ -847,7 +847,6 @@ namespace StableDiffusionTagManager.ViewModels
             {
                 OpenProject = new Project(projFile);
                 OpenProject.ProjectUpdated += UpdateProjectSettings;
-                UpdateProjectSettings();
             }
 
             openFolder = folder;
@@ -863,6 +862,9 @@ namespace StableDiffusionTagManager.ViewModels
                 subfolderEntries.Add(sf);
 
             AvailableSubfolders = subfolderEntries;
+
+            if (projFolder)
+                UpdateProjectSettings();
 
             // Set root entry as the selected subfolder (no event side-effects; backing field only)
             selectedSubfolder = rootEntry;
@@ -2096,6 +2098,7 @@ namespace StableDiffusionTagManager.ViewModels
                 var capturedTagPrompt = tagPrompt;
                 var capturedUrl = endpointUrl;
                 var capturedRemoveAllTags = vm.RemoveAllTagsBeforeInterrogation;
+                var capturedSkipIfExists = vm.SkipImagesWithExistingContent;
 
                 string opLabel = (nlVm != null && tagVm != null) ? "NL + Tag interrogate"
                     : (nlVm != null ? "NL interrogate" : "Tag interrogate");
@@ -2111,6 +2114,14 @@ namespace StableDiffusionTagManager.ViewModels
                     $"{opLabel}: {image.Filename}",
                     async () =>
                     {
+                        if (capturedSkipIfExists &&
+                            (capturedImage.Tags.Count > 0 || !string.IsNullOrWhiteSpace(capturedImage.Description)))
+                        {
+                            if (capturedIsCurrentFolder)
+                                await Dispatcher.UIThread.InvokeAsync(() => capturedImage.SetHasPendingOperation(false, null));
+                            return;
+                        }
+
                         // Compute results on whatever thread the async operations resume on.
                         // Mutations to ObservableObject properties and ObservableCollection
                         // must happen on the UI thread, so we collect results here and apply

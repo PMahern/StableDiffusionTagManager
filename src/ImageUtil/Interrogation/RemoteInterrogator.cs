@@ -47,15 +47,32 @@ namespace ImageUtil.Interrogation
                          .ToList();
         }
 
-        private Task<string> QueryRemote(RemoteInterrogatorArgs args, string base64Image, Action<string> consoleCallBack)
+        private async Task<string> QueryRemote(RemoteInterrogatorArgs args, string base64Image, Action<string> consoleCallBack)
         {
-            return args.EndpointType switch
+            HttpRequestException? lastEx = null;
+            for (int attempt = 1; attempt <= 5; attempt++)
             {
-                RemoteEndpointType.Ollama => QueryOllama(args, base64Image, consoleCallBack),
-                RemoteEndpointType.KoboldCpp => QueryKoboldCpp(args, base64Image, consoleCallBack),
-                RemoteEndpointType.OpenAI => QueryOpenAI(args, base64Image, consoleCallBack),
-                _ => QueryOllama(args, base64Image, consoleCallBack)
-            };
+                try
+                {
+                    return await (args.EndpointType switch
+                    {
+                        RemoteEndpointType.Ollama => QueryOllama(args, base64Image, consoleCallBack),
+                        RemoteEndpointType.KoboldCpp => QueryKoboldCpp(args, base64Image, consoleCallBack),
+                        RemoteEndpointType.OpenAI => QueryOpenAI(args, base64Image, consoleCallBack),
+                        _ => QueryOllama(args, base64Image, consoleCallBack)
+                    });
+                }
+                catch (HttpRequestException ex)
+                {
+                    lastEx = ex;
+                    if (attempt < 5)
+                    {
+                        consoleCallBack($"Request failed (attempt {attempt}/5), retrying in 250ms...");
+                        await Task.Delay(250);
+                    }
+                }
+            }
+            throw lastEx!;
         }
 
         private async Task<string> QueryOllama(RemoteInterrogatorArgs args, string base64Image, Action<string> consoleCallBack)

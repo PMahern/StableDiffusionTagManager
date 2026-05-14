@@ -69,6 +69,9 @@ namespace StableDiffusionTagManager.ViewModels
         [ObservableProperty]
         private bool removeAllTagsBeforeInterrogation = false;
 
+        [ObservableProperty]
+        private bool skipImagesWithExistingContent = false;
+
         [RelayCommand]
         public void Interrogate()
         {
