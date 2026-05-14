@@ -179,21 +179,8 @@ namespace ImageUtil
                     arguments.Append($" && pip install {dependency}");
                 }
             }
-                if (additionalDependencies != null)
-                {
-                    foreach (var dependency in additionalDependencies)
-                    {
-                        arguments.Append($" && pip install {dependency}");
-                    }
-                }
 
-                if (requirementsFile != null)
-                {
-                    arguments.Append($" && pip install -r {requirementsFile}");
-                }
-
-                
-                arguments.Append(" && exit\"");
+            arguments.Append(" && exit\"");
                 info.Arguments = arguments.ToString();
 
             info.RedirectStandardOutput = true;
@@ -215,8 +202,6 @@ namespace ImageUtil
             await p.WaitForExitAsync();
 
             return true;
-
-            return false;
         }
 
         public static async Task DownloadIfLFSLink(string filePath, string lfsurl)
